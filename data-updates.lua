@@ -102,7 +102,7 @@ function Scrap.get_scrap_item()
         {
           type = "item",
           name = item.. "-scrap",
-          icon = "__Logistico__/graphics/icons/scrap/" ..item.. "-scrap.png", -- or "__Logistico__/graphics/icons/missing-icon.png",
+          icon = "__Ingredient_Scrap__/graphics/icons/" ..item.. "-scrap.png", -- or "__Ingredient_Scrap__/graphics/icons/missing-icon.png",
           icon_size = 64, icon_mipmaps = 4,
           subgroup = "raw-material",
           order = "z-b",
@@ -197,12 +197,12 @@ function Scrap.get_scrap_recipes(result, enabled)
           localised_name = {"recipe-name."..name},
           icons = {
             {
-              icon = "__Logistico__/graphics/icons/scrap/" ..item.. "-scrap.png",
+              icon = "__Ingredient_Scrap__/graphics/icons/" ..item.. "-scrap.png",
               icon_size = 64, icon_mipmaps = 4,
               scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
             },
             {
-              icon = "__Logistico__/graphics/icons/scrap/recycle.png",
+              icon = "__Ingredient_Scrap__/graphics/icons/recycle.png",
               icon_size = 64, icon_mipmaps = 4,
               scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 0.8, g = 1.0, b = 0.8, a = 1.0 }
             },
@@ -322,7 +322,7 @@ data:extend({
         scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
       },
       {
-        icon = "__Logistico__/graphics/icons/scrap/recycle.png",
+        icon = "__Ingredient_Scrap__/graphics/icons/recycle.png",
         icon_size = 64, icon_mipmaps = 4,
         scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 0.8, g = 1.0, b = 0.8, a = 1.0 }
       },
