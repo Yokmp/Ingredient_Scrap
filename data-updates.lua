@@ -160,10 +160,9 @@ function Scrap.get_scrap_recipes(result, enabled)
 
       for _, v in ipairs(result) do
         _result = item.. "-" ..v
-        if data.raw.item[_result] then
-          -- error("item " ..result.. "not found!")
-          log("item " ..result.. "not found!")
-          break
+        if data.raw.item[_result] then break else
+          -- error("item " ..serpent.block(result).. "not found!")
+          log("item " ..serpent.block(_result).. "not found!")
         end
       end
 
