@@ -3,7 +3,7 @@
 This README is a stub!<br />
 
 ### ![Download the Zip-File here!](https://github.com/Yokmp/Ingredient_Scrap/raw/main/Ingredient_Scrap_1.0.1.zip)
-<!-- ![ScreenShot](shot_01.jpg) -->
+<!-- ![ScreenShot](shot_01.png) -->
 
 This Mod is written under Factorio 1.1.33.
 It inserts its data in the data-updates stage.
