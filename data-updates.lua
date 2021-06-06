@@ -3,6 +3,7 @@
 -- TODO? maybe make it local and provide an interface if this ever becomes a stand-alone or even public
 
 -- require("lldebugger").start()
+debug = true -- use this to spam your log
 
 local Scrap = {}
 
@@ -52,7 +53,7 @@ function Scrap.get_scrap_results()
           table.insert( insert, {name = name, amount_min = 1, amount_max = amount, probability = 0.24} )
         end
         scrap_results[recipe].expensive.results = insert
-      else log(tostring(recipe)..".expensive -> not found")
+      else if debug then log(tostring(recipe)..".expensive -> not found") end
         scrap_results[recipe] = nil
       end
     end
@@ -65,7 +66,7 @@ function Scrap.get_scrap_results()
           table.insert( insert, {name = name, amount_min = 1, amount_max = amount, probability = 0.24} )
         end
         scrap_results[recipe].normal.results = insert
-      else log(tostring(recipe)..".normal -> not found")
+      else if debug then log(tostring(recipe)..".normal -> not found") end
         scrap_results[recipe] = nil
       end
     end
@@ -78,7 +79,7 @@ function Scrap.get_scrap_results()
           table.insert( insert, {name = name, amount_min = 1, amount_max = amount, probability = 0.24} )
         end
         scrap_results[recipe].results = insert
-      else log(tostring(recipe)..".results -> not found")
+      else if debug then log(tostring(recipe)..".results -> not found") end
         scrap_results[recipe] = nil
       end
     end
@@ -162,7 +163,7 @@ function Scrap.get_scrap_recipes(result, enabled)
         _result = item.. "-" ..v
         if data.raw.item[_result] then break else
           -- error("item " ..serpent.block(result).. "not found!")
-          log("item " ..serpent.block(_result).. "not found!")
+          if debug then log("item " ..serpent.block(_result).. "not found!") end
         end
       end
 
@@ -306,6 +307,11 @@ Scrap.add_scrap(
 
 -- log(serpent.block(data.raw.technology["steel-processing"], {comment = false}))
 -- assert(1==2, " D I E")
+
+-- local startResult = require('vscode-debuggee').start()
+-- print('debuggee start result: ', startResult)
+
+if debug then return Scrap end
 
 --[[
 data:extend({

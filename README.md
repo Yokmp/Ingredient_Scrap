@@ -2,8 +2,6 @@
 
 This README is a stub!<br />
 
-### ![Download the Zip-File here!](https://github.com/Yokmp/Ingredient_Scrap/releases/download/_1.0.0/Ingredient_Scrap_1.0.0.zip)
-<!-- ![ScreenShot](.github/shot_1.jpg) -->
 
 This Mod is written under Factorio 1.1.33.
 It inserts its data in the data-updates stage.
