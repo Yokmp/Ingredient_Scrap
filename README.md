@@ -17,7 +17,7 @@ other mods recipes then just edit data-updates.lua where youll find the two arra
 </tr>
 </table>
 
-### [Download the Zip-File here!](https://github.com/Yokmp/Ingredient_Scrap/raw/main/Ingredient_Scrap_1.0.1.zip)
+### [Download the Zip-File here!](https://github.com/Yokmp/Ingredient_Scrap/raw/main/Ingredient_Scrap_1.0.2.zip)
 
 
 ## Customize

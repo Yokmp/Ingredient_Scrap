@@ -250,11 +250,11 @@ function Scrap.add_scrap(scrap_results, items, recipes)
       --   table.insert(data.raw.recipe[item].results, results.result)
       -- end
       if data.raw.recipe[item].result then
+        data.raw.recipe[item].main_product = data.raw.recipe[item].result
         local data_result = data.raw.recipe[item].result
         local data_amount = data.raw.recipe[item].result_count or 1
         table.insert( result.results, {data_result, data_amount})
         data.raw.recipe[item].results = result.results
-        data.raw.recipe[item].main_product = item
 -- log(serpent.block(data.raw.recipe[item]))
       end
     end
@@ -264,13 +264,13 @@ function Scrap.add_scrap(scrap_results, items, recipes)
       --   table.insert(data.raw.recipe[item].expensive.results, results.result)
       -- end
       if data.raw.recipe[item].expensive.result then
+          data.raw.recipe[item].expensive.main_product = data.raw.recipe[item].expensive.result
         local  data_result = data.raw.recipe[item].expensive.result
         local  data_amount = data.raw.recipe[item].expensive.result_count or 1
 
         -- if scrap_results[item].expensive.results then
           table.insert( result.expensive.results, {data_result, data_amount})
           data.raw.recipe[item].expensive.results = result.expensive.results
-          data.raw.recipe[item].expensive.main_product = item
 --         else
 -- log(serpent.block(tostring(scrap_results[item])..".expensive.results not found!"))
 --         end
@@ -283,13 +283,13 @@ function Scrap.add_scrap(scrap_results, items, recipes)
       --   table.insert(data.raw.recipe[item].normal.results, results.result)
       -- end
       if data.raw.recipe[item].normal.result then
+          data.raw.recipe[item].normal.main_product = data.raw.recipe[item].normal.result
         local  data_result = data.raw.recipe[item].normal.result
         local  data_amount = data.raw.recipe[item].normal.result_count or 1
 
         -- if scrap_results[item].normal.results then
           table.insert( scrap_results[item].normal.results, {data_result, data_amount})
           data.raw.recipe[item].normal.results = result.normal.results
-          data.raw.recipe[item].normal.main_product = item
 --         else
 -- log(serpent.block(data.raw.recipe[item].name..".normal.results not found!"))
 --         end
