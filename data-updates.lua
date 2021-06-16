@@ -3,7 +3,7 @@
 -- TODO? maybe make it local and provide an interface if this ever becomes a stand-alone or even public
 
 -- require("lldebugger").start()
-debug = true -- use this to spam your log
+local debug = false -- use this to spam your log
 
 local Scrap = {}
 
