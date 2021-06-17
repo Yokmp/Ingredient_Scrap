@@ -11,5 +11,11 @@ if (mods['Krastorio2']) then
   table.insert(_types, "imersium")
   table.insert(_results, "beam")
 end
+if (mods['bztitanium']) then
+  table.insert(_types, "titanium")
+end
+if (mods['bztungsten']) then
+  table.insert(_types, "tungsten")
+end
 
 return {_types, _results}

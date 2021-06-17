@@ -48,6 +48,7 @@ end
 ---@return table ``{results = {name = name, amount_min = 1, amount_max = amount}}``
 function Scrap.get_scrap_results()
   local scrap_results = {}
+  local scrap_probability = settings.startup["ingredient-scrap-probability"].value/100
   for recipe, value in pairs(data.raw.recipe) do
 
     if value.expensive then
@@ -55,7 +56,7 @@ function Scrap.get_scrap_results()
       add_to_results(scrap_results, recipe, value.expensive.ingredients, "expensive")
       if scrap_results[recipe] and scrap_results[recipe].expensive then
         for name, amount in pairs(scrap_results[recipe].expensive.results) do
-          table.insert( insert, {name = name, amount_min = 1, amount_max = amount, probability = 0.24} )
+          table.insert( insert, {name = name, amount_min = 1, amount_max = amount, probability = scrap_probability} )
         end
         scrap_results[recipe].expensive.results = insert
       else if debug then log(tostring(recipe)..".expensive -> not found") end
@@ -68,7 +69,7 @@ function Scrap.get_scrap_results()
       add_to_results(scrap_results, recipe, value.normal.ingredients, "normal")
       if scrap_results[recipe] and scrap_results[recipe].normal then
         for name, amount in pairs(scrap_results[recipe].normal.results) do
-          table.insert( insert, {name = name, amount_min = 1, amount_max = amount, probability = 0.24} )
+          table.insert( insert, {name = name, amount_min = 1, amount_max = amount, probability = scrap_probability} )
         end
         scrap_results[recipe].normal.results = insert
       else if debug then log(tostring(recipe)..".normal -> not found") end
@@ -81,7 +82,7 @@ function Scrap.get_scrap_results()
       add_to_results(scrap_results, recipe, value.ingredients, "results")
       if scrap_results[recipe] and scrap_results[recipe].results then
         for name, amount in pairs(scrap_results[recipe].results) do
-          table.insert( insert, {name = name, amount_min = 1, amount_max = amount, probability = 0.24} )
+          table.insert( insert, {name = name, amount_min = 1, amount_max = amount, probability = scrap_probability} )
         end
         scrap_results[recipe].results = insert
       else if debug then log(tostring(recipe)..".results -> not found") end
@@ -220,7 +221,7 @@ function Scrap.get_scrap_recipes(result, enabled)
           energy_required = 3.2,
           always_show_products = true,
           allow_as_intermediate = false,
-          ingredients = {{ item.. "-scrap", 10}},
+          ingredients = {{ item.. "-scrap", settings.startup["ingredient-scrap-needed"].value}},
           results = {{ _result, 1 }}
         }
       )
@@ -239,7 +240,7 @@ end
 -- assert(1==2, " D I E")
 
 
---- Create and add scrap items *(preferably in data stage)*
+--- Create and add scrap items *(preferably in data-updates stage)*
 ---@param scrap_results table Expected format see ``get_scrap_results()``
 ---@param items table Expected format see ``get_scrap_item()``
 ---@param recipes table Expected format see ``get_scrap_recipes()``
