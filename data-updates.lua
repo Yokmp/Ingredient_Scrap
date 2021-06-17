@@ -11,7 +11,7 @@ local Scrap = {}
   So iron will match iron-plate and hardenend-iron-plate. Even superironbar would be a match.
   To exclude like copper-plate but still use copper-cables just be more specific. It is also used
   to contruct the scrap-items like ``iron-scrap``.]]
-local _types = {"iron", "copper", "steel"}  --, "lead", "titanium", "tungsten"}
+local _types = {"iron", "copper", "steel"}
 --[[  This table holds the result suffix which is then be constructed to ``_types.."-".._results`` (eg iron-plate).
   Like the _types table, this one also goes by priority, so position 1 is taken if possible, if not pos 2 will be checked until
   it runs out of options, then the script will log it and **ignore** the recipe.
@@ -109,7 +109,8 @@ function Scrap.get_scrap_item()
         {
           type = "item",
           name = item.. "-scrap",
-          icon = "__Ingredient_Scrap__/graphics/icons/" ..item.. "-scrap.png", -- or "__Ingredient_Scrap__/graphics/icons/missing-icon.png",
+          -- icon = "__Ingredient_Scrap__/graphics/icons/" ..item.. "-scrap.png",
+          icon = get_icon(item),
           icon_size = 64, icon_mipmaps = 4,
           subgroup = "raw-material",
           order = "z-b",
@@ -204,12 +205,12 @@ function Scrap.get_scrap_recipes(result, enabled)
           localised_name = {"recipe-name."..name},
           icons = {
             {
-              icon = "__Ingredient_Scrap__/graphics/icons/" ..item.. "-scrap.png",
+              icon = get_icon(item),
               icon_size = 64, icon_mipmaps = 4,
               scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
             },
             {
-              icon = "__Ingredient_Scrap__/graphics/icons/recycle.png",
+              icon = get_icon("recycle"),
               icon_size = 64, icon_mipmaps = 4,
               scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 0.8, g = 1.0, b = 0.8, a = 1.0 }
             },
