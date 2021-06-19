@@ -20,8 +20,11 @@ local _results = {"plate"} --, "ingot"}
 
 local mod = require("mods")
 
-table.extend(_types, mod[1])
-table.extend(_results, mod[2])
+_types = table.extend(mod[1], _types)
+_results = table.extend(mod[2], _results)
+
+-- log(serpent.block(_types))
+-- assert(1==2)
 
 --- Adds the ingredients (uses difficulty if possible) to the scrap_results table.
 ---@return table ``{[_types.."-scrap"] = amount}``
@@ -109,7 +112,6 @@ function Scrap.get_scrap_item()
         {
           type = "item",
           name = item.. "-scrap",
-          -- icon = "__Ingredient_Scrap__/graphics/icons/" ..item.. "-scrap.png",
           icon = get_icon(item),
           icon_size = 64, icon_mipmaps = 4,
           subgroup = "raw-material",
@@ -132,16 +134,24 @@ end
 ---@param item string the item to look for in ``effects.recipe``
 ---@param name string the name of the recipe to add
 ---@return table technologies returns matching technologies as array
-function Scrap.insert_technology(item, name)
+function Scrap.insert_technology(item, name, raw_item)
 local unlock = { recipe = name, type = "unlock-recipe" }
 local techs = {}
   for key, value in pairs(data.raw.technology) do
-    if value.effects then
+    -- log(value.name.." - " ..item.." - " ..name.. " - " ..raw_item)
+    if string.match(tostring(value.name), raw_item) then
+log(value.name .. " - " ..name)
+    end
+    if value.effects and #value.effects > 0 then
       for _, effects in pairs(value.effects) do
-        if effects.recipe and effects.recipe == item then
+        if (effects.recipe and effects.recipe == item) then
           techs[#techs+1] = key
+          break
         end
       end
+    elseif string.match(tostring(value.name), raw_item) then
+      techs[#techs+1] = key
+      break
     end
   end
   for _,v in ipairs(techs) do
@@ -149,12 +159,12 @@ local techs = {}
   end
   return techs
 end
--- log(serpent.block(Scrap.insert_technology("steel-plate", "recycle-steel-scrap"), {comment = false}))
--- log(serpent.block(data.raw.technology["steel-processing"], {comment = false}))
+-- log(serpent.block(Scrap.insert_technology("zinc-plate", "recycle-zinc-scrap", "zinc"), {comment = false}))
+-- log(serpent.block(data.raw.technology["zinc-processing"], {comment = false}))
 -- assert(1==2, " D I E")
 
 --- Create the scrap items recycling recipe from ``_types`` and return the table.
----@param result table ``_types.. "-" ..result`` eg: iron-plate
+---@param result? table ``_types.. "-" ..result`` eg: iron-plate
 ---@param enabled? boolean default depends on available technologies
 ---@return table recipes
 function Scrap.get_scrap_recipes(result, enabled)
@@ -168,34 +178,32 @@ function Scrap.get_scrap_recipes(result, enabled)
 
       for _, v in ipairs(result) do
         _result = item.. "-" ..v
-        if data.raw.item[_result] then break else
-          -- error("item " ..serpent.block(result).. "not found!")
-          if debug then log("item " ..serpent.block(_result).. "not found!") end
+        if data.raw.item[_result] then
+          if not enabled then
+            local tech = Scrap.insert_technology(_result, name, item)
+            if #tech == 0 then enabled = true end
+            -- log("Scrap.insert_technology() " ..name.. ": " ..serpent.block(tech))
+            -- log(_result.. " : " ..tostring(enabled))
+          end
+          break
+        else
+          result._result = nil
+          -- error("Item '" ..item.. "' not found!") -- this is bad
+          if debug then
+            log("item " ..serpent.block(_result).. "not found!")
+          end
         end
       end
+      log(serpent.block(_result))
+      log(serpent.block(item))
+      local order = "z" --data.raw.item[_result].order.. "-a" or "z"
 
-      local order = data.raw.item[_result].order.. "-a" or "z"
-
-      if not data.raw.item[_result] then error("Item '" ..item.. "' not found!") end -- this is bad
-      --[[ CONCEPT in addition there must also an normal/expensive result enabled=... | to much work
-      -- if data.raw.recipe[_result] then
-      --   if data.raw.recipe[_result].enabled then -- enabled is optional (true) so the lookup can return nil
-      --     enabled = data.raw.recipe[_result].enabled
-      --   else
-      --     if data.raw.recipe[_result].expensive then
-      --       enabled = data.raw.recipe[_result].expensive.enabled or true
-      --     end
-      --     if data.raw.recipe[_result].normal then
-      --       enabled = data.raw.recipe[_result].normal.enabled or true
-      --     end
-      --   end
-      -- end ]]
-      if not enabled then
-        local tech = Scrap.insert_technology(_result, name)
-        if #tech == 0 then enabled = true end
-        -- log("Scrap.insert_technology() " ..name.. ": " ..serpent.dump(tech))
-        -- log(_result.. " : " ..tostring(enabled))
-      end
+      -- if not enabled then
+      --   local tech = Scrap.insert_technology(_result, name)
+      --   if #tech == 0 then enabled = true end
+      --   -- log("Scrap.insert_technology() " ..name.. ": " ..serpent.dump(tech))
+      --   -- log(_result.. " : " ..tostring(enabled))
+      -- end
 
       table.insert(
         scrap_recipes,
@@ -203,18 +211,7 @@ function Scrap.get_scrap_recipes(result, enabled)
           type = "recipe",
           name = name,
           localised_name = {"recipe-name."..name},
-          icons = {
-            {
-              icon = get_icon(item),
-              icon_size = 64, icon_mipmaps = 4,
-              scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
-            },
-            {
-              icon = get_icon("recycle"),
-              icon_size = 64, icon_mipmaps = 4,
-              scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 0.8, g = 1.0, b = 0.8, a = 1.0 }
-            },
-          },
+          icons = get_scrap_icons(item, _result),
           subgroup = "raw-material",
           category = "smelting",
           order = order,

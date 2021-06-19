@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2021-17-06
+  Changes:
+    - Added some settings to change some values
+  Minor Features:
+    - added support for Angels, bzlead/titanium/tungsten, bobores
+---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2021-17-06
   Changes:

@@ -3,7 +3,7 @@ local _types = {}
 local _results = {}
 local mod_name = "__Ingredient_Scrap__"
 function table.extend(t1, t2)
-  for i = 1, #t2 do t1[#t1+1] = t2[i] end
+  for i = 1, #t2 do t1[#t1+1] = t2[i] end return t1
 end
 
 function get_icon(name)
@@ -22,28 +22,61 @@ function get_icon(name)
   }
   return icons[name] or icons.missing
 end
+function get_scrap_icons(item, result)
+  local icon_item, icon_size, icon_mipmaps
+  if data.raw.item[result] then
+    if data.raw.item[result].icon then
+      icon_item = data.raw.item[result].icon
+      icon_size = data.raw.item[result].icon_size
+      icon_mipmaps = data.raw.item[result].icon_mipmaps
+    elseif data.raw.item[item].icon then
+      icon_item = data.raw.item[item].icon
+      icon_size = data.raw.item[item].icon_size
+      icon_mipmaps = data.raw.item[item].icon_mipmaps
+    end
+  end
+  return {
+    {
+      icon = get_icon(item),
+      icon_size = 64, icon_mipmaps = 4,
+      scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
+    },
+    {
+      icon = icon_item or get_icon("missing"),
+      icon_size = icon_size or 64, icon_mipmaps = icon_mipmaps or 4,
+      scale = 0.25, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
+    },
+    {
+      icon = get_icon("recycle"),
+      icon_size = 64, icon_mipmaps = 4,
+      scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 0.8, g = 1.0, b = 0.8, a = 1.0 }
+    },
+  }
+end
 
 if (mods['Molten_Metals']) then
-  table.insert(_results, "ingot")
+  table.extend(_results, {"ingot"})
 end
 if (mods['Krastorio2']) then
-  table.insert(_types, "imersium")
-  table.insert(_results, "beam")
+  table.extend(_types, {"imersium"})
+  table.extend(_results, {"beam"})
 end
 if (mods['angelssmelting']) then
-  table.insert(_results, "ingot")
+  table.extend(_results, {"ingot"})
 end
 if (mods['bztitanium']) then
-  table.insert(_types, "titanium")
+  table.extend(_types, {"titanium"})
 end
 if (mods['bztungsten']) then
-  table.insert(_types, "tungsten")
+  table.extend(_types, {"tungsten"})
 end
 if (mods['bzlead']) then
-  table.insert(_types, "lead")
+  table.extend(_types, {"lead"})
 end
-if (mods["bobplates"]) then
-  
+if (mods["bobores"]) then
+  table.extend(_types, {"lead", "titanium", "zinc", "nickel", "aluminium", "tungsten", "tin", "silver", "gold",
+  "brass", "bronze", "nitinol", "invar", "cobalt-steel", "cobalt", --[["glass", "silicon",]] "gunmetal" })
+  table.extend(_results, {"plate", "alloy", "gear-wheel", "bearing"})
 end
 
 return {_types, _results}
