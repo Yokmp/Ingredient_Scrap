@@ -15,7 +15,7 @@ local ingredient_types = {"iron", "copper", "steel"}
 local result_types = {"plate"} --, "ingot"}
 
 
--- local mod = require("mods")
+local mod = require("mods")
 -- _types = table.extend(mod[1], _types)
 -- _results = table.extend(mod[2], _results)
 
@@ -106,8 +106,26 @@ end
 -- assert(1==2, "updates")
 
 
+---Wrapper for ``recipe_get_ingredients()`` and ``recipe_ingredient_has_type()``
+---@param _recipe_name table
+---@param _types table
+---@return table ``{ match = boolean, simple = n, normal = n, expensive = n }``
+function recipe_ingredient_match_amount(_recipe_name, _types)
+  local _ingredients = {}
+  local _amounts = { match = false, simple = 0, normal = 0, expensive = 0 }
+  _types = _types or ingredient_types
+
+  if data.raw.recipe[_recipe_name] then
+    _ingredients = recipe_get_ingredients(data.raw.recipe[_recipe_name])
+    _amounts = recipe_ingredient_has_type( _ingredients, _types )
+  end
+
+  return _amounts
+end
+
+
 ---Gets the results and their difficulty if possible
-function recipe_get_results(_recipe) -- rewrite me because im useless
+function recipe_get_results(_recipe)
   local _results = {}
   local _enabled = _recipe.enabled or true -- not a trustful source
 
@@ -175,3 +193,48 @@ end
 -- assert(1==2, "updates")
 
 
+-----------------
+--    SCRAP    --
+-----------------
+---Generate a scrap item
+---@param _scrap table {name=_type, stack_size=n}
+function get_scrap_item(_scrap)
+  return {
+    type = "item",
+    name = _scrap[1].. "-scrap",
+    icon = get_icon(_scrap[1]),
+    icon_size = 64, icon_mipmaps = 4,
+    subgroup = "raw-material",
+    order = "z-b",
+    stack_size = _scrap[2] or 100
+  }
+end
+-- log(serpent.block(get_scrap_item( {"test-type"} )))
+-- log(serpent.block(get_scrap_item( {"copper", 42} )))
+-- assert(1==2, "updates")
+
+---comment
+---@param _ingredient_type string ingredient_type
+---@param _result_type string result_type
+---@return table recipe
+function get_scrap_recipe(_ingredient_type, _result_type)
+  local _item = _ingredient_type.."-".._result_type
+  local _name = "recycle-" .._ingredient_type.. "-scrap"
+  return {
+    type = "recipe",
+    name = _name,
+    localised_name = {"recipe-name.".._name},
+    icons = get_scrap_icons(_ingredient_type, _item),
+    subgroup = "raw-material",
+    category = "smelting",
+    order = data.raw.recipe[_item].order,
+    enabled = data.raw.recipe[_item].enabled,
+    energy_required = 3.2,
+    always_show_products = true,
+    allow_as_intermediate = false,
+    ingredients = {{ _ingredient_type.. "-scrap", settings.startup["ingredient-scrap-needed"].value}},
+    results = {{ _item, 1 }}
+  }
+end
+log(serpent.block(get_scrap_recipe( "copper", "plate" )))
+assert(1==2, "updates")
