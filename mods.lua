@@ -1,11 +1,15 @@
+require("functions")
 
 local _types = {}
 local _results = {}
 local mod_name = "__Ingredient_Scrap__"
+
 function table.extend(t1, t2)
   for i = 1, #t2 do t1[#t1+1] = t2[i] end return t1
 end
 
+---comment
+---@return string
 function get_icon(name)
   local icon_path = mod_name.. "/graphics/icons/"
   local icon = icon_path..name.."-scrap.png"
@@ -15,13 +19,30 @@ function get_icon(name)
     iron      = icon,
     copper    = icon,
     steel     = icon,
-    titanium  = icon,
-    lead      = icon,
-    tungsten  = icon,
-    imersium  = icon,
+    imersium      = get_icon_bycolor("purple", 1),
+    lead          = get_icon_bycolor("brown", 3),
+    titanium      = get_icon_bycolor("dgrey", 2),
+    zinc          = get_icon_bycolor("grey", 3),
+    nickel        = get_icon_bycolor("grey", 2),
+    aluminium     = get_icon_bycolor("grey", 1),
+    tungsten      = get_icon_bycolor("grey", 2),
+    tin           = get_icon_bycolor("grey", 2),
+    silver        = get_icon_bycolor("grey", 1),
+    gold          = get_icon_bycolor("yellow", 2),
+    brass         = get_icon_bycolor("yellow", 1),
+    bronze        = get_icon_bycolor("orange", 1),
+    nitinol       = get_icon_bycolor("grey", 2),
+    invar         = get_icon_bycolor("grey", 3),
+    cobalt        = get_icon_bycolor("blue", 2),
+    -- glass      = get_icon_bycolor("purple", 1),
+    -- silicon    = get_icon_bycolor("purple", 1),
+    gunmetal      = get_icon_bycolor("yellow", 1),
+    ["cobalt-steel"]  = get_icon_bycolor("blue", 2),
+    ["copper-tungsten"]  = get_icon_bycolor("red", 2),
   }
   return icons[name] or icons.missing
 end
+
 function get_scrap_icons(item, result)
   local icon_item, icon_size, icon_mipmaps
   if data.raw.item[result] then
@@ -73,10 +94,17 @@ end
 if (mods['bzlead']) then
   table.extend(_types, {"lead"})
 end
-if (mods["bobores"]) then
-  table.extend(_types, {"lead", "titanium", "zinc", "nickel", "aluminium", "tungsten", "tin", "silver", "gold",
+if (mods["bobplates"]) then
+  table.extend(_types, {"lead", "titanium", "zinc", "nickel", "aluminium", "copper-tungsten", "tungsten", "tin", "silver", "gold",
   "brass", "bronze", "nitinol", "invar", "cobalt-steel", "cobalt", --[["glass", "silicon",]] "gunmetal" })
   table.extend(_results, {"plate", "alloy", "gear-wheel", "bearing"})
+
+  local tech = { {"cobalt","cobalt"}, {"cobalt-steel","cobalt"}, {"nitinol", "nitinol"},
+    {"silver", "lead"}, {"zinc", "zinc"}, {"brass", "zinc"}, {"gunmetal", "zinc"}} -- the bad batch
+  for _, name in ipairs(tech) do
+    data.raw.recipe["recycle-"..name[1].."-scrap"] = {enabled = false}
+    table.insert( data.raw.technology[name[2].."-processing"].effects, { recipe = "recycle-"..name[1].."-scrap", type = "unlock-recipe" } )
+  end
 end
 
 return {_types, _results}

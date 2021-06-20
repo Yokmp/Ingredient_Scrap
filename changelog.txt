@@ -1,10 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2021-19-06
+  Changes:
+    - changed the way icon lookup and generation work
+  Minor Features:
+    - 27 new scrap icons
+---------------------------------------------------------------------------------------------------
 Version: 1.0.4
-Date: 2021-17-06
+Date: 2021-19-06
   Changes:
     - Added some settings to change some values
+    - improved icon handling; you will see a "missing" icon (a lot with bobplates)
   Minor Features:
-    - added support for Angels, bzlead/titanium/tungsten, bobores
+    - added support for bobplates, bzlead/bztitanium/bztungsten
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2021-17-06
