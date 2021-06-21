@@ -23,143 +23,182 @@ local mod = require("mods")
 -- assert(1==2)
 
 
----adds name and amount keys to ingredients and returns a new table
----@param table table
----@return table
-function add_pairs(table)
-  local _t = table
-
-  for i, value in ipairs(_t) do
-    if not value.name then
-      _t[i].name   = value[1] ;  _t[i][1] = nil
-      _t[i].amount = value[2] ;  _t[i][2] = nil
-    end
-  end
-
-  return _t
-end
 
 
 -------------------
 --    RECIPES    --
 -------------------
+--#region
 
----Get the ingredients of the given recipe
-function recipe_get_ingredients(_recipe)
-  local _ingredients = {}
-  local _enabled = _recipe.enabled or true
+---adds name and amount keys to ingredients and returns a new table
+---@param table table ``{"name", n?}``
+---@return table ``{ name = "name", amount = n }``
+local function add_pairs(table)
+  if table.name then return table end
+  local _t = table
 
-  if _recipe.ingredients then
-    _ingredients = {difficulty = false, enabled = _enabled}
-    _ingredients.simple = add_pairs(_recipe.ingredients)
-  end
-  if _recipe.normal then
-    _ingredients = {difficulty = true, enabled = _enabled}
-    _ingredients.normal = add_pairs(_recipe.normal.ingredients)
-  end
-  if _recipe.expensive then
-    _ingredients = {difficulty = true, enabled = _enabled}
-    _ingredients.expensive = add_pairs(_recipe.expensive.ingredients)
-  end
+  _t.name   = _t[1]      ;  _t[1] = nil
+  _t.amount = _t[2] or 1 ;  _t[2] = nil
 
-  return _ingredients
+  return _t
 end
--- log(serpent.block(recipe_get_ingredients(data.raw.recipe["gun-turret"]), {comment = false}))
--- log(serpent.block(recipe_get_ingredients(data.raw.recipe["uranium-processing"]), {comment = false}))
--- assert(1==2, "updates")
+-- log(serpent.block( add_pairs({ "iron-gear-wheel", 10 }) ))
+-- log(serpent.block( add_pairs({ "copper-plate", 10 }) ))
+-- log(serpent.block( add_pairs({ name="iron-plate", amount=20 }) ))
+-- log(serpent.block( add_pairs({ name = "uranium-235", probability = 0.007, amount = 1 }) ))
+-- assert(1==2, "add_pairs()")
+
+---@param data_recipe table ``data.raw.recipe["name"]``
+function recipe_get_keywords(data_recipe)
+  local _return = {ingredients = nil, normal = nil, expensive = nil, result = nil, result_count = nil, results = nil}
+
+    if data_recipe.ingredients then
+      _return.ingredients = true
+    end
+    if data_recipe.normal then
+      _return.normal = true
+    end
+    if data_recipe.expensive then
+      _return.expensive = true
+    end
+    if data_recipe.result then
+      _return.result = true
+    end
+    if data_recipe.result_count then
+      _return.result_count = true
+    end
+    if data_recipe.results then
+      _return.results = true
+    end
+
+  return _return
+end
+-- log(serpent.block(recipe_get_keywords( data.raw.recipe["uranium-processing"] )))
+-- log(serpent.block(recipe_get_keywords( data.raw.recipe["iron-gear-wheel"] )))
+-- assert(1==2, "recipe_get_keywords()")
+
+---@param data_recipe table ``data.raw.recipe["name"]``
+---@param difficulty? table ``{ingredients = boolean, normal = boolean, expensive = boolean}``
+function recipe_is_enabled(data_recipe, difficulty)
+  local _return = {ingredients = false, normal = false, expensive = false}
+  local _difficulty = difficulty or recipe_get_keywords(data_recipe)
+
+    if _difficulty.ingredients and (data_recipe.enabled or data_recipe.enabled == nil) then
+      _return.ingredients = true
+    end
+    if _difficulty.normal and data_recipe.normal.enabled == nil then
+      _return.normal = true
+    end
+    if _difficulty.expensive and data_recipe.expensive.enabled == nil then
+      _return.expensive = true
+    end
+
+  return _return
+end
+-- log(serpent.block(recipe_is_enabled( data.raw.recipe["iron-stick"] )))
+-- log(serpent.block(recipe_is_enabled( data.raw.recipe["flamethrower-turret"] )))
+-- log(serpent.block(recipe_is_enabled( data.raw.recipe["iron-gear-wheel"] )))
+-- assert(1==2, "recipe_is_enabled()")
 
 
 ---Does an ingredient match one of the types
----@param _ingredients table
----@param _types table
-function recipe_ingredient_has_type(_ingredients, _types)
-  local _amount = { match=false, simple=0, normal=0, expensive=0}
+---@param data_recipe table ``data.raw.recipe["name"]``
+---@param _type string ingredient_types[n]
+---@param difficulty? table ``{ingredients = boolean, normal = boolean, expensive = boolean}``
+function recipe_ingredient_has_type(data_recipe, _type, difficulty)
+  local _amount = { match = false, ingredients = 0, normal = 0, expensive = 0 }
+  local _difficulty = difficulty or recipe_get_keywords(data_recipe)
 
-  if _ingredients.difficulty then
-    for i, value in ipairs(_ingredients.normal) do
-      if string.match(tostring(value.name), _types[i]) then
-        _amount.normal = _amount.normal + 1
-        _amount.match = true
+  if _difficulty.normal then
+    for i, value in ipairs(data_recipe.normal.ingredients) do
+      value = add_pairs(value)
+      if string.match(tostring(value.name), _type) then
+        _amount.normal    = _amount.normal + 1
+        _amount.match     = true
       end
     end
-    for i, value in ipairs(_ingredients.expensive) do
-      if string.match(tostring(value.name), _types[i]) then
+  end
+  if _difficulty.expensive then
+    for i, value in ipairs(data_recipe.expensive.ingredients) do
+      value = add_pairs(value)
+      if string.match(tostring(value.name), _type) then
         _amount.expensive = _amount.expensive + 1
-        _amount.match = true
+        _amount.match     = true
       end
     end
-  else
-    for i, value in ipairs(_ingredients.simple) do
-      if string.match(tostring(value.name), _types[i]) then
-        _amount.simple = _amount.simple + 1
-        _amount.match = true
+  end
+  if _difficulty.ingredients then
+    for i, value in ipairs(data_recipe.ingredients) do
+      value = add_pairs(value)
+      if string.match(tostring( value.name ), _type) then
+        _amount.ingredients    = _amount.ingredients + 1
+        _amount.match     = true
       end
     end
   end
 
   return _amount
 end
--- local test = recipe_get_ingredients(data.raw.recipe["gun-turret"])
--- log(serpent.block( recipe_ingredient_has_type( test, ingredient_types ), {comment = false}))
--- test = recipe_get_ingredients(data.raw.recipe["uranium-processing"])
--- log(serpent.block( recipe_ingredient_has_type( test, ingredient_types ), {comment = false}))
--- assert(1==2, "updates")
+-- log(serpent.block( recipe_ingredient_has_type( data.raw.recipe["uranium-processing"], "iron" ), {comment = false}))
+-- log(serpent.block( recipe_ingredient_has_type( data.raw.recipe["iron-gear-wheel"], "iron" ), {comment = false}))
+-- log(serpent.block( recipe_ingredient_has_type( data.raw.recipe["gun-turret"], "iron" ), {comment = false}))
+-- assert(1==2, "recipe_ingredient_has_type()")
 
 
----Wrapper for ``recipe_get_ingredients()`` and ``recipe_ingredient_has_type()``
----@param _recipe_name table
----@param _types table
----@return table ``{ match = boolean, simple = n, normal = n, expensive = n }``
-function recipe_ingredient_match_amount(_recipe_name, _types)
-  local _ingredients = {}
-  local _amounts = { match = false, simple = 0, normal = 0, expensive = 0 }
-  _types = _types or ingredient_types
-
-  if data.raw.recipe[_recipe_name] then
-    _ingredients = recipe_get_ingredients(data.raw.recipe[_recipe_name])
-    _amounts = recipe_ingredient_has_type( _ingredients, _types )
-  end
-
-  return _amounts
-end
 
 
 ---Gets the results and their difficulty if possible
-function recipe_get_results(_recipe)
-  local _results = {}
-  local _enabled = _recipe.enabled or true -- not a trustful source
+---@param data_recipe table ``data.raw.recipe["name"]``
+---@param difficulty? table ``{result = boolean, results = boolean, normal = boolean, expensive = boolean}``
+function recipe_get_results(data_recipe, difficulty)
+  local _results = {results = {}, normal = {}, expensive = {}}
+  local _difficulty = difficulty or recipe_get_keywords(data_recipe)
 
-  if _recipe.results then
-    _results[_recipe.name] = {difficulty = false, enabled = _enabled}
-    _results[_recipe.name].results = add_pairs(_recipe.results)
-  end
-  if _recipe.result then
-    _results[_recipe.name] = {difficulty = false, enabled = _enabled}
-    _results[_recipe.name].results = {name = _recipe.result, amount = 1}
-    if _recipe.result_count then
-      _results[_recipe.name].results.amount = _recipe.result_count
+  if _difficulty.results then
+    for i, value in ipairs(data_recipe.results) do
+      _results.results[i] = add_pairs(value)
     end
   end
-  if _recipe.normal then
-    _results[_recipe.name] = {difficulty = true, enabled = _enabled}
-    _results[_recipe.name].normal = add_pairs(_recipe.normal.ingredients)
+  if _difficulty.result then
+    _results.results.name = data_recipe.result
+    _results.results.amount = data_recipe.result_count or 1
   end
-  if _recipe.expensive then
-    _results[_recipe.name] = {difficulty = true, enabled = _enabled}
-    _results[_recipe.name].expensive = add_pairs(_recipe.expensive.ingredients)
+  if _difficulty.normal then
+    if data_recipe.normal.result then
+      _results.normal.name = data_recipe.normal.result
+      _results.normal.amount = data_recipe.normal.result_amount or 1
+    else
+      for i, value in ipairs(data_recipe.normal.results) do
+        _results.normal[i] = add_pairs(value)
+      end
+    end
+  end
+  if _difficulty.expensive then
+    if data_recipe.expensive.result then
+      _results.expensive.name = data_recipe.expensive.result
+      _results.expensive.amount = data_recipe.result_count or 1
+    else
+      for i, value in ipairs(data_recipe.expensive.results) do
+        _results.expensive[i] = add_pairs(value)
+      end
+    end
   end
 
   return _results
 end
--- log(serpent.block(recipe_get_results(data.raw.recipe["iron-stick"]), {comment = false}))
--- log(serpent.block(recipe_get_results(data.raw.recipe["uranium-processing"]), {comment = false}))
--- log(serpent.block(recipe_get_results(data.raw.recipe["kovarex-enrichment-process"]), {comment = false}))
--- assert(1==2, "updates")
+log(serpent.block(recipe_get_results(data.raw.recipe["iron-gear-wheel"]), {comment = false}))
+log(serpent.block(recipe_get_results(data.raw.recipe["uranium-processing"]), {comment = false}))
+log(serpent.block(recipe_get_results(data.raw.recipe["kovarex-enrichment-process"]), {comment = false}))
+assert(1==2, "recipe_get_results()")
+-- #endregion
+
+
 
 
 ----------------------
 --    TECHNOLOGY    --
 ----------------------
+--#region
 
 function technology_has_recipe(_technology, _recipe)
 
@@ -178,6 +217,8 @@ end
 -- log(serpent.block(technology_has_recipe(data.raw.technology["modules"] ,"modules"), {comment = false}))
 -- assert(1==2, "updates")
 
+
+
 function get_technology_by_recipe(_recipe)
   local _tech = {}
 
@@ -191,13 +232,17 @@ function get_technology_by_recipe(_recipe)
 end
 -- log(serpent.block(get_technology_by_recipe("steel-plate"), {comment = false}))
 -- assert(1==2, "updates")
+--#endregion
+
+
 
 
 -----------------
 --    SCRAP    --
 -----------------
+
 ---Generate a scrap item
----@param _scrap table {name=_type, stack_size=n}
+---@param _scrap table ``{ name=_type, stack_size=n }``
 function get_scrap_item(_scrap)
   return {
     type = "item",
@@ -213,7 +258,7 @@ end
 -- log(serpent.block(get_scrap_item( {"copper", 42} )))
 -- assert(1==2, "updates")
 
----comment
+
 ---@param _ingredient_type string ingredient_type
 ---@param _result_type string result_type
 ---@return table recipe
@@ -236,5 +281,60 @@ function get_scrap_recipe(_ingredient_type, _result_type)
     results = {{ _item, 1 }}
   }
 end
-log(serpent.block(get_scrap_recipe( "copper", "plate" )))
-assert(1==2, "updates")
+-- log(serpent.block(get_scrap_recipe( "copper", "plate" )))
+-- assert(1==2, "updates")
+
+
+---Insert return table into an items results.
+--
+---Use ``recipe_ingredient_match_amount(_recipe_name, _types)`` for max_amount.
+---@param _name string
+---@param _amount number
+---@return table ``{name = _name, amount_min = 1, amount_max = _amount, probability = scrap_probability}``
+function get_scrap_result(_name, _amount)
+  local scrap_probability = settings.startup["ingredient-scrap-probability"].value/100
+  return {name = _name, amount_min = 1, amount_max = _amount, probability = scrap_probability}
+end
+
+
+
+
+
+---@param _scrap table {type="type", stack_size=n}
+---@param _result string result_type ( "plate" )
+function add_scrap(_scrap, _result)
+  local _scrap_item = get_scrap_item({name=_scrap.type, stack_size=_scrap.stack_size})
+  local _scrap_recipe = get_scrap_recipe(_scrap.type_type, _result)
+
+  -- add_scrap_to_techtree
+end
+
+
+
+
+
+
+
+
+for recipe, value in pairs(data.raw.recipe) do
+
+  for it, _ingredient in ipairs(ingredient_types) do
+
+    for ir, _result in ipairs(result_types) do
+
+      local _res = recipe_get_results(recipe)
+      local _amount = recipe_ingredient_match_amount(recipe, _ingredient)
+      local _s_result = get_scrap_result(_name, _amount)
+      local _r_results = {}
+
+      if _res.difficulty then
+        
+      else
+        _r_results = _res.results
+      end
+
+    end
+
+  end
+
+end
