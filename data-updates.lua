@@ -201,25 +201,28 @@ function recipe_replace_results(data_recipe, data_results, keywords)
   local _results = data_results or recipe_get_results(data_recipe)
   local _keywords = keywords or recipe_get_keywords(data_recipe)
 
+  if _keywords.results or _keywords.result then
     data_recipe.result = nil
     data_recipe.result_count = nil
-  if _keywords.results then
-    data_recipe.results = _results
+    data_recipe.results = _results.results
   end
   if _keywords.normal then
-    data_recipe.normal.results = _results
     data_recipe.normal.result = nil
     data_recipe.normal.result_count = nil
+    data_recipe.normal.results = _results.normal
   end
   if _keywords.expensive then
-    data_recipe.expensive.results = _results
     data_recipe.expensive.result = nil
     data_recipe.expensive.result_count = nil
+    data_recipe.expensive.results = _results.expensive
   end
 
 end
--- log(serpent.block(recipe_replace_results(data.raw.recipe["iron-gear-wheel"]), {comment = false}))
--- assert(1==2, "recipe_replace_results()")
+recipe_replace_results(data.raw.recipe["centrifuge"])
+log(serpent.block(data.raw.recipe["centrifuge"], {comment = false}))
+recipe_replace_results(data.raw.recipe["iron-gear-wheel"])
+log(serpent.block(data.raw.recipe["iron-gear-wheel"], {comment = false}))
+assert(1==2, "recipe_replace_results()")
 -- #endregion
 
 
