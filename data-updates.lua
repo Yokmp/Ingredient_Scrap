@@ -34,7 +34,7 @@ local mod = require("mods")
 ---@param table table ``{"name", n?}``
 ---@return table ``{ name = "name", amount = n }``
 local function add_pairs(table)
-  if table.name then return table end
+  if table and table.name then return table end --they can be empty and would be "valid"
   local _t = table
 
   _t.name   = _t[1]      ;  _t[1] = nil
@@ -49,6 +49,7 @@ end
 -- assert(1==2, "add_pairs()")
 
 ---@param data_recipe table ``data.raw.recipe["name"]``
+---@return table ``{ingredients = boolean, normal = boolean, expensive = boolean, result = boolean, result_count = boolean, results = boolean}``
 function recipe_get_keywords(data_recipe)
   local _return = {ingredients = nil, normal = nil, expensive = nil, result = nil, result_count = nil, results = nil}
 
@@ -78,18 +79,18 @@ end
 -- assert(1==2, "recipe_get_keywords()")
 
 ---@param data_recipe table ``data.raw.recipe["name"]``
----@param difficulty? table ``{ingredients = boolean, normal = boolean, expensive = boolean}``
-function recipe_is_enabled(data_recipe, difficulty)
+---@param keywords? table ``{ingredients = boolean, normal = boolean, expensive = boolean, result = boolean, result_count = boolean, results = boolean}``
+function recipe_is_enabled(data_recipe, keywords)
   local _return = {ingredients = false, normal = false, expensive = false}
-  local _difficulty = difficulty or recipe_get_keywords(data_recipe)
+  local _keywords = keywords or recipe_get_keywords(data_recipe)
 
-    if _difficulty.ingredients and (data_recipe.enabled or data_recipe.enabled == nil) then
+    if _keywords.ingredients and (data_recipe.enabled or data_recipe.enabled == nil) then
       _return.ingredients = true
     end
-    if _difficulty.normal and data_recipe.normal.enabled == nil then
+    if _keywords.normal and data_recipe.normal.enabled == nil then
       _return.normal = true
     end
-    if _difficulty.expensive and data_recipe.expensive.enabled == nil then
+    if _keywords.expensive and data_recipe.expensive.enabled == nil then
       _return.expensive = true
     end
 
@@ -104,12 +105,12 @@ end
 ---Does an ingredient match one of the types
 ---@param data_recipe table ``data.raw.recipe["name"]``
 ---@param _type string ingredient_types[n]
----@param difficulty? table ``{ingredients = boolean, normal = boolean, expensive = boolean}``
-function recipe_ingredient_has_type(data_recipe, _type, difficulty)
+---@param keywords? table ``{ingredients = boolean, normal = boolean, expensive = boolean, result = boolean, result_count = boolean, results = boolean}``
+function recipe_ingredient_has_type(data_recipe, _type, keywords)
   local _amount = { match = false, ingredients = 0, normal = 0, expensive = 0 }
-  local _difficulty = difficulty or recipe_get_keywords(data_recipe)
+  local _keywords = keywords or recipe_get_keywords(data_recipe)
 
-  if _difficulty.normal then
+  if _keywords.normal then
     for i, value in ipairs(data_recipe.normal.ingredients) do
       value = add_pairs(value)
       if string.match(tostring(value.name), _type) then
@@ -118,7 +119,7 @@ function recipe_ingredient_has_type(data_recipe, _type, difficulty)
       end
     end
   end
-  if _difficulty.expensive then
+  if _keywords.expensive then
     for i, value in ipairs(data_recipe.expensive.ingredients) do
       value = add_pairs(value)
       if string.match(tostring(value.name), _type) then
@@ -127,7 +128,7 @@ function recipe_ingredient_has_type(data_recipe, _type, difficulty)
       end
     end
   end
-  if _difficulty.ingredients then
+  if _keywords.ingredients then
     for i, value in ipairs(data_recipe.ingredients) do
       value = add_pairs(value)
       if string.match(tostring( value.name ), _type) then
@@ -147,23 +148,23 @@ end
 
 
 
----Gets the results and their difficulty if possible
+---Gets the results and their keywords if possible
 ---@param data_recipe table ``data.raw.recipe["name"]``
----@param difficulty? table ``{result = boolean, results = boolean, normal = boolean, expensive = boolean}``
-function recipe_get_results(data_recipe, difficulty)
+---@param keywords? table ``{ingredients = boolean, normal = boolean, expensive = boolean, result = boolean, result_count = boolean, results = boolean}``
+function recipe_get_results(data_recipe, keywords)
   local _results = {results = {}, normal = {}, expensive = {}}
-  local _difficulty = difficulty or recipe_get_keywords(data_recipe)
+  local _keywords = keywords or recipe_get_keywords(data_recipe)
 
-  if _difficulty.results then
+  if _keywords.results then
     for i, value in ipairs(data_recipe.results) do
       _results.results[i] = add_pairs(value)
     end
   end
-  if _difficulty.result then
+  if _keywords.result then
     _results.results.name = data_recipe.result
     _results.results.amount = data_recipe.result_count or 1
   end
-  if _difficulty.normal then
+  if _keywords.normal then
     if data_recipe.normal.result then
       _results.normal.name = data_recipe.normal.result
       _results.normal.amount = data_recipe.normal.result_amount or 1
@@ -173,7 +174,7 @@ function recipe_get_results(data_recipe, difficulty)
       end
     end
   end
-  if _difficulty.expensive then
+  if _keywords.expensive then
     if data_recipe.expensive.result then
       _results.expensive.name = data_recipe.expensive.result
       _results.expensive.amount = data_recipe.result_count or 1
@@ -186,12 +187,40 @@ function recipe_get_results(data_recipe, difficulty)
 
   return _results
 end
-log(serpent.block(recipe_get_results(data.raw.recipe["iron-gear-wheel"]), {comment = false}))
-log(serpent.block(recipe_get_results(data.raw.recipe["uranium-processing"]), {comment = false}))
-log(serpent.block(recipe_get_results(data.raw.recipe["kovarex-enrichment-process"]), {comment = false}))
-assert(1==2, "recipe_get_results()")
--- #endregion
+-- log(serpent.block(recipe_get_results(data.raw.recipe["iron-gear-wheel"]), {comment = false}))
+-- log(serpent.block(recipe_get_results(data.raw.recipe["uranium-processing"]), {comment = false}))
+-- log(serpent.block(recipe_get_results(data.raw.recipe["kovarex-enrichment-process"]), {comment = false}))
+-- assert(1==2, "recipe_get_results()")
 
+
+
+---@param data_recipe table ``data.raw.recipe["name"]``
+---@param data_results? table ``recipe_get_results(data.raw.recipe["name"])``
+---@param keywords? table ``{ingredients = boolean, normal = boolean, expensive = boolean, result = boolean, result_count = boolean, results = boolean}``
+function recipe_replace_results(data_recipe, data_results, keywords)
+  local _results = data_results or recipe_get_results(data_recipe)
+  local _keywords = keywords or recipe_get_keywords(data_recipe)
+
+    data_recipe.result = nil
+    data_recipe.result_count = nil
+  if _keywords.results then
+    data_recipe.results = _results
+  end
+  if _keywords.normal then
+    data_recipe.normal.results = _results
+    data_recipe.normal.result = nil
+    data_recipe.normal.result_count = nil
+  end
+  if _keywords.expensive then
+    data_recipe.expensive.results = _results
+    data_recipe.expensive.result = nil
+    data_recipe.expensive.result_count = nil
+  end
+
+end
+-- log(serpent.block(recipe_replace_results(data.raw.recipe["iron-gear-wheel"]), {comment = false}))
+-- assert(1==2, "recipe_replace_results()")
+-- #endregion
 
 
 
