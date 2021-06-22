@@ -375,13 +375,15 @@ function get_scrap_recycle_result(scrap_type)
       return scrap_type.."-"..result_type
     end
   end
+  return false
 end
 
 
 ---@param scrap_type string ingredient_type
+---@param item_type? string ingredient_type
 ---@return table recipe
-function get_scrap_recycle_recipe(scrap_type)
-  local _item = get_scrap_recycle_result(scrap_type) or "missing"
+function get_scrap_recycle_recipe(scrap_type, item_type)
+  local _item = scrap_type.."-"..item_type or get_scrap_recycle_result(scrap_type)
   local _name = "recycle-" ..scrap_type.. "-scrap"
   local _enabled = recipe_is_enabled(data.raw.recipe[_item])
 
