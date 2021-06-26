@@ -21,8 +21,8 @@ local _results = {"plate"} --, "ingot"}
 local mod = require("mods")
 
 
-_types = table.extend(mod[1], _types)
-_results = table.extend(mod[2], _results)
+_types = yutil.table.extend(mod[1], _types)
+_results = yutil.table.extend(mod[2], _results)
 
 -- log(serpent.block(_types))
 -- assert(1==2)
@@ -113,7 +113,7 @@ function Scrap.get_scrap_item()
         {
           type = "item",
           name = item.. "-scrap",
-          icon = get_icon(item),
+          icon = yutil.get_icon(item),
           icon_size = 64, icon_mipmaps = 4,
           subgroup = "raw-material",
           order = "z-b",
@@ -216,7 +216,7 @@ function Scrap.get_scrap_recipes(result, enabled)
           type = "recipe",
           name = name,
           localised_name = {"recipe-name."..name},
-          icons = get_scrap_icons(item, _result),
+          icons = yutil.get_scrap_icons(item, _result),
           subgroup = "raw-material",
           category = "smelting",
           order = order,

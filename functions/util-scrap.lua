@@ -11,7 +11,7 @@ function get_scrap_prototype_item(ingredient_type, stack_size, scrap_icon)
   return {
     type = "item",
     name = ingredient_type.. "-scrap",
-    icon = scrap_icon or get_icon(ingredient_type),
+    icon = scrap_icon or yutil.get_icon(ingredient_type),
     icon_size = 64, icon_mipmaps = 4,
     subgroup = "raw-material",
     order = "z-b",
@@ -58,7 +58,7 @@ function get_scrap_prototype_recipe(scrap_type, recycle_result)
     type = "recipe",
     name = _name,
     localised_name = {"recipe-name.".._name},
-    icons = get_scrap_icons(scrap_type, _item),
+    icons = yutil.get_scrap_icons(scrap_type, _item),
     subgroup = "raw-material",
     category = "smelting",
     order = _order or "z",
@@ -80,55 +80,6 @@ end
 -- log(serpent.block(get_scrap_prototype_recipe( "copper" ), {comment = false}))
 -- log(serpent.block(get_scrap_prototype_recipe( "steel" ), {comment = false}))
 -- assert(1==2, "get_scrap_prototype_recipe()")
-
-
----Does an ingredient match one of the types
----@param data_recipe table ``data.raw.recipe["name"]``
----@param scrap_type string ingredient_types[n]
----@param keywords? table ``{ingredients = boolean, normal = number, expensive = number, result = number, result_count = number, results = number}``
--- function get_scrap_amount(data_recipe, scrap_type, keywords)
---   local _amount = { match = false, ingredients = 0, normal = 0, expensive = 0 }
---   local _keywords = keywords or recipe_get_keywords(data_recipe)
-
---   if _keywords.normal then
---     for i, value in ipairs(data_recipe.normal.ingredients) do
---       value = add_pairs(value)
---       if string.match(tostring(value.name), scrap_type) then
---         _amount.normal      = _amount.normal + 1
---         _amount.match       = true
---       end
---     end
---   end
---   if _keywords.expensive then
---     for i, value in ipairs(data_recipe.expensive.ingredients) do
---       value = add_pairs(value)
---       if string.match(tostring(value.name), scrap_type) then
---         _amount.expensive   = _amount.expensive + 1
---         _amount.match       = true
---       end
---     end
---   end
---   if _keywords.ingredients then
---     for i, value in ipairs(data_recipe.ingredients) do
---       value = add_pairs(value)
---       if string.match(tostring( value.name ), scrap_type) then
---         _amount.ingredients = _amount.ingredients + 1
---         _amount.match       = true
---       end
---     end
---   end
-
---   if _amount.normal == 0 then _amount.normal = nil end
---   if _amount.expensive == 0 then _amount.expensive = nil end
---   if _amount.ingredients == 0 then _amount.ingredients = nil end
-
---   return _amount
--- end
--- log(serpent.block( get_scrap_amount( data.raw.recipe["uranium-processing"], "iron" ), {comment = false}))
--- log(serpent.block( get_scrap_amount( data.raw.recipe["iron-gear-wheel"], "iron" ), {comment = false}))
--- log(serpent.block( get_scrap_amount( data.raw.recipe["gun-turret"], "iron" ), {comment = false}))
--- log(serpent.block( get_scrap_amount( data.raw.recipe["steel-plate"], "steel" ), {comment = false}))
--- assert(1==2, "get_scrap_amount()")
 
 
 ---returns a results table
@@ -174,78 +125,74 @@ end
 ---@param data_recipe table ``data.raw.recipe["name"]``
 ---@param scrap_type? string scrap_ingredient_type
 ---@param keywords? table ``{ingredients = boolean, normal = boolean, expensive = boolean, result = boolean, result_count = boolean, results = boolean}``
-function recipe_add_scrap_result(data_recipe, scrap_type, keywords)
+function scrap_add_result(data_recipe, scrap_type, keywords)
   recipe_format_ingredients(data_recipe)
   recipe_format_results(data_recipe)
 
   local _keywords = keywords or recipe_get_keywords(data_recipe)
   local _scrap_type = scrap_type or get_ingredient_type(data_recipe)
-  local _result = get_scrap_result(data.raw.recipe[data_recipe.name])
+  local _result = get_scrap_result(data.raw.recipe[data_recipe.name], _scrap_type)
 
-  if data_recipe.name == "gun-turret" then
-    log("_keywords: "..serpent.block(_keywords))
-    log("_scrap_type: "..serpent.block(_scrap_type))
-    log("_result: "..serpent.block(_result))
-  end
-
-  if _keywords.results and _result.results then
-    if data_recipe.results[1].name then
-      data_recipe.main_product = data_recipe.results[1].name or data_recipe.name
-    end
-    for _, results in ipairs(_result.results) do
-      table.insert(data_recipe.results, results)
-    end
+  if not _keywords.ingredients then
+    log(" No ingredients found:   "..data_recipe.name)
+    return false
   end
 
-  if _keywords.normal and _result.normal then
-    if data_recipe.normal.results[1].name then
-      data_recipe.normal.main_product = data_recipe.normal.results[1].name or data_recipe.name
+  -- if next(_scrap_type, nil) then
+  --   log(data_recipe.name.." no scrap type: ".. serpent.block(_scrap_type))
+  --   return false end
+  -- if next(_result, nil) then
+  --   log(data_recipe.name.." no scrap result: ".. serpent.block(_result))
+  --   return false end
+
+-- log("Name: "..data_recipe.name)
+-- log("_keywords: "..serpent.block(_keywords))
+-- log("_scrap_type: "..serpent.block(_scrap_type))
+
+
+  -- if data_recipe.name == "gun-turret" then
+  --   log("_keywords: "..serpent.block(_keywords))
+  --   log("_scrap_type: "..serpent.block(_scrap_type))
+  --   log("_result: "..serpent.block(_result))
+  -- end
+
+
+
+    if _keywords.results and _result.results and _scrap_type.ingredients then
+      if data_recipe.results[1].name then
+        data_recipe.main_product = data_recipe.results[1].name or data_recipe.name
+      end
+      for _, results in ipairs(_result.results) do
+        table.insert(data_recipe.results, results)
+      end
     end
-    for _, results in ipairs(_result.normal) do
-      table.insert(data_recipe.normal.results, results)
+
+    if _keywords.normal and _result.normal and _scrap_type.normal then
+      if data_recipe.normal.results[1].name then
+        data_recipe.normal.main_product = data_recipe.normal.results[1].name or data_recipe.name
+      end
+      for _, results in ipairs(_result.normal) do
+        table.insert(data_recipe.normal.results, results)
+      end
     end
-  end
-  if _keywords.expensive and _result.expensive then
-    if data_recipe.expensive.results[1].name then
-      data_recipe.expensive.main_product = data_recipe.expensive.results[1].name or data_recipe.name
+
+    if _keywords.expensive and _result.expensive and _scrap_type.expensive then
+      if data_recipe.expensive.results[1].name then
+        data_recipe.expensive.main_product = data_recipe.expensive.results[1].name or data_recipe.name
+      end
+      for _, results in ipairs(_result.expensive) do
+        table.insert(data_recipe.expensive.results, results)
+      end
     end
-    for _, results in ipairs(_result.expensive) do
-      table.insert(data_recipe.expensive.results, results)
-    end
-  end
 
 
 end
--- recipe_add_scrap_result(data.raw.recipe["steel-plate"])
--- recipe_add_scrap_result(data.raw.recipe["basic-oil-processing"])
--- recipe_add_scrap_result(data.raw.recipe["gun-turret"])
+-- scrap_add_result(data.raw.recipe["steel-plate"])
+-- -- scrap_add_result(data.raw.recipe["basic-oil-processing"])
+-- scrap_add_result(data.raw.recipe["gun-turret"])
 -- log(serpent.block(data.raw.recipe["steel-plate"]))
--- log(serpent.block(data.raw.recipe["basic-oil-processing"]))
+-- -- log(serpent.block(data.raw.recipe["basic-oil-processing"]))
 -- log(serpent.block(data.raw.recipe["gun-turret"]))
--- assert(1==2, "recipe_add_scrap_result()")
+-- assert(1==2, "scrap_add_result()")
 
 
-
-
-
-
--- ---@param keywords? table ``{ingredients = boolean, normal = number, expensive = number, result = number, result_count = number, results = number}``
--- function scrap_add_to_results(data_recipe, scrap_type, keywords)
---   local scrap_result = get_scrap_result(data_recipe, scrap_type)
---   local _keywords = keywords or recipe_get_keywords(data_recipe)
-
---   if _keywords.results then
---     table.insert(data_recipe.results, scrap_result.results)
---   end
---   if _keywords.normal then
---     table.insert(data_recipe.normal.results, scrap_result.normal)
---   end
---   if _keywords.expensive then
---     table.insert(data_recipe.expensive.results, scrap_result.expensive)
---   end
--- end
---   scrap_add_to_results(data.raw.recipe["iron-gear-wheel"], "iron")
--- log(serpent.block(data.raw.recipe["iron-gear-wheel"]))
--- scrap_add_to_results(data.raw.recipe["gun-turret"], "copper")
--- log(serpent.block(data.raw.recipe["gun-turret"]))
--- assert(1==2, "scrap_add_to_results()")

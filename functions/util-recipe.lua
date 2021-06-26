@@ -9,13 +9,13 @@ function recipe_get_keywords(data_recipe)
   local _return = {ingredients = nil, normal = nil, expensive = nil, result = nil, result_count = nil, results = nil}
 
   if data_recipe then
-    if data_recipe.ingredients then
+    if data_recipe.ingredients and #data_recipe.ingredients > 0 then
       _return.ingredients = true
     end
-    if data_recipe.normal then
+    if data_recipe.normal and #data_recipe.normal > 0 then
       _return.normal = true
     end
-    if data_recipe.expensive then
+    if data_recipe.expensive and #data_recipe.expensive > 0 then
       _return.expensive = true
     end
     if data_recipe.result then
@@ -24,7 +24,7 @@ function recipe_get_keywords(data_recipe)
     if data_recipe.result_count then
       _return.result_count = true
     end
-    if data_recipe.results then
+    if data_recipe.results and #data_recipe.results > 0 then
       _return.results = true
     end
   end
@@ -33,6 +33,7 @@ function recipe_get_keywords(data_recipe)
 end
 -- log(serpent.block(recipe_get_keywords( data.raw.recipe["uranium-processing"] )))
 -- log(serpent.block(recipe_get_keywords( data.raw.recipe["iron-gear-wheel"] )))
+-- log(serpent.block(recipe_get_keywords( data.raw.recipe["bob-liquid-air"] )))
 -- assert(1==2, "recipe_get_keywords()")
 
 
@@ -71,17 +72,17 @@ function recipe_get_ingredients(data_recipe, keywords)
 
   if _keywords.normal then
     for i, value in ipairs(data_recipe.normal.ingredients) do
-      _ingredients.normal[i] = add_pairs(value)
+      _ingredients.normal[i] = yutil.add_pairs(value)
     end
   end
   if _keywords.expensive then
     for i, value in ipairs(data_recipe.expensive.ingredients) do
-      _ingredients.expensive[i] = add_pairs(value)
+      _ingredients.expensive[i] = yutil.add_pairs(value)
     end
   end
   if _keywords.ingredients then
     for i, value in ipairs(data_recipe.ingredients) do
-      _ingredients.ingredients[i] = add_pairs(value)
+      _ingredients.ingredients[i] = yutil.add_pairs(value)
     end
   end
 
@@ -179,9 +180,19 @@ end
 -- assert(1==2, "recipe_format_ingredients()")
 
 
+
+
+-- get_ingredients
+-- set_ingredients
+-- get_results
+-- set_results
+
+
+
+
 --    RESULTS    --
 
----Gets the results and their keywords if possible
+---Returns the results of the given recipe as key=value pairs
 ---@param data_recipe table ``data.raw.recipe["name"]``
 ---@param keywords? table ``{ingredients = boolean, normal = boolean, expensive = boolean, result = boolean, result_count = boolean, results = boolean}``
 function recipe_get_results(data_recipe, keywords)
@@ -189,28 +200,28 @@ function recipe_get_results(data_recipe, keywords)
   local _keywords = keywords or recipe_get_keywords(data_recipe)
 
   if _keywords.result then
-    _results.results[1] = {name = data_recipe.result, amount = data_recipe.result_count or 1}
+    _results.results[1] = yutil.add_pairs({data_recipe.result, data_recipe.result_count})
   end
   if _keywords.results then
     for i, value in ipairs(data_recipe.results) do
-      _results.results[i] = add_pairs(value)
+      _results.results[i] = yutil.add_pairs(value)
     end
   end
   if _keywords.normal then
     if data_recipe.normal.result then
-      _results.normal[1] = {name = data_recipe.normal.result, amount = data_recipe.normal.result_amount or 1}
+      _results.normal[1] = yutil.add_pairs({data_recipe.normal.result, data_recipe.normal.result_count})
     else
       for i, value in ipairs(data_recipe.normal.results) do
-        _results.normal[i] = add_pairs(value)
+        _results.normal[i] = yutil.add_pairs(value)
       end
     end
   end
   if _keywords.expensive then
     if data_recipe.expensive.result then
-      _results.expensive[1] = {name = data_recipe.expensive.result, amount = data_recipe.result_count or 1}
+      _results.expensive[1] = yutil.add_pairs({data_recipe.expensive.result, data_recipe.expensive.result_count})
     else
       for i, value in ipairs(data_recipe.expensive.results) do
-        _results.expensive[i] = add_pairs(value)
+        _results.expensive[i] = yutil.add_pairs(value)
       end
     end
   end
@@ -223,39 +234,64 @@ end
 -- assert(1==2, "recipe_get_results()")
 
 
----Formats a recipes results data to named keys
----@param data_recipe table ``data.raw.recipe["name"]``
----@param keywords? table ``{ingredients = boolean, normal = boolean, expensive = boolean, result = boolean, result_count = boolean, results = boolean}``
-function recipe_format_results(data_recipe, keywords)
-  local _results = recipe_get_results(data_recipe)
-  local _keywords = keywords or recipe_get_keywords(data_recipe)
+---Returns a formatted recipes results data
+---@param recipe_results table ``{ result, result_count, results={}, normal={}, expensive={} }``
+function recipe_format_results(recipe_results)
+  local _t = util.copy(recipe_results)
+  local _return = { results = {} }
 
-  if _keywords.results or _keywords.result then
-    data_recipe.result = nil
-    data_recipe.result_count = nil
+  if _t.result then
+    _t.result_count = _t.result_count or 1
+    _return.results = yutil.add_pairs({_t.result, _t.result_count})
+  else
+    for i, results in ipairs(_t) do
+      _return.results[i] = yutil.add_pairs(results)
+    end
+  end
+
+  return _return
+end
+-- log(serpent.block( recipe_format_results(data.raw.recipe["iron-gear-wheel"].normal) ))
+-- -- log(serpent.block( data.raw.recipe["iron-gear-wheel"], {comment = false} ))
+-- log(serpent.block( recipe_format_results(data.raw.recipe["uranium-processing"].results) ))
+-- -- log(serpent.block( data.raw.recipe["uranium-processing"], {comment = false} ))
+-- log(serpent.block( recipe_format_results(data.raw.recipe["kovarex-enrichment-process"].results) ))
+-- -- log(serpent.block( data.raw.recipe["kovarex-enrichment-process"].results, {comment = false} ))
+-- assert(1==2, " recipe_format_results()")
+
+
+---@param data_recipe table ``data.raw.recipe["name"]``
+---@param recipe_results table ``recipe_get_results(data_recipe)``
+function recipe_add_results(data_recipe, recipe_results)
+  local _results = recipe_results or recipe_get_results(data_recipe)
+
+  if recipe_results.results then
+    table.insert(data_recipe.results, recipe_results.results)
+  end
+  if recipe_results.normal then
+    table.insert(data_recipe.normal.results, _results.normal)
+  end
+  if recipe_results.expensive then
+    table.insert(data_recipe.expensive.results, _results.expensive)
+  end
+
+end
+
+
+---@param data_recipe table ``data.raw.recipe["name"]``
+---@param recipe_results table ``{results={}, normal={}, expensive={}}``
+function recipe_replace_results(data_recipe, recipe_results)
+  local _results = recipe_format_results(recipe_results)
+
+  if recipe_results.results then
     data_recipe.results = _results.results
   end
-  if _keywords.normal then
-    data_recipe.normal.result = nil
-    data_recipe.normal.result_count = nil
+  if recipe_results.normal then
     data_recipe.normal.results = _results.normal
   end
-  if _keywords.expensive then
-    data_recipe.expensive.result = nil
-    data_recipe.expensive.result_count = nil
+  if recipe_results.expensive then
     data_recipe.expensive.results = _results.expensive
   end
 
 end
---  recipe_format_results(data.raw.recipe["iron-gear-wheel"])
--- -- recipe_format_ingredients(data.raw.recipe["iron-gear-wheel"])
--- log(serpent.block(data.raw.recipe["iron-gear-wheel"], {comment = false}))
---  recipe_format_results(data.raw.recipe["uranium-processing"])
--- -- recipe_format_ingredients(data.raw.recipe["uranium-processing"])
--- log(serpent.block(data.raw.recipe["uranium-processing"], {comment = false}))
---  recipe_format_results(data.raw.recipe["kovarex-enrichment-process"])
--- -- recipe_format_ingredients(data.raw.recipe["kovarex-enrichment-process"])
--- log(serpent.block(data.raw.recipe["kovarex-enrichment-process"], {comment = false}))
--- assert(1==2, " recipe_format_results()")
-
 
