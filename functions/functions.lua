@@ -13,15 +13,15 @@ end
 ---@return table ``{ name = "name", amount = n }``
 function yutil.add_pairs(_table)
   local _t = _table
+
   if type(_t) == "table" and _t[1] then --they can be empty and would be "valid" until ...
     if _t.name then return _t end       --ignore if it has pairs already
     if type(_t[1]) ~= "string" then error(" First index must be of type 'string'") end
-    if type(_t[2]) ~= "number" then _t[2] = 1;  log(" Warning: add_pairs("..type(_t[1])..", "..type(_t[2])..") - implicitly set value - amount = 1") end
-    if not data.raw.item[_t[1]].type == "item" then log(" Warning: add_pairs() - ".._t[1].." - wrong item type") end
-    return { type = "item", name = _t[1], amount = _t[2] or 1}
+    if type(_t[2]) ~= "number" then log(" Warning: add_pairs("..type(_t[1])..", "..type(_t[2])..") - implicitly set value - amount = 1"); _t[2] = 1 end
+    return { name = _t[1], amount = _t[2] or 1}
   elseif type(_t) == "string" then
     log(" Warning: add_pairs("..type(_t[1])..", "..type(_t[2])..") - implicitly set value - amount = 1")
-    return { type = "item", name = _t, amount = 1}
+    return { name = _t, amount = 1}
   end
   return _t
 end
