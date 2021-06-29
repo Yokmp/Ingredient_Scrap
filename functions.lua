@@ -94,17 +94,17 @@ function yutil.get_scrap_icons(item, result)
     {
       icon = yutil.get_icon(item),
       icon_size = 64, icon_mipmaps = 4,
-      scale = 0.5, shift = yutil.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
+      scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
     },
     {
       icon = icon_item or yutil.get_icon("missing"),
       icon_size = icon_size or 64, icon_mipmaps = icon_mipmaps or 4,
-      scale = 0.25, shift = yutil.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
+      scale = 0.25, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
     },
     {
       icon = yutil.get_icon("recycle"),
       icon_size = 64, icon_mipmaps = 4,
-      scale = 0.5, shift = yutil.by_pixel(0, 0), tint = { r = 0.8, g = 1.0, b = 0.8, a = 1.0 }
+      scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 0.8, g = 1.0, b = 0.8, a = 1.0 }
     },
   }
 end
@@ -115,7 +115,6 @@ end
 ---@param index number
 ---@return string
 function yutil.get_icon_bycolor(color, index)
-  local mod_name = "__Ingredient_Scrap__"
   local icon_path = mod_name.. "/graphics/icons/color/"
   local icon  	  = nil
   local missing   = mod_name.. "/graphics/icons/missing-icon.png"
