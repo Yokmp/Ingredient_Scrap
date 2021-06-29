@@ -2,22 +2,34 @@ scrap_types = {"iron", "copper", "steel"}
 item_types = {"plate"}
 
 local yutil = require("functions")
+local mod = require("mods")
+
+scrap_types = yutil.table.extend(mod[1], scrap_types)
+item_types = yutil.table.extend(mod[2], item_types)
+
+
 -------------------
 --    UTILITY    --
 -------------------
 
 
+
+local do_test = true
 -- local debug_test_item = "gun-turret"
 -- local debug_test_item = "electronic-circuit"
-local debug_test_item = "tank"
+-- local debug_test_item = "tank"
+-- local debug_test_item = "empty-barrel"
+-- local debug_test_item = "iron-gear-wheel"
+local debug_test_item = "radar"
+-- log(serpent.block( data.raw.recipe[debug_test_item] ))
 
 ---holds the return table template
 local _return_template_ = {
     name = "_return_template_",
     recipe = {    -- determine and cache                                     get -> modify -> replace
-                    ingredients = {}, ingredient_types = {},   results = {}, enabled = true, main_product = "",
-      normal    = { ingredients = {}, ingredient_types = {},   results = {}, enabled = true, main_product = "", },
-      expensive = { ingredients = {}, ingredient_types = {},   results = {}, enabled = true, main_product = "", },
+                    ingredients = {}, ingredient_types = {},   results = {}, enabled = true, main_product = nil,
+      normal    = { ingredients = {}, ingredient_types = {},   results = {}, enabled = true, main_product = nil, },
+      expensive = { ingredients = {}, ingredient_types = {},   results = {}, enabled = true, main_product = nil, },
 
     },
   }
@@ -36,16 +48,16 @@ function filter_scrap_types()
     for _, i_type in ipairs(item_types) do
       if data.raw.item[s_type.."-"..i_type] then
         _return[index] = s_type
-      else
-        log(" No Result for: "..s_type)
+        log(" Result for: "..s_type.."-"..i_type)
       end
     end
   end
   scrap_types = _return
   return _return
 end
--- filter_scrap_types()
--- assert(1==2, "filter_scrap_types()")
+if do_test then filter_scrap_types() end
+log(serpent.block(scrap_types))
+assert(1==2, "filter_scrap_types()")
 
 
 function get_scrap_types(scrap_type, item_types)
@@ -59,7 +71,7 @@ function get_scrap_types(scrap_type, item_types)
 
   return false
 end
--- log(serpent.block(get_scrap_types(scrap_types[1], item_types)))
+if do_test then log(serpent.block(get_scrap_types("iron", item_types))) end
 -- assert(1==2, "get_scrap_types()")
 
 
@@ -101,50 +113,49 @@ function get_recipe_ingredients(recipe_name)
   end
   return _return.recipe
 end
--- get_recipe_ingredients(debug_test_item)
+if do_test then get_recipe_ingredients(debug_test_item) end
 -- log(serpent.block( _return.recipe ))
 -- assert(1==2, "get_recipe_ingredients()")
 
 
 function get_recipe_ingredient_types(recipe_name)
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
-    -- local _scrap_types = get_scrap_types(scrap_types, item_types)
 
     if _return.recipe.ingredients[1] then
       for _, ingredient in ipairs(_return.recipe.ingredients) do
         for _, _type in ipairs(scrap_types) do
 
           if string.match(ingredient.name, _type) and get_scrap_types(_type, item_types) then
-            _return.recipe.ingredient_types[_type] = get_scrap_types(_type, item_types)
-            _return.recipe.ingredient_types[_type].amount = _return.recipe.ingredient_types[_type].amount +1
+            _return.recipe.ingredient_types[_type] = _return.recipe.ingredient_types[_type] or get_scrap_types(_type, item_types)
+            _return.recipe.ingredient_types[_type].amount = _return.recipe.ingredient_types[_type].amount+1
           end
         end
       end
     end
 
-      if _return.recipe.normal.ingredients[1] then
-        for _, ingredient in ipairs(_return.recipe.normal.ingredients) do
-          for _, _type in ipairs(scrap_types) do
+    if _return.recipe.normal.ingredients[1] then
+      for _, ingredient in ipairs(_return.recipe.normal.ingredients) do
+        for _, _type in ipairs(scrap_types) do
 
-            if string.match(ingredient.name, _type) and get_scrap_types(_type, item_types) then
-              _return.recipe.normal.ingredient_types[_type] = get_scrap_types(_type, item_types)
-              _return.recipe.normal.ingredient_types[_type].amount = _return.recipe.normal.ingredient_types[_type].amount +1
-            end
+          if string.match(ingredient.name, _type) and get_scrap_types(_type, item_types) then
+            _return.recipe.normal.ingredient_types[_type] = _return.recipe.normal.ingredient_types[_type] or get_scrap_types(_type, item_types)
+            _return.recipe.normal.ingredient_types[_type].amount = _return.recipe.normal.ingredient_types[_type].amount +1
           end
         end
       end
+    end
 
-      if _return.recipe.expensive.ingredients[1] then
-        for _, ingredient in ipairs(_return.recipe.expensive.ingredients) do
-          for _, _type in ipairs(scrap_types) do
+    if _return.recipe.expensive.ingredients[1] then
+      for _, ingredient in ipairs(_return.recipe.expensive.ingredients) do
+        for _, _type in ipairs(scrap_types) do
 
-            if string.match(ingredient.name, _type) and get_scrap_types(_type, item_types) then
-              _return.recipe.expensive.ingredient_types[_type] = get_scrap_types(_type, item_types)
-              _return.recipe.expensive.ingredient_types[_type].amount = _return.recipe.expensive.ingredient_types[_type].amount +1
-            end
+          if string.match(ingredient.name, _type) and get_scrap_types(_type, item_types) then
+            _return.recipe.expensive.ingredient_types[_type] = _return.recipe.expensive.ingredient_types[_type] or get_scrap_types(_type, item_types)
+            _return.recipe.expensive.ingredient_types[_type].amount = _return.recipe.expensive.ingredient_types[_type].amount
           end
         end
       end
+    end
 
   else
     log(" Recipe not found: "..tostring(recipe_name))
@@ -152,7 +163,7 @@ function get_recipe_ingredient_types(recipe_name)
   end
   return _return.recipe
 end
--- get_recipe_ingredient_types(debug_test_item)
+if do_test then get_recipe_ingredient_types(debug_test_item) end
 -- log(serpent.block(_return.recipe))
 -- assert(1==2, "get_recipe_ingredient_types()")
 
@@ -161,15 +172,24 @@ function get_recipe_results(recipe_name)
 
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
     local data_recipe = data.raw.recipe[recipe_name]
+    local scrap_probability = settings.startup["ingredient-scrap-probability"].value/100
 
     if data_recipe.result then
       _return.recipe.results[1] = yutil.add_pairs( {data_recipe.result, data_recipe.result_count} )
+      for _, scrap in pairs(_return.recipe.ingredient_types) do
+        table.insert(_return.recipe.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
+      end
     end
+
     if data_recipe.results and data_recipe.results[1] then
       for i, result in ipairs(data_recipe.ingredients) do
         _return.recipe.results[i] = yutil.add_pairs( result )
       end
+      for _, scrap in pairs(_return.recipe.ingredient_types) do
+        table.insert(_return.recipe.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
+      end
     end
+
     if data_recipe.normal then
       if data_recipe.normal.results and data_recipe.normal.results[1] then
         for i, result in ipairs(data_recipe.normal.results) do
@@ -178,7 +198,11 @@ function get_recipe_results(recipe_name)
       elseif data_recipe.normal.result then
         _return.recipe.normal.results[1] = yutil.add_pairs( {data_recipe.normal.result, data_recipe.normal.result_count} )
       end
+      for _, scrap in pairs(_return.recipe.normal.ingredient_types) do
+        table.insert(_return.recipe.normal.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
+      end
     end
+
     if data_recipe.expensive then
       if data_recipe.expensive.results and data_recipe.expensive.results[1] then
         for i, result in ipairs(data_recipe.expensive.results) do
@@ -186,6 +210,9 @@ function get_recipe_results(recipe_name)
         end
       elseif data_recipe.expensive.result then
         _return.recipe.expensive.results[1] = yutil.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
+      end
+      for _, scrap in pairs(_return.recipe.expensive.ingredient_types) do
+        table.insert(_return.recipe.expensive.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
       end
     end
 
@@ -195,7 +222,7 @@ function get_recipe_results(recipe_name)
   end
   return _return.recipe
 end
--- get_recipe_results(debug_test_item)
+if do_test then  get_recipe_results(debug_test_item) end
 -- log(serpent.block( _return.recipe ))
 -- assert(1==2, "get_recipe_results()")
 
@@ -214,7 +241,7 @@ function recipe_is_enabled(recipe_name)
   end
   return _return.recipe
 end
--- recipe_is_enabled(debug_test_item)
+if do_test then recipe_is_enabled(debug_test_item) end
 -- log(serpent.block( _return.recipe ))
 -- assert(1==2, "recipe_is_enabled()")
 
@@ -251,7 +278,7 @@ function recipe_get_main_product(recipe_name)
   end
     return _return.recipe
 end
--- recipe_get_main_product(debug_test_item)
+if do_test then recipe_get_main_product(debug_test_item) end
 -- log(serpent.block( _return.recipe ))
 -- assert(1==2, "recipe_get_main_product()")
 
@@ -272,7 +299,7 @@ local function get_recycle_result_name(scrap_type)
       end
     end
 end
--- log(serpent.block( get_recycle_result_name("copper") ))
+if do_test then log(serpent.block( get_recycle_result_name("steel") )) end
 -- assert(1==2, "get_recycle_result_name()")
 
 
@@ -292,7 +319,7 @@ local function get_scrap_recycle_tech(result_name) -- TODO: normal, expensive
   end
   return _techs
 end
--- log(serpent.block( get_scrap_recycle_tech("steel-plate") ))
+if do_test then  log(serpent.block( get_scrap_recycle_tech("steel-plate") )) end
 -- assert(1==2, "get_scrap_recycle_tech()")
 
 
@@ -357,48 +384,61 @@ function make_scrap(scrap_type, scrap_icon, stack_size)
   return _data
   end
 end
--- log(serpent.block( make_scrap("iron") ))
+if do_test then log(serpent.block( make_scrap("steel") )) end
 -- assert(1==2, "make_scrap_items()")
 
 
+if do_test then
+  log(serpent.block( data.raw.recipe[debug_test_item] ))
+  log(serpent.block(_return))
+  assert(1==2, "do_test = true")
+end
 -- log(serpent.block(data.raw.recipe["sulfuric-acid"]))
--- assert(1==2)
+
+
+
+
+
+
 
 filter_scrap_types()
 for _, s_type in ipairs(scrap_types) do
-  log("Generating "..s_type.."-scrap item and recipe")
+  if do_test then log("Generating "..s_type.."-scrap item and recipe") end
   make_scrap(s_type)
 end
 
 for recipe_name, recipe_data in pairs(data.raw.recipe) do
-  if not recipe_data.subgroup == "fluid-recipes" then
+  if do_test then log(recipe_name.." - "..tostring(recipe_data.subgroup)) end
+  if not settings.startup["ingredient-scrap-handle-fluids"].value and recipe_data.subgroup and recipe_data.subgroup == "fluid-recipes" then
+    log("Skipping fluid-recipe: "..recipe_name)
+  else
 
-    local _return = new_return(recipe_name)
+    _return = new_return(recipe_name)
     get_recipe_ingredients(recipe_name)
     get_recipe_ingredient_types(recipe_name)
     get_recipe_results(recipe_name)
     recipe_is_enabled(recipe_name)
     recipe_get_main_product(recipe_name)
 
-log(serpent.block(_return))
-assert(1==2)
-
-    if recipe_data.result or recipe_data.results then
-      data.raw.recipe[recipe_name].results = _return.recipe.results
-      recipe_data.main_product = _return.recipe.main_product
+    if next(_return.recipe.results) then
+      data.raw.recipe[recipe_name].results = util.table.deepcopy(_return.recipe.results)
+      recipe_data.main_product = util.table.deepcopy(_return.recipe.main_product)
     end
-    if recipe_data.normal and recipe_data.normal.results then
-      data.raw.recipe[recipe_name].results = _return.recipe.normal.results
-      data.raw.recipe[recipe_name].main_product = _return.recipe.normal.main_product
+    if recipe_data.normal and next(_return.recipe.normal.results) then
+      data.raw.recipe[recipe_name].normal.results = util.table.deepcopy(_return.recipe.normal.results)
+      data.raw.recipe[recipe_name].normal.main_product = util.table.deepcopy(_return.recipe.normal.main_product)
     end
-    if recipe_data.expensive and recipe_data.expensive.results then
-      data.raw.recipe[recipe_name].results = _return.recipe.expensive.results
-      data.raw.recipe[recipe_name].main_product = _return.recipe.expensive.main_product
+    if recipe_data.expensive and next(_return.recipe.expensive.results) then
+      data.raw.recipe[recipe_name].expensive.results = util.table.deepcopy(_return.recipe.expensive.results)
+      data.raw.recipe[recipe_name].expensive.main_product = util.table.deepcopy(_return.recipe.expensive.main_product)
     end
 
+    -- if recipe_name == "radar" then
+    --   log(serpent.block( _return.recipe ))
+    --   -- log(serpent.block(data.raw.recipe[debug_test_item]))
+    --   log(serpent.block(data.raw.recipe["radar"]))
+    --   assert(1==2, "THIS IS THE END")
+    -- end
   end
 end
-
-log(serpent.block(data.raw.recipe["iron-gear-wheel"]))
-
 

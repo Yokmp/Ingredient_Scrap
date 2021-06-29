@@ -15,7 +15,13 @@ data:extend({
   },
   {
     type = "bool-setting",
-      name = "ingredient-scrap-amount-by-ingredients",
+      name = "ingredient-scrap-handle-fluids",
+      setting_type = "startup",
+      default_value = true
+  },
+  {
+    type = "bool-setting",
+      name = "ingredient-scrap-amount-by-ingredients", -- balancing can be an issue here
       setting_type = "startup",
       hidden = true,
       default_value = true

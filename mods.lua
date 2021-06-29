@@ -22,7 +22,7 @@ if (mods['bzlead']) then
 end
 if (mods["bobplates"]) then
   yutil.table.extend(_types, {"lead", "titanium", "zinc", "nickel", "aluminium", "copper-tungsten", "tungsten", "tin", "silver", "gold",
-  "brass", "bronze", "nitinol", "invar", "cobalt-steel", "cobalt", --[["glass", "silicon",]] "gunmetal" })
+  "brass", "bronze", "nitinol", "invar", "cobalt-steel", "cobalt", "glass", "silicon", "gunmetal" })
   yutil.table.extend(_results, {"plate", "alloy", "gear-wheel", "bearing"})
 
   -- local tech = { {"cobalt","cobalt"}, {"cobalt-steel","cobalt"}, {"nitinol", "nitinol"},

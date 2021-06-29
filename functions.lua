@@ -17,7 +17,7 @@ function yutil.add_pairs(_table)
   if type(_t) == "table" and _t[1] then --they can be empty and would be "valid" until ...
     if _t.name then return _t end       --ignore if it has pairs already
     if type(_t[1]) ~= "string" then error(" First index must be of type 'string'") end
-    if type(_t[2]) ~= "number" then log(" Warning: add_pairs("..type(_t[1])..", "..type(_t[2])..") - implicitly set value - amount = 1"); _t[2] = 1 end
+    if type(_t[2]) ~= "number" then --[[log(" Warning: add_pairs("..type(_t[1])..", "..type(_t[2])..") - implicitly set value - amount = 1");]] _t[2] = 1 end
     return { name = _t[1], amount = _t[2] or 1}
   elseif type(_t) == "string" then
     log(" Warning: add_pairs("..type(_t[1])..", "..type(_t[2])..") - implicitly set value - amount = 1")
@@ -32,17 +32,6 @@ end
 -- assert(1==2, "add_pairs()")
 
 
--- constants = constants or {}
--- constants.difficulty = {
---   ["none"] = 1,
---   ["result"] = 1,
---   ["results"] = 2,
---   ["ingredients"] = 2,
---   ["normal"] = 3,
---   ["expensive"] = 4,
--- }
-
----comment
 ---@return string
 function yutil.get_icon(name)
   local icon_path = mod_name.. "/graphics/icons/"
