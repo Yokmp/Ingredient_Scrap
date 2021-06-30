@@ -4,7 +4,7 @@ data:extend({
       name = "ingredient-scrap-needed",
       setting_type = "startup",
       minimum_value = 1,
-      default_value = 10
+      default_value = 5
   },
   {
       type = "int-setting",
@@ -17,6 +17,7 @@ data:extend({
     type = "bool-setting",
       name = "ingredient-scrap-handle-fluids",
       setting_type = "startup",
+      hidden = true,
       default_value = true
   },
   {

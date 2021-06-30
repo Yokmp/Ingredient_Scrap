@@ -32,71 +32,11 @@ end
 -- assert(1==2, "add_pairs()")
 
 
----@return string
-function yutil.get_icon(name)
-  local icon_path = mod_name.. "/graphics/icons/"
-  local icon = icon_path..name.."-scrap.png"
-  local icons = {
-    missing   = icon_path.."missing-icon.png",
-    recycle   = icon_path.."recycle.png",
-    iron      = icon,
-    copper    = icon,
-    steel     = icon,
-    imersium      = yutil.get_icon_bycolor("purple", 1),
-    lead          = yutil.get_icon_bycolor("brown", 3),
-    titanium      = yutil.get_icon_bycolor("dgrey", 2),
-    zinc          = yutil.get_icon_bycolor("grey", 3),
-    nickel        = yutil.get_icon_bycolor("grey", 2),
-    aluminium     = yutil.get_icon_bycolor("grey", 1),
-    tungsten      = yutil.get_icon_bycolor("grey", 2),
-    tin           = yutil.get_icon_bycolor("grey", 2),
-    silver        = yutil.get_icon_bycolor("grey", 1),
-    gold          = yutil.get_icon_bycolor("yellow", 2),
-    brass         = yutil.get_icon_bycolor("yellow", 1),
-    bronze        = yutil.get_icon_bycolor("orange", 1),
-    nitinol       = yutil.get_icon_bycolor("grey", 2),
-    invar         = yutil.get_icon_bycolor("grey", 3),
-    cobalt        = yutil.get_icon_bycolor("blue", 2),
-    -- glass      = yutil.get_icon_bycolor("purple", 1),
-    -- silicon    = yutil.get_icon_bycolor("purple", 1),
-    gunmetal      = yutil.get_icon_bycolor("yellow", 1),
-    ["cobalt-steel"]  = yutil.get_icon_bycolor("blue", 2),
-    ["copper-tungsten"]  = yutil.get_icon_bycolor("red", 2),
-  }
-  return icons[name] or icons.missing
-end
 
-function yutil.get_scrap_icons(item, result)
-  local icon_item, icon_size, icon_mipmaps
-  if data.raw.item[result] then
-    if data.raw.item[result].icon then
-      icon_item = data.raw.item[result].icon
-      icon_size = data.raw.item[result].icon_size
-      icon_mipmaps = data.raw.item[result].icon_mipmaps
-    elseif data.raw.item[item].icon then
-      icon_item = data.raw.item[item].icon
-      icon_size = data.raw.item[item].icon_size
-      icon_mipmaps = data.raw.item[item].icon_mipmaps
-    end
-  end
-  return {
-    {
-      icon = yutil.get_icon(item),
-      icon_size = 64, icon_mipmaps = 4,
-      scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
-    },
-    {
-      icon = icon_item or yutil.get_icon("missing"),
-      icon_size = icon_size or 64, icon_mipmaps = icon_mipmaps or 4,
-      scale = 0.25, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
-    },
-    {
-      icon = yutil.get_icon("recycle"),
-      icon_size = 64, icon_mipmaps = 4,
-      scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 0.8, g = 1.0, b = 0.8, a = 1.0 }
-    },
-  }
-end
+----------------
+--    ICONS   --
+----------------
+
 
 
 ---returns an icon in the form of ``path/color-scrap-index.png``
@@ -133,5 +73,75 @@ function yutil.get_icon_bycolor(color, index)
 
   return icon or missing
 end
+
+
+---@return string
+function yutil.get_item_icon(scrap_type)
+  local icon_path = mod_name.. "/graphics/icons/"
+  local icon = icon_path..scrap_type.."-scrap.png"
+  local icons = {
+    missing   = icon_path.."missing-icon.png",
+    recycle   = icon_path.."recycle.png",
+    iron      = icon,
+    copper    = icon,
+    steel     = icon,
+    imersium      = yutil.get_icon_bycolor("purple", 1),
+    lead          = yutil.get_icon_bycolor("brown", 3),
+    titanium      = yutil.get_icon_bycolor("dgrey", 2),
+    zinc          = yutil.get_icon_bycolor("grey", 3),
+    nickel        = yutil.get_icon_bycolor("grey", 2),
+    aluminium     = yutil.get_icon_bycolor("grey", 1),
+    tungsten      = yutil.get_icon_bycolor("grey", 2),
+    tin           = yutil.get_icon_bycolor("grey", 2),
+    silver        = yutil.get_icon_bycolor("grey", 1),
+    gold          = yutil.get_icon_bycolor("yellow", 2),
+    brass         = yutil.get_icon_bycolor("yellow", 1),
+    bronze        = yutil.get_icon_bycolor("orange", 1),
+    nitinol       = yutil.get_icon_bycolor("grey", 2),
+    invar         = yutil.get_icon_bycolor("grey", 3),
+    cobalt        = yutil.get_icon_bycolor("blue", 2),
+    -- glass      = yutil.get_icon_bycolor("purple", 1),
+    -- silicon    = yutil.get_icon_bycolor("purple", 1),
+    gunmetal      = yutil.get_icon_bycolor("yellow", 1),
+    ["cobalt-steel"]  = yutil.get_icon_bycolor("blue", 2),
+    ["copper-tungsten"]  = yutil.get_icon_bycolor("red", 2),
+  }
+  return icons[scrap_type] or icons.missing
+end
+
+function yutil.get_recycle_icons(scrap_type, scrap_name)
+  local icon_item, icon_size, icon_mipmaps
+
+  if data.raw.item[scrap_name] then
+    if data.raw.item[scrap_name].icon then
+      icon_item = data.raw.item[scrap_name].icon
+      icon_size = data.raw.item[scrap_name].icon_size
+      icon_mipmaps = data.raw.item[scrap_name].icon_mipmaps
+    elseif data.raw.item[scrap_type].icon then
+      icon_item = data.raw.item[scrap_type].icon
+      icon_size = data.raw.item[scrap_type].icon_size
+      icon_mipmaps = data.raw.item[scrap_type].icon_mipmaps
+    end
+  end
+
+  return {
+    {
+      icon = yutil.get_icon(scrap_type),
+      icon_size = 64, icon_mipmaps = 4,
+      scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
+    },
+    {
+      icon = icon_item or yutil.get_icon("missing"),
+      icon_size = icon_size or 64, icon_mipmaps = icon_mipmaps or 4,
+      scale = 0.25, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
+    },
+    {
+      icon = yutil.get_icon("recycle"),
+      icon_size = 64, icon_mipmaps = 4,
+      scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 0.8, g = 1.0, b = 0.8, a = 1.0 }
+    },
+  }
+end
+
 
 return yutil
