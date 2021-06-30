@@ -1,11 +1,12 @@
-scrap_types = {"iron", "copper", "steel"}
-item_types = {"plate"}
+g_scrap_types = {"iron", "copper", "steel"}
+g_item_types = {"plate"}
 
 local yutil = require("functions")
 local mod = require("mods")
+local patch = mod[3]
 
-scrap_types = yutil.table.extend(mod[1], scrap_types)
-item_types = yutil.table.extend(mod[2], item_types)
+local scrap_types = yutil.table.extend(mod[1], g_scrap_types)
+local item_types = yutil.table.extend(mod[2], g_item_types)
 
 
 -------------------
@@ -34,14 +35,14 @@ local _return_template_ = {
 
     },
   }
-function new_return(recipe_name)
+  local function new_return(recipe_name)
   local _t = util.table.deepcopy(_return_template_)
   _t.name = recipe_name
   return _t
 end
 
 
-function filter_scrap_types()
+local function filter_scrap_types()
   local _t1, _t2 = {}, {}
   log("Filtering scrap types")
   for _, s_type in ipairs(scrap_types) do
@@ -64,7 +65,7 @@ end
 -- assert(1==2, "filter_scrap_types()")
 
 
-function get_scrap_types(scrap_type, item_types)
+local function get_scrap_types(scrap_type, item_types)
 
   for i, i_type in ipairs(item_types) do
     local _name = scrap_type.."-"..i_type
@@ -91,7 +92,7 @@ end
 local _return = new_return(debug_test_recipe)
 
 
-function get_recipe_ingredients(recipe_name)
+local function get_recipe_ingredients(recipe_name)
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
     local data_recipe = data.raw.recipe[recipe_name]
 
@@ -122,7 +123,7 @@ if do_test then get_recipe_ingredients(debug_test_recipe) end
 -- assert(1==2, "get_recipe_ingredients()")
 
 
-function get_recipe_ingredient_types(recipe_name)
+local function get_recipe_ingredient_types(recipe_name)
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
 
     if _return.recipe.ingredients[1] then
@@ -172,7 +173,7 @@ if do_test then get_recipe_ingredient_types(debug_test_recipe) end
 -- assert(1==2, "get_recipe_ingredient_types()")
 
 
-function get_recipe_results(recipe_name)
+local function get_recipe_results(recipe_name)
 
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
     local data_recipe = data.raw.recipe[recipe_name]
@@ -231,7 +232,7 @@ if do_test then  get_recipe_results(debug_test_recipe) end
 -- assert(1==2, "get_recipe_results()")
 
 
-function recipe_is_enabled(recipe_name)
+local function recipe_is_enabled(recipe_name)
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
     local data_recipe = data.raw.recipe[recipe_name]
 
@@ -250,7 +251,7 @@ if do_test then recipe_is_enabled(debug_test_recipe) end
 -- assert(1==2, "recipe_is_enabled()")
 
 
-function recipe_get_main_product(recipe_name)
+local function recipe_get_main_product(recipe_name)
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
     local data_recipe = data.raw.recipe[recipe_name]
 
@@ -300,7 +301,7 @@ if do_test then recipe_get_main_product(debug_test_recipe) end
 local function get_scrap_recycle_tech(recipe_name, raw_scrap) -- TODO: normal, expensive
   local _techs = { effects={enabled=true, recipes={}}, normal={enabled=true, recipes={}}, expensive={enabled=true, recipes={}} }
   for tech_name, value in pairs(data.raw.technology) do
-    if value.effects then
+    if patch.technology(tech_name) and value.effects then
       for i, effect in ipairs(value.effects) do
         if effect.recipe and effect.recipe == recipe_name then
           _techs.effects.enabled = false
@@ -343,7 +344,7 @@ end
 -- assert(1==2, "get_recycle_result_name()")
 
 
-function make_scrap(scrap_type, scrap_icon, stack_size)
+local function make_scrap(scrap_type, scrap_icon, stack_size)
   local scrap_name = scrap_type.. "-scrap"
 
   if not data.raw.item[scrap_name] then
@@ -380,7 +381,7 @@ function make_scrap(scrap_type, scrap_icon, stack_size)
         type = "recipe",
         name = recipe_name,
         localised_name = {"recipe-name."..recipe_name},
-        icons = yutil.get_recycle_icons(scrap_type, scrap_name),
+        icons = yutil.get_recycle_icons(scrap_type, result_name),
         subgroup = "raw-material",
         category = "smelting",
         order = recipe_order,
@@ -401,6 +402,7 @@ function make_scrap(scrap_type, scrap_icon, stack_size)
       },
     }
   data:extend(_data)
+
   return _data
   end
 end
@@ -457,3 +459,4 @@ for recipe_name, recipe_data in pairs(data.raw.recipe) do
   -- end
 end
 
+patch.recipes()

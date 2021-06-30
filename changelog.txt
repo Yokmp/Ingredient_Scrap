@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2021-30-06
+  Changes:
+    - rewritten the whole mod
+  Minor Features:
+    - new Settings for probability and amount
+    - i lost my hair, thanks bob
+    - new recycle icon which is easier to see/distinct
+---------------------------------------------------------------------------------------------------
 Version: 1.0.5
 Date: 2021-19-06
   Changes:
