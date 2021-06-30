@@ -14,7 +14,7 @@ if (mods['Molten_Metals']) then
 end
 if (mods['Krastorio2']) then
   yutil.table.extend(_types, {"imersium", "lithium", "rare"})
-  yutil.table.extend(_results, {"beam", "metals", "chloride"})
+  yutil.table.extend(_results, {"plate", "beam", "metals", "chloride"})
 end
 if (mods['angelssmelting']) then
   yutil.table.extend(_results, {"ingot"})
