@@ -123,16 +123,17 @@ if do_test then get_recipe_ingredients(debug_test_recipe) end
 -- assert(1==2, "get_recipe_ingredients()")
 
 
-local function get_recipe_ingredient_types(recipe_name)
+local function get_recipe_ingredient_types(recipe_name) --!BUG doesn't find names like copper-tungsten! Adds copper and tungsten scrap instead
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
 
     if _return.recipe.ingredients[1] then
       for _, ingredient in ipairs(_return.recipe.ingredients) do
         for _, _type in ipairs(scrap_types) do
 
-          if string.match(ingredient.name, _type) and get_scrap_types(_type, item_types) then
+          if string.find(ingredient.name, _type, 0, true) and get_scrap_types(_type, item_types) then
             _return.recipe.ingredient_types[_type] = _return.recipe.ingredient_types[_type] or get_scrap_types(_type, item_types)
-            _return.recipe.ingredient_types[_type].amount = _return.recipe.ingredient_types[_type].amount+1
+            _return.recipe.ingredient_types[_type].amount = _return.recipe.ingredient_types[_type].amount +1
+            break
           end
         end
       end
@@ -142,9 +143,10 @@ local function get_recipe_ingredient_types(recipe_name)
       for _, ingredient in ipairs(_return.recipe.normal.ingredients) do
         for _, _type in ipairs(scrap_types) do
 
-          if string.match(ingredient.name, _type) and get_scrap_types(_type, item_types) then
+          if string.find(ingredient.name, _type, 0, true) and get_scrap_types(_type, item_types) then
             _return.recipe.normal.ingredient_types[_type] = _return.recipe.normal.ingredient_types[_type] or get_scrap_types(_type, item_types)
             _return.recipe.normal.ingredient_types[_type].amount = _return.recipe.normal.ingredient_types[_type].amount +1
+            break
           end
         end
       end
@@ -154,9 +156,10 @@ local function get_recipe_ingredient_types(recipe_name)
       for _, ingredient in ipairs(_return.recipe.expensive.ingredients) do
         for _, _type in ipairs(scrap_types) do
 
-          if string.match(ingredient.name, _type) and get_scrap_types(_type, item_types) then
+          if string.find(ingredient.name, _type, 0, true) and get_scrap_types(_type, item_types) then
             _return.recipe.expensive.ingredient_types[_type] = _return.recipe.expensive.ingredient_types[_type] or get_scrap_types(_type, item_types)
-            _return.recipe.expensive.ingredient_types[_type].amount = _return.recipe.expensive.ingredient_types[_type].amount
+            _return.recipe.expensive.ingredient_types[_type].amount = _return.recipe.expensive.ingredient_types[_type].amount +1
+            break
           end
         end
       end
@@ -169,6 +172,7 @@ local function get_recipe_ingredient_types(recipe_name)
   return _return.recipe
 end
 if do_test then get_recipe_ingredient_types(debug_test_recipe) end
+-- get_recipe_ingredient_types("cobalt-steel-alloy")
 -- log(serpent.block(_return.recipe))
 -- assert(1==2, "get_recipe_ingredient_types()")
 
@@ -385,17 +389,18 @@ local function make_scrap(scrap_type, scrap_icon, stack_size)
         subgroup = "raw-material",
         category = "smelting",
         order = recipe_order,
-        energy_required = 3.2,
         always_show_products = true,
         allow_as_intermediate = false,
         enabled = enabled,
         normal = {
           enabled = normal_enabled,
+          energy_required = 3.2,
           ingredients = {{ name = scrap_name, amount = settings.startup["ingredient-scrap-needed"].value}},
           results = {{ name = result_name, amount = 1 }}
         },
         expensive = {
           enabled = expensive_enabled,
+          energy_required = 3.2,
           ingredients = {{ name = scrap_name, amount = settings.startup["ingredient-scrap-needed"].value*2}},
           results = {{ name = result_name, amount = 1 }}
         }
@@ -460,3 +465,11 @@ for recipe_name, recipe_data in pairs(data.raw.recipe) do
 end
 
 patch.recipes()
+
+-- for key, value in pairs(data.raw.recipe) do
+--   if string.match(value.name, "cobalt") then
+--     log(serpent.block(data.raw.recipe[value.name]))
+--   end
+-- end
+-- error("cobalt-steel")
+

@@ -87,7 +87,7 @@ function yutil.get_item_icon(scrap_type)
     steel     = icon,
     imersium      = yutil.get_icon_bycolor("purple", 1),
     lead          = yutil.get_icon_bycolor("brown", 3),
-    titanium      = yutil.get_icon_bycolor("dgrey", 2),
+    titanium      = yutil.get_icon_bycolor("grey", 1),
     zinc          = yutil.get_icon_bycolor("grey", 2),
     nickel        = yutil.get_icon_bycolor("grey", 2),
     aluminium     = yutil.get_icon_bycolor("grey", 1),
@@ -104,7 +104,7 @@ function yutil.get_item_icon(scrap_type)
     -- silicon    = yutil.get_icon_bycolor("purple", 1),
     gunmetal      = yutil.get_icon_bycolor("yellow", 1),
     lithium       = yutil.get_icon_bycolor("dgrey", 1),
-    ["cobalt-steel"]  = yutil.get_icon_bycolor("blue", 2),
+    ["cobalt-steel"]  = yutil.get_icon_bycolor("blue", 1),
     ["copper-tungsten"]  = yutil.get_icon_bycolor("red", 2),
   }
   return icons[scrap_type] or icons.missing

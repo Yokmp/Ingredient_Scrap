@@ -1,8 +1,23 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2021-04-07
+  Changes:
+    - fixed pattern matching, should now match some-thing with some-thing-plate
+    - fixed some recipes in bobplates
+    - fixed titanium icons for bobplates and bztitanium
+    - Krastorio 2 rare-metal recycling is now available from the start
+    - if Krastorio 2 and Lead(bzlead) are enabled, lead recycling is now available from the start
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2021-04-07
+  Changes:
+    - fixed crafting time, now needs 3.2 instead of 0.5 seconds
+---------------------------------------------------------------------------------------------------
 Version: 1.1.1
-Date: 2021-30-06
+Date: 2021-04-07
   Changes:
     - changed some recipes
+    - smaller fixes
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2021-30-06
