@@ -1,12 +1,12 @@
-g_scrap_types = {"iron", "copper", "steel"}
-g_item_types = {"plate"}
+local _scrap_types = {"iron", "copper", "steel"}
+local _item_types = {"plate"}
 
 local yutil = require("functions")
 local mod = require("mods")
 local patch = mod[3]
 
-local scrap_types = yutil.table.extend(mod[1], g_scrap_types)
-local item_types = yutil.table.extend(mod[2], g_item_types)
+local scrap_types = yutil.table.extend(mod[1], _scrap_types)
+local item_types = yutil.table.extend(mod[2], _item_types)
 
 
 -------------------
@@ -118,12 +118,12 @@ local function get_recipe_ingredients(recipe_name)
   end
   return _return.recipe
 end
-if do_test then get_recipe_ingredients(debug_test_recipe) end
+-- if do_test then get_recipe_ingredients(debug_test_recipe) end
 -- log(serpent.block( _return.recipe ))
 -- assert(1==2, "get_recipe_ingredients()")
 
 
-local function get_recipe_ingredient_types(recipe_name) --!BUG doesn't find names like copper-tungsten! Adds copper and tungsten scrap instead
+local function get_recipe_ingredient_types(recipe_name)
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
 
     if _return.recipe.ingredients[1] then
@@ -171,7 +171,7 @@ local function get_recipe_ingredient_types(recipe_name) --!BUG doesn't find name
   end
   return _return.recipe
 end
-if do_test then get_recipe_ingredient_types(debug_test_recipe) end
+-- if do_test then get_recipe_ingredient_types(debug_test_recipe) end
 -- get_recipe_ingredient_types("cobalt-steel-alloy")
 -- log(serpent.block(_return.recipe))
 -- assert(1==2, "get_recipe_ingredient_types()")
@@ -231,12 +231,12 @@ local function get_recipe_results(recipe_name)
   end
   return _return.recipe
 end
-if do_test then  get_recipe_results(debug_test_recipe) end
+-- if do_test then  get_recipe_results(debug_test_recipe) end
 -- log(serpent.block( _return.recipe ))
 -- assert(1==2, "get_recipe_results()")
 
 
-local function recipe_is_enabled(recipe_name)
+local function recipe_is_enabled(recipe_name) -- determides through technology
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
     local data_recipe = data.raw.recipe[recipe_name]
 
@@ -250,7 +250,7 @@ local function recipe_is_enabled(recipe_name)
   end
   return _return.recipe
 end
-if do_test then recipe_is_enabled(debug_test_recipe) end
+-- if do_test then recipe_is_enabled(debug_test_recipe) end
 -- log(serpent.block( _return.recipe ))
 -- assert(1==2, "recipe_is_enabled()")
 
@@ -289,7 +289,7 @@ local function recipe_get_main_product(recipe_name)
   end
     return _return.recipe
 end
-if do_test then recipe_get_main_product(debug_test_recipe) end
+-- if do_test then recipe_get_main_product(debug_test_recipe) end
 -- log(serpent.block( _return.recipe ))
 -- assert(1==2, "recipe_get_main_product()")
 
@@ -440,7 +440,7 @@ for recipe_name, recipe_data in pairs(data.raw.recipe) do
     get_recipe_ingredients(recipe_name)
     get_recipe_ingredient_types(recipe_name)
     get_recipe_results(recipe_name)
-    recipe_is_enabled(recipe_name)
+    -- recipe_is_enabled(recipe_name)
     recipe_get_main_product(recipe_name)
 
     if next(_return.recipe.results) then
@@ -466,10 +466,10 @@ end
 
 patch.recipes()
 
--- for key, value in pairs(data.raw.recipe) do
---   if string.match(value.name, "cobalt") then
---     log(serpent.block(data.raw.recipe[value.name]))
---   end
--- end
--- error("cobalt-steel")
+for key, value in pairs(data.raw.recipe) do
+  if string.match(value.name, "glass") then
+    log(serpent.block(data.raw.recipe[value.name]))
+  end
+end
+-- error("find_name")
 

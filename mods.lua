@@ -1,4 +1,4 @@
-require("functions")
+local yutil = require("functions")
 
 
 ------------------
@@ -20,7 +20,7 @@ if (mods['angelssmelting']) then
   yutil.table.extend(_results, {"ingot"})
 end
 if (mods["bobplates"]) then
-  yutil.table.extend(_types, {"cobalt-steel", "copper-tungsten", "lead", "titanium", "zinc", "nickel", "aluminium", "tungsten", "tin", "silver", "gold",
+  yutil.table.extend(_types, {"cobalt-steel", "copper-tungsten", "lead", "titanium", "zinc", "nickel", "aluminium", "tungsten-carbide", "tin", "silver", "gold",
   "brass", "bronze", "nitinol", "invar", "cobalt", "quartz", "silicon", "gunmetal", "aluminium" })
   yutil.table.extend(_results, {"alloy", "glass"})
 end
@@ -32,6 +32,10 @@ if (mods['bztungsten']) then
 end
 if (mods['bzlead']) then
   yutil.table.extend(_types, {"lead"})
+end
+if (mods['IndustrialRevolution']) then
+  yutil.table.extend(_types, {"tin", "bronze", "gold", "lead", "cupronickel", "invar", "chromium", "stainless", "tellurium", "glass"})
+  yutil.table.extend(_results, {"ingot", "mix"})
 end
 
 
@@ -48,27 +52,48 @@ recipes = function ()
     data.raw.item["titanium-scrap"].icon = yutil.get_icon_bycolor("dgrey", 2)
   end
   if (mods["bobplates"]) then
-      data.raw.item["lead-scrap"].icon = yutil.get_icon_bycolor("blue", 1)
-      data.raw.recipe["recycle-lead-scrap"].icons[1].icon = yutil.get_icon_bycolor("blue", 1)
+    data.raw.item["lead-scrap"].icon = yutil.get_icon_bycolor("blue", 1)
+    data.raw.recipe["recycle-lead-scrap"].icons[1].icon = yutil.get_icon_bycolor("blue", 1)
   end
   if (mods['Krastorio2']) then
-      data.raw.recipe["recycle-lithium-scrap"].normal.results[1] = {name="lithium", amount=1}
-      data.raw.recipe["recycle-lithium-scrap"].normal.ingredients[2] = {type="fluid",name="chlorine", amount=10}
-      data.raw.recipe["recycle-lithium-scrap"].normal.main_product = "lithium"
-      data.raw.recipe["recycle-lithium-scrap"].expensive = nil -- uses normal
-      data.raw.recipe["recycle-rare-scrap"].icons[1].icon = yutil.get_icon_bycolor("dgrey", 1)
-      data.raw.item["rare-scrap"].icon = yutil.get_icon_bycolor("dgrey", 1)
+    data.raw.recipe["recycle-lithium-scrap"].normal.results[1] = {name="lithium", amount=1}
+    data.raw.recipe["recycle-lithium-scrap"].normal.ingredients = util.copy(data.raw.recipe["lithium-chloride"].ingredients)
+    data.raw.recipe["recycle-lithium-scrap"].normal.ingredients[3] = { name = "lithium-scrap", amount = settings.startup["ingredient-scrap-needed"].value}
+    data.raw.recipe["recycle-lithium-scrap"].normal.main_product = "lithium"
+    data.raw.recipe["recycle-lithium-scrap"].expensive = nil -- uses normal
+    data.raw.recipe["recycle-rare-scrap"].icons[1].icon = yutil.get_icon_bycolor("dgrey", 1)
+    data.raw.item["rare-scrap"].icon = yutil.get_icon_bycolor("dgrey", 1)
+  end
+  if (mods['IndustrialRevolution']) then
+    data.raw.recipe["recycle-tellurium-scrap"].icon = "__Ingredient_Scrap__/graphics/icons/mods/recycle-tellurium-scrap.png"
+    data.raw.recipe["recycle-tellurium-scrap"].icon_size = 64
+    data.raw.recipe["recycle-tellurium-scrap"].icon_mipmaps = 4
+    data.raw.recipe["recycle-tellurium-scrap"].icons = nil
+    data.raw.item["tellurium-scrap"].icon = "__Ingredient_Scrap__/graphics/icons/mods/tellurium-scrap.png"
+    data.raw.item["tellurium-scrap"].icon_size = 64
+    data.raw.item["tellurium-scrap"].icon_mipmaps = 4
+    data.raw.item["tellurium-scrap"].icons = nil
+    data.raw.recipe["recycle-chromium-scrap"].icon = "__Ingredient_Scrap__/graphics/icons/mods/recycle-chromium-scrap.png"
+    data.raw.recipe["recycle-chromium-scrap"].icon_size = 64
+    data.raw.recipe["recycle-chromium-scrap"].icon_mipmaps = 4
+    data.raw.recipe["recycle-chromium-scrap"].icons = nil
+    data.raw.item["chromium-scrap"].icon = "__Ingredient_Scrap__/graphics/icons/mods/chromium-scrap.png"
+    data.raw.item["chromium-scrap"].icon_size = 64
+    data.raw.item["chromium-scrap"].icon_mipmaps = 4
+    data.raw.item["chromium-scrap"].icons = nil
   end
 end,
 technology = function (tech_name)
   local _return = true
-  if (mods['Krastorio2'] or mods['bzlead']) then
+  if (mods['bzlead']) then
+    if tech_name == "lead-matter-processing" then return false end
+  end
+  if (mods['Krastorio2']) then
     if tech_name == "kr-lithium-sulfur-battery"
     or tech_name == "kr-iron-pickaxe"
     or tech_name == "kr-matter-iron-processing"
     or tech_name == "kr-matter-copper-processing"
     or tech_name == "kr-matter-rare-metals-processing"
-    or tech_name == "lead-matter-processing"
     then _return = false end
   end
   return _return

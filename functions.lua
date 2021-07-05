@@ -1,7 +1,7 @@
 
 local mod_name = "__Ingredient_Scrap__"
 
-yutil = { table={} }
+local yutil = { table={} }
 
 function yutil.table.extend(t1, t2)
   if type(t1) == "table" and type(t2) == "table" then
@@ -91,21 +91,23 @@ function yutil.get_item_icon(scrap_type)
     zinc          = yutil.get_icon_bycolor("grey", 2),
     nickel        = yutil.get_icon_bycolor("grey", 2),
     aluminium     = yutil.get_icon_bycolor("grey", 1),
-    tungsten      = yutil.get_icon_bycolor("grey", 2),
+    tungsten      = yutil.get_icon_bycolor("dgrey", 1),
     tin           = yutil.get_icon_bycolor("grey", 2),
     silver        = yutil.get_icon_bycolor("grey", 1),
     gold          = yutil.get_icon_bycolor("yellow", 2),
     brass         = yutil.get_icon_bycolor("yellow", 1),
-    bronze        = yutil.get_icon_bycolor("orange", 1),
+    bronze        = yutil.get_icon_bycolor("yellow", 2),
     nitinol       = yutil.get_icon_bycolor("grey", 2),
     invar         = yutil.get_icon_bycolor("grey", 3),
     cobalt        = yutil.get_icon_bycolor("blue", 2),
     -- glass      = yutil.get_icon_bycolor("purple", 1),
     -- silicon    = yutil.get_icon_bycolor("purple", 1),
-    gunmetal      = yutil.get_icon_bycolor("yellow", 1),
+    gunmetal      = yutil.get_icon_bycolor("yellow", 2),
     lithium       = yutil.get_icon_bycolor("dgrey", 1),
     ["cobalt-steel"]  = yutil.get_icon_bycolor("blue", 1),
     ["copper-tungsten"]  = yutil.get_icon_bycolor("red", 2),
+    chromium      = yutil.get_icon_bycolor("grey", 1),
+    tellurium     = yutil.get_icon_bycolor("purple", 1),
   }
   return icons[scrap_type] or icons.missing
 end
