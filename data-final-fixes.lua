@@ -353,10 +353,10 @@ local function make_scrap(scrap_type, scrap_icon, stack_size)
 
   if not data.raw.item[scrap_name] then
     local _data
-    local recipe_name = "recycle-" ..scrap_type.. "-scrap"
+    local recipe_name = "recycle-" ..scrap_name
     local result_name = get_recycle_result_name(scrap_type)
-    local item_order = "z["..scrap_name.."]"
-    local recipe_order = "z["..recipe_name.."]"
+    local item_order = "is-["..scrap_name.."]"
+    local recipe_order = "is-["..recipe_name.."]"
 
     local enabled = --[[_return.recipe.enabled or]] get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
     local normal_enabled = --[[_return.recipe.normal.enabled or]] get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
@@ -466,10 +466,10 @@ end
 
 patch.recipes()
 
-for key, value in pairs(data.raw.recipe) do
-  if string.match(value.name, "glass") then
-    log(serpent.block(data.raw.recipe[value.name]))
-  end
-end
+-- for key, value in pairs(data.raw.recipe) do
+--   if string.match(value.name, "glass") then
+--     log(serpent.block(data.raw.recipe[value.name]))
+--   end
+-- end
 -- error("find_name")
 

@@ -87,7 +87,7 @@ function yutil.get_item_icon(scrap_type)
     steel     = icon,
     imersium      = yutil.get_icon_bycolor("purple", 1),
     lead          = yutil.get_icon_bycolor("brown", 3),
-    titanium      = yutil.get_icon_bycolor("grey", 1),
+    titanium      = yutil.get_icon_bycolor("dgrey", 2),
     zinc          = yutil.get_icon_bycolor("grey", 2),
     nickel        = yutil.get_icon_bycolor("grey", 2),
     aluminium     = yutil.get_icon_bycolor("grey", 1),
@@ -113,7 +113,7 @@ function yutil.get_item_icon(scrap_type)
 end
 
 function yutil.get_recycle_icons(scrap_type, result_name)
-  local icon_item, icon_size, icon_mipmaps
+  local icon_item, icon_size, icon_mipmaps, scale_factor
 
   if data.raw.item[result_name] then
     if data.raw.item[result_name].icon then
@@ -126,17 +126,17 @@ function yutil.get_recycle_icons(scrap_type, result_name)
       icon_mipmaps = data.raw.item[scrap_type].icon_mipmaps
     end
   end
-
+  scale_factor = (64/icon_size) or 1
   return {
     {
       icon = yutil.get_item_icon(scrap_type),
       icon_size = 64, icon_mipmaps = 4,
-      scale = 0.5, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
+      scale = 0.5, shift = util.by_pixel(0, 0)
     },
     {
       icon = icon_item or yutil.get_item_icon("missing"),
       icon_size = icon_size or 64, icon_mipmaps = icon_mipmaps or 4,
-      scale = 0.25, shift = util.by_pixel(0, 0), tint = { r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
+      scale = 0.25*scale_factor, shift = {-8,-8}
     },
     {
       icon = yutil.get_item_icon("recycle"),

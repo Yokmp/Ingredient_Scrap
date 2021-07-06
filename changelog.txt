@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.1.3
+Version: 1.1.4
 Date: 2021-04-07
   Changes:
     - now works with Industrial Revolution 2
@@ -8,7 +8,7 @@ Date: 2021-04-07
     - fixed titanium icons for bobplates and bztitanium
     - Krastorio 2: rare-metal recycling is now available from the start
     - Krastorio 2: lithium recycling now needs the same ingredients as lithium-chloride plus lithium-scrap
-    - if Krastorio 2 and Lead(bzlead) are enabled, lead recycling is now available from the start
+    - Titanium(bztitanium), Tungsten(bztungsten) and Lead(bzlead) icons now match to bobplates and Krastorio2
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2021-04-07

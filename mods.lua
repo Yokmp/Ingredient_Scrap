@@ -47,9 +47,13 @@ end
 local patch ={
 
 recipes = function ()
-  if (mods['bztitanium'] and not mods["bobplates"] and not mods["Krastorio2"]) then
-    data.raw.recipe["recycle-titanium-scrap"].icons[1].icon = yutil.get_icon_bycolor("dgrey", 2)
-    data.raw.item["titanium-scrap"].icon = yutil.get_icon_bycolor("dgrey", 2)
+  if (mods['bztungsten'] and not mods["bobplates"] and not mods["Krastorio2"]) then
+    data.raw.recipe["recycle-tungsten-scrap"].icons[1].icon = yutil.get_icon_bycolor("grey", 1)
+    data.raw.item["tungsten-scrap"].icon = yutil.get_icon_bycolor("grey", 1)
+  end
+  if (mods['bztitanium'] and not mods["Krastorio2"]) then
+    data.raw.recipe["recycle-titanium-scrap"].icons[1].icon = yutil.get_icon_bycolor("grey", 2)
+    data.raw.item["titanium-scrap"].icon = yutil.get_icon_bycolor("grey", 2)
   end
   if (mods["bobplates"]) then
     data.raw.item["lead-scrap"].icon = yutil.get_icon_bycolor("blue", 1)
