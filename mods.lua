@@ -24,6 +24,12 @@ if (mods["bobplates"]) then
   "brass", "bronze", "nitinol", "invar", "cobalt", "quartz", "silicon", "gunmetal", "tungsten" })
   yutil.table.extend(_results, {"alloy", "glass"})
 end
+if (mods['Clowns-Extended-Minerals']) then
+    yutil.table.extend(_types, {"adamantite", "orichalcite", "phosphorite", "eliongate"})
+    if clowns and not clowns.special_vanilla then
+        yutil.table.extend(_types, {"antitate", "pro-galena", "saguinate", "meta-garnierite", "nova-leucoxene", "stannic", "plumbic", "manganic", "titanic", "phosphic"})
+    end
+end
 if (mods['bztitanium']) then
   yutil.table.extend(_types, {"titanium"})
 end
