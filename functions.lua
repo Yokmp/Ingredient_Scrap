@@ -108,6 +108,20 @@ function yutil.get_item_icon(scrap_type)
     ["copper-tungsten"]  = yutil.get_icon_bycolor("red", 2),
     chromium      = yutil.get_icon_bycolor("grey", 1),
     tellurium     = yutil.get_icon_bycolor("purple", 1),
+    adamantite    = yutil.get_icon_bycolor("purple", 1),
+    antitate      = yutil.get_icon_bycolor("red", 1),
+    ["pro-galena"]= yutil.get_icon_bycolor("dgrey", 1),
+    orichalcite   = yutil.get_icon_bycolor("orange", 1),
+    phosphorite   = yutil.get_icon_bycolor("grey", 1),
+    sanguinate    = yutil.get_icon_bycolor("red", 1),
+    elionagate    = yutil.get_icon_bycolor("teal", 1),
+    ["meta-garnierite"] = yutil.get_icon_bycolor("yellow", 1),
+    ["nova-leucoxene"] = yutil.get_icon_bycolor("dgrey", 1),
+    stannic = yutil.get_icon_bycolor("green", 3),
+    plumbic = yutil.get_icon_bycolor("purple", 3),
+    manganic = yutil.get_icon_bycolor("orange", 3),
+    titanic = yutil.get_icon_bycolor("grey", 3),
+    phosphic = yutil.get_icon_bycolor("teal", 3),
   }
   return icons[scrap_type] or icons.missing
 end
