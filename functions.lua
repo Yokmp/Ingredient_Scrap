@@ -25,11 +25,11 @@ function yutil.add_pairs(_table)
   end
   return _t
 end
--- log(serpent.block( add_pairs({ "iron-gear-wheel", 10 }) ))
+-- log(serpent.block( add_pairs({ "iron-stick"}) ))
 -- log(serpent.block( add_pairs({ "copper-plate", 10 }) ))
 -- log(serpent.block( add_pairs({ name="iron-plate", amount=20 }) ))
 -- log(serpent.block( add_pairs({ name = "uranium-235", probability = 0.007, amount = 1 }) ))
--- assert(1==2, "add_pairs()")
+-- error("add_pairs()")
 
 
 
@@ -44,7 +44,7 @@ end
 ---@param index number
 ---@return string
 function yutil.get_icon_bycolor(color, index)
-  local icon_path = mod_name.. "/graphics/icons/color/"
+  local icon_path = mod_name.. "/graphics/icons/"
   local icon  	  = nil
   local missing   = mod_name.. "/graphics/icons/missing-icon.png"
   local recycle   = mod_name.. "/graphics/icons/recycle.png"
@@ -57,6 +57,7 @@ function yutil.get_icon_bycolor(color, index)
     purple  = "purple",
     red     = "red",
     teal    = "teal",
+    green   = "green",
     yellow  = "yellow",
   }
 
@@ -75,57 +76,60 @@ function yutil.get_icon_bycolor(color, index)
 end
 
 
+yutil.scrap_icons = {
+  recycle             = yutil.get_icon_bycolor("recycle"),
+  adamantite          = yutil.get_icon_bycolor("purple", 1),
+  aluminium           = yutil.get_icon_bycolor("grey", 1),
+  antitate            = yutil.get_icon_bycolor("red", 1),
+  brass               = yutil.get_icon_bycolor("yellow", 1),
+  bronze              = yutil.get_icon_bycolor("yellow", 2),
+  chromium            = yutil.get_icon_bycolor("grey", 1),
+  cobalt              = yutil.get_icon_bycolor("blue", 2),
+  copper              = yutil.get_icon_bycolor("orange", 1),
+  ["cobalt-steel"]    = yutil.get_icon_bycolor("blue", 1),
+  ["copper-tungsten"] = yutil.get_icon_bycolor("red", 2),
+  elionagate          = yutil.get_icon_bycolor("teal", 1),
+  -- glass            = yutil.get_icon_bycolor("purple", 1),
+  gold                = yutil.get_icon_bycolor("yellow", 2),
+  gunmetal            = yutil.get_icon_bycolor("yellow", 2),
+  imersium            = yutil.get_icon_bycolor("purple", 1),
+  invar               = yutil.get_icon_bycolor("grey", 3),
+  iron                = yutil.get_icon_bycolor("grey", 1),
+  lead                = yutil.get_icon_bycolor("brown", 3),
+  lithium             = yutil.get_icon_bycolor("dgrey", 1),
+  manganic            = yutil.get_icon_bycolor("orange", 3),
+  ["meta-garnierite"] = yutil.get_icon_bycolor("yellow", 1),
+  nickel              = yutil.get_icon_bycolor("grey", 2),
+  nitinol             = yutil.get_icon_bycolor("grey", 2),
+  ["nova-leucoxene"]  = yutil.get_icon_bycolor("dgrey", 1),
+  orichalcite         = yutil.get_icon_bycolor("orange", 1),
+  osmium              = yutil.get_icon_bycolor("purple", 3),
+  phosphic            = yutil.get_icon_bycolor("teal", 3),
+  phosphorite         = yutil.get_icon_bycolor("grey", 1),
+  plumbic             = yutil.get_icon_bycolor("purple", 3),
+  ["pro-galena"]      = yutil.get_icon_bycolor("dgrey", 1),
+  sanguinate          = yutil.get_icon_bycolor("red", 1),
+  silicon             = yutil.get_icon_bycolor("brown", 1),
+  silver              = yutil.get_icon_bycolor("grey", 1),
+  stannic             = yutil.get_icon_bycolor("green", 3),
+  steel               = yutil.get_icon_bycolor("grey", 2),
+  tellurium           = yutil.get_icon_bycolor("purple", 1),
+  tin                 = yutil.get_icon_bycolor("grey", 2),
+  titanic             = yutil.get_icon_bycolor("grey", 3),
+  titanium            = yutil.get_icon_bycolor("dgrey", 2),
+  tungsten            = yutil.get_icon_bycolor("dgrey", 1),
+  zinc                = yutil.get_icon_bycolor("grey", 2),
+}
+
+
 ---@return string
 function yutil.get_item_icon(scrap_type)
-  local icon_path = mod_name.. "/graphics/icons/"
-  local icon = icon_path..scrap_type.."-scrap.png"
-  local icons = {
-    missing   = icon_path.."missing-icon.png",
-    recycle   = icon_path.."recycle.png",
-    iron      = icon,
-    copper    = icon,
-    steel     = icon,
-    imersium      = yutil.get_icon_bycolor("purple", 1),
-    lead          = yutil.get_icon_bycolor("brown", 3),
-    titanium      = yutil.get_icon_bycolor("dgrey", 2),
-    zinc          = yutil.get_icon_bycolor("grey", 2),
-    nickel        = yutil.get_icon_bycolor("grey", 2),
-    aluminium     = yutil.get_icon_bycolor("grey", 1),
-    tungsten      = yutil.get_icon_bycolor("dgrey", 1),
-    tin           = yutil.get_icon_bycolor("grey", 2),
-    silver        = yutil.get_icon_bycolor("grey", 1),
-    gold          = yutil.get_icon_bycolor("yellow", 2),
-    brass         = yutil.get_icon_bycolor("yellow", 1),
-    bronze        = yutil.get_icon_bycolor("yellow", 2),
-    nitinol       = yutil.get_icon_bycolor("grey", 2),
-    invar         = yutil.get_icon_bycolor("grey", 3),
-    cobalt        = yutil.get_icon_bycolor("blue", 2),
-    -- glass      = yutil.get_icon_bycolor("purple", 1),
-    -- silicon    = yutil.get_icon_bycolor("purple", 1),
-    gunmetal      = yutil.get_icon_bycolor("yellow", 2),
-    lithium       = yutil.get_icon_bycolor("dgrey", 1),
-    ["cobalt-steel"]  = yutil.get_icon_bycolor("blue", 1),
-    ["copper-tungsten"]  = yutil.get_icon_bycolor("red", 2),
-    chromium      = yutil.get_icon_bycolor("grey", 1),
-    tellurium     = yutil.get_icon_bycolor("purple", 1),
-    adamantite    = yutil.get_icon_bycolor("purple", 1),
-    antitate      = yutil.get_icon_bycolor("red", 1),
-    ["pro-galena"]= yutil.get_icon_bycolor("dgrey", 1),
-    orichalcite   = yutil.get_icon_bycolor("orange", 1),
-    phosphorite   = yutil.get_icon_bycolor("grey", 1),
-    sanguinate    = yutil.get_icon_bycolor("red", 1),
-    elionagate    = yutil.get_icon_bycolor("teal", 1),
-    ["meta-garnierite"] = yutil.get_icon_bycolor("yellow", 1),
-    ["nova-leucoxene"] = yutil.get_icon_bycolor("dgrey", 1),
-    stannic = yutil.get_icon_bycolor("green", 3),
-    plumbic = yutil.get_icon_bycolor("purple", 3),
-    manganic = yutil.get_icon_bycolor("orange", 3),
-    titanic = yutil.get_icon_bycolor("grey", 3),
-    phosphic = yutil.get_icon_bycolor("teal", 3),
-  }
+  local icons = yutil.scrap_icons
   return icons[scrap_type] or icons.missing
 end
 
+
+---returns the recycle recipe icons layers
 function yutil.get_recycle_icons(scrap_type, result_name)
   local icon_item, icon_size, icon_mipmaps, scale_factor
 

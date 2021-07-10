@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2021-10-07
+  Changes:
+    - added support for clowns-extended-minerasls (nihilisticpandemonium)
+    - replaced duplicate of aluminium with tungsten in bobplates (nihilisticpandemonium)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2021-04-07
   Changes:
