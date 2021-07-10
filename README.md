@@ -6,30 +6,23 @@ Affected are only "vanilla-names" (iron, copper, steel). If you want to add scra
 other mods recipes then just edit data-updates.lua where youll find the two array at the top of the file.
 
 
-<table>
-<tr>
-<td>
-<img src=shot_01.png>
-</td>
-<td>
-<img src=shot_02.png>
-</td>
-</tr>
-</table>
+|example recipes|mods recipes|
+|:-:|-|
+|![](shot_01.png)<br>![](shot_02.png)|![](shot_03.png)|
 
 
 ## Customize
-The ``_types`` table holds the phrases and looks into the recipes with string.match() to find them.
+The ``_types`` table holds the patterns and is used to match parts of a recipe name with string.find().
 So iron will match iron-plate and hardenend-iron-plate. Even superironbar would be a match.
 To exclude like copper-plate but still use copper-cables just be more specific. It is also used
-to contruct the scrap-items like ``iron-scrap``.
+to contruct the scrap-items like ``iron-scrap`` and the recycle recipes like ``recycle-iron-scrap``.
 
 <pre lang=lua> local _types = {"iron", "copper", "steel"} </pre>
 
 This table holds the result suffix which is then be constructed to ``_types.."-".._results`` (eg iron-plate).
-Like the _types table, this one also goes by priority, so position 1 is taken if possible, if not pos 2 will be checked etc until
-it runs out of options, then the script will log it and **ignore** the recipe.
-As there will be no recycling of this scrap-item place some kind of fallback match at the end of the table.<br/> "*plate*"" is a good candidate.
+Like the \_types table, this one also goes by priority, so index 1 is taken if possible, if not 2 will be checked etc.
+When no match is found then the recipe will be ignored and it is also logged.
+As there will be no recycling of this scrap-item _plate_ is added to the end as some sort of fallback.
 
 <pre lang=lua> local _results = {"plate"} </pre>
 
@@ -37,19 +30,17 @@ As there will be no recycling of this scrap-item place some kind of fallback mat
 * Initial release
 
 ## Known Issues
-* None yet
+* doesn't work if the item name is in 'reverse' order like plates-osmium instead of osmium-plate
+* a recipe is enabled if no technology which unlocks the result can be found instead of checking the enabled keys
+* scrap colors doesn't fit quite frequently because i didn't implement a tint based icon system, shame on me
+* the scrap icons look awful
 
 ## Languages
 * english
 * deutsch
 
 ## ToDo
-* [ ] recipe and Tech-Cost Balancing
-* [ ] better Icons
-* [ ] Techtree overhaul (maybe)
-* [ ] Options/Settings
-* [ ] Interface
-* [ ] Additional recipes (maybe)
+* [ ] Interface?
 
 ## How to contribute?
 
