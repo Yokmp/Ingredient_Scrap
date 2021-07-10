@@ -33,6 +33,25 @@ end
 
 
 
+function yutil.set_item_icon(item_name, new_icon)
+  if data.raw.item[item_name] then
+    data.raw.item[item_name].icon = new_icon
+    data.raw.item[item_name].icon_size = 64
+    data.raw.item[item_name].icon_mipmaps = 4
+    data.raw.item[item_name].icons = nil
+  end
+end
+function yutil.set_recipe_icon(recipe_name, new_icon)
+  if data.raw.recipe[recipe_name] then
+    data.raw.recipe[recipe_name].icon = new_icon
+    data.raw.recipe[recipe_name].icon_size = 64
+    data.raw.recipe[recipe_name].icon_mipmaps = 4
+    data.raw.recipe[recipe_name].icons = nil
+  end
+end
+
+
+
 ----------------
 --    ICONS   --
 ----------------

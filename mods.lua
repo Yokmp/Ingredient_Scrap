@@ -26,12 +26,12 @@ if (mods["bobplates"]) then
   "brass", "bronze", "nitinol", "invar", "cobalt", "quartz", "silicon", "gunmetal", "tungsten" })
   yutil.table.extend(_results, {"alloy", "glass"})
 end
-if (mods['Clowns-Extended-Minerals']) then
-    yutil.table.extend(_types, {"osmium", "adamantite", "orichalcite", "phosphorite", "eliongate"})
-    if clowns and not clowns.special_vanilla then
-        yutil.table.extend(_types, {"antitate", "pro-galena", "saguinate", "meta-garnierite", "nova-leucoxene", "stannic", "plumbic", "manganic", "titanic", "phosphic"})
-    end
-end
+-- if (mods['Clowns-Extended-Minerals']) then -- TODO
+--     yutil.table.extend(_types, {"adamantite", "orichalcite", "phosphorite", "eliongate"})
+--     if clowns and not clowns.special_vanilla then
+--         yutil.table.extend(_types, {"antitate", "pro-galena", "saguinate", "meta-garnierite", "nova-leucoxene", "stannic", "plumbic", "manganic", "titanic", "phosphic"})
+--     end
+-- end
 if (mods['bztitanium']) then
   yutil.table.extend(_types, {"titanium"})
 end
@@ -47,59 +47,55 @@ if (mods['IndustrialRevolution']) then
 end
 
 
+
+----------------
+--    ICONS   --
+----------------
+
+
+
+if (mods['bztungsten'] and not mods["bobplates"] and not mods["Krastorio2"]) then
+  yutil.scrap_icons["tungsten"] = yutil.get_icon_bycolor("grey", 1)
+end
+if (mods['bztitanium'] and not mods["Krastorio2"]) then
+  yutil.scrap_icons["titanium"] = yutil.get_icon_bycolor("grey", 2)
+end
+if (mods["bobplates"] and not mods['angelssmelting']) then
+  yutil.scrap_icons["lead"] = yutil.get_icon_bycolor("blue", 1)
+end
+if (mods['angelssmelting']) then
+  yutil.scrap_icons["lead"] = yutil.get_icon_bycolor("dgrey", 1)
+  yutil.scrap_icons["tin"] = yutil.get_icon_bycolor("green", 1)
+  yutil.scrap_icons["titanium"] = yutil.get_icon_bycolor("purple", 1)
+end
+if (mods['Krastorio2']) then
+  yutil.scrap_icons["rare"] = yutil.get_icon_bycolor("dgrey", 1)
+end
+
+
+
 ------------------
 --    PATCHES   --
 ------------------
 
 
 local patch ={
-icons = function ()
-  if (mods['bztungsten'] and not mods["bobplates"] and not mods["Krastorio2"]) then
-    yutil.scrap_icons["tungsten"] = yutil.get_icon_bycolor("grey", 1)
-  end
-  if (mods['bztitanium'] and not mods["Krastorio2"]) then
-    yutil.scrap_icons["titanium"] = yutil.get_icon_bycolor("grey", 2)
-  end
-  if (mods["bobplates"] and not mods['angelssmelting']) then
-    yutil.scrap_icons["lead"] = yutil.get_icon_bycolor("blue", 1)
-  end
-  if (mods['angelssmelting']) then
-    yutil.scrap_icons["lead"] = yutil.get_icon_bycolor("dgrey", 1)
-    yutil.scrap_icons["tin"] = yutil.get_icon_bycolor("green", 1)
-    yutil.scrap_icons["titanium"] = yutil.get_icon_bycolor("purple", 1)
-  end
-  if (mods['Krastorio2']) then
-    yutil.scrap_icons["rare"] = yutil.get_icon_bycolor("dgrey", 1)
-  end
-end,
 
 recipes = function ()
+  -- if (mods['angelssmelting']) then
+  -- end
   if (mods['Krastorio2']) then
     data.raw.recipe["recycle-lithium-scrap"].normal.results[1] = {name="lithium", amount=1}
     data.raw.recipe["recycle-lithium-scrap"].normal.ingredients = util.copy(data.raw.recipe["lithium-chloride"].ingredients)
     data.raw.recipe["recycle-lithium-scrap"].normal.ingredients[3] = { name = "lithium-scrap", amount = settings.startup["ingredient-scrap-needed"].value}
     data.raw.recipe["recycle-lithium-scrap"].normal.main_product = "lithium"
     data.raw.recipe["recycle-lithium-scrap"].expensive = nil -- uses normal
-    -- data.raw.recipe["recycle-rare-scrap"].icons[1].icon = yutil.get_icon_bycolor("dgrey", 1)
-    -- data.raw.item["rare-scrap"].icon = yutil.get_icon_bycolor("dgrey", 1)
   end
   if (mods['IndustrialRevolution']) then
-    data.raw.recipe["recycle-tellurium-scrap"].icon = "__Ingredient_Scrap__/graphics/icons/mods/recycle-tellurium-scrap.png"
-    data.raw.recipe["recycle-tellurium-scrap"].icon_size = 64
-    data.raw.recipe["recycle-tellurium-scrap"].icon_mipmaps = 4
-    data.raw.recipe["recycle-tellurium-scrap"].icons = nil
-    data.raw.item["tellurium-scrap"].icon = "__Ingredient_Scrap__/graphics/icons/mods/tellurium-scrap.png"
-    data.raw.item["tellurium-scrap"].icon_size = 64
-    data.raw.item["tellurium-scrap"].icon_mipmaps = 4
-    data.raw.item["tellurium-scrap"].icons = nil
-    data.raw.recipe["recycle-chromium-scrap"].icon = "__Ingredient_Scrap__/graphics/icons/mods/recycle-chromium-scrap.png"
-    data.raw.recipe["recycle-chromium-scrap"].icon_size = 64
-    data.raw.recipe["recycle-chromium-scrap"].icon_mipmaps = 4
-    data.raw.recipe["recycle-chromium-scrap"].icons = nil
-    data.raw.item["chromium-scrap"].icon = "__Ingredient_Scrap__/graphics/icons/mods/chromium-scrap.png"
-    data.raw.item["chromium-scrap"].icon_size = 64
-    data.raw.item["chromium-scrap"].icon_mipmaps = 4
-    data.raw.item["chromium-scrap"].icons = nil
+    yutil.set_item_icon("tellurium-scrap", "__Ingredient_Scrap__/graphics/icons/mods/recycle-tellurium-scrap.png")
+    yutil.set_recipe_icon("recycle-tellurium-scrap", "__Ingredient_Scrap__/graphics/icons/mods/recycle-tellurium-scrap.png")
+    yutil.set_item_icon("recycle-chromium-scrap", "__Ingredient_Scrap__/graphics/icons/mods/recycle-chromium-scrap.png")
+    yutil.set_recipe_icon("recycle-chromium-scrap", "__Ingredient_Scrap__/graphics/icons/mods/recycle-chromium-scrap.png")
   end
 end,
 technology = function (tech_name)

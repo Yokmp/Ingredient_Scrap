@@ -427,7 +427,7 @@ for _, s_type in ipairs(scrap_types) do
   make_scrap(s_type)
 end
 
-patch.icons()
+-- patch.icons()
 
 for recipe_name, recipe_data in pairs(data.raw.recipe) do
   -- if do_test then log(recipe_name.." - "..tostring(recipe_data.subgroup)) end
