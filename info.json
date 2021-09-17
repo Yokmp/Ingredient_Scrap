@@ -7,7 +7,6 @@
   "factorio_version": "1.1",
   "homepage": "https://github.com/Yokmp/Ingredient_Scrap",
   "dependencies": ["base >= 0.17.66",
-                  "? bzlead",
-                  "?Clowns-Extended-Minerals"],
+                  "? bzlead"],
   "description": "Adds scrap results depending on the recipes ingredients."
 }

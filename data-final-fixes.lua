@@ -35,13 +35,15 @@ local _return_template_ = {
 
     },
   }
-  local function new_return(recipe_name)
+---get new return template
+local function new_return(recipe_name)
   local _t = util.table.deepcopy(_return_template_)
   _t.name = recipe_name
   return _t
 end
 
 
+---remove unused scraptype combinations
 local function filter_scrap_types()
   local _t1, _t2 = {}, {}
   log("Filtering scrap types")
@@ -67,7 +69,7 @@ end
 
 local function get_scrap_types(scrap_type, item_types)
 
-  for i, i_type in ipairs(item_types) do
+  for _, i_type in ipairs(item_types) do
     local _name = scrap_type.."-"..i_type
     if data.raw.item[_name] then
       return { scrap = scrap_type.."-scrap", item = _name, amount = 0 }

@@ -90,6 +90,7 @@ recipes = function ()
     data.raw.recipe["recycle-lithium-scrap"].normal.ingredients[3] = { name = "lithium-scrap", amount = settings.startup["ingredient-scrap-needed"].value}
     data.raw.recipe["recycle-lithium-scrap"].normal.main_product = "lithium"
     data.raw.recipe["recycle-lithium-scrap"].expensive = nil -- uses normal
+    data.raw.recipe["recycle-lithium-scrap"].category = "chemistry"
   end
   if (mods['IndustrialRevolution']) then
     yutil.set_item_icon("tellurium-scrap", "__Ingredient_Scrap__/graphics/icons/mods/recycle-tellurium-scrap.png")
