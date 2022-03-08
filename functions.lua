@@ -98,6 +98,7 @@ end
 yutil.scrap_icons = {
   recycle             = yutil.get_icon_bycolor("recycle"),
   adamantite          = yutil.get_icon_bycolor("purple", 1),
+  aluminum            = yutil.get_icon_bycolor("grey", 1),
   aluminium           = yutil.get_icon_bycolor("grey", 1),
   antitate            = yutil.get_icon_bycolor("red", 1),
   brass               = yutil.get_icon_bycolor("yellow", 1),

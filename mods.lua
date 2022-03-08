@@ -38,6 +38,9 @@ end
 if (mods['bztungsten']) then
   yutil.table.extend(_types, {"tungsten"})
 end
+if (mods['bzaluminum']) then
+  yutil.table.extend(_types, {"aluminum"})
+end
 if (mods['bzlead']) then
   yutil.table.extend(_types, {"lead"})
 end
@@ -59,6 +62,9 @@ if (mods['bztungsten'] and not mods["bobplates"] and not mods["Krastorio2"]) the
 end
 if (mods['bztitanium'] and not mods["Krastorio2"]) then
   yutil.scrap_icons["titanium"] = yutil.get_icon_bycolor("grey", 2)
+end
+if (mods['bzaluminum'] ) then
+  yutil.scrap_icons["aluminum"] = yutil.get_icon_bycolor("grey", 1)
 end
 if (mods["bobplates"] and not mods['angelssmelting']) then
   yutil.scrap_icons["lead"] = yutil.get_icon_bycolor("blue", 1)
@@ -98,6 +104,9 @@ recipes = function ()
     yutil.set_item_icon("recycle-chromium-scrap", "__Ingredient_Scrap__/graphics/icons/mods/recycle-chromium-scrap.png")
     yutil.set_recipe_icon("recycle-chromium-scrap", "__Ingredient_Scrap__/graphics/icons/mods/recycle-chromium-scrap.png")
   end
+  -- if (mods['bzaluminum'] ) then
+  --   -- I CRY SILENTLY
+  -- end
 end,
 technology = function (tech_name)
   local _return = true
