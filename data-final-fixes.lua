@@ -24,7 +24,7 @@ local do_test = false
 -- local debug_test_recipe = "radar"
 -- local debug_test_recipe = "bronze-alloy"
 local debug_test_recipe = "aluminum-cable"
-log(serpent.block( data.raw.recipe[debug_test_recipe] ))
+-- log(serpent.block( data.raw.recipe[debug_test_recipe] ))
 
 ---holds the return table template
 local _return_template_ = {
