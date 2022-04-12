@@ -1,0 +1,77 @@
+-- ---@meta
+
+
+
+--     ---Returns the amount of fluid boxes
+--     ---@param entity_name string
+--     ---@param entity_type? string
+--     ---@return integer
+-- ylib.fluid.get_fluid_box_amount = function (entity_name, entity_type) end
+--     ---Returns the amount of fluid boxes of a type
+--     ---@param entity_name string
+--     ---@param production_type string
+--     ---@param entity_type? string
+--     ---@return integer
+-- ylib.fluid.gget_fluid_box_amount_of_type = function (entity_name, production_type, entity_type) end
+--     ---Returns a table containing the amount of fluid box types
+--     ---@param entity_name string
+--     ---@param entity_type? string
+--     ---@return table ``{none = i, input = i, ["input-output"] = i, output = i,}``
+-- ylib.fluid.gget_fluid_box_types = function (entity_name, entity_type) end
+--     ---Returns a list of all fluids
+--     ---@param filter? table do only return fluids containing this string
+--     ---@return table
+-- ylib.fluid.gget_fluids = function (filter) end
+--     ---Returns true if the entity has a fluid box
+--     ---@param entity_name string
+--     ---@param entity_type? string must be set if the entity name exists in multiple types
+--     ---@return boolean
+-- ylib.fluid.ghas_fluid_box = function (entity_name, entity_type) end
+--     ---Returns true if the entity has a specific type of fluid box
+--     ---@param entity_name string
+--     ---@param production_type string
+--     ---@param entity_type? string must be set if the entity name exists in multiple types
+--     ---@return boolean
+-- ylib.fluid.ghas_fluid_box_of_type = function (entity_name, production_type, entity_type) end
+
+--  ylib = {
+--   icon = {
+--     get_composed_icon = function () end,
+--     get_fluid_icon = function () end,
+--     get_icon_from_item = function () end,
+--   },
+--   recipe = {
+--     add_ingredient = function () end,
+--     add_result = function () end,
+--     get_amount_in = function () end,
+--     get_amount_out = function () end,
+--     get_byingredient = function () end,
+--     get_byresult = function () end,
+--     get_energy_required = function () end,
+--     get_ingredients = function () end,
+--     get_result_count = function () end,
+--     get_results = function () end,
+--     remove_ingredient = function () end,
+--     replace_ingredient = function () end,
+--     set_enabled = function () end,
+--     set_energy = function () end,
+--     set_ingredient_temperature = function () end,
+--     set_ingredients = function () end,
+--     set_result_temperature = function () end,
+--   },
+--   util = {
+--     ---Returns table ``t`` with keys for name and amount
+--     ---@param t table|string ``lua {string, number?}``
+--     ---@return table ``{ name = "name": string, amount = n: integer }``
+--     add_pairs = function (t) end,
+--     assembler1pipepictures = function (tint) end,
+--     ---Returns _true_ if table contains anything
+--     ---@return boolean
+--     check_table = function (t) end,
+--     get_entity_type = function () end,
+--     get_table_matches = function (ta, tb) end,
+--     get_type = function (item) end,
+--     is_in_list = function (v, t) end,
+--     mix_tints = function (ta, tb) end
+--   }
+-- }

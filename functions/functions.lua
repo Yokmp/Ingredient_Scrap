@@ -8,30 +8,6 @@ function yutil.table.extend(t1, t2)
     for i = 1, #t2 do t1[#t1+1] = t2[i] end return t1 end
 end
 
----adds name and amount keys to ingredients and returns a new table
----@param _table table ``{string, number?}``
----@return table ``{ name = "name", amount = n }``
-function yutil.add_pairs(_table)
-  local _t = _table
-
-  if type(_t) == "table" and _t[1] then --they can be empty and would be "valid" until ...
-    if _t.name then return _t end       --ignore if it has pairs already
-    if type(_t[1]) ~= "string" then error(" First index must be of type 'string'") end
-    if type(_t[2]) ~= "number" then --[[log(" Warning: add_pairs("..type(_t[1])..", "..type(_t[2])..") - implicitly set value - amount = 1");]] _t[2] = 1 end
-    return { name = _t[1], amount = _t[2] or 1}
-  elseif type(_t) == "string" then
-    log(" Warning: add_pairs("..type(_t[1])..", "..type(_t[2])..") - implicitly set value - amount = 1")
-    return { name = _t, amount = 1}
-  end
-  return _t
-end
--- log(serpent.block( add_pairs({ "iron-stick"}) ))
--- log(serpent.block( add_pairs({ "copper-plate", 10 }) ))
--- log(serpent.block( add_pairs({ name="iron-plate", amount=20 }) ))
--- log(serpent.block( add_pairs({ name = "uranium-235", probability = 0.007, amount = 1 }) ))
--- error("add_pairs()")
-
-
 
 function yutil.set_item_icon(item_name, new_icon)
   if data.raw.item[item_name] then
