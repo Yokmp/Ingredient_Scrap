@@ -1,28 +1,28 @@
 data:extend({
   {
       type = "int-setting",
-      name = "ingredient-scrap-needed",
+      name = "yis-needed",
       setting_type = "startup",
       minimum_value = 1,
       default_value = 5
   },
   {
       type = "int-setting",
-      name = "ingredient-scrap-probability",
+      name = "yis-probability",
       setting_type = "startup",
       minimum_value = 1,
       default_value = 24
   },
   {
       type = "bool-setting",
-      name = "ingredient-scrap-handle-fluids",
+      name = "yis-handle-fluids",
       setting_type = "startup",
       hidden = true,
       default_value = true
   },
   {
       type = "bool-setting",
-      name = "ingredient-scrap-amount-by-ingredients", -- balancing can be an issue here
+      name = "yis-amount-by-ingredients", -- balancing can be an issue here
       setting_type = "startup",
       hidden = true,
       default_value = true
