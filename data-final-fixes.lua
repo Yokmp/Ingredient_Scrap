@@ -1,14 +1,16 @@
-local _material_types = {"iron", "copper", "steel", "aluminum"}
+local _material_types = {"iron", "copper", "steel", "aluminum", "erronium"}
 local _result_types = {"plate"}
---//TODO add a function which tracks each recipes scrap result so we can match it later on?
-  -- fomrat like : { recipe_name = {{material, amount}, {material, amount}, ...} }
-  -- basically build a lookup table
+local _result_recipes = {} --these recipes will not generate srap
+local scrap_probability = settings.startup["yis-probability"].value/100
 
+
+--#region Prepare
 -- Remove unused materials
 local _t1, _t2 = {}, {}
 for _, m_type in ipairs(_material_types) do
   for _, r_type in ipairs(_result_types) do
     if data.raw.item[m_type.."-"..r_type] then
+      _result_recipes[#_result_recipes+1] = m_type.."-"..r_type --add to recipe combinations
       _t1[m_type] = m_type
     end
   end
@@ -17,15 +19,9 @@ for _, _type in pairs(_t1) do
   _t2[#_t2+1] = _type
 end
 _material_types = _t2
-
-
--- local yutil = require("functions.functions")
--- local mod = require("mods")
--- local patch = mod[3]
-
--- local scrap_types = yutil.table.extend(mod[1], _material_types)
--- local item_types = yutil.table.extend(mod[2], _item_types)
-
+-- log(serpent.block(_material_types))
+-- log(serpent.block(_result_recipes))
+-- error("Remove unused materials")
 
 
 scrap_lookup = {
@@ -86,43 +82,6 @@ scrap_lookup = {
 -- error("scrap_lookup:add()")
 
 
-
-
--- ---Removes all material_types which don't have a result when combined with item_types.
--- ---Returns a list of scrap results.
--- ---@param material_types table
--- ---@param result_types table
--- ---@return table scrap_results ``{ingredient = "iron-scrap", result = "iron-plate"}``
--- function get_possible_results(material_types, result_types)
---   local _t1, _t2 = {}, {}
---   info("Filtering scrap types")
---   for _, m_type in ipairs(material_types) do
---     for _, i_type in ipairs(result_types) do
---       if data.raw.item[m_type.."-"..i_type] then
-
---         if not _t1[m_type] then
-
---           _t1[m_type] = {ingredient = m_type.."-scrap", result = m_type.."-"..i_type}
---           _t1[m_type] = m_type.."-"..i_type
-
---         -- elseif data.raw.item[m_type.."-"..i_type].subgroup -- //TODO function to find the "lowest" item
---         --    and data.raw.item[m_type.."-"..i_type].subgroup == "raw-material" then
-
---         --   _t1[m_type] = m_type.."-"..i_type
---         end
-
---       end
---     end
---   end
---   for _, v in pairs(_t1) do
---     _t2[#_t2+1] = v
---   end
---   return _t2
--- end
--- log(serpent.block(get_possible_results(_material_types, _result_types)))
--- error("get_possible_results()")
-
-
 ---Returns a list of materials based on the recipes ingredients
 ---@param ingredients table
 ---@return table ``{material = { "material-scrap", 10}}``
@@ -147,40 +106,36 @@ end
 -- error("get_recipe_materials()")
 
 
-
-
---loop through all recipes
+--loop through all recipes and build the actual lookup table
 
 for recipe_name, _ in pairs(data.raw.recipe) do
 
-  local _in = ylib.recipe.get_ingredients(recipe_name) --returns ``{ingredients={}, normal={}, expensive={}}``
-  local _out = ylib.recipe.get_results(recipe_name)
-  local _re = {}
+  if not ylib.util.is_in_list(recipe_name, _result_recipes) then --exclude recycle result recipes
 
-  local scrap_probability = settings.startup["yis-probability"].value/100
+    local _in = ylib.recipe.get_ingredients(recipe_name) --returns ``{ingredients={}, normal={}, expensive={}}``
+    local _out = ylib.recipe.get_results(recipe_name)
+    local _re = {}
 
-  if _in.ingredients then
-    _re.ingredients =  get_recipe_materials(_in.ingredients)
-    data.raw.recipe[recipe_name].results = _out.results
-    for _, value in pairs(_re.ingredients) do
-      scrap_lookup:add(recipe_name, value[1], value[2])
-      table.insert(data.raw.recipe[recipe_name].results, {name = value[1], amount_min = 1, amount_max = value[2], probability = scrap_probability})
+    if _in.ingredients then
+      _re.ingredients =  get_recipe_materials(_in.ingredients)
+      data.raw.recipe[recipe_name].results = _out.results
+      for _, value in pairs(_re.ingredients) do
+        scrap_lookup:add(recipe_name, value[1], value[2])
+      end
     end
-  end
-  if _in.normal then
-    _re.normal =  get_recipe_materials(_in.normal)
-    data.raw.recipe[recipe_name].normal.results = _out.normal
-    for _, value in pairs(_re.normal) do
-      scrap_lookup:add(recipe_name, value[1], {value[2], 0})
-      table.insert(data.raw.recipe[recipe_name].normal.results, {name = value[1], amount_min = 1, amount_max = value[2], probability = scrap_probability})
+    if _in.normal then
+      _re.normal =  get_recipe_materials(_in.normal)
+      data.raw.recipe[recipe_name].normal.results = _out.normal
+      for _, value in pairs(_re.normal) do
+        scrap_lookup:add(recipe_name, value[1], {value[2], 0})
+      end
     end
-  end
-  if _in.expensive then
-    _re.expensive =  get_recipe_materials(_in.expensive)
-    data.raw.recipe[recipe_name].expensive.results = _out.expensive
-    for _, value in pairs(_re.expensive) do
-      scrap_lookup:add(recipe_name, value[1], {0, value[2]})
-      table.insert(data.raw.recipe[recipe_name].expensive.results, {name = value[1], amount_min = 1, amount_max = value[2], probability = scrap_probability})
+    if _in.expensive then
+      _re.expensive =  get_recipe_materials(_in.expensive)
+      data.raw.recipe[recipe_name].expensive.results = _out.expensive
+      for _, value in pairs(_re.expensive) do
+        scrap_lookup:add(recipe_name, value[1], {0, value[2]})
+      end
     end
   end
 
@@ -191,11 +146,15 @@ end
 -- log(serpent.block(data.raw.recipe["tank"]))
 -- log(serpent.block(scrap_lookup:get("battery")))
 -- log(serpent.block(scrap_lookup:get("tank")))
-error()
+--#endregion Prepare
 
 
-
-
+-- loop again through all recipes and read all items( which are NOT a recycle result?)
+-- look up scrap_lookup and construckt results with added amounts of scrap per material
+-- like a vanilla pipe is worth {1,2} iron-scrap
+-- an engine-unit 1 steel-plate, 1 iron-gear-wheel {2,4} and 2 pipes (1 steel and {4,6} iron)
+-- so a pump (1 steel-plate, 1 engine-unit, 1 pipe) results in {1,1} steel and {5,8} iron
+-- since the pump has no difficulty it actually results in 1 steel and 5 iron
 
 
 
