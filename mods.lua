@@ -85,10 +85,15 @@ end
 --------------------
 
 
-
-if (mods['SeaBlock'] ) then
-  yutil.table.extend(_blacklist, { "copper-scrap", "iron-scrap" })
+local str = settings.startup["yis-unlock-scraps"].value
+-- str = type(str) == "string" and str or ""
+for word in string.gmatch(str, '[^,%s]+') do
+  _blacklist[#_blacklist+1] = word
 end
+      -- use ingame settings if possible!
+-- if (mods['SeaBlock'] ) then
+  -- yutil.table.extend(_blacklist, { "copper-scrap", "iron-scrap" })
+-- end
 
 
 ------------------

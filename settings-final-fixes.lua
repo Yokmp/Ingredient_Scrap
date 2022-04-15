@@ -4,7 +4,8 @@ data:extend({
         name = "yis-needed",
         setting_type = "startup",
         minimum_value = 1,
-        default_value = 5
+        default_value = 5,
+        order = "",
     },
     {
         type = "int-setting",
@@ -26,5 +27,11 @@ data:extend({
         setting_type = "startup",
         hidden = false,
         default_value = false
+    },
+    {
+        type = "string-setting",
+        name = "yis-unlock-scraps",
+        setting_type = "startup",
+        default_value = "iron-scrap, copper-scrap",
     },
 })

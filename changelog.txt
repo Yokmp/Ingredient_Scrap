@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2022-04-16
+  Changes:
+    - added support for SeaBlock
+    - new setting for determining the scrap amount
+    - new setting to exclude specific scraps from beeing locked by a technology, this should fix that with some mods basic recipes aren't available from the start
+    - adjusted some techologies
+---------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 2022-03-08
   Changes:
