@@ -1,4 +1,4 @@
-local yutil = require("functions.functions")
+local yutil = require("functions")
 
 
 ------------------
@@ -7,7 +7,7 @@ local yutil = require("functions.functions")
 
 local _types = {}
 local _results = {}
-
+local _blacklist = {}
 
 -- if (mods['Molten_Metals']) then
 --   yutil.table.extend(_results, {"ingot"})
@@ -80,12 +80,33 @@ end
 
 
 
+--------------------
+--    BLACKLIST   --
+--------------------
+
+
+
+if (mods['SeaBlock'] ) then
+  yutil.table.extend(_blacklist, { "copper-scrap", "iron-scrap" })
+end
+
+
 ------------------
 --    PATCHES   --
 ------------------
 
 
 local patch ={
+is_blacklisted = function (item)
+  if #_blacklist > 0 then
+
+    for _, v in ipairs (_blacklist) do
+      if item == v then return true end
+    end
+
+  end
+  return false
+end,
 
 recipes = function ()
   -- if (mods['angelssmelting']) then
@@ -107,7 +128,16 @@ recipes = function ()
   -- if (mods['bzaluminum'] ) then
   --   -- I CRY SILENTLY
   -- end
+  -- if (mods['SeaBlock'] ) then -- or is this caused by angels?
+  --   ylib.recipe.add_result("assembling-machine-2", "iron-scrap", 2)
+  --   ylib.recipe.add_result("pipe", "iron-scrap", 1)
+  --   ylib.recipe.add_result("iron-gear-wheel", "iron-scrap", 2)
+  --   ylib.recipe.add_result("steam-engine", "iron-scrap", 18)
+  --   ylib.recipe.add_result("electric-ore-crusher", "iron-scrap", 15)
+  --   ylib.recipe.add_result("copper-pipe", "copper-scrap", 1)
+  -- end
 end,
+
 technology = function (tech_name)
   local _return = true
   if (mods['bzlead']) then
@@ -124,6 +154,7 @@ technology = function (tech_name)
       _return = false
     end
   end
+
   return _return
 end
 }

@@ -106,17 +106,20 @@ local function get_recipe_ingredients(recipe_name)
 
     if data_recipe.ingredients and data_recipe.ingredients[1] then
       for i, ingredient in ipairs(data_recipe.ingredients) do
-        _return.recipe.ingredients[i] = ylib.util.add_pairs(ingredient)
+        -- _return.recipe.ingredients[i] = ylib.util.add_pairs(ingredient)
+        _return.recipe.ingredients[i] = yutil.add_pairs(ingredient)
       end
     end
     if data_recipe.expensive and data_recipe.expensive.ingredients[1] then
       for i, ingredient in ipairs(data_recipe.expensive.ingredients) do
-        _return.recipe.normal.ingredients[i] = ylib.util.add_pairs(ingredient)
+        -- _return.recipe.normal.ingredients[i] = ylib.util.add_pairs(ingredient)
+        _return.recipe.normal.ingredients[i] = yutil.add_pairs(ingredient)
       end
     end
     if data_recipe.expensive and data_recipe.expensive.ingredients[1] then
       for i, ingredient in ipairs(data_recipe.expensive.ingredients) do
-        _return.recipe.expensive.ingredients[i] = ylib.util.add_pairs(ingredient)
+        -- _return.recipe.expensive.ingredients[i] = ylib.util.add_pairs(ingredient)
+        _return.recipe.expensive.ingredients[i] = yutil.add_pairs(ingredient)
       end
     end
 
@@ -142,16 +145,7 @@ local function get_recipe_ingredient_types(recipe_name)
 
     if _return.recipe.ingredients[1] then
       for _, ingredient in ipairs(_return.recipe.ingredients) do
---         amount_in = ylib.recipe.get_amount_in(recipe_name, ingredient.name)
-
-
--- log(serpent.block(recipe_name..": "..ingredient.name))
--- log(serpent.block(recipe_name..": "..ingredient.amount))
--- log(serpent.block({[recipe_name] = {amount_in}}))
-
-
         for _, _type in ipairs(scrap_types) do
-
           if string.find(ingredient.name, _type, 0, true) and get_scrap_types(_type, item_types) then
             _return.recipe.ingredient_types[_type] = _return.recipe.ingredient_types[_type] or get_scrap_types(_type, item_types)
             if settings.startup["yis-amount-by-ingredients"] then
@@ -221,7 +215,8 @@ local function get_recipe_results(recipe_name)
     local scrap_probability = settings.startup["yis-probability"].value/100
 
     if data_recipe.result then
-      _return.recipe.results[1] = ylib.util.add_pairs( {data_recipe.result, data_recipe.result_count} )
+      -- _return.recipe.results[1] = ylib.util.add_pairs( {data_recipe.result, data_recipe.result_count} )
+      _return.recipe.results[1] = yutil.add_pairs( {data_recipe.result, data_recipe.result_count} )
       for _, scrap in pairs(_return.recipe.ingredient_types) do
         table.insert(_return.recipe.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
       end
@@ -229,7 +224,8 @@ local function get_recipe_results(recipe_name)
 
     if data_recipe.results and data_recipe.results[1] then
       for i, result in ipairs(data_recipe.results) do
-        _return.recipe.results[i] = ylib.util.add_pairs( result )
+        -- _return.recipe.results[i] = ylib.util.add_pairs( result )
+        _return.recipe.results[i] = yutil.add_pairs( result )
       end
       for _, scrap in pairs(_return.recipe.ingredient_types) do
         table.insert(_return.recipe.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
@@ -239,10 +235,12 @@ local function get_recipe_results(recipe_name)
     if data_recipe.expensive then
       if data_recipe.expensive.results and data_recipe.expensive.results[1] then
         for i, result in ipairs(data_recipe.expensive.results) do
-          _return.recipe.normal.results[i] = ylib.util.add_pairs( result )
+          -- _return.recipe.normal.results[i] = ylib.util.add_pairs( result )
+          _return.recipe.normal.results[i] = yutil.add_pairs( result )
         end
       elseif data_recipe.expensive.result then
-        _return.recipe.normal.results[1] = ylib.util.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
+        -- _return.recipe.normal.results[1] = ylib.util.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
+        _return.recipe.normal.results[1] = yutil.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
       end
       for _, scrap in pairs(_return.recipe.normal.ingredient_types) do
         table.insert(_return.recipe.normal.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
@@ -252,10 +250,12 @@ local function get_recipe_results(recipe_name)
     if data_recipe.expensive then
       if data_recipe.expensive.results and data_recipe.expensive.results[1] then
         for i, result in ipairs(data_recipe.expensive.results) do
-          _return.recipe.expensive.results[i] = ylib.util.add_pairs( result )
+          -- _return.recipe.expensive.results[i] = ylib.util.add_pairs( result )
+          _return.recipe.expensive.results[i] = yutil.add_pairs( result )
         end
       elseif data_recipe.expensive.result then
-        _return.recipe.expensive.results[1] = ylib.util.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
+        -- _return.recipe.expensive.results[1] = ylib.util.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
+        _return.recipe.expensive.results[1] = yutil.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
       end
       for _, scrap in pairs(_return.recipe.expensive.ingredient_types) do
         table.insert(_return.recipe.expensive.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
@@ -395,17 +395,24 @@ local function make_scrap(scrap_type, scrap_icon, stack_size)
     local item_order = "is-["..scrap_name.."]"
     local recipe_order = "is-["..recipe_name.."]"
 
+
     local enabled = --[[_return.recipe.enabled or]] get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
     local normal_enabled = --[[_return.recipe.normal.enabled or]] get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
     local expensive_enabled = --[[_return.recipe.expensive.enabled or]] get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
 
-    if not data.raw.recipe[recipe_name] then -- TODO normal, expensive
+-- add recipe to technology, or not --//TODO normal, expensive but noone uses difficulty in technologies
+    if not data.raw.recipe[recipe_name]
+    and not patch.is_blacklisted(scrap_name) then
       local tech_table = get_scrap_recycle_tech(result_name, scrap_type)
       for _, tech_name in ipairs(tech_table.effects.recipes) do
         log(tech_name.." unlocks "..recipe_name)
         table.insert(data.raw.technology[tech_name].effects,
           { type = "unlock-recipe", recipe = recipe_name } )
       end
+    else
+      enabled = true
+      normal_enabled = true
+      expensive_enabled = true
     end
 
     _data = {
@@ -511,7 +518,7 @@ patch.recipes()
 --   end
 -- end
 -- for key, value in pairs(data.raw.technology) do
---   if string.match(value.name, "alumin") then
+--   if string.match(value.name, "refining") then
 --     log(serpent.block(data.raw.technology[value.name]))
 --   end
 -- end

@@ -13,7 +13,6 @@ end
 ---@return table ``{ name = "name", amount = n }``
 function yutil.add_pairs(_table)
   local _t = _table
-
   if type(_t) == "table" and _t[1] then --they can be empty and would be "valid" until ...
     if _t.name then return _t end       --ignore if it has pairs already
     if type(_t[1]) ~= "string" then error(" First index must be of type 'string'") end
@@ -25,14 +24,11 @@ function yutil.add_pairs(_table)
   end
   return _t
 end
--- log(serpent.block( add_pairs({ "iron-stick"}) ))
--- log(serpent.block( add_pairs({ "copper-plate", 10 }) ))
--- log(serpent.block( add_pairs({ name="iron-plate", amount=20 }) ))
--- log(serpent.block( add_pairs({ name = "uranium-235", probability = 0.007, amount = 1 }) ))
--- error("add_pairs()")
 
 
-
+---Sets the items icon, sets icons to nil.
+---@param item_name string
+---@param new_icon string
 function yutil.set_item_icon(item_name, new_icon)
   if data.raw.item[item_name] then
     data.raw.item[item_name].icon = new_icon
@@ -41,6 +37,9 @@ function yutil.set_item_icon(item_name, new_icon)
     data.raw.item[item_name].icons = nil
   end
 end
+---Sets the recipes icon, sets icons to nil.
+---@param recipe_name string
+---@param new_icon string
 function yutil.set_recipe_icon(recipe_name, new_icon)
   if data.raw.recipe[recipe_name] then
     data.raw.recipe[recipe_name].icon = new_icon
@@ -142,14 +141,17 @@ yutil.scrap_icons = {
 }
 
 
----@return string
+---@return string - icon path
 function yutil.get_item_icon(scrap_type)
   local icons = yutil.scrap_icons
   return icons[scrap_type] or icons.missing
 end
 
 
----returns the recycle recipe icons layers
+---returns the recycle recipe icons table
+---@param scrap_type string
+---@param result_name string
+---@return table
 function yutil.get_recycle_icons(scrap_type, result_name)
   local icon_item, icon_size, icon_mipmaps, scale_factor
 
