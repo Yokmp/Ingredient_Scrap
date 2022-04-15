@@ -1,12 +1,14 @@
 {
   "name": "Ingredient_Scrap",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "title": "Ingredient Scrap",
   "author": "yokmp",
   "contact": "yokmp.sfgmail.com",
   "factorio_version": "1.1",
   "homepage": "https://github.com/Yokmp/Ingredient_Scrap",
-  "dependencies": ["base >= 0.17.66",
-                  "? bzlead"],
+  "dependencies": ["base >= 1.0",
+                  "?ylib >= 0.4.1", 
+                  "? bzlead",
+                  "? bzaluminum"],
   "description": "Adds scrap results depending on the recipes ingredients."
 }

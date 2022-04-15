@@ -1,9 +1,9 @@
 # A small Mod for Factorio built around Scrap.
 
-This Mod is written under Factorio 1.1.33.
-It inserts its data in the data-updates stage.
-Affected are only "vanilla-names" (iron, copper, steel). If you want to add scrap for 
-other mods recipes then just edit data-updates.lua where youll find the two array at the top of the file.
+It inserts its data in the data-final-fixes stage.
+Affected are only "vanilla-names" (iron, copper, steel).
+There are a few mods supported like KR2, IR2 and all (April 2022) bz-mods.
+If you want to add scrap for other mods recipes then just edit mods.lua in which you can set like patterns and technologies.
 
 
 |example recipes|mods recipes|
@@ -26,9 +26,6 @@ As there will be no recycling of this scrap-item _plate_ is added to the end as 
 
 <pre lang=lua> local _results = {"plate"} </pre>
 
-## Updates
-* Initial release
-
 ## Known Issues
 * doesn't work if the item name is in 'reverse' order like plates-osmium instead of osmium-plate
 * a recipe is enabled if no technology which unlocks the result can be found instead of checking the enabled keys
@@ -39,9 +36,5 @@ As there will be no recycling of this scrap-item _plate_ is added to the end as 
 * english
 * deutsch
 
-## ToDo
-* [ ] Interface?
-
 ## How to contribute?
-
 Please use the Issues Tab and share your suggestions and/or code.

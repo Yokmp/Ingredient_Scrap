@@ -1,4 +1,4 @@
-local yutil = require("functions")
+local yutil = require("functions.functions")
 
 
 ------------------
@@ -9,9 +9,9 @@ local _types = {}
 local _results = {}
 
 
-if (mods['Molten_Metals']) then
-  yutil.table.extend(_results, {"ingot"})
-end
+-- if (mods['Molten_Metals']) then
+--   yutil.table.extend(_results, {"ingot"})
+-- end
 if (mods['Krastorio2']) then
   yutil.table.extend(_types, {"imersium", "lithium", "rare"})
   yutil.table.extend(_results, {"plate", "beam", "metals", "chloride"})
@@ -26,7 +26,7 @@ if (mods["bobplates"]) then
   "brass", "bronze", "nitinol", "invar", "cobalt", "quartz", "silicon", "gunmetal", "tungsten" })
   yutil.table.extend(_results, {"alloy", "glass"})
 end
--- if (mods['Clowns-Extended-Minerals']) then -- TODO
+-- if (mods['Clowns-Extended-Minerals']) then --//TODO reverse match/generation of recipes like plates-iron
 --     yutil.table.extend(_types, {"adamantite", "orichalcite", "phosphorite", "eliongate"})
 --     if clowns and not clowns.special_vanilla then
 --         yutil.table.extend(_types, {"antitate", "pro-galena", "saguinate", "meta-garnierite", "nova-leucoxene", "stannic", "plumbic", "manganic", "titanic", "phosphic"})
@@ -93,7 +93,7 @@ recipes = function ()
   if (mods['Krastorio2']) then
     data.raw.recipe["recycle-lithium-scrap"].normal.results[1] = {name="lithium", amount=1}
     data.raw.recipe["recycle-lithium-scrap"].normal.ingredients = util.copy(data.raw.recipe["lithium-chloride"].ingredients)
-    data.raw.recipe["recycle-lithium-scrap"].normal.ingredients[3] = { name = "lithium-scrap", amount = settings.startup["ingredient-scrap-needed"].value}
+    data.raw.recipe["recycle-lithium-scrap"].normal.ingredients[3] = { name = "lithium-scrap", amount = settings.startup["yis-needed"].value}
     data.raw.recipe["recycle-lithium-scrap"].normal.main_product = "lithium"
     data.raw.recipe["recycle-lithium-scrap"].expensive = nil -- uses normal
     data.raw.recipe["recycle-lithium-scrap"].category = "chemistry"
@@ -120,6 +120,9 @@ technology = function (tech_name)
     or tech_name == "kr-matter-copper-processing"
     or tech_name == "kr-matter-rare-metals-processing"
     then _return = false end
+    if mods["bzaluminum"] and tech_name == "aluminum-matter-processing" then
+      _return = false
+    end
   end
   return _return
 end
