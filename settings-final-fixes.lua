@@ -15,7 +15,7 @@ data:extend({
     },
     {
         type = "bool-setting",
-        name = "yis-handle-fluids",
+        name = "yis-handle-fluids", -- fluid mixer could also do this
         setting_type = "startup",
         hidden = true,
         default_value = true
@@ -25,6 +25,6 @@ data:extend({
         name = "yis-amount-by-ingredients", -- balancing can be an issue here
         setting_type = "startup",
         hidden = false,
-        default_value = true
+        default_value = false
     },
 })
