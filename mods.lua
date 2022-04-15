@@ -9,9 +9,9 @@ local _types = {}
 local _results = {}
 
 
-if (mods['Molten_Metals']) then
-  yutil.table.extend(_results, {"ingot"})
-end
+-- if (mods['Molten_Metals']) then
+--   yutil.table.extend(_results, {"ingot"})
+-- end
 if (mods['Krastorio2']) then
   yutil.table.extend(_types, {"imersium", "lithium", "rare"})
   yutil.table.extend(_results, {"plate", "beam", "metals", "chloride"})
@@ -120,6 +120,9 @@ technology = function (tech_name)
     or tech_name == "kr-matter-copper-processing"
     or tech_name == "kr-matter-rare-metals-processing"
     then _return = false end
+    if mods["bzaluminum"] then
+      
+    end
   end
   return _return
 end
