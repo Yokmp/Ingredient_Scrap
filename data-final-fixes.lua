@@ -205,10 +205,55 @@ end
 -- error("get_recipe_ingredient_types()")
 
 
+-- Calculates the binomial coefficient n over k
+local function binom(n, k)
+  result = 1
+  for i = n-k+1, n do
+    result = result*i
+  end
+  for i = 1, k do
+    result = result/i
+  end
+  return result
+end
+
+-- Calculates an appropriate range of scrap results.  Uses binomial coefficients
+-- to simulate independent scrap chance per item and returns low and high amounts
+-- such that they cover a 90% confidence interval of the true distribution.
+local function get_scrap_amount_range(base_amount, probability)
+  local low = -1
+  local high = -1
+  local acc = 0
+  for i = 0, base_amount do
+    local prob = math.pow(probability, i)*math.pow(1-probability, base_amount-i)*binom(base_amount, i)
+    local last = acc
+    acc = acc+prob
+    if low<0 and acc>0.05 then
+      low = i
+    end
+    if high<0 and acc>0.95 then
+      high = i-1
+    end
+  end
+  return low, high
+end
+
 local function add_scrap_results(recipe)
   local scrap_probability = settings.startup["yis-probability"].value/100
   for _, scrap in pairs(recipe.ingredient_types) do
-    table.insert(recipe.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
+    if settings.startup["yis-amount-by-ingredients"] then
+      local low_amount, high_amount = get_scrap_amount_range(scrap.amount, scrap_probability)
+      if high_amount>1 then
+        table.insert(recipe.results, {name = scrap.scrap, amount_min = low_amount, amount_max = high_amount})
+      else
+        -- If the ingredient amount or scrap chance is low, there may be less
+        -- than one scrap by average.  Calculate the chance for a single scrap
+        -- instead of using a range.
+        table.insert(recipe.results, {name = scrap.scrap, amount = 1, probability = scrap_probability*scrap.amount})
+      end
+    else
+      table.insert(recipe.results, {name = scrap.scrap, amount = scrap.amount, probability = scrap_probability})
+    end
   end
 end
 
