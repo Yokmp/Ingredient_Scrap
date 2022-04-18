@@ -110,8 +110,8 @@ local function get_recipe_ingredients(recipe_name)
         _return.recipe.ingredients[i] = yutil.add_pairs(ingredient)
       end
     end
-    if data_recipe.expensive and data_recipe.expensive.ingredients[1] then
-      for i, ingredient in ipairs(data_recipe.expensive.ingredients) do
+    if data_recipe.normal and data_recipe.normal.ingredients[1] then
+      for i, ingredient in ipairs(data_recipe.normal.ingredients) do
         -- _return.recipe.normal.ingredients[i] = ylib.util.add_pairs(ingredient)
         _return.recipe.normal.ingredients[i] = yutil.add_pairs(ingredient)
       end
@@ -205,6 +205,56 @@ end
 -- error("get_recipe_ingredient_types()")
 
 
+-- Calculates the binomial coefficient n over k
+local function binom(n, k)
+  result = 1
+  for i = 1, k do
+    result = result*(n+1-i)
+    result = result/i
+  end
+  return result
+end
+
+-- Calculates an appropriate range of scrap results.  Uses binomial coefficients
+-- to simulate independent scrap chance per item and returns low and high amounts
+-- such that they cover a 90% confidence interval of the true distribution.
+local function get_scrap_amount_range(base_amount, probability)
+  local low = -1
+  local high = -1
+  local acc = 0
+  for i = 0, base_amount do
+    local prob = math.pow(probability, i)*math.pow(1-probability, base_amount-i)*binom(base_amount, i)
+    local last = acc
+    acc = acc+prob
+    if low<0 and acc>0.05 then
+      low = i
+    end
+    if high<0 and acc>0.95 then
+      high = i-1
+    end
+  end
+  return low, high
+end
+
+local function add_scrap_results(recipe)
+  local scrap_probability = settings.startup["yis-probability"].value/100
+  for _, scrap in pairs(recipe.ingredient_types) do
+    if settings.startup["yis-amount-by-ingredients"] then
+      local low_amount, high_amount = get_scrap_amount_range(scrap.amount, scrap_probability)
+      if high_amount>1 then
+        table.insert(recipe.results, {name = scrap.scrap, amount_min = low_amount, amount_max = high_amount})
+      else
+        -- If the ingredient amount or scrap chance is low, there may be less
+        -- than one scrap by average.  Calculate the chance for a single scrap
+        -- instead of using a range.
+        table.insert(recipe.results, {name = scrap.scrap, amount = 1, probability = scrap_probability*scrap.amount})
+      end
+    else
+      table.insert(recipe.results, {name = scrap.scrap, amount = scrap.amount, probability = scrap_probability})
+    end
+  end
+end
+
 ---gets the results, creates the scrap results and inserts them into ``_return.recipe.(difficulty).results``
 ---@param recipe_name string
 ---@return table
@@ -212,14 +262,11 @@ local function get_recipe_results(recipe_name)
 
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
     local data_recipe = data.raw.recipe[recipe_name]
-    local scrap_probability = settings.startup["yis-probability"].value/100
 
     if data_recipe.result then
       -- _return.recipe.results[1] = ylib.util.add_pairs( {data_recipe.result, data_recipe.result_count} )
       _return.recipe.results[1] = yutil.add_pairs( {data_recipe.result, data_recipe.result_count} )
-      for _, scrap in pairs(_return.recipe.ingredient_types) do
-        table.insert(_return.recipe.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
-      end
+      add_scrap_results(_return.recipe)
     end
 
     if data_recipe.results and data_recipe.results[1] then
@@ -227,24 +274,20 @@ local function get_recipe_results(recipe_name)
         -- _return.recipe.results[i] = ylib.util.add_pairs( result )
         _return.recipe.results[i] = yutil.add_pairs( result )
       end
-      for _, scrap in pairs(_return.recipe.ingredient_types) do
-        table.insert(_return.recipe.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
-      end
+      add_scrap_results(_return.recipe)
     end
 
-    if data_recipe.expensive then
-      if data_recipe.expensive.results and data_recipe.expensive.results[1] then
-        for i, result in ipairs(data_recipe.expensive.results) do
+    if data_recipe.normal then
+      if data_recipe.normal.results and data_recipe.normal.results[1] then
+        for i, result in ipairs(data_recipe.normal.results) do
           -- _return.recipe.normal.results[i] = ylib.util.add_pairs( result )
           _return.recipe.normal.results[i] = yutil.add_pairs( result )
         end
-      elseif data_recipe.expensive.result then
-        -- _return.recipe.normal.results[1] = ylib.util.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
-        _return.recipe.normal.results[1] = yutil.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
+      elseif data_recipe.normal.result then
+        -- _return.recipe.normal.results[1] = ylib.util.add_pairs( {data_recipe.normal.result, data_recipe.normal.result_count} )
+        _return.recipe.normal.results[1] = yutil.add_pairs( {data_recipe.normal.result, data_recipe.normal.result_count} )
       end
-      for _, scrap in pairs(_return.recipe.normal.ingredient_types) do
-        table.insert(_return.recipe.normal.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
-      end
+      add_scrap_results(_return.recipe.normal)
     end
 
     if data_recipe.expensive then
@@ -257,9 +300,7 @@ local function get_recipe_results(recipe_name)
         -- _return.recipe.expensive.results[1] = ylib.util.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
         _return.recipe.expensive.results[1] = yutil.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
       end
-      for _, scrap in pairs(_return.recipe.expensive.ingredient_types) do
-        table.insert(_return.recipe.expensive.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
-      end
+      add_scrap_results(_return.recipe.expensive)
     end
 
   else
@@ -278,7 +319,7 @@ local function recipe_is_enabled(recipe_name) -- determides through technology
     local data_recipe = data.raw.recipe[recipe_name]
 
       if data_recipe.enabled == false then _return.recipe.enabled = false end
-      if data_recipe.expensive and data_recipe.expensive.enabled == false then _return.recipe.normal.enabled = false end
+      if data_recipe.normal and data_recipe.normal.enabled == false then _return.recipe.normal.enabled = false end
       if data_recipe.expensive and data_recipe.expensive.enabled == false then _return.recipe.expensive.enabled = false end
 
   else
@@ -306,8 +347,8 @@ local function recipe_get_main_product(recipe_name)
         _return.recipe.main_product = _return.recipe.results[1].name
       end
 
-      if data_recipe.expensive and data_recipe.expensive.main_product and not data_recipe.expensive.main_product == "" then
-        _return.recipe.normal.main_product = data_recipe.expensive.main_product
+      if data_recipe.normal and data_recipe.normal.main_product and not data_recipe.normal.main_product == "" then
+        _return.recipe.normal.main_product = data_recipe.normal.main_product
       elseif _return.recipe.normal.results[1] then
         _return.recipe.normal.main_product = _return.recipe.normal.results[1].name
       end
@@ -494,8 +535,8 @@ for recipe_name, recipe_data in pairs(data.raw.recipe) do
       recipe_data.main_product = util.table.deepcopy(_return.recipe.main_product)
     end
     if recipe_data.normal and next(_return.recipe.normal.results) then
-      data.raw.recipe[recipe_name].expensive.results = util.table.deepcopy(_return.recipe.normal.results)
-      data.raw.recipe[recipe_name].expensive.main_product = util.table.deepcopy(_return.recipe.normal.main_product)
+      data.raw.recipe[recipe_name].normal.results = util.table.deepcopy(_return.recipe.normal.results)
+      data.raw.recipe[recipe_name].normal.main_product = util.table.deepcopy(_return.recipe.normal.main_product)
     end
     if recipe_data.expensive and next(_return.recipe.expensive.results) then
       data.raw.recipe[recipe_name].expensive.results = util.table.deepcopy(_return.recipe.expensive.results)
