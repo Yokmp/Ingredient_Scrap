@@ -1,8 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2022-04-18
+  Changes:
+    - fixed difficulty mismatches
+    - new setting to choose calculation method
+    - new icons for settings so you'll find them easier, experimenting with methods may be quicker
+  Minor Features:
+    - new method of calculating scrap amounts
+---------------------------------------------------------------------------------------------------
 Version: 1.1.7
 Date: 2022-04-16
   Changes:
     - added support for SeaBlock
+  Minor Features:
     - new setting for determining the scrap amount
     - new setting to exclude specific scraps from beeing locked by a technology, this should fix that with some mods basic recipes aren't available from the start
     - adjusted some techologies
@@ -21,13 +31,14 @@ Date: 2021-10-07
 Version: 1.1.4
 Date: 2021-04-07
   Changes:
-    - now works with Industrial Revolution 2
     - fixed pattern matching, matches are now more consistent
     - fixed some recipes in bobplates
     - fixed titanium icons for bobplates and bztitanium
     - Krastorio 2: rare-metal recycling is now available from the start
     - Krastorio 2: lithium recycling now needs the same ingredients as lithium-chloride plus lithium-scrap
     - Titanium(bztitanium), Tungsten(bztungsten) and Lead(bzlead) icons now match to bobplates and Krastorio2
+  Minor Features:
+    - now works with Industrial Revolution 2
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2021-04-07

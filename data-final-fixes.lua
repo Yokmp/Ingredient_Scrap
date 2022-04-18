@@ -1,12 +1,14 @@
-local _scrap_types = {"iron", "copper", "steel"}
-local _item_types = {"plate"}
-
 local yutil = require("functions")
 local mod = require("mods")
 local patch = mod[3]
 
-local scrap_types = yutil.table.extend(mod[1], _scrap_types)
-local item_types = yutil.table.extend(mod[2], _item_types)
+local scrap_types = yutil.table.extend(mod[1], {"iron", "copper", "steel"})
+local item_types = yutil.table.extend(mod[2], {"plate"})
+
+local settings_amount =  settings.startup["yis-amount-by-ingredients"].value ---@type boolean
+local settings_method =  settings.startup["yis-amount-limit"].value ---@type boolean
+local settings_probability = settings.startup["yis-probability"].value/100
+local settings_needed = settings.startup["yis-needed"].value ---@type integer
 
 
 -------------------
@@ -133,7 +135,6 @@ end
 -- log(serpent.block( _return.recipe ))
 -- error("get_recipe_ingredients()")
 
---//TODO scrap amount based on ingredient amount instead of count
 
 ---determines the ingredient types and amount and inserts them into ``_return.recipe.(difficulty).ingredient_types[type]``
 ---@param recipe_name string
@@ -141,14 +142,12 @@ end
 local function get_recipe_ingredient_types(recipe_name)
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
 
-  local amount_in = {}
-
     if _return.recipe.ingredients[1] then
       for _, ingredient in ipairs(_return.recipe.ingredients) do
         for _, _type in ipairs(scrap_types) do
           if string.find(ingredient.name, _type, 0, true) and get_scrap_types(_type, item_types) then
             _return.recipe.ingredient_types[_type] = _return.recipe.ingredient_types[_type] or get_scrap_types(_type, item_types)
-            if settings.startup["yis-amount-by-ingredients"] then
+            if settings_amount then
               _return.recipe.ingredient_types[_type].amount = _return.recipe.ingredient_types[_type].amount + ingredient.amount
             else
               _return.recipe.ingredient_types[_type].amount = _return.recipe.ingredient_types[_type].amount +1
@@ -165,7 +164,7 @@ local function get_recipe_ingredient_types(recipe_name)
 
           if string.find(ingredient.name, _type, 0, true) and get_scrap_types(_type, item_types) then
             _return.recipe.normal.ingredient_types[_type] = _return.recipe.normal.ingredient_types[_type] or get_scrap_types(_type, item_types)
-            if settings.startup["yis-amount-by-ingredients"] then
+            if settings_amount then
               _return.recipe.normal.ingredient_types[_type].amount = _return.recipe.normal.ingredient_types[_type].amount + ingredient.amount
             else
               _return.recipe.normal.ingredient_types[_type].amount = _return.recipe.normal.ingredient_types[_type].amount +1
@@ -182,7 +181,7 @@ local function get_recipe_ingredient_types(recipe_name)
 
           if string.find(ingredient.name, _type, 0, true) and get_scrap_types(_type, item_types) then
             _return.recipe.expensive.ingredient_types[_type] = _return.recipe.expensive.ingredient_types[_type] or get_scrap_types(_type, item_types)
-            if settings.startup["yis-amount-by-ingredients"] then
+            if settings_amount then
               _return.recipe.expensive.ingredient_types[_type].amount = _return.recipe.expensive.ingredient_types[_type].amount + ingredient.amount
             else
               _return.recipe.expensive.ingredient_types[_type].amount = _return.recipe.expensive.ingredient_types[_type].amount +1
@@ -205,55 +204,66 @@ end
 -- error("get_recipe_ingredient_types()")
 
 
--- Calculates the binomial coefficient n over k
-local function binom(n, k)
-  result = 1
-  for i = 1, k do
+---Calculates the binomial coefficient n over p (or choose(n, p))
+---@param n integer amount of trials
+---@param p integer probability of a Success
+---@return string|number
+local function binom(n, p) -- if n=1, p=1 -> 0
+  local result = 1
+  for i = 1, p do
     result = result*(n+1-i)
     result = result/i
   end
   return result
 end
 
--- Calculates an appropriate range of scrap results.  Uses binomial coefficients
--- to simulate independent scrap chance per item and returns low and high amounts
--- such that they cover a 90% confidence interval of the true distribution.
+
+---Calculates an appropriate range of scrap results. Uses binomial coefficients
+---to simulate independent scrap chance per item and returns low and high amounts
+---such that they cover a 90% confidence interval of the true distribution.
+---@param base_amount integer
+---@param probability number
+---@return integer low
+---@return integer high
 local function get_scrap_amount_range(base_amount, probability)
   local low = -1
   local high = -1
   local acc = 0
   for i = 0, base_amount do
     local prob = math.pow(probability, i)*math.pow(1-probability, base_amount-i)*binom(base_amount, i)
-    local last = acc
     acc = acc+prob
-    if low<0 and acc>0.05 then
+    if low < 0 and acc > 0.05 then
       low = i
     end
-    if high<0 and acc>0.95 then
+    if high < 0 and acc > 0.95 then
       high = i-1
     end
   end
   return low, high
 end
 
+
+---Adds scrap results, also takes amount into account so that less than 1 scrap is still 1
+---@param recipe table recipe data like in ``_return.recipe``
 local function add_scrap_results(recipe)
-  local scrap_probability = settings.startup["yis-probability"].value/100
   for _, scrap in pairs(recipe.ingredient_types) do
-    if settings.startup["yis-amount-by-ingredients"] then
-      local low_amount, high_amount = get_scrap_amount_range(scrap.amount, scrap_probability)
+    if settings_method then
+      local low_amount, high_amount = get_scrap_amount_range(scrap.amount, settings_probability)
       if high_amount>1 then
         table.insert(recipe.results, {name = scrap.scrap, amount_min = low_amount, amount_max = high_amount})
       else
         -- If the ingredient amount or scrap chance is low, there may be less
         -- than one scrap by average.  Calculate the chance for a single scrap
         -- instead of using a range.
-        table.insert(recipe.results, {name = scrap.scrap, amount = 1, probability = scrap_probability*scrap.amount})
+        table.insert(recipe.results, {name = scrap.scrap, amount = 1, probability = settings_probability*scrap.amount})
       end
     else
-      table.insert(recipe.results, {name = scrap.scrap, amount = scrap.amount, probability = scrap_probability})
+      scrap.amount = util.clamp(scrap.amount, 1,( scrap.amount*settings_probability))
+      table.insert(recipe.results, {name = scrap.scrap, amount = scrap.amount, probability = settings_probability})
     end
   end
 end
+
 
 ---gets the results, creates the scrap results and inserts them into ``_return.recipe.(difficulty).results``
 ---@param recipe_name string
@@ -314,7 +324,7 @@ end
 -- error("get_recipe_results()")
 
 
-local function recipe_is_enabled(recipe_name) -- determides through technology
+local function recipe_is_enabled(recipe_name) -- determined through technology
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
     local data_recipe = data.raw.recipe[recipe_name]
 
@@ -436,12 +446,12 @@ local function make_scrap(scrap_type, scrap_icon, stack_size)
     local item_order = "is-["..scrap_name.."]"
     local recipe_order = "is-["..recipe_name.."]"
 
-
+-- this makes recipe_is_enabled() somewhat obsolete.
     local enabled = --[[_return.recipe.enabled or]] get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
     local normal_enabled = --[[_return.recipe.normal.enabled or]] get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
     local expensive_enabled = --[[_return.recipe.expensive.enabled or]] get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
 
--- add recipe to technology, or not --//TODO normal, expensive but noone uses difficulty in technologies
+-- add recipe to technology, or not --?-//IDEA normal, expensive but noone uses difficulty in technologies
     if not data.raw.recipe[recipe_name]
     and not patch.is_blacklisted(scrap_name) then
       local tech_table = get_scrap_recycle_tech(result_name, scrap_type)
@@ -480,13 +490,13 @@ local function make_scrap(scrap_type, scrap_icon, stack_size)
         normal = {
           enabled = normal_enabled,
           energy_required = 3.2,
-          ingredients = {{ name = scrap_name, amount = settings.startup["yis-needed"].value}},
+          ingredients = {{ name = scrap_name, amount = settings_needed}},
           results = {{ name = result_name, amount = 1 }}
         },
         expensive = {
           enabled = expensive_enabled,
           energy_required = 3.2,
-          ingredients = {{ name = scrap_name, amount = settings.startup["yis-needed"].value*2}},
+          ingredients = {{ name = scrap_name, amount = settings_needed*2}},
           results = {{ name = result_name, amount = 1 }}
         }
       },
@@ -516,7 +526,7 @@ end
 
 for recipe_name, recipe_data in pairs(data.raw.recipe) do
   -- if do_test then log(recipe_name.." - "..tostring(recipe_data.subgroup)) end
-  -- if not settings.startup["ingredient-scrap-handle-fluids"].value
+  -- if not settings.startup["yis-handle-fluids"].value -- ive filtered this somewhere else but cant remember how and where o.0
   -- and recipe_data.subgroup
   -- and recipe_data.subgroup == "fluid-recipes"
   -- then
