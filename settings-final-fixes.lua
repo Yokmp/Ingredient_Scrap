@@ -16,14 +16,23 @@ data:extend({
         order = "b",
     },
     {
+        hidden = true,
+        type = "string-setting",
+        name = "yis-amount-method",
+        setting_type = "startup",
+        default_value = "al",
+        allowed_values = {"cu", "cl", "au", "al"}
+    },
+    {
+        hidden = false,
         type = "bool-setting",
         name = "yis-amount-by-ingredients", --//FIXME scrap amount can outweight the cost
         setting_type = "startup",
-        hidden = false,
-        default_value = false,
+        default_value = true,
         order = "c",
     },
     {
+        hidden = false,
         type = "bool-setting",
         name = "yis-amount-limit",
         setting_type = "startup",
