@@ -208,10 +208,8 @@ end
 -- Calculates the binomial coefficient n over k
 local function binom(n, k)
   result = 1
-  for i = n-k+1, n do
-    result = result*i
-  end
   for i = 1, k do
+    result = result*(n+1-i)
     result = result/i
   end
   return result
