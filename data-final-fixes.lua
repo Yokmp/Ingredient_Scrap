@@ -205,6 +205,13 @@ end
 -- error("get_recipe_ingredient_types()")
 
 
+local function add_scrap_results(recipe)
+  local scrap_probability = settings.startup["yis-probability"].value/100
+  for _, scrap in pairs(recipe.ingredient_types) do
+    table.insert(recipe.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
+  end
+end
+
 ---gets the results, creates the scrap results and inserts them into ``_return.recipe.(difficulty).results``
 ---@param recipe_name string
 ---@return table
@@ -212,14 +219,11 @@ local function get_recipe_results(recipe_name)
 
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
     local data_recipe = data.raw.recipe[recipe_name]
-    local scrap_probability = settings.startup["yis-probability"].value/100
 
     if data_recipe.result then
       -- _return.recipe.results[1] = ylib.util.add_pairs( {data_recipe.result, data_recipe.result_count} )
       _return.recipe.results[1] = yutil.add_pairs( {data_recipe.result, data_recipe.result_count} )
-      for _, scrap in pairs(_return.recipe.ingredient_types) do
-        table.insert(_return.recipe.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
-      end
+      add_scrap_results(_return.recipe)
     end
 
     if data_recipe.results and data_recipe.results[1] then
@@ -227,9 +231,7 @@ local function get_recipe_results(recipe_name)
         -- _return.recipe.results[i] = ylib.util.add_pairs( result )
         _return.recipe.results[i] = yutil.add_pairs( result )
       end
-      for _, scrap in pairs(_return.recipe.ingredient_types) do
-        table.insert(_return.recipe.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
-      end
+      add_scrap_results(_return.recipe)
     end
 
     if data_recipe.normal then
@@ -242,9 +244,7 @@ local function get_recipe_results(recipe_name)
         -- _return.recipe.normal.results[1] = ylib.util.add_pairs( {data_recipe.normal.result, data_recipe.normal.result_count} )
         _return.recipe.normal.results[1] = yutil.add_pairs( {data_recipe.normal.result, data_recipe.normal.result_count} )
       end
-      for _, scrap in pairs(_return.recipe.normal.ingredient_types) do
-        table.insert(_return.recipe.normal.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
-      end
+      add_scrap_results(_return.recipe.normal)
     end
 
     if data_recipe.expensive then
@@ -257,9 +257,7 @@ local function get_recipe_results(recipe_name)
         -- _return.recipe.expensive.results[1] = ylib.util.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
         _return.recipe.expensive.results[1] = yutil.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
       end
-      for _, scrap in pairs(_return.recipe.expensive.ingredient_types) do
-        table.insert(_return.recipe.expensive.results, {name = scrap.scrap, amount_min = 1, amount_max = scrap.amount, probability = scrap_probability})
-      end
+      add_scrap_results(_return.recipe.expensive)
     end
 
   else
