@@ -26,7 +26,7 @@ data:extend({
     {
         hidden = false,
         type = "bool-setting",
-        name = "yis-amount-by-ingredients", --//FIXME scrap amount can outweight the cost
+        name = "yis-amount-by-ingredients",
         setting_type = "startup",
         default_value = true,
         order = "c",
