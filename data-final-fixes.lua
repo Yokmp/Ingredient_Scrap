@@ -137,6 +137,7 @@ end
 
 
 ---determines the ingredient types and amount and inserts them into ``_return.recipe.(difficulty).ingredient_types[type]``
+---
 ---Also filters fluids and sets the method for calculating scrap amounts
 ---@param recipe_name string
 ---@return table
