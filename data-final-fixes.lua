@@ -5,10 +5,11 @@ local patch = mod[3]
 local scrap_types = yutil.table.extend(mod[1], {"iron", "copper", "steel"})
 local item_types = yutil.table.extend(mod[2], {"plate"})
 
-local settings_amount =  settings.startup["yis-amount-by-ingredients"].value ---@type boolean
-local settings_method =  settings.startup["yis-amount-limit"].value ---@type boolean
-local settings_probability = settings.startup["yis-probability"].value/100
-local settings_needed = settings.startup["yis-needed"].value ---@type integer
+local settings_amount       = settings.startup["yis-amount-by-ingredients"].value ---@type boolean
+local settings_method       = settings.startup["yis-amount-limit"].value ---@type boolean
+local settings_probability  = settings.startup["yis-probability"].value/100
+local settings_needed       = settings.startup["yis-needed"].value ---@type integer
+-- local settings_allow_fluids = settings.startup["yis-allow-fluids"].value ---@type boolean
 
 
 -------------------
@@ -70,10 +71,10 @@ end
 -- error("filter_scrap_types()")
 
 
----Returns a scrap type table
+---Returns a scrap type table or false
 ---@param scrap_type string
 ---@param item_types table uses item_types{}
----@return table ``{ scrap = scrap_type.."-scrap", item = _name, amount = 0 }``
+---@return table|boolean ``{ scrap = scrap_type.."-scrap", item = recycle-result, amount = 0 }``
 local function get_scrap_types(scrap_type, item_types)
   for _, i_type in ipairs(item_types) do
     local _name = scrap_type.."-"..i_type
@@ -99,6 +100,7 @@ end
 local _return = new_return(debug_test_recipe)
 
 
+
 ---Gets all ingredients of a recipe, formats it and inserts it into ``_return.recipe{}``
 ---@param recipe_name string
 ---@return table _return.recipe
@@ -106,22 +108,20 @@ local function get_recipe_ingredients(recipe_name)
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
     local data_recipe = data.raw.recipe[recipe_name]
 
+
     if data_recipe.ingredients and data_recipe.ingredients[1] then
       for i, ingredient in ipairs(data_recipe.ingredients) do
-        -- _return.recipe.ingredients[i] = ylib.util.add_pairs(ingredient)
         _return.recipe.ingredients[i] = yutil.add_pairs(ingredient)
       end
     end
     if data_recipe.normal and data_recipe.normal.ingredients[1] then
       for i, ingredient in ipairs(data_recipe.normal.ingredients) do
-        -- _return.recipe.normal.ingredients[i] = ylib.util.add_pairs(ingredient)
-        _return.recipe.normal.ingredients[i] = yutil.add_pairs(ingredient)
+          _return.recipe.normal.ingredients[i] = yutil.add_pairs(ingredient)
       end
     end
     if data_recipe.expensive and data_recipe.expensive.ingredients[1] then
       for i, ingredient in ipairs(data_recipe.expensive.ingredients) do
-        -- _return.recipe.expensive.ingredients[i] = ylib.util.add_pairs(ingredient)
-        _return.recipe.expensive.ingredients[i] = yutil.add_pairs(ingredient)
+          _return.recipe.expensive.ingredients[i] = yutil.add_pairs(ingredient)
       end
     end
 
@@ -137,6 +137,7 @@ end
 
 
 ---determines the ingredient types and amount and inserts them into ``_return.recipe.(difficulty).ingredient_types[type]``
+---Also filters fluids and sets the method for calculating scrap amounts
 ---@param recipe_name string
 ---@return table
 local function get_recipe_ingredient_types(recipe_name)
@@ -147,7 +148,7 @@ local function get_recipe_ingredient_types(recipe_name)
         for _, _type in ipairs(scrap_types) do
           if string.find(ingredient.name, _type, 0, true) and get_scrap_types(_type, item_types) then
             _return.recipe.ingredient_types[_type] = _return.recipe.ingredient_types[_type] or get_scrap_types(_type, item_types)
-            if settings_amount then
+            if settings_amount and not data.raw.fluid[ingredient.name] then
               _return.recipe.ingredient_types[_type].amount = _return.recipe.ingredient_types[_type].amount + ingredient.amount
             else
               _return.recipe.ingredient_types[_type].amount = _return.recipe.ingredient_types[_type].amount +1
@@ -164,7 +165,7 @@ local function get_recipe_ingredient_types(recipe_name)
 
           if string.find(ingredient.name, _type, 0, true) and get_scrap_types(_type, item_types) then
             _return.recipe.normal.ingredient_types[_type] = _return.recipe.normal.ingredient_types[_type] or get_scrap_types(_type, item_types)
-            if settings_amount then
+            if settings_amount and not data.raw.fluid[ingredient.name]  then
               _return.recipe.normal.ingredient_types[_type].amount = _return.recipe.normal.ingredient_types[_type].amount + ingredient.amount
             else
               _return.recipe.normal.ingredient_types[_type].amount = _return.recipe.normal.ingredient_types[_type].amount +1
@@ -181,7 +182,7 @@ local function get_recipe_ingredient_types(recipe_name)
 
           if string.find(ingredient.name, _type, 0, true) and get_scrap_types(_type, item_types) then
             _return.recipe.expensive.ingredient_types[_type] = _return.recipe.expensive.ingredient_types[_type] or get_scrap_types(_type, item_types)
-            if settings_amount then
+            if settings_amount and not data.raw.fluid[ingredient.name]  then
               _return.recipe.expensive.ingredient_types[_type].amount = _return.recipe.expensive.ingredient_types[_type].amount + ingredient.amount
             else
               _return.recipe.expensive.ingredient_types[_type].amount = _return.recipe.expensive.ingredient_types[_type].amount +1
@@ -512,10 +513,6 @@ end
 
 
 
-
-
-
-
 filter_scrap_types()
 for _, s_type in ipairs(scrap_types) do
   if do_test then log("Generating "..s_type.."-scrap item and recipe") end
@@ -526,14 +523,9 @@ end
 
 for recipe_name, recipe_data in pairs(data.raw.recipe) do
   -- if do_test then log(recipe_name.." - "..tostring(recipe_data.subgroup)) end
-  -- if not settings.startup["yis-handle-fluids"].value -- ive filtered this somewhere else but cant remember how and where o.0
-  -- and recipe_data.subgroup
-  -- and recipe_data.subgroup == "fluid-recipes"
-  -- then
-  --   log("Skipping fluid-recipe: "..recipe_name)
-  -- else
 
     _return = new_return(recipe_name)
+
     get_recipe_ingredients(recipe_name)
     get_recipe_ingredient_types(recipe_name)
     get_recipe_results(recipe_name)
@@ -558,7 +550,6 @@ for recipe_name, recipe_data in pairs(data.raw.recipe) do
       log(serpent.block(data.raw.recipe[debug_test_recipe]))
       error("THIS IS THE END")
     end
-  -- end
 end
 
 patch.recipes()

@@ -44,4 +44,13 @@ data:extend({
     height = 64,
     shift = {0,02}
   },
+  {
+    type = "sprite",
+    name = "drop-symbol",
+    filename = "__Ingredient_Scrap__/graphics/icons/drop-symbol.png",
+    priority = "extra-high",
+    width = 64,
+    height = 64,
+    shift = {0,02}
+  },
 })

@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 2022-04-22
+  Changes:
+    - fluids now use the amount of fluids to calculate the scrap amounts so you don't get like 10 scrap per ore
+    - locale now uses localised_name to preset the icons
+---------------------------------------------------------------------------------------------------
 Version: 1.1.9
 Date: 2022-04-19
   Changes:
