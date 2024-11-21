@@ -8,7 +8,7 @@ util.item = util.item or {}
 ---Search by pattern
 ---@param table table
 ---@param pattern string
----@return table
+---@return table|nil
 function util.find(table, pattern)
   for _, value in pairs(table) do
     if string.find(value.name, pattern, 0, true) then return value end
@@ -26,7 +26,7 @@ end
 
 ---Search technologies by pattern
 ---@param pattern string
----@return table
+---@return table|nil
 function util.technology.find(pattern)
   return util.find(data.raw.item, pattern)
 end
@@ -140,12 +140,6 @@ function get_scrap_amount(recipe_name, scrap_type)
   if data_recipe.ingredients[1] then
     scrap_amount[1] = scrap_amount[1] + sum_scrap_amount(data_recipe.ingredients, scrap_type)
   end
-  if data_recipe.normal and data_recipe.normal.ingredients[1] then
-    scrap_amount[2] = scrap_amount[2] + sum_scrap_amount(data_recipe.ingredients, scrap_type)
-  end
-  if data_recipe.expensive and data_recipe.expensive.ingredients[1] then
-    scrap_amount[3] = scrap_amount[3] + sum_scrap_amount(data_recipe.ingredients, scrap_type)
-  end
 
   return scrap_amount
 end
@@ -160,36 +154,7 @@ function add_scrap_result(recipe_name, scrap_type, scrap_amount)
   local data_recipe = data.raw.recipe[recipe_name]
   local scrap_probability = settings.startup["ingredient-scrap-probability"].value/100
 
-  if data_recipe.result and not data_recipe.results then
-    data.raw.recipe[recipe_name].results = {
-      {name = data.raw.recipe[recipe_name].result, amount = data.raw.recipe[recipe_name].amount or 1},
-      { name = scrap_type.."-scrap", amount_min = 1, amount_max = scrap_amount[1], probability = scrap_probability }
-    }
-  else
-    table.insert(data.raw.recipe[recipe_name].results, { name = scrap_type.."-scrap", amount_min = 1, amount_max = scrap_amount[1], probability = scrap_probability })
-  end
-
-  if data_recipe.normal then
-    if data_recipe.normal.result and not data_recipe.normal.results then
-      data.raw.recipe[recipe_name].normal.results = {
-        {name = data.raw.recipe[recipe_name].result, amount = data.raw.recipe[recipe_name].amount or 1},
-        { name = scrap_type.."-scrap", amount_min = 1, amount_max = scrap_amount[2], probability = scrap_probability }
-      }
-    else
-      table.insert(data.raw.recipe[recipe_name].normal.results, { name = scrap_type.."-scrap", amount_min = 1, amount_max = scrap_amount[2], probability = scrap_probability })
-    end
-  end
-
-  if data_recipe.expensive then
-    if data_recipe.expensive.result and not data_recipe.expensive.results then
-      data.raw.recipe[recipe_name].expensive.results = {
-        {name = data.raw.recipe[recipe_name].result, amount = data.raw.recipe[recipe_name].amount or 1},
-        { name = scrap_type.."-scrap", amount_min = 1, amount_max = scrap_amount[3], probability = scrap_probability }
-      }
-    else
-      table.insert(data.raw.recipe[recipe_name].expensive.results, { name = scrap_type.."-scrap", amount_min = 1, amount_max = scrap_amount[3], probability = scrap_probability })
-    end
-  end
+  table.insert(data.raw.recipe[recipe_name].results, { name = scrap_type.."-scrap", amount_min = 1, amount_max = scrap_amount[1], probability = scrap_probability })
 
 end
 -- add_scrap_recult("iron-stick", "iron-scrap", {1,1,1})
@@ -200,14 +165,15 @@ end
 
 
 
--- function util.get_recycle_result_name(scrap_type)
---   if type(scrap_type) ~= "string" then return nil end
---     for _, i_type in ipairs(item_types) do
---       if data.raw.item[scrap_type.."-"..i_type] then
---         return scrap_type.."-"..i_type
---       end
---     end
--- end
+function util.get_recycle_result_name(scrap_type)
+  if type(scrap_type) ~= "string" then return nil end
+---@diagnostic disable-next-line: undefined-global
+    for _, i_type in ipairs(item_types) do -- set in data stage
+      if data.raw.item[scrap_type.."-"..i_type] then
+        return scrap_type.."-"..i_type
+      end
+    end
+end
 
 function util.get_scrap_recycle_tech(recipe_name, raw_scrap) -- TODO: normal, expensive
   local _techs = { effects={enabled=true, recipes={}}, normal={enabled=true, recipes={}}, expensive={enabled=true, recipes={}} }
@@ -240,10 +206,8 @@ function util.make_scrap(scrap_type, scrap_icon, stack_size)
     local recipe_order = "is-["..recipe_name.."]"
 
     local enabled = --[[_return.recipe.enabled or]] util.get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
-    local normal_enabled = --[[_return.recipe.normal.enabled or]] util.get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
-    local expensive_enabled = --[[_return.recipe.expensive.enabled or]] util.get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
 
-    if not data.raw.recipe[recipe_name] then -- TODO normal, expensive
+    if not data.raw.recipe[recipe_name] then
       local tech_table = util.get_scrap_recycle_tech(result_name, scrap_type)
       for _, tech_name in ipairs(tech_table.effects.recipes) do
         log(tech_name.." unlocks "..recipe_name)
@@ -273,18 +237,6 @@ function util.make_scrap(scrap_type, scrap_icon, stack_size)
         always_show_products = true,
         allow_as_intermediate = false,
         enabled = enabled,
-        normal = {
-          enabled = normal_enabled,
-          energy_required = 3.2,
-          ingredients = {{ name = scrap_name, amount = settings.startup["ingredient-scrap-needed"].value}},
-          results = {{ name = result_name, amount = 1 }}
-        },
-        expensive = {
-          enabled = expensive_enabled,
-          energy_required = 3.2,
-          ingredients = {{ name = scrap_name, amount = settings.startup["ingredient-scrap-needed"].value*2}},
-          results = {{ name = result_name, amount = 1 }}
-        }
       },
     }
   data:extend(_data)

@@ -85,7 +85,7 @@ end
 --------------------
 
 
-local str = settings.startup["yis-unlock-scraps"].value
+local str = tostring(settings.startup["yis-unlock-scraps"].value)
 -- str = type(str) == "string" and str or ""
 for word in string.gmatch(str, '[^,%s]+') do
   _blacklist[#_blacklist+1] = word
@@ -117,11 +117,10 @@ recipes = function ()
   -- if (mods['angelssmelting']) then
   -- end
   if (mods['Krastorio2']) then
-    data.raw.recipe["recycle-lithium-scrap"].normal.results[1] = {name="lithium", amount=1}
-    data.raw.recipe["recycle-lithium-scrap"].normal.ingredients = util.copy(data.raw.recipe["lithium-chloride"].ingredients)
-    data.raw.recipe["recycle-lithium-scrap"].normal.ingredients[3] = { name = "lithium-scrap", amount = settings.startup["yis-needed"].value}
-    data.raw.recipe["recycle-lithium-scrap"].normal.main_product = "lithium"
-    data.raw.recipe["recycle-lithium-scrap"].expensive = nil -- uses normal
+    data.raw.recipe["recycle-lithium-scrap"].results[1] = {name="lithium", amount=1} ---@type table
+    data.raw.recipe["recycle-lithium-scrap"].ingredients = util.copy(data.raw.recipe["lithium-chloride"].ingredients)
+    data.raw.recipe["recycle-lithium-scrap"].ingredients[3] = { name = "lithium-scrap", amount = settings.startup["yis-needed"].value} ---@type table
+    data.raw.recipe["recycle-lithium-scrap"].main_product = "lithium"
     data.raw.recipe["recycle-lithium-scrap"].category = "chemistry"
   end
   if (mods['IndustrialRevolution']) then

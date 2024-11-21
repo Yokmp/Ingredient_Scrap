@@ -1,15 +1,15 @@
-local yutil = require("functions")
+local util = require("functions")
 local mod = require("mods")
 local patch = mod[3]
 
-local scrap_types = yutil.table.extend(mod[1], {"iron", "copper", "steel"})
-local item_types = yutil.table.extend(mod[2], {"plate"})
+local scrap_types = util.table.extend(mod[1], {"iron", "copper", "steel"})
+local item_types = util.table.extend(mod[2], {"plate"})
 
-local settings_amount       = settings.startup["yis-amount-by-ingredients"].value ---@type boolean
-local settings_method       = settings.startup["yis-amount-limit"].value ---@type boolean
+local settings_amount       = settings.startup["yis-amount-by-ingredients"].value
+local settings_method       = settings.startup["yis-amount-limit"].value
 local settings_probability  = settings.startup["yis-probability"].value/100
-local settings_needed       = settings.startup["yis-needed"].value ---@type integer
--- local settings_allow_fluids = settings.startup["yis-allow-fluids"].value ---@type boolean
+local settings_needed       = settings.startup["yis-needed"].value
+-- local settings_allow_fluids = settings.startup["yis-allow-fluids"].value
 
 
 -------------------
@@ -34,9 +34,6 @@ local _return_template_ = {
     name = "_return_template_",
     recipe = {    -- determine and cache                                     get -> modify -> replace
                     ingredients = {}, ingredient_types = {},   results = {}, enabled = true, main_product = nil,
-      normal    = { ingredients = {}, ingredient_types = {},   results = {}, enabled = true, main_product = nil, },
-      expensive = { ingredients = {}, ingredient_types = {},   results = {}, enabled = true, main_product = nil, },
-
     },
   }
 ---get new return template
@@ -111,17 +108,7 @@ local function get_recipe_ingredients(recipe_name)
 
     if data_recipe.ingredients and data_recipe.ingredients[1] then
       for i, ingredient in ipairs(data_recipe.ingredients) do
-        _return.recipe.ingredients[i] = yutil.add_pairs(ingredient)
-      end
-    end
-    if data_recipe.normal and data_recipe.normal.ingredients[1] then
-      for i, ingredient in ipairs(data_recipe.normal.ingredients) do
-          _return.recipe.normal.ingredients[i] = yutil.add_pairs(ingredient)
-      end
-    end
-    if data_recipe.expensive and data_recipe.expensive.ingredients[1] then
-      for i, ingredient in ipairs(data_recipe.expensive.ingredients) do
-          _return.recipe.expensive.ingredients[i] = yutil.add_pairs(ingredient)
+        _return.recipe.ingredients[i] = util.add_pairs(ingredient)
       end
     end
 
@@ -153,40 +140,6 @@ local function get_recipe_ingredient_types(recipe_name)
               _return.recipe.ingredient_types[_type].amount = _return.recipe.ingredient_types[_type].amount + ingredient.amount
             else
               _return.recipe.ingredient_types[_type].amount = _return.recipe.ingredient_types[_type].amount +1
-            end
-            break
-          end
-        end
-      end
-    end
-
-    if _return.recipe.normal.ingredients[1] then
-      for _, ingredient in ipairs(_return.recipe.normal.ingredients) do
-        for _, _type in ipairs(scrap_types) do
-
-          if string.find(ingredient.name, _type, 0, true) and get_scrap_types(_type, item_types) then
-            _return.recipe.normal.ingredient_types[_type] = _return.recipe.normal.ingredient_types[_type] or get_scrap_types(_type, item_types)
-            if settings_amount and not data.raw.fluid[ingredient.name]  then
-              _return.recipe.normal.ingredient_types[_type].amount = _return.recipe.normal.ingredient_types[_type].amount + ingredient.amount
-            else
-              _return.recipe.normal.ingredient_types[_type].amount = _return.recipe.normal.ingredient_types[_type].amount +1
-            end
-            break
-          end
-        end
-      end
-    end
-
-    if _return.recipe.expensive.ingredients[1] then
-      for _, ingredient in ipairs(_return.recipe.expensive.ingredients) do
-        for _, _type in ipairs(scrap_types) do
-
-          if string.find(ingredient.name, _type, 0, true) and get_scrap_types(_type, item_types) then
-            _return.recipe.expensive.ingredient_types[_type] = _return.recipe.expensive.ingredient_types[_type] or get_scrap_types(_type, item_types)
-            if settings_amount and not data.raw.fluid[ingredient.name]  then
-              _return.recipe.expensive.ingredient_types[_type].amount = _return.recipe.expensive.ingredient_types[_type].amount + ingredient.amount
-            else
-              _return.recipe.expensive.ingredient_types[_type].amount = _return.recipe.expensive.ingredient_types[_type].amount +1
             end
             break
           end
@@ -275,44 +228,12 @@ local function get_recipe_results(recipe_name)
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
     local data_recipe = data.raw.recipe[recipe_name]
 
-    if data_recipe.result then
-      -- _return.recipe.results[1] = ylib.util.add_pairs( {data_recipe.result, data_recipe.result_count} )
-      _return.recipe.results[1] = yutil.add_pairs( {data_recipe.result, data_recipe.result_count} )
-      add_scrap_results(_return.recipe)
-    end
-
     if data_recipe.results and data_recipe.results[1] then
       for i, result in ipairs(data_recipe.results) do
         -- _return.recipe.results[i] = ylib.util.add_pairs( result )
-        _return.recipe.results[i] = yutil.add_pairs( result )
+        _return.recipe.results[i] = util.add_pairs( result )
       end
       add_scrap_results(_return.recipe)
-    end
-
-    if data_recipe.normal then
-      if data_recipe.normal.results and data_recipe.normal.results[1] then
-        for i, result in ipairs(data_recipe.normal.results) do
-          -- _return.recipe.normal.results[i] = ylib.util.add_pairs( result )
-          _return.recipe.normal.results[i] = yutil.add_pairs( result )
-        end
-      elseif data_recipe.normal.result then
-        -- _return.recipe.normal.results[1] = ylib.util.add_pairs( {data_recipe.normal.result, data_recipe.normal.result_count} )
-        _return.recipe.normal.results[1] = yutil.add_pairs( {data_recipe.normal.result, data_recipe.normal.result_count} )
-      end
-      add_scrap_results(_return.recipe.normal)
-    end
-
-    if data_recipe.expensive then
-      if data_recipe.expensive.results and data_recipe.expensive.results[1] then
-        for i, result in ipairs(data_recipe.expensive.results) do
-          -- _return.recipe.expensive.results[i] = ylib.util.add_pairs( result )
-          _return.recipe.expensive.results[i] = yutil.add_pairs( result )
-        end
-      elseif data_recipe.expensive.result then
-        -- _return.recipe.expensive.results[1] = ylib.util.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
-        _return.recipe.expensive.results[1] = yutil.add_pairs( {data_recipe.expensive.result, data_recipe.expensive.result_count} )
-      end
-      add_scrap_results(_return.recipe.expensive)
     end
 
   else
@@ -331,9 +252,6 @@ local function recipe_is_enabled(recipe_name) -- determined through technology
     local data_recipe = data.raw.recipe[recipe_name]
 
       if data_recipe.enabled == false then _return.recipe.enabled = false end
-      if data_recipe.normal and data_recipe.normal.enabled == false then _return.recipe.normal.enabled = false end
-      if data_recipe.expensive and data_recipe.expensive.enabled == false then _return.recipe.expensive.enabled = false end
-
   else
     log(" Recipe not found: "..tostring(recipe_name))
     error(" Recipe not found: "..tostring(recipe_name))
@@ -353,22 +271,8 @@ local function recipe_get_main_product(recipe_name)
 
       if data_recipe.main_product and not data_recipe.main_product == "" then
         _return.recipe.main_product = data_recipe.main_product
-      elseif data_recipe.result then
-        _return.recipe.main_product = data_recipe.result
       elseif _return.recipe.results[1] then
         _return.recipe.main_product = _return.recipe.results[1].name
-      end
-
-      if data_recipe.normal and data_recipe.normal.main_product and not data_recipe.normal.main_product == "" then
-        _return.recipe.normal.main_product = data_recipe.normal.main_product
-      elseif _return.recipe.normal.results[1] then
-        _return.recipe.normal.main_product = _return.recipe.normal.results[1].name
-      end
-
-      if data_recipe.expensive and data_recipe.expensive.main_product and not data_recipe.expensive.main_product == "" then
-        _return.recipe.expensive.main_product = data_recipe.expensive.main_product
-      elseif _return.recipe.expensive.results[1] then
-        _return.recipe.expensive.main_product = _return.recipe.expensive.results[1].name
       end
 
     end
@@ -425,14 +329,17 @@ end
 
 
 
-
-local function get_recycle_result_name(scrap_type)
+---returns the scrap result name or nil if none is found
+---@param scrap_type string
+---@return string|nil
+local function get_recycle_result_name(scrap_type) --?should not return mixed
   if type(scrap_type) ~= "string" then return nil end
     for _, i_type in ipairs(item_types) do
       if data.raw.item[scrap_type.."-"..i_type] then
         return scrap_type.."-"..i_type
       end
     end
+    return nil
 end
 -- if do_test then log(serpent.block( get_recycle_result_name("steel") )) end
 -- error("get_recycle_result_name()")
@@ -444,16 +351,14 @@ local function make_scrap(scrap_type, scrap_icon, stack_size)
   if not data.raw.item[scrap_name] then
     local _data
     local recipe_name = "recycle-" ..scrap_name
-    local result_name = get_recycle_result_name(scrap_type)
+    local result_name = get_recycle_result_name(scrap_type) or error("Couldn't get a valid result name!")
     local item_order = "is-["..scrap_name.."]"
     local recipe_order = "is-["..recipe_name.."]"
 
 -- this makes recipe_is_enabled() somewhat obsolete.
     local enabled = --[[_return.recipe.enabled or]] get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
-    local normal_enabled = --[[_return.recipe.normal.enabled or]] get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
-    local expensive_enabled = --[[_return.recipe.expensive.enabled or]] get_scrap_recycle_tech(result_name, scrap_type).effects.enabled
 
--- add recipe to technology, or not --?-//IDEA normal, expensive but noone uses difficulty in technologies
+-- add recipe to technology, or not
     if not data.raw.recipe[recipe_name]
     and not patch.is_blacklisted(scrap_name) then
       local tech_table = get_scrap_recycle_tech(result_name, scrap_type)
@@ -472,7 +377,7 @@ local function make_scrap(scrap_type, scrap_icon, stack_size)
       {
         type = "item",
         name = scrap_name,
-        icon = scrap_icon or yutil.get_item_icon(scrap_type),
+        icon = scrap_icon or util.get_item_icon(scrap_type),
         icon_size = 64, icon_mipmaps = 4,
         subgroup = "raw-material",
         order = item_order,
@@ -482,25 +387,16 @@ local function make_scrap(scrap_type, scrap_icon, stack_size)
         type = "recipe",
         name = recipe_name,
         localised_name = {"recipe-name."..recipe_name},
-        icons = yutil.get_recycle_icons(scrap_type, result_name),
+        icons = util.get_recycle_icons(scrap_type, result_name),
         subgroup = "raw-material",
         category = "smelting",
         order = recipe_order,
         always_show_products = true,
         allow_as_intermediate = false,
         enabled = enabled,
-        normal = {
-          enabled = normal_enabled,
-          energy_required = 3.2,
-          ingredients = {{ name = scrap_name, amount = settings_needed}},
-          results = {{ name = result_name, amount = 1 }}
-        },
-        expensive = {
-          enabled = expensive_enabled,
-          energy_required = 3.2,
-          ingredients = {{ name = scrap_name, amount = settings_needed*2}},
-          results = {{ name = result_name, amount = 1 }}
-        }
+        energy_required = 3.2,
+        ingredients = {{ name = scrap_name, amount = settings_needed}},
+        results = {{ name = result_name, amount = 1 }}
       },
     }
   data:extend(_data)
@@ -536,14 +432,6 @@ for recipe_name, recipe_data in pairs(data.raw.recipe) do
     if next(_return.recipe.results) then
       data.raw.recipe[recipe_name].results = util.table.deepcopy(_return.recipe.results)
       recipe_data.main_product = util.table.deepcopy(_return.recipe.main_product)
-    end
-    if recipe_data.normal and next(_return.recipe.normal.results) then
-      data.raw.recipe[recipe_name].normal.results = util.table.deepcopy(_return.recipe.normal.results)
-      data.raw.recipe[recipe_name].normal.main_product = util.table.deepcopy(_return.recipe.normal.main_product)
-    end
-    if recipe_data.expensive and next(_return.recipe.expensive.results) then
-      data.raw.recipe[recipe_name].expensive.results = util.table.deepcopy(_return.recipe.expensive.results)
-      data.raw.recipe[recipe_name].expensive.main_product = util.table.deepcopy(_return.recipe.expensive.main_product)
     end
 
     if do_test and recipe_name == debug_test_recipe then
