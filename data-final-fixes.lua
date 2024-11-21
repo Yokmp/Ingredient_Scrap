@@ -425,14 +425,17 @@ end
 
 
 
-
-local function get_recycle_result_name(scrap_type)
+---returns the scrap result name or nil if none is found
+---@param scrap_type string
+---@return string|nil
+local function get_recycle_result_name(scrap_type) --?should not return mixed
   if type(scrap_type) ~= "string" then return nil end
     for _, i_type in ipairs(item_types) do
       if data.raw.item[scrap_type.."-"..i_type] then
         return scrap_type.."-"..i_type
       end
     end
+    return nil
 end
 -- if do_test then log(serpent.block( get_recycle_result_name("steel") )) end
 -- error("get_recycle_result_name()")
@@ -444,7 +447,7 @@ local function make_scrap(scrap_type, scrap_icon, stack_size)
   if not data.raw.item[scrap_name] then
     local _data
     local recipe_name = "recycle-" ..scrap_name
-    local result_name = get_recycle_result_name(scrap_type)
+    local result_name = get_recycle_result_name(scrap_type) or error("Couldn't get a valid result name!")
     local item_order = "is-["..scrap_name.."]"
     local recipe_order = "is-["..recipe_name.."]"
 

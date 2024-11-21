@@ -80,9 +80,9 @@ function yutil.get_icon_bycolor(color, index)
   }
 
   if type(color) == "string" and icons[color] then
-    if type(index) =="number" then
-      index = tostring(util.clamp(index, 1, 3))
-      icon = icon_path..icons[color].."-scrap-"..index..".png"
+    if type(index) == "number" then
+      local ii = tostring(util.clamp(index, 1, 3))
+      icon = icon_path..icons[color].."-scrap-"..ii..".png"
     else
       icon = icon_path..icons[color].."-scrap-"..tostring(math.random(3))..".png"
     end
@@ -95,7 +95,7 @@ end
 
 
 yutil.scrap_icons = {
-  recycle             = yutil.get_icon_bycolor("recycle"),
+  recycle             = yutil.get_icon_bycolor("recycle", 1),
   adamantite          = yutil.get_icon_bycolor("purple", 1),
   aluminum            = yutil.get_icon_bycolor("grey", 1),
   aluminium           = yutil.get_icon_bycolor("grey", 1),

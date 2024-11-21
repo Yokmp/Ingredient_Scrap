@@ -8,7 +8,7 @@ util.item = util.item or {}
 ---Search by pattern
 ---@param table table
 ---@param pattern string
----@return table
+---@return table|nil
 function util.find(table, pattern)
   for _, value in pairs(table) do
     if string.find(value.name, pattern, 0, true) then return value end
@@ -26,7 +26,7 @@ end
 
 ---Search technologies by pattern
 ---@param pattern string
----@return table
+---@return table|nil
 function util.technology.find(pattern)
   return util.find(data.raw.item, pattern)
 end
