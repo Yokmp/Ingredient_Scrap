@@ -1,11 +1,12 @@
-
 local mod_name = "__Ingredient_Scrap__"
 
-local yutil = { table={} }
+local yutil = { table = {} }
 
 function util.table.extend(t1, t2)
   if type(t1) == "table" and type(t2) == "table" then
-    for i = 1, #t2 do t1[#t1+1] = t2[i] end return t1 end
+    for i = 1, #t2 do t1[#t1 + 1] = t2[i] end
+    return t1
+  end
 end
 
 ---adds name and amount keys to ingredients and returns a new table
@@ -17,14 +18,13 @@ function util.add_pairs(_table)
     if _t.name then return _t end       --ignore if it has pairs already
     if type(_t[1]) ~= "string" then error(" First index must be of type 'string'") end
     if type(_t[2]) ~= "number" then --[[log(" Warning: add_pairs("..type(_t[1])..", "..type(_t[2])..") - implicitly set value - amount = 1");]] _t[2] = 1 end
-    return { name = _t[1], amount = _t[2] or 1}
+    return { name = _t[1], amount = _t[2] or 1 }
   elseif type(_t) == "string" then
-    log(" Warning: add_pairs("..type(_t[1])..", "..type(_t[2])..") - implicitly set value - amount = 1")
-    return { name = _t, amount = 1}
+    log(" Warning: add_pairs(" .. type(_t[1]) .. ", " .. type(_t[2]) .. ") - implicitly set value - amount = 1")
+    return { name = _t, amount = 1 }
   end
   return _t
 end
-
 
 ---Sets the items icon, sets icons to nil.
 ---@param item_name string
@@ -35,10 +35,11 @@ function util.set_item_icon(item_name, new_icon)
       icon = new_icon,
       icon_size = 64,
       scale = 0.5,
-      shift = {0,0}
+      shift = { 0, 0 }
     }
   end
 end
+
 ---Sets the recipes icon, sets icons to nil.
 ---@param recipe_name string
 ---@param new_icon string
@@ -48,12 +49,10 @@ function util.set_recipe_icon(recipe_name, new_icon)
       icon = new_icon,
       icon_size = 64,
       scale = 0.5,
-      shift = {0,0}
+      shift = { 0, 0 }
     }
   end
 end
-
-
 
 ----------------
 --    ICONS   --
@@ -66,29 +65,29 @@ end
 ---@param index number
 ---@return string
 function util.get_icon_bycolor(color, index)
-  local icon_path = mod_name.. "/graphics/icons/"
-  local icon  	  = nil
-  local missing   = mod_name.. "/graphics/icons/missing-icon.png"
-  local recycle   = mod_name.. "/graphics/icons/recycle.png"
-  local icons = {
-    blue    = "blue",
-    brown   = "brown",
-    dgrey   = "darkgrey",
-    grey    = "grey",
-    orange  = "orange",
-    purple  = "purple",
-    red     = "red",
-    teal    = "teal",
-    green   = "green",
-    yellow  = "yellow",
+  local icon_path = mod_name .. "/graphics/icons/"
+  local icon      = nil
+  local missing   = mod_name .. "/graphics/icons/missing-icon.png"
+  local recycle   = mod_name .. "/graphics/icons/recycle.png"
+  local icons     = {
+    blue   = "blue",
+    brown  = "brown",
+    dgrey  = "darkgrey",
+    grey   = "grey",
+    orange = "orange",
+    purple = "purple",
+    red    = "red",
+    teal   = "teal",
+    green  = "green",
+    yellow = "yellow",
   }
 
   if type(color) == "string" and icons[color] then
     if type(index) == "number" then
       local ii = tostring(util.clamp(index, 1, 3))
-      icon = icon_path..icons[color].."-scrap-"..ii..".png"
+      icon = icon_path .. icons[color] .. "-scrap-" .. ii .. ".png"
     else
-      icon = icon_path..icons[color].."-scrap-"..tostring(math.random(3))..".png"
+      icon = icon_path .. icons[color] .. "-scrap-" .. tostring(math.random(3)) .. ".png"
     end
   elseif color == "recycle" then
     icon = recycle
@@ -96,7 +95,6 @@ function util.get_icon_bycolor(color, index)
 
   return icon or missing
 end
-
 
 util.scrap_icons = {
   recycle             = util.get_icon_bycolor("recycle", 1),
@@ -151,7 +149,6 @@ function util.get_item_icon(scrap_type)
   return icons[scrap_type] or icons.missing
 end
 
-
 ---returns the recycle recipe icons table
 ---@param scrap_type string
 ---@param result_name string
@@ -172,25 +169,28 @@ function util.get_recycle_icons(scrap_type, result_name)
       icon_size = data.raw.item[scrap_type].icon_size
     end
   end
-  scale_factor = (64/icon_size) or 1
+  scale_factor = (64 / icon_size) or 1
   return {
     {
       icon = util.get_item_icon(scrap_type),
-      icon_size = 64, scale = 0.5,
+      icon_size = 64,
+      scale = 0.5,
       shift = util.by_pixel(0, 0)
     },
     {
       icon = icon_item or util.get_item_icon("missing"),
-      icon_size = icon_size or 64, scale = 0.25*scale_factor,
-      shift = {-8,-8}
+      icon_size = icon_size or 64,
+      scale = 0.25 * scale_factor,
+      shift = { -8, -8 }
     },
     {
       icon = util.get_item_icon("recycle"),
-      icon_size = 64, scale = 0.5,
-      shift = util.by_pixel(0, 0), tint = { r = 0.8, g = 1.0, b = 0.8, a = 1.0 }
+      icon_size = 64,
+      scale = 0.5,
+      shift = util.by_pixel(0, 0),
+      tint = { r = 0.8, g = 1.0, b = 0.8, a = 1.0 }
     },
   }
 end
-
 
 return yutil

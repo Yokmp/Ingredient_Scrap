@@ -6,7 +6,7 @@ data:extend({
     priority = "extra-high",
     width = 64,
     height = 64,
-    shift = {0,02}
+    shift = { 0, 02 }
   },
   {
     type = "sprite",
@@ -15,7 +15,7 @@ data:extend({
     priority = "extra-high",
     width = 64,
     height = 64,
-    shift = {0,02}
+    shift = { 0, 02 }
   },
   {
     type = "sprite",
@@ -24,7 +24,7 @@ data:extend({
     priority = "extra-high",
     width = 64,
     height = 64,
-    shift = {0,02}
+    shift = { 0, 02 }
   },
   {
     type = "sprite",
@@ -33,7 +33,7 @@ data:extend({
     priority = "extra-high",
     width = 64,
     height = 64,
-    shift = {0,02}
+    shift = { 0, 02 }
   },
   {
     type = "sprite",
@@ -42,7 +42,7 @@ data:extend({
     priority = "extra-high",
     width = 64,
     height = 64,
-    shift = {0,02}
+    shift = { 0, 02 }
   },
   {
     type = "sprite",
@@ -51,6 +51,6 @@ data:extend({
     priority = "extra-high",
     width = 64,
     height = 64,
-    shift = {0,02}
+    shift = { 0, 02 }
   },
 })

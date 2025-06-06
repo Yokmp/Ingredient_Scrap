@@ -1,0 +1,54 @@
+--[[
+  define a prototype table
+    it must hold the recipe name and its results
+
+
+  needs classes
+]]
+
+yokmods = yokmods or {}
+yokmods.ingredient_scrap = yokmods.ingredient_scrap or {}
+
+---@class ISdata_table
+---@field auto_recycle boolean
+---@field fluids_as_barrel boolean
+---@field probability number
+---@field recipes ISdata_table.ISrecipes
+---@field scraps ISdata_table.ISscrap
+
+---@class ISdata_table.ISrecipes
+---@field items ISdata_table.ISrecipe.items
+---@field fluids ISdata_table.ISrecipe.fluids
+
+---@class ISdata_table.ISrecipe.items
+---@field recipe_name data.ItemIngredientPrototype
+
+---@class ISdata_table.ISrecipe.fluids
+---@field recipe_name data.FluidIngredientPrototype
+
+
+---@class ISdata_table.ISscrap
+---@field string table
+
+
+
+
+---@type ISdata_table
+yokmods.ingredient_scrap.data_table = {
+  auto_recycle = false,
+  fluids_as_barrel = true,
+  probability = 1,
+  recipes = {
+    items = {
+      recipe_name = { type= "item", name = "ingredient-name", amount = 5 },
+    },
+    fluids = {
+      recipe_name = { type="fluid", name = "ingredient-name", amount = 120, temperature = 15 },
+    }
+  },
+  scraps = {
+    ["item_name"] = { name = "scrap-name", amount = 2, probability = 1}
+  }
+}
+
+field = { ["key-name"] = {foo = "string", bar = 123 }, }

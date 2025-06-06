@@ -2,7 +2,7 @@ data:extend({
     {
         type = "int-setting",
         name = "yis-needed",
-        localised_name = {"", "[img=sum-symbol]", " - ", {"mod-setting-name.yis-needed"}},
+        localised_name = { "", "[img=sum-symbol]", " - ", { "mod-setting-name.yis-needed" } },
         setting_type = "startup",
         minimum_value = 1,
         default_value = 5,
@@ -11,7 +11,7 @@ data:extend({
     {
         type = "int-setting",
         name = "yis-probability",
-        localised_name = {"", "[img=percent-symbol]", " - ", {"mod-setting-name.yis-probability"}},
+        localised_name = { "", "[img=percent-symbol]", " - ", { "mod-setting-name.yis-probability" } },
         setting_type = "startup",
         minimum_value = 1,
         default_value = 24,
@@ -23,13 +23,13 @@ data:extend({
         name = "yis-amount-method",
         setting_type = "startup",
         default_value = "al",
-        allowed_values = {"cu", "cl", "au", "al"}
+        allowed_values = { "cu", "cl", "au", "al" }
     },
     {
         hidden = false,
         type = "bool-setting",
         name = "yis-amount-by-ingredients",
-        localised_name = {"", "[img=gears-symbol]", " - ", {"mod-setting-name.yis-amount-by-ingredients"}},
+        localised_name = { "", "[img=gears-symbol]", " - ", { "mod-setting-name.yis-amount-by-ingredients" } },
         setting_type = "startup",
         default_value = true,
         order = "c",
@@ -38,7 +38,7 @@ data:extend({
         hidden = false,
         type = "bool-setting",
         name = "yis-amount-limit",
-        localised_name = {"", "[img=sigma-symbol]", " - ", {"mod-setting-name.yis-amount-limit"}},
+        localised_name = { "", "[img=sigma-symbol]", " - ", { "mod-setting-name.yis-amount-limit" } },
         setting_type = "startup",
         default_value = true,
         order = "d",
@@ -46,7 +46,7 @@ data:extend({
     {
         type = "string-setting",
         name = "yis-unlock-scraps",
-        localised_name = {"", "[img=unlock-symbol]", " - ", {"mod-setting-name.yis-unlock-scraps"}},
+        localised_name = { "", "[img=unlock-symbol]", " - ", { "mod-setting-name.yis-unlock-scraps" } },
         setting_type = "startup",
         default_value = "iron-scrap, copper-scrap",
         order = "e",
@@ -54,7 +54,7 @@ data:extend({
     {
         type = "bool-setting",
         name = "yis-allow-fluids",
-        localised_name = {"", "[img=drop-symbol]", " - ", {"mod-setting-name.yis-allow-fluids"}},
+        localised_name = { "", "[img=drop-symbol]", " - ", { "mod-setting-name.yis-allow-fluids" } },
         setting_type = "startup",
         hidden = true,
         default_value = true,

@@ -1,9 +1,9 @@
-local _material_types = {"iron", "copper", "steel", "aluminum", "erronium"}
-local _result_types = {"plate"}
+local _material_types = { "iron", "copper", "steel", "aluminum", "erronium" }
+local _result_types = { "plate" }
 local _result_recipes = {} --these recipes will not generate scrap
-local _unresolved = {} --{["recipe-name"] = true}
+local _unresolved = {}     --{["recipe-name"] = true}
 
-local scrap_probability = settings.startup["yis-probability"].value/100
+local scrap_probability = settings.startup["yis-probability"].value / 100
 
 
 --#region Prepare
@@ -15,14 +15,14 @@ scrap_lookup = {
   ---@param amount number|table saves as table for difficulty ``{normal, expensive}``
   add = function(self, recipe_name, material, amount)
     if amount and type(amount) == "number" then
-      amount = {amount, amount}
+      amount = { amount, amount }
     elseif type(amount) ~= "table" then
       log(debug.traceback())
       error("scrap_lookup:add(..., amount) expects a table or number")
     end
     if recipe_name and type(recipe_name) == "string"
-    and material and type(material) == "string"
-    and type(amount) == "table" then
+        and material and type(material) == "string"
+        and type(amount) == "table" then
       if self[recipe_name] then
         if self[recipe_name][material] then
           self[recipe_name][material] = {
@@ -30,26 +30,26 @@ scrap_lookup = {
             self[recipe_name][material][2] + amount[2]
           }
         else
-          self[recipe_name][material] = {amount[1], amount[2]}
+          self[recipe_name][material] = { amount[1], amount[2] }
         end
       else
-        self[recipe_name] = {[material] = {amount[1], amount[2]}}
+        self[recipe_name] = { [material] = { amount[1], amount[2] } }
       end
     end
   end,
--- ---Returns a formatted table
--- ---@param self table
--- ---@param recipe_name string
--- ---@return table ``{{name = material_name, amount = {normal, expensive}}, ...}``
---   get = function (self, recipe_name)
---     if self[recipe_name] then
---       local _t = {}
---       for key, value in pairs(self[recipe_name]) do
---         _t[#_t+1] = {name = key, amount = {normal = value[1], expensive = value[2]}}
---       end
---       return _t
---     end
---   end
+  -- ---Returns a formatted table
+  -- ---@param self table
+  -- ---@param recipe_name string
+  -- ---@return table ``{{name = material_name, amount = {normal, expensive}}, ...}``
+  --   get = function (self, recipe_name)
+  --     if self[recipe_name] then
+  --       local _t = {}
+  --       for key, value in pairs(self[recipe_name]) do
+  --         _t[#_t+1] = {name = key, amount = {normal = value[1], expensive = value[2]}}
+  --       end
+  --       return _t
+  --     end
+  --   end
 }
 -- scrap_lookup["test-recipe"] = {
 --   ["copper"] = {1,1},
@@ -69,14 +69,14 @@ scrap_lookup = {
 local _t1, _t2 = {}, {}
 for _, m_type in ipairs(_material_types) do
   for _, r_type in ipairs(_result_types) do
-    if data.raw.item[m_type.."-"..r_type] then
-      _result_recipes[#_result_recipes+1] = m_type.."-"..r_type
+    if data.raw.item[m_type .. "-" .. r_type] then
+      _result_recipes[#_result_recipes + 1] = m_type .. "-" .. r_type
       _t1[m_type] = m_type
     end
   end
 end
 for _, _type in pairs(_t1) do
-  _t2[#_t2+1] = _type
+  _t2[#_t2 + 1] = _type
 end
 _material_types = _t2
 -- log(serpent.block(_material_types)) --{"iron", "copper", ...}
@@ -97,7 +97,7 @@ local function get_recipe_materials(ingredients)
         if materials[m_type] then
           amount_old = materials[m_type][2]
         end
-        materials[m_type] = {m_type.."-scrap", value.amount + amount_old}
+        materials[m_type] = { type="item", m_type .. "-scrap", value.amount + amount_old }
       end
     end
   end
@@ -110,33 +110,20 @@ end
 
 -- loop through _result_recipes and build a basic lookup table
 for _, recipe_name in pairs(_result_recipes) do
+  local _in = ylib.recipe.get_ingredients(recipe_name)   --returns ``{ingredients={}, normal={}, expensive={}}``
+  local _re = {}
 
-    local _in = ylib.recipe.get_ingredients(recipe_name) --returns ``{ingredients={}, normal={}, expensive={}}``
-    local _re = {}
+  if _in.ingredients then
+    _re.ingredients = get_recipe_materials(_in.ingredients)
+    for _, value in pairs(_re.ingredients) do
+      scrap_lookup:add(recipe_name, value[1], value[2])
+    end
+  end
 
-    if _in.ingredients then
-      _re.ingredients =  get_recipe_materials(_in.ingredients)
-      for _, value in pairs(_re.ingredients) do
-        scrap_lookup:add(recipe_name, value[1], value[2])
-      end
-    end
-    if _in.normal then
-      _re.normal =  get_recipe_materials(_in.normal)
-      for _, value in pairs(_re.normal) do
-        scrap_lookup:add(recipe_name, value[1], {value[2], 0})
-      end
-    end
-    if _in.expensive then
-      _re.expensive =  get_recipe_materials(_in.expensive)
-      for _, value in pairs(_re.expensive) do
-        scrap_lookup:add(recipe_name, value[1], {0, value[2]})
-      end
-    end
-
-    if not ylib.util.check_table(_re) then
-      log(debug.traceback("An empty result was generated for: "..recipe_name..".\nThis means that some mod probably added an invalid recipe at some point."))
-    end
-
+  if not ylib.util.check_table(_re) then
+    log(debug.traceback("An empty result was generated for: " ..
+    recipe_name .. ".\nThis means that some mod probably added an invalid recipe at some point."))
+  end
 end
 log(serpent.block(scrap_lookup))
 error("Fill scrap_lookup")
@@ -168,8 +155,6 @@ end
 -- log(serpent.block(_result_recipes))
 
 function prepare(recipe_name)
-
-
   local _in = ylib.recipe.get_ingredients(_result_recipes[recipe_name]) --returns ``{ingredients={}, normal={}, expensive={}}``
 
   if _in then
@@ -180,9 +165,9 @@ function prepare(recipe_name)
         end
       end
     end
-
   end
 end
+
 -- prepare("pipe")
 
 log(serpent.block(scrap_lookup))
