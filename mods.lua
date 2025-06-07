@@ -123,7 +123,7 @@ local patch = {
       data.raw.recipe["recycle-lithium-scrap"].results[1] = { type="item", name = "lithium", amount = 1 } ---@type table
       data.raw.recipe["recycle-lithium-scrap"].ingredients = util.copy(data.raw.recipe["lithium-chloride"].ingredients)
       data.raw.recipe["recycle-lithium-scrap"].ingredients[3] = { type="item", name = "lithium-scrap", amount = settings.startup
-      ["yis-needed"].value } ---@type table
+      ["yis-needed"].value } ---@type number
       data.raw.recipe["recycle-lithium-scrap"].main_product = "lithium"
       data.raw.recipe["recycle-lithium-scrap"].category = "chemistry"
     end

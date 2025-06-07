@@ -13,6 +13,7 @@
                   "? angelsrefining",
                   "? angelssmelting",
                   "? bzlead",
-                  "? bzaluminum"],
+                  "? bzaluminum"
+                ],
   "description": "Adds scrap results depending on the recipes ingredients."
 }

@@ -110,7 +110,7 @@ end
 
 -- loop through _result_recipes and build a basic lookup table
 for _, recipe_name in pairs(_result_recipes) do
-  local _in = ylib.recipe.get_ingredients(recipe_name)   --returns ``{ingredients={}, normal={}, expensive={}}``
+  local _in = ylib.recipe.get_ingredients(recipe_name)
   local _re = {}
 
   if _in.ingredients then
