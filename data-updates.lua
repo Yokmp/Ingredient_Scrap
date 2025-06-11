@@ -6,10 +6,10 @@
   - result amounts are affected by this and a function which "smoothens out" some extreme values;
 
 TODO
-probability setting, amount or min/max setting, icons, patcher
+probability setting, amount or min/max setting, patcher
 depending on addon/dlc:
 item and recycle_recipe generators (quality -> recycler)
-tech injection (space-age, quality)
+tech injection? (space-age, quality)
 ]]
 
 yokmods = yokmods or {}
@@ -42,7 +42,7 @@ yokmods.ingredient_scrap.settings.fluids       = settings.startup["yis-fluid-rec
 ISsettings = yokmods.ingredient_scrap.settings
 
 --------------------------------
---- REQUIRES                  --
+---*REQUIRES*                 --
 --------------------------------
 
 require("generator")
@@ -50,16 +50,15 @@ require("patcher")
 
 
 --------------------------------
---- INITIALIZE                --
+--- *INITIALIZE*              --
 --------------------------------
 
---TODO reorder the table
---Inititalizes the data_table
+--*Inititalizes the data_table*
 ---@return ISdata_table
 function yokmods.ingredient_scrap.init_data_table()
   return {
-    auto_recycle = false,
-    fluids_as_barrel = true,
+    auto_recycle = false,     -- unused
+    fluids_as_barrel = true,  -- unused
     probability = ISsettings.probability,
     ingredients = {
       items = {},
@@ -69,14 +68,14 @@ function yokmods.ingredient_scrap.init_data_table()
       recipes = {},
       items = {},
     },
-    inserts = {}, -- ``"scrap_name" = resultPrototype``
+    inserts = {},
   }
 end
 yokmods.ingredient_scrap.data_table = yokmods.ingredient_scrap.init_data_table()
 
 
 --------------------------------
---- FUNCTIONS                 --
+---*FUNCTIONS*                --
 --------------------------------
 
 --TODO the whole probability vs min max thing needs a rewrite
@@ -118,7 +117,7 @@ local blacklist_types = { "bacteria", "ore"} --? TESTING -> REPLACE ME
 
 
 --------------------------------
---- COLLECT                   --
+---*COLLECT*                  --
 --------------------------------
 
 ---gets the results, creates the scrap results and inserts them into ``_return.recipe.results``
@@ -143,6 +142,7 @@ function yokmods.ingredient_scrap.data_table_collector()
             if ingredient.type == "item" then
               table.insert(data_table.ingredients.items[recipe.name], ingredient) -- source
               yokmods.ingredient_scrap.get_scrap_amount(data_table, ingredient, recipe, scrap_type)
+              yokmods.ingredient_scrap.find_main_product(data_table, recipe, scrap_type)
               yokmods.ingredient_scrap.make_scrap_item({
                 name = ingredient.name,
                 type = scrap_type,

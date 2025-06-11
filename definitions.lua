@@ -21,7 +21,7 @@
 
 ---@class ISdata_table.prototypes
 ---@field items ISdata_table.prototypes.items
----@field recipes data.RecipePrototype
+---@field recipes ISdata_table.prototypes.recipes
 
 ---@class ISdata_table.prototypes.items
 ---@field [string] data.ItemPrototype
@@ -31,6 +31,7 @@
 
 
 ---@class ISdata_table.inserts
+---@field main_product string
 ---@field [table] data.ItemPrototype
 
 
