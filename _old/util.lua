@@ -1,4 +1,4 @@
-local yutil = require("functions")
+local util = require("functions")
 
 util = util or {}
 util.technology = util.technology or {}
@@ -171,8 +171,8 @@ function util.get_recycle_result_name(scrap_type)
   end
 end
 
-function util.get_scrap_recycle_tech(recipe_name, raw_scrap) -- TODO: normal, expensive
-  local _techs = { effects = { enabled = true, recipes = {} }, normal = { enabled = true, recipes = {} }, expensive = { enabled = true, recipes = {} } }
+function util.get_scrap_recycle_tech(recipe_name, raw_scrap)
+  local _techs = { effects = { enabled = true, recipes = {} } }
   for tech_name, value in pairs(data.raw.technology) do
     -- if patch.technology(tech_name) and value.effects then
     --   for i, effect in ipairs(value.effects) do
@@ -216,9 +216,8 @@ function util.make_scrap(scrap_type, scrap_icon, stack_size)
       {
         type = "item",
         name = scrap_name,
-        icon = scrap_icon or yutil.get_item_icon(scrap_type),
+        icon = scrap_icon or util.get_item_icon(scrap_type),
         icon_size = 64,
-        icon_mipmaps = 4,
         subgroup = "raw-material",
         order = item_order,
         stack_size = stack_size or 100
@@ -227,7 +226,7 @@ function util.make_scrap(scrap_type, scrap_icon, stack_size)
         type = "recipe",
         name = recipe_name,
         localised_name = { "recipe-name." .. recipe_name },
-        icons = yutil.get_recycle_icons(scrap_type, result_name),
+        icons = util.get_recycle_icons(scrap_type, result_name),
         subgroup = "raw-material",
         category = "smelting",
         order = recipe_order,

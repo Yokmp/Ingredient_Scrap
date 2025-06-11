@@ -1,6 +1,6 @@
 local mod_name = "__Ingredient_Scrap__"
 
-local yutil = { table = {} }
+local util = { table = {} }
 
 function util.table.extend(t1, t2)
   if type(t1) == "table" and type(t2) == "table" then
@@ -26,7 +26,7 @@ function util.add_pairs(_table)
   return _t
 end
 
----Sets the items icon, sets icons to nil.
+---Sets the items icons
 ---@param item_name string
 ---@param new_icon string
 function util.set_item_icon(item_name, new_icon)
@@ -40,7 +40,7 @@ function util.set_item_icon(item_name, new_icon)
   end
 end
 
----Sets the recipes icon, sets icons to nil.
+---Sets the recipes icons
 ---@param recipe_name string
 ---@param new_icon string
 function util.set_recipe_icon(recipe_name, new_icon)
@@ -151,7 +151,7 @@ end
 
 ---returns the recycle recipe icons table
 ---@param scrap_type string
----@param result_name string
+---@param result_name string|nil
 ---@return table
 function util.get_recycle_icons(scrap_type, result_name)
   local icon_item, icon_size, scale_factor
@@ -193,4 +193,4 @@ function util.get_recycle_icons(scrap_type, result_name)
   }
 end
 
-return yutil
+return util

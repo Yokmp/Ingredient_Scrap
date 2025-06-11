@@ -123,7 +123,7 @@ end
 -- error("get_recipe_ingredients()")
 
 
----determines the ingredient types and amount and inserts them into ``_return.recipe.(difficulty).ingredient_types[type]``
+---determines the ingredient types and amount and inserts them into ``_return.recipe.ingredient_types[type]``
 ---
 ---Also filters fluids and sets the method for calculating scrap amounts
 ---@param recipe_name string

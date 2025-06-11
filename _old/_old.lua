@@ -113,7 +113,7 @@ for _, recipe_name in pairs(_result_recipes) do
   local _in = ylib.recipe.get_ingredients(recipe_name)
   local _re = {}
 
-  if _in.ingredients then
+  if _in and _in.ingredients then
     _re.ingredients = get_recipe_materials(_in.ingredients)
     for _, value in pairs(_re.ingredients) do
       scrap_lookup:add(recipe_name, value[1], value[2])

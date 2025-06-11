@@ -1,4 +1,4 @@
-local yutil = require("functions")
+local util = require("functions")
 
 
 ------------------
@@ -13,22 +13,22 @@ local _blacklist = {}
 --   yutil.table.extend(_results, {"ingot"})
 -- end
 if (mods['Krastorio2']) then
-  yutil.table.extend(_types, { "imersium", "lithium", "rare" })
-  yutil.table.extend(_results, { "plate", "beam", "metals", "chloride" })
+  util.table.extend(_types, { "imersium", "lithium", "rare" })
+  util.table.extend(_results, { "plate", "beam", "metals", "chloride" })
 end
 if (mods['angelssmelting']) then
-  yutil.table.extend(_types,
+  util.table.extend(_types,
     { "aluminium", "brass", "bronze", "chrome", "cobalt-steel", "cobalt", "gold", "gunmetal", "invar", "lead",
       "manganese", "nickel",
       "nitinol", "platinum", "silicon", "silver", "tin", "titanium", "tungsten", "zinc" })
-  yutil.table.extend(_results, { "ingot" })
+  util.table.extend(_results, { "ingot" })
 end
 if (mods["bobplates"]) then
-  yutil.table.extend(_types,
+  util.table.extend(_types,
     { "cobalt-steel", "copper-tungsten", "lead", "titanium", "zinc", "nickel", "aluminium", "tungsten-carbide", "tin",
       "silver", "gold",
       "brass", "bronze", "nitinol", "invar", "cobalt", "quartz", "silicon", "gunmetal", "tungsten" })
-  yutil.table.extend(_results, { "alloy", "glass" })
+  util.table.extend(_results, { "alloy", "glass" })
 end
 -- if (mods['Clowns-Extended-Minerals']) then --//TODO reverse match/generation of recipes like plates-iron
 --     yutil.table.extend(_types, {"adamantite", "orichalcite", "phosphorite", "eliongate"})
@@ -37,21 +37,21 @@ end
 --     end
 -- end
 if (mods['bztitanium']) then
-  yutil.table.extend(_types, { "titanium" })
+  util.table.extend(_types, { "titanium" })
 end
 if (mods['bztungsten']) then
-  yutil.table.extend(_types, { "tungsten" })
+  util.table.extend(_types, { "tungsten" })
 end
 if (mods['bzaluminum']) then
-  yutil.table.extend(_types, { "aluminum" })
+  util.table.extend(_types, { "aluminum" })
 end
 if (mods['bzlead']) then
-  yutil.table.extend(_types, { "lead" })
+  util.table.extend(_types, { "lead" })
 end
 if (mods['IndustrialRevolution']) then
-  yutil.table.extend(_types,
+  util.table.extend(_types,
     { "tin", "bronze", "gold", "lead", "cupronickel", "invar", "chromium", "stainless", "tellurium", "glass" })
-  yutil.table.extend(_results, { "ingot", "mix" })
+  util.table.extend(_results, { "ingot", "mix" })
 end
 
 
@@ -63,24 +63,24 @@ end
 
 
 if (mods['bztungsten'] and not mods["bobplates"] and not mods["Krastorio2"]) then
-  yutil.scrap_icons["tungsten"] = yutil.get_icon_bycolor("grey", 1)
+  util.scrap_icons["tungsten"] = util.get_icon_bycolor("grey", 1)
 end
 if (mods['bztitanium'] and not mods["Krastorio2"]) then
-  yutil.scrap_icons["titanium"] = yutil.get_icon_bycolor("grey", 2)
+  util.scrap_icons["titanium"] = util.get_icon_bycolor("grey", 2)
 end
 if (mods['bzaluminum']) then
-  yutil.scrap_icons["aluminum"] = yutil.get_icon_bycolor("grey", 1)
+  util.scrap_icons["aluminum"] = util.get_icon_bycolor("grey", 1)
 end
 if (mods["bobplates"] and not mods['angelssmelting']) then
-  yutil.scrap_icons["lead"] = yutil.get_icon_bycolor("blue", 1)
+  util.scrap_icons["lead"] = util.get_icon_bycolor("blue", 1)
 end
 if (mods['angelssmelting']) then
-  yutil.scrap_icons["lead"] = yutil.get_icon_bycolor("dgrey", 1)
-  yutil.scrap_icons["tin"] = yutil.get_icon_bycolor("green", 1)
-  yutil.scrap_icons["titanium"] = yutil.get_icon_bycolor("purple", 1)
+  util.scrap_icons["lead"] = util.get_icon_bycolor("dgrey", 1)
+  util.scrap_icons["tin"] = util.get_icon_bycolor("green", 1)
+  util.scrap_icons["titanium"] = util.get_icon_bycolor("purple", 1)
 end
 if (mods['Krastorio2']) then
-  yutil.scrap_icons["rare"] = yutil.get_icon_bycolor("dgrey", 1)
+  util.scrap_icons["rare"] = util.get_icon_bycolor("dgrey", 1)
 end
 
 
@@ -128,11 +128,11 @@ local patch = {
       data.raw.recipe["recycle-lithium-scrap"].category = "chemistry"
     end
     if (mods['IndustrialRevolution']) then
-      yutil.set_item_icon("tellurium-scrap", "__Ingredient_Scrap__/graphics/icons/mods/recycle-tellurium-scrap.png")
-      yutil.set_recipe_icon("recycle-tellurium-scrap",
+      util.set_item_icon("tellurium-scrap", "__Ingredient_Scrap__/graphics/icons/mods/recycle-tellurium-scrap.png")
+      util.set_recipe_icon("recycle-tellurium-scrap",
         "__Ingredient_Scrap__/graphics/icons/mods/recycle-tellurium-scrap.png")
-      yutil.set_item_icon("recycle-chromium-scrap", "__Ingredient_Scrap__/graphics/icons/mods/recycle-chromium-scrap.png")
-      yutil.set_recipe_icon("recycle-chromium-scrap",
+      util.set_item_icon("recycle-chromium-scrap", "__Ingredient_Scrap__/graphics/icons/mods/recycle-chromium-scrap.png")
+      util.set_recipe_icon("recycle-chromium-scrap",
         "__Ingredient_Scrap__/graphics/icons/mods/recycle-chromium-scrap.png")
     end
     -- if (mods['bzaluminum'] ) then
