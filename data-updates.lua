@@ -28,9 +28,9 @@ yokmods.ingredient_scrap = yokmods.ingredient_scrap or {}
 
 
 yokmods.ingredient_scrap.settings = yokmods.ingredient_scrap.settings or {}
--- true will set an amount rather than a range
-yokmods.ingredient_scrap.settings.amount_range = settings.startup["yis-amount-range"].value --[[@as boolean]]
--- the probability if no range is selected (0 - 100)
+-- true will set an amount rather than min/max
+yokmods.ingredient_scrap.settings.fixed_amount = settings.startup["yis-fixed-amount"].value --[[@as boolean]]
+-- the probability (0 - 100)
 yokmods.ingredient_scrap.settings.probability  = settings.startup["yis-probability"].value  --[[@as integer]]
 -- how should the scrap amount be calculated
 yokmods.ingredient_scrap.settings.limit        = settings.startup["yis-amount-limit"].value --[[@as string]]
@@ -145,12 +145,12 @@ function yokmods.ingredient_scrap.data_table_collector()
               yokmods.ingredient_scrap.find_main_product(data_table, recipe, scrap_type)
               yokmods.ingredient_scrap.make_scrap_item({
                 name = ingredient.name,
-                type = scrap_type,
+                scrap_type = scrap_type,
                 -- item_tint= {}, -- TODO get_item_tint()
                 stack_size = util.clamp(data.raw.item[ingredient.name].stack_size * ISsettings.needed, 10, 200)
               })
 
-              yokmods.ingredient_scrap.make_recycle_recipes({
+              yokmods.ingredient_scrap.item_recycle_recipes({
                 result_type = "item",
                 result_name = ingredient.name,
                 scrap_type = scrap_type,

@@ -78,10 +78,10 @@ for k,v in pairs(data.raw["furnace"]) do
   table.insert(v.crafting_categories, "yis-recycle")
 end
 for k,v in pairs(data.raw["assembling-machine"]) do
-log(v.name)
+-- log(v.name)
   if v.name == "foundry" then
     table.insert(v.crafting_categories, "yis-recycle-to-fluid")
   end
 end
 -- log(serpent.block(data.raw["furnace"]["steel-furnace"], {maxlevel = 2}))
-log(serpent.block(data.raw["assembling-machine"]["foundry"], {maxlevel = 2}))
+-- log(serpent.block(data.raw["assembling-machine"]["foundry"], {maxlevel = 2}))
