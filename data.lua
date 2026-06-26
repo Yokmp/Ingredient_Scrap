@@ -1,4 +1,4 @@
-require("definitions")
+require("lib.definitions")
 data:extend({
   {
     type = "sprite",
@@ -67,16 +67,20 @@ data:extend({
 data:extend({
   {
     type = "recipe-category",
-    name = "yis-recycle"
+    name = "yis-recycle-to-item"
   },
   {
     type = "recipe-category",
     name = "yis-recycle-to-fluid"
   },
 })
+
+---TODO add recycler from quality dlc
+-- insert scrap recycling into crafting_categories
 for k,v in pairs(data.raw["furnace"]) do
-  table.insert(v.crafting_categories, "yis-recycle")
+  table.insert(v.crafting_categories, "yis-recycle-to-item")
 end
+-- if space age is present, add too
 for k,v in pairs(data.raw["assembling-machine"]) do
 -- log(v.name)
   if v.name == "foundry" then
@@ -85,3 +89,4 @@ for k,v in pairs(data.raw["assembling-machine"]) do
 end
 -- log(serpent.block(data.raw["furnace"]["steel-furnace"], {maxlevel = 2}))
 -- log(serpent.block(data.raw["assembling-machine"]["foundry"], {maxlevel = 2}))
+

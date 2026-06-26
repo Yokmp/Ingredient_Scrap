@@ -296,7 +296,7 @@ end
 
 
 
-local function get_scrap_recycle_tech(recipe_name, raw_scrap) -- TODO: normal, expensive
+local function get_scrap_recycle_tech(recipe_name, raw_scrap)
   local _techs = { effects={enabled=true, recipes={}}, normal={enabled=true, recipes={}}, expensive={enabled=true, recipes={}} }
   for tech_name, value in pairs(data.raw.technology) do
     if patch.technology(tech_name) and value.effects then
@@ -311,8 +311,6 @@ local function get_scrap_recycle_tech(recipe_name, raw_scrap) -- TODO: normal, e
         _techs.effects.recipes[#_techs.effects.recipes+1] = tech_name
       end
     end
-    --normal
-    --expensive
   end
   return _techs
 end
