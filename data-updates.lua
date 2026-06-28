@@ -12,8 +12,7 @@ yokmods.ingredient_scrap.settings.probability = settings.startup["yis-probabilit
 yokmods.ingredient_scrap.settings.limit = settings.startup["yis-amount-limit"].value
 yokmods.ingredient_scrap.settings.needed = settings.startup["yis-needed"].value
 yokmods.ingredient_scrap.settings.fluids = settings.startup["yis-fluid-recipes"].value
-yokmods.ingredient_scrap.settings.fluids_as_barrel = true
-yokmods.ingredient_scrap.settings.auto_recycle = false
+yokmods.ingredient_scrap.settings.barreling = settings.startup["yis-barreling"].value -- recycling scrap needs a barrel for fluids
 
 if IS_DEBUG then
   local ok, profile = pcall(require, "test.profile")

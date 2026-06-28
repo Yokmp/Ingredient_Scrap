@@ -46,11 +46,10 @@ data:extend({
         order = "z",
     },
     {
-        hidden = true,
-        type = "string-setting",
-        name = "yis-uid",
+        hidden = false,
+        type = "bool-setting",
+        name = "yis-barreling",
         setting_type = "startup",
-        default_value = "",
-        allow_blank = true,
+        default_value = true,
     },
 })

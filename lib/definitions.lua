@@ -5,6 +5,7 @@
 ---@field prototypes ISdata_table.prototypes
 ---@field inserts ISdata_table.inserts
 ---@field materials ISdata_table.materials
+---@field debug table?
 
 
 ---@class ISdata_table.constants
