@@ -1,78 +1,11 @@
+--------------------------------
+---*LOCALS*                   --
+--------------------------------
+
+
 local item_sounds = require("__base__.prototypes.item_sounds")
 local item_tints  = require("__base__.prototypes.item-tints")
 local scrap_tints = require("lib.item-tints")
-
-
----Creates or accumulates the scrap result entry for the specified recipe.
----@param data_table ISdata_table
----@param ingredient ISIngredientPrototype
----@param recipe ISRecipePrototype
----@param scrap_type string
-function yokmods.ingredient_scrap.add_recipe_results(data_table, ingredient, recipe, scrap_type)
-  local amount, min, max = yokmods.ingredient_scrap.scrap_amount_range(ingredient.amount)
-  local scrap_name = scrap_type .. "-scrap"
-
-  if data_table.debug and data_table.debug.sources then
-    data_table.debug.sources.inserts[recipe.name] = data_table.debug.sources.inserts[recipe.name] or {}
-    table.insert(data_table.debug.sources.inserts[recipe.name], {
-      ingredient = ingredient.name,
-      ingredient_type = ingredient.type,
-      amount = ingredient.amount,
-      scrap_type = scrap_type,
-    })
-  end
-
-  data_table.inserts.recipes[recipe.name].results = data_table.inserts.recipes[recipe.name].results or {}
-
-  -- Check whether this scrap_type already exists in results (accumulate)
-  local existing = nil
-  for _, result in ipairs(data_table.inserts.recipes[recipe.name].results) do
-    if result.name == scrap_name then
-      existing = result
-      break
-    end
-  end
-
-  if existing then                            -- adds up amount if scrap_type already exists
-    if ISsettings.fixed_amount then
-      existing.amount = existing.amount + amount
-    else
-      existing.amount_min = existing.amount_min + min
-      existing.amount_max = existing.amount_max + max
-    end
-  else                                        -- new entry as array element
-    table.insert(data_table.inserts.recipes[recipe.name].results, {
-      type        = "item",
-      name        = scrap_name,
-      amount      = ISsettings.fixed_amount and amount or nil,
-      amount_min  = ISsettings.fixed_amount and nil or min,
-      amount_max  = ISsettings.fixed_amount and nil or max,
-      probability = ISsettings.probability > 0 and (ISsettings.probability / 100) or nil,
-    })
-  end
-end
-
-
----Finds, stores, and returns the recipe main product, falling back to the first result.
----@param data_table ISdata_table
----@param recipe ISRecipePrototype
----@return string|nil
-function yokmods.ingredient_scrap.get_main_product(data_table, recipe)
-  data_table.inserts.recipes[recipe.name] = data_table.inserts.recipes[recipe.name] or {}
-
-  -- Nil-Guard: void recipes oder leere results
-  if not recipe.results or not recipe.results[1] then
-    data_table.inserts.recipes[recipe.name].main_product = nil
-    return nil
-  end
-
-  local main_product
-  main_product = recipe.main_product or recipe.results[1].name  -- If main_product is not set, use the first result as a fallback.
-  data_table.inserts.recipes[recipe.name].main_product = main_product
-
-  return main_product
-end
-
 
 ---Scales and shifts a source item icon so it can be layered over the scrap icon.
 ---@param icon_data ISIcon
@@ -84,9 +17,10 @@ local function icon_scale_and_shift(icon_data, shift)
     icon = icon_data.icon,
     size = icon_data.icon_size,
     scale = 0.25 * scale_factor,
-    shift = shift or { -8, -8 }
+    shift = shift or { -8, 8 }
   }
 end
+
 
 
 --------------------------------
@@ -114,6 +48,8 @@ function yokmods.ingredient_scrap.make_scrap_item(scrap_defines)
   local scrap_item = {
     type = "item",
     name = scrap_name,
+    -- localised_name = {"item-name." .. scrap_name},
+    localised_name = { "", {"item-name." .. scrap_defines.scrap_type}, " ", {"item-name.scrap"}},
     icons = { {
       icon_size = 64,
       icon = icon_path .. scrap_icons[1] .. ".png",
@@ -172,20 +108,19 @@ end
 function yokmods.ingredient_scrap.item_recycle_recipes(recipe_defines)
 
   local recipe_name = yokmods.ingredient_scrap.get_recycle_recipe_name(recipe_defines.scrap_type) .. (recipe_defines.recipe_suffix or "")
+  -- local scrap_name = yokmods.ingredient_scrap.get_scrap_name(recipe_defines.scrap_type)
 
   if data.raw["recipe"][recipe_name]
   or yokmods.ingredient_scrap.data_table.prototypes.recipes[recipe_name] then return end -- no duplicates
 
   local result_amount = recipe_defines.result_amount or (recipe_defines.result_type == "item" and 1 or 10)
-  local constants = yokmods.ingredient_scrap.data_table.constants
-  local icon_layers = yokmods.ingredient_scrap.get_icon_layers(recipe_defines.scrap_type, recipe_defines.scrap_type)
-  table.insert(icon_layers, { icon = constants.icon_path .. "recycle.png", icon_size = 256, scale = 0.25})
+  local icon_layers = yokmods.ingredient_scrap.get_icon_layers(recipe_defines.scrap_type)
 
   ---@type ISRecipePrototype
   local recycle_recipe = {
     type = "recipe",
     name = recipe_name,
-    localised_name = { "recipe-name." .. recipe_name },
+    localised_name = { "", {"item-name.recycle"}, " ", {"item-name." .. recipe_defines.scrap_type}},
     icons = icon_layers,
     enabled = false,
     subgroup = "raw-material",
@@ -224,13 +159,17 @@ end
 function yokmods.ingredient_scrap.technology_prototype(tech_defines)
 
   local recycle_recipe_name = yokmods.ingredient_scrap.get_recycle_recipe_name(tech_defines.scrap_type)
+  local scrap_name = yokmods.ingredient_scrap.get_scrap_name(tech_defines.scrap_type)
   local constants = yokmods.ingredient_scrap.data_table.constants
-  local icon_layers = yokmods.ingredient_scrap.get_icon_layers(tech_defines.scrap_type, tech_defines.scrap_type)
-  table.insert(icon_layers, { icon = constants.icon_path .. "recycle.png", icon_size = 256, scale = 1})
+  local icon_layers = yokmods.ingredient_scrap.get_icon_layers(tech_defines.scrap_type, true)
+
+  log(serpent.block(icon_layers))
 
   local scrap_technology = {
     type = "technology",
     name = recycle_recipe_name,
+    -- localised_name = {"", { "recipe-name." .. recycle_recipe_name }},
+    localised_name = { "", {"item-name." .. tech_defines.scrap_type}, " ",{"item-name.scrap"}, " ", {"item-name.recycling"} },
     icons = icon_layers,
     enabled = true,
     hidden = false,

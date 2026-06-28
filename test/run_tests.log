@@ -1,0 +1,117 @@
+Starte Factorio: F:\Games\Factorio_ModTest\bin\x64\factorio.exe
+Log-Datei:       F:\Games\Factorio_ModTest\factorio-current.log
+Ausgabe:         lua_table.lua
+Timeout:         120s
+────────────────────────────────────────────────────────────
+Factorio beendet nach 4.3s (exit code: 0)
+Log OK — extrahiere Lua-Tabelle...
+────────────────────────────────────────────────────────────
+Lese Logdatei:  F:\Games\Factorio_ModTest\factorio-current.log
+Ausgabedatei:   lua_table.lua
+Erfolgreich! 4409 Zeilen extrahiert -> lua_table.lua
+────────────────────────────────────────────────────────────
+Starte Tests: F:\Games\Factorio_ModTest\mods\Ingredient_Scrap\test\test_synthetic.py
+────────────────────────────────────────────────────────────
+
+────────────────────────────────────────────────────────────
+  MATERIALS
+────────────────────────────────────────────────────────────
+[PASS] [TC-14] testium in materials.solid
+[PASS] [TC-15] testium in materials.fluid (molten-testium + testium-plate)
+[PASS] [TC-09] alienite NICHT in materials.fluid (kein alienite-plate)
+[PASS] [TC-10] uranium NICHT in materials.solid (blacklist)
+
+────────────────────────────────────────────────────────────
+  [TC-01] Einfaches Rezept — yis-test-tc01
+────────────────────────────────────────────────────────────
+[PASS] TC-01: main_product = 'yis-test-product-a'
+[PASS] TC-01: iron-scrap in results
+[PASS] TC-01: iron-scrap amount > 0
+[PASS] TC-01: genau 1 result
+
+────────────────────────────────────────────────────────────
+  [TC-02] Akkumulierung — yis-test-tc02
+────────────────────────────────────────────────────────────
+[PASS] TC-02: iron-scrap in results
+[PASS] TC-02: amount > TC-01 (iron-plate + iron-gear-wheel akkumuliert)
+[PASS] TC-02: genau 1 result (kein Duplikat)
+
+────────────────────────────────────────────────────────────
+  [TC-03] Mehrere scrap_types — yis-test-tc03
+────────────────────────────────────────────────────────────
+[PASS] TC-03: iron-scrap in results
+[PASS] TC-03: copper-scrap in results
+[PASS] TC-03: genau 2 results
+
+────────────────────────────────────────────────────────────
+  [TC-04] Dämpfung bei hoher Menge — yis-test-tc04
+────────────────────────────────────────────────────────────
+[PASS] TC-04: iron-scrap vorhanden
+[PASS] TC-04: amount < 40 (Dämpfung greift bei 200x iron-plate, 24%)
+[PASS] TC-04: amount > 0
+
+────────────────────────────────────────────────────────────
+  [TC-05] Void-Rezept — yis-test-tc05-void
+────────────────────────────────────────────────────────────
+[PASS] TC-05: keine results (void recipe ignoriert)
+
+────────────────────────────────────────────────────────────
+  [TC-06] Fluid main_product — yis-test-tc06
+────────────────────────────────────────────────────────────
+[PASS] TC-06: kein iron-scrap (fluid main_product ignoriert)
+
+────────────────────────────────────────────────────────────
+  [TC-07] Fluid-Ingredient — yis-test-tc07
+────────────────────────────────────────────────────────────
+[PASS] TC-07: testium-scrap in results
+[FAIL] TC-07: recycle-testium-scrap-to-fluid Rezept existiert
+       -> recycle-testium-scrap-to-fluid fehlt in prototypes.recipes
+[FAIL] TC-07: testium-scrap Item existiert
+       -> testium-scrap fehlt in prototypes.items
+
+────────────────────────────────────────────────────────────
+  [TC-08] Fluid + Solid akkumuliert — yis-test-tc08
+────────────────────────────────────────────────────────────
+[PASS] TC-08: iron-scrap vorhanden
+[PASS] TC-08: genau 1 iron-scrap Eintrag (solid + fluid akkumuliert)
+[FAIL] TC-08: amount > TC-01 (fluid addiert auf solid)
+       -> TC-08 amount=2 sollte > TC-01 amount=2 sein
+
+────────────────────────────────────────────────────────────
+  [TC-09] Unbekanntes Fluid — yis-test-tc09
+────────────────────────────────────────────────────────────
+[PASS] TC-09: kein scrap result (alienite ignoriert)
+
+────────────────────────────────────────────────────────────
+  [TC-10] Blacklisted — yis-test-tc10
+────────────────────────────────────────────────────────────
+[PASS] TC-10: kein scrap result (uranium blacklisted)
+
+────────────────────────────────────────────────────────────
+  [TC-11] Kein Tech-Eintrag — yis-test-tc11-no-tech
+────────────────────────────────────────────────────────────
+[PASS] TC-11: KEIN recycle-iron-scrap Tech aus tc11 (kein loses Ende)
+[PASS] TC-11: kein 'yis-test-tech-iron' in prototypes.technology
+
+────────────────────────────────────────────────────────────
+  [TC-12] Tech-Eintrag vorhanden — yis-test-tc12-with-tech
+────────────────────────────────────────────────────────────
+[FAIL] TC-12: recycle-testium-scrap Tech existiert
+       -> recycle-testium-scrap Tech fehlt obwohl yis-test-tech-testium existiert
+
+────────────────────────────────────────────────────────────
+  [TC-13] Item mit icons{} — yis-test-tc13-icons-array
+────────────────────────────────────────────────────────────
+[FAIL] TC-13: testium-scrap generiert (kein Absturz bei icons{})
+       -> make_scrap_item ist bei icons{} abgestürzt oder hat nichts generiert
+
+────────────────────────────────────────────────────────────
+  ZUSAMMENFASSUNG
+────────────────────────────────────────────────────────────
+
+  26/31 Tests bestanden  |  5 FEHLGESCHLAGEN:
+    ✗ TC-07: recycle-testium-scrap-to-fluid Rezept existiert
+    ✗ TC-07: testium-scrap Item existiert
+    ✗ TC-08: amount > TC-01 (fluid addiert auf solid)
+    ✗ TC-12: recycle-testium-scrap Tech existiert
+    ✗ TC-13: testium-scrap generiert (kein Absturz bei icons{})

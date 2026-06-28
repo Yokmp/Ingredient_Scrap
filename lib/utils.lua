@@ -5,6 +5,77 @@ local scrap_tints = require("lib.item-tints")
 ---*FUNCTIONS*                --
 --------------------------------
 
+
+---Creates or accumulates the scrap result entry for the specified recipe.
+---@param data_table ISdata_table
+---@param ingredient ISIngredientPrototype
+---@param recipe ISRecipePrototype
+---@param scrap_type string
+function yokmods.ingredient_scrap.add_recipe_results(data_table, ingredient, recipe, scrap_type)
+  local amount, min, max = yokmods.ingredient_scrap.scrap_amount_range(ingredient.amount)
+  local scrap_name = scrap_type .. "-scrap"
+
+  if data_table.debug and data_table.debug.sources then
+    data_table.debug.sources.inserts[recipe.name] = data_table.debug.sources.inserts[recipe.name] or {}
+    table.insert(data_table.debug.sources.inserts[recipe.name], {
+      ingredient = ingredient.name,
+      ingredient_type = ingredient.type,
+      amount = ingredient.amount,
+      scrap_type = scrap_type,
+    })
+  end
+
+  data_table.inserts.recipes[recipe.name].results = data_table.inserts.recipes[recipe.name].results or {}
+
+  -- Check whether this scrap_type already exists in results (accumulate)
+  local existing = nil
+  for _, result in ipairs(data_table.inserts.recipes[recipe.name].results) do
+    if result.name == scrap_name then
+      existing = result
+      break
+    end
+  end
+
+  if existing then                            -- adds up amount if scrap_type already exists
+    if ISsettings.fixed_amount then
+      existing.amount = existing.amount + amount
+    else
+      existing.amount_min = existing.amount_min + min
+      existing.amount_max = existing.amount_max + max
+    end
+  else                                        -- new entry as array element
+    table.insert(data_table.inserts.recipes[recipe.name].results, {
+      type        = "item",
+      name        = scrap_name,
+      amount      = ISsettings.fixed_amount and amount or nil,
+      amount_min  = ISsettings.fixed_amount and nil or min,
+      amount_max  = ISsettings.fixed_amount and nil or max,
+      probability = ISsettings.probability > 0 and (ISsettings.probability / 100) or nil,
+    })
+  end
+end
+
+
+---Finds, stores, and returns the recipe main product, falling back to the first result.
+---@param data_table ISdata_table
+---@param recipe ISRecipePrototype
+---@return string|nil
+function yokmods.ingredient_scrap.get_main_product(data_table, recipe)
+  data_table.inserts.recipes[recipe.name] = data_table.inserts.recipes[recipe.name] or {}
+
+  -- Nil-Guard: void recipes or emptty results
+  if not recipe.results or not recipe.results[1] then
+    data_table.inserts.recipes[recipe.name].main_product = nil
+    return nil
+  end
+
+  local main_product
+  main_product = recipe.main_product or recipe.results[1].name  -- If main_product is not set, use the first result as a fallback.
+  data_table.inserts.recipes[recipe.name].main_product = main_product
+
+  return main_product
+end
+
 ---Returns a mod-data and JSON friendly copy of a log detail value.
 ---@param value any
 ---@param depth integer
@@ -89,7 +160,7 @@ end
 ---to simulate independent scrap chance per item and returns low and high amounts
 ---such that they cover a 90% confidence interval of the true distribution.
 ---@param base_amount integer
----@return integer base_amount, integer amount_min, integer amount_max
+---@return integer base_amount, integer|nil amount_min, integer|nil amount_max
 function yokmods.ingredient_scrap.scrap_amount_range(base_amount)
   local probability = ISsettings.probability / 100
 
@@ -215,24 +286,40 @@ end
 --------------------------------
 
 ---@param scrap_type string
----@param icon_size? string
+---@param tech_icon? boolean
 ---@return table
 ---Returns the icon layers used by recycle recipes for the given scrap type.
-function yokmods.ingredient_scrap.get_icon_layers(scrap_type, icon_size)
+function yokmods.ingredient_scrap.get_icon_layers(scrap_type, tech_icon)
 -- log(serpent.block(scrap_type))
+  local constants = yokmods.ingredient_scrap.data_table.constants
   local source_icons = yokmods.ingredient_scrap.data_table.prototypes.items[scrap_type .. "-scrap"].icons
   local icons = {}
-  -- local recycle_icon = (mods["quality"] and "__quality__/graphics/icons/recycling.png") or (icon_path .. "recycle.png")
-  local constants = yokmods.ingredient_scrap.data_table.constants
 
   if not yokmods.ingredient_scrap.data_table.prototypes.items[scrap_type .. "-scrap"] then
-    log("no scrap item for: " .. scrap_type)
+    log("No scrap item for: " .. scrap_type .. " default to 'signal-deny.png'")
     return { { icon = "__base__/graphics/icons/signal/signal-deny.png", icon_size = 64 } }
   end
 
-  for _, v in ipairs(source_icons) do
-    table.insert(icons, v)
+  if not tech_icon then
+    if mods["quality"] then
+      table.insert(icons, { icon = "__quality__/graphics/icons/recycling.png", icon_size = 64, scale = 1})
+    else
+      table.insert(icons, { icon = constants.icon_path .. "recycle-top-64.png", icon_size = 64, scale = 1})
+    end
   end
+
+  for _, v in ipairs(source_icons) do table.insert(icons, v) end
+
+  if tech_icon then
+    table.insert(icons, { icon = constants.icon_path .. "recycle-256.png", icon_size = 256, scale = 1})
+  else
+    if mods["quality"] then
+      table.insert(icons, { icon = "__quality__/graphics/icons/recycling-top.png", icon_size = 64, scale = 1})
+    else
+      table.insert(icons, { icon = constants.icon_path .. "recycle-64.png", icon_size = 64, scale = 1})
+    end
+  end
+
 
   return icons
 end

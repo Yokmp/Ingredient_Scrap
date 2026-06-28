@@ -22,7 +22,7 @@ data:extend({
         hidden = false,
         type = "bool-setting",
         name = "yis-fixed-amount",
-        localised_name = { "", "[img=fixed-symbol]", " - ", { "mod-setting-name.yis-amount-range" } },
+        localised_name = { "", "[img=fixed-symbol]", " - ", { "mod-setting-name.yis-fixed-amount" } },
         setting_type = "startup",
         default_value = false,
         order = "c",
@@ -46,7 +46,7 @@ data:extend({
         order = "z",
     },
     {
-        hidden = false,
+        hidden = true,
         type = "bool-setting",
         name = "yis-barreling",
         setting_type = "startup",
