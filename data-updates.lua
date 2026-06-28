@@ -11,8 +11,7 @@ yokmods.ingredient_scrap.settings.fixed_amount = settings.startup["yis-fixed-amo
 yokmods.ingredient_scrap.settings.probability = settings.startup["yis-probability"].value
 yokmods.ingredient_scrap.settings.limit = settings.startup["yis-amount-limit"].value
 yokmods.ingredient_scrap.settings.needed = settings.startup["yis-needed"].value
--- The startup setting is currently hidden; keep the mod default enabled until the option is wired into UI.
-yokmods.ingredient_scrap.settings.fluids = true
+yokmods.ingredient_scrap.settings.fluids = settings.startup["yis-fluid-recipes"].value
 yokmods.ingredient_scrap.settings.fluids_as_barrel = true
 yokmods.ingredient_scrap.settings.auto_recycle = false
 
@@ -39,7 +38,7 @@ function yokmods.ingredient_scrap.init_data_table()
     constants = {
       icon_path = "__Ingredient_Scrap__/graphics/icons/",
       recycle_categories = { solid = "yis-recycle-to-item", fluid = "yis-recycle-to-fluid" },
-      icon_scrap = { "scrap" },
+      icon_scrap = { "scrap-64" },
       scrap_pictures = 3,
     },
     ingredients = {

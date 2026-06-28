@@ -18,14 +18,6 @@ data:extend({
         default_value = 24,
         order = "b",
     },
-    -- {
-    --     hidden = true,
-    --     type = "string-setting",
-    --     name = "yis-amount-method",
-    --     setting_type = "startup",
-    --     default_value = "al",
-    --     allowed_values = { "cu", "cl", "au", "al" }
-    -- },
     {
         hidden = false,
         type = "bool-setting",
@@ -44,16 +36,8 @@ data:extend({
         default_value = true,
         order = "d",
     },
-    -- {
-    --     type = "string-setting",
-    --     name = "yis-unlock-scraps",
-    --     localised_name = { "", "[img=unlock-symbol]", " - ", { "mod-setting-name.yis-unlock-scraps" } },
-    --     setting_type = "startup",
-    --     default_value = "iron-scrap, copper-scrap",
-    --     order = "e",
-    -- },
     {
-        hidden = true,
+        hidden = false,
         type = "bool-setting",
         name = "yis-fluid-recipes",
         localised_name = { "", "[img=drop-symbol]", " - ", { "mod-setting-name.yis-fluid-recipes" } },
