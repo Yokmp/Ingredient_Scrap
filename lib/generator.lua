@@ -2,7 +2,6 @@ local item_sounds = require("__base__.prototypes.item_sounds")
 local item_tints  = require("__base__.prototypes.item-tints")
 local scrap_tints = require("lib.item-tints")
 
---TODO scrap amount per ingredient type and by ingredient amount
 
 ---Creates or accumulates the scrap result entry for the specified recipe.
 ---@param data_table ISdata_table
@@ -12,6 +11,16 @@ local scrap_tints = require("lib.item-tints")
 function yokmods.ingredient_scrap.add_recipe_results(data_table, ingredient, recipe, scrap_type)
   local amount, min, max = yokmods.ingredient_scrap.scrap_amount_range(ingredient.amount)
   local scrap_name = scrap_type .. "-scrap"
+
+  if data_table.debug and data_table.debug.sources then
+    data_table.debug.sources.inserts[recipe.name] = data_table.debug.sources.inserts[recipe.name] or {}
+    table.insert(data_table.debug.sources.inserts[recipe.name], {
+      ingredient = ingredient.name,
+      ingredient_type = ingredient.type,
+      amount = ingredient.amount,
+      scrap_type = scrap_type,
+    })
+  end
 
   data_table.inserts.recipes[recipe.name].results = data_table.inserts.recipes[recipe.name].results or {}
 
@@ -44,22 +53,28 @@ function yokmods.ingredient_scrap.add_recipe_results(data_table, ingredient, rec
 end
 
 
----find and set the main product or nil
+---Finds, stores, and returns the recipe main product, falling back to the first result.
 ---@param data_table ISdata_table
 ---@param recipe ISRecipePrototype
----@param scrap_type? string
-function yokmods.ingredient_scrap.get_main_product(data_table, recipe, scrap_type)
-  local main_product
+---@return string|nil
+function yokmods.ingredient_scrap.get_main_product(data_table, recipe)
   data_table.inserts.recipes[recipe.name] = data_table.inserts.recipes[recipe.name] or {}
 
-  -- If main_product is not set, use the first result as a fallback.
-  main_product = recipe.main_product or recipe.results[1].name
+  -- Nil-Guard: void recipes oder leere results
+  if not recipe.results or not recipe.results[1] then
+    data_table.inserts.recipes[recipe.name].main_product = nil
+    return nil
+  end
 
+  local main_product
+  main_product = recipe.main_product or recipe.results[1].name  -- If main_product is not set, use the first result as a fallback.
   data_table.inserts.recipes[recipe.name].main_product = main_product
+
+  return main_product
 end
 
 
----scales and shifts the original item icon
+---Scales and shifts a source item icon so it can be layered over the scrap icon.
 ---@param icon_data ISIcon
 ---@param shift? vector
 ---@return table
@@ -80,9 +95,10 @@ end
 
 
 ---@param scrap_defines {name: string, scrap_type: string, stack_size?: number}
+---Creates and stores the generated scrap item prototype for a material type.
 function yokmods.ingredient_scrap.make_scrap_item(scrap_defines)
   local scrap_name = yokmods.ingredient_scrap.get_scrap_name(scrap_defines.scrap_type)
-  if data.raw["item"][scrap_name] then return end
+  if data.raw["item"][scrap_name] or yokmods.ingredient_scrap.data_table.prototypes.items[scrap_name] then return end
 
   local scrap_pictures = yokmods.ingredient_scrap.data_table.constants.scrap_pictures
   local scrap_icons = yokmods.ingredient_scrap.data_table.constants.icon_scrap
@@ -133,6 +149,14 @@ function yokmods.ingredient_scrap.make_scrap_item(scrap_defines)
     end
   end
 
+  if yokmods.ingredient_scrap.data_table.debug and yokmods.ingredient_scrap.data_table.debug.sources then
+    yokmods.ingredient_scrap.data_table.debug.sources.items[scrap_name] = {
+      source_item = scrap_defines.name,
+      scrap_type = scrap_defines.scrap_type,
+      stack_size = scrap_defines.stack_size,
+    }
+  end
+
   yokmods.ingredient_scrap.data_table.prototypes.items[scrap_name] = scrap_item
 end
 
@@ -143,12 +167,14 @@ end
 --------------------------------
 
 
----Recycle recipes
+---Creates and stores the generated recycle recipe prototype for item or fluid recovery.
 ---@param recipe_defines {scrap_type: string, result_type: string, result_name: string, categories: category, result_amount?: number, recipe_suffix?: string}
 function yokmods.ingredient_scrap.item_recycle_recipes(recipe_defines)
+
   local recipe_name = yokmods.ingredient_scrap.get_recycle_recipe_name(recipe_defines.scrap_type) .. (recipe_defines.recipe_suffix or "")
 
-  if data.raw["recipe"][recipe_name] then return end -- no duplicates
+  if data.raw["recipe"][recipe_name]
+  or yokmods.ingredient_scrap.data_table.prototypes.recipes[recipe_name] then return end -- no duplicates
 
   local result_amount = recipe_defines.result_amount or (recipe_defines.result_type == "item" and 1 or 10)
   local constants = yokmods.ingredient_scrap.data_table.constants
@@ -163,7 +189,7 @@ function yokmods.ingredient_scrap.item_recycle_recipes(recipe_defines)
     icons = icon_layers,
     enabled = false,
     subgroup = "raw-material",
-    categories = recipe_defines.categories,
+    category = recipe_defines.categories[1],
     order = "is-[" .. recipe_name .. "]",
     always_show_products = true,
     allow_as_intermediate = false,
@@ -175,6 +201,14 @@ function yokmods.ingredient_scrap.item_recycle_recipes(recipe_defines)
     results = { { type = recipe_defines.result_type, name = recipe_defines.result_name, amount = result_amount } }
   }
 
+  if yokmods.ingredient_scrap.data_table.debug and yokmods.ingredient_scrap.data_table.debug.sources then
+    yokmods.ingredient_scrap.data_table.debug.sources.recipes[recipe_name] = {
+      scrap_type = recipe_defines.scrap_type,
+      result_type = recipe_defines.result_type,
+      result_name = recipe_defines.result_name,
+    }
+  end
+
   yokmods.ingredient_scrap.data_table.prototypes.recipes[recipe_name] = recycle_recipe
 end
 
@@ -185,7 +219,7 @@ end
 --------------------------------
 
 
----Match recycle recipe name with technologies that unlock the original recipe and add them as unlocks to the tech
+---Creates and stores a recycle technology when the source recipe is unlocked by an existing technology.
 ---@param tech_defines {scrap_type: string, recipe_name: string, data_table: ISdata_table}
 function yokmods.ingredient_scrap.technology_prototype(tech_defines)
 
@@ -230,3 +264,5 @@ function yokmods.ingredient_scrap.technology_prototype(tech_defines)
     end
   end
 end
+
+

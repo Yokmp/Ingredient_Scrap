@@ -10,7 +10,7 @@ local scrap_tints = require("lib.item-tints")
 ---to simulate independent scrap chance per item and returns low and high amounts
 ---such that they cover a 90% confidence interval of the true distribution.
 ---@param base_amount integer
----@return integer base_amount
+---@return integer base_amount, integer amount_min, integer amount_max
 function yokmods.ingredient_scrap.scrap_amount_range(base_amount)
   local probability = ISsettings.probability / 100
 
@@ -37,13 +37,13 @@ function yokmods.ingredient_scrap.scrap_amount_range(base_amount)
 end
 
 
----returns the scrap name
+---Returns the generated recycle recipe name for a scrap material type.
 ---@param scrap_type string
 ---@return string
 function yokmods.ingredient_scrap.get_recycle_recipe_name(scrap_type)
   return "recycle-" .. scrap_type .. "-scrap"
 end
----returns the scrap name
+---Returns the generated scrap item name for a scrap material type.
 ---@param scrap_type string
 ---@return string
 function yokmods.ingredient_scrap.get_scrap_name(scrap_type)
@@ -135,6 +135,7 @@ end
 ---@param scrap_type string
 ---@param icon_size? string
 ---@return table
+---Returns the icon layers used by recycle recipes for the given scrap type.
 function yokmods.ingredient_scrap.get_icon_layers(scrap_type, icon_size)
 -- log(serpent.block(scrap_type))
   local source_icons = yokmods.ingredient_scrap.data_table.prototypes.items[scrap_type .. "-scrap"].icons

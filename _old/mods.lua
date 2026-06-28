@@ -107,6 +107,7 @@ end
 
 
 local patch = {
+  ---Returns true when an item name is present in the configured blacklist.
   is_blacklisted = function(item)
     if #_blacklist > 0 then
       for _, v in ipairs(_blacklist) do
@@ -116,6 +117,7 @@ local patch = {
     return false
   end,
 
+  ---Applies compatibility recipe patches for selected supported mods.
   recipes = function()
     -- if (mods['angelssmelting']) then
     -- end
@@ -148,6 +150,7 @@ local patch = {
     -- end
   end,
 
+  ---Returns whether a technology should be considered for scrap unlock patching.
   technology = function(tech_name)
     local _return = true
     if (mods['bzlead']) then

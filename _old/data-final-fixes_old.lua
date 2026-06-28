@@ -247,6 +247,7 @@ end
 -- error("get_recipe_results()")
 
 
+---Copies the source recipe enabled state into the current return table.
 local function recipe_is_enabled(recipe_name) -- determined through technology
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
     local data_recipe = data.raw.recipe[recipe_name]
@@ -263,6 +264,7 @@ end
 -- error("recipe_is_enabled()")
 
 
+---Determines and stores the main product for the current legacy recipe result table.
 local function recipe_get_main_product(recipe_name)
   if type(recipe_name) == "string" and data.raw.recipe[recipe_name] then
     local data_recipe = data.raw.recipe[recipe_name]
@@ -296,6 +298,7 @@ end
 
 
 
+---Finds technologies that should unlock a generated legacy recycle recipe.
 local function get_scrap_recycle_tech(recipe_name, raw_scrap)
   local _techs = { effects={enabled=true, recipes={}}, normal={enabled=true, recipes={}}, expensive={enabled=true, recipes={}} }
   for tech_name, value in pairs(data.raw.technology) do
@@ -343,6 +346,7 @@ end
 -- error("get_recycle_result_name()")
 
 
+---Creates legacy scrap item and recycle recipe prototypes for one scrap type.
 local function make_scrap(scrap_type, scrap_icon, stack_size)
   local scrap_name = scrap_type.. "-scrap"
 

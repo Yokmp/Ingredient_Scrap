@@ -1,31 +1,35 @@
+---Converts a hex color string into Factorio's runtime color table format.
+local function color(hex)
+  return util.color(hex)
+end
 
 local tint_colors = {
-  ["blue"]     = { util.color("#1560bd") },
-  ["brown"]    = { util.color("#43464b") },
-  ["cyan"]     = { util.color("#00BCE3") },
-  ["green"]    = { util.color("#006E33") },
-  ["grey"]     = { util.color("#888b8d") },
-  ["lgrey"]    = { util.color("#dbe2e9") },
+  ["blue"]     = color("#1560bd"),
+  ["brown"]    = color("#43464b"),
+  ["cyan"]     = color("#00BCE3"),
+  ["green"]    = color("#006E33"),
+  ["grey"]     = color("#888b8d"),
+  ["lgrey"]    = color("#dbe2e9"),
   ["dgrey"]    = { r = 123, g = 134, b = 122, a = 0.9 },
-  ["orange"]   = { util.color("#CB6015") },
-  ["lpurple"]  = { util.color("#B946F2") },
-  ["purple"]   = { util.color("#8031A7") },
+  ["orange"]   = color("#CB6015"),
+  ["lpurple"]  = color("#B946F2"),
+  ["purple"]   = color("#8031A7"),
   ["dpurple"]  = { r = 101, g = 85, b = 177, a = 0.8 },
-  ["red"]      = { util.color("#AB2328") },
-  ["teal"]     = { util.color("#00B2A9") },
-  ["lyellow"]  = { util.color("#FEDD00") },
-  ["yellow"]   = { util.color("#FECD00") },
+  ["red"]      = color("#AB2328"),
+  ["teal"]     = color("#00B2A9"),
+  ["lyellow"]  = color("#FEDD00"),
+  ["yellow"]   = color("#FECD00"),
 
-  ["brass"]    = { util.color("#AC9F3C") },
-  ["bronze"]   = { util.color("#a97142") },
-  ["glass"]    = { util.color("#afeeee") },
-  ["gold"]     = { util.color("#FFB81C") },
-  ["chrome"]   = { util.color("#DBE2E9") },
-  ["platinum"] = { util.color("#E5E1E6") },
-  ["zinc"]     = { util.color("#BAC4C8") },
-  ["titan"]    = { util.color("#DADBCF") },
-  ["nickel"]   = { util.color("#CCD3D8") },
-  ["mangan"]   = { util.color("#D3BC8D") },
+  ["brass"]    = color("#AC9F3C"),
+  ["bronze"]   = color("#a97142"),
+  ["glass"]    = color("#afeeee"),
+  ["gold"]     = color("#FFB81C"),
+  ["chrome"]   = color("#DBE2E9"),
+  ["platinum"] = color("#E5E1E6"),
+  ["zinc"]     = color("#BAC4C8"),
+  ["titan"]    = color("#DADBCF"),
+  ["nickel"]   = color("#CCD3D8"),
+  ["mangan"]   = color("#D3BC8D"),
 }
 
 --TODO: key name should be mod_prefix-item_type
@@ -73,4 +77,3 @@ return {
   tungsten            = tint_colors["dpurple"],
   zinc                = tint_colors["zinc"],
 }
-

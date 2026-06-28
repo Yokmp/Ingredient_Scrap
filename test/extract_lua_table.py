@@ -18,15 +18,17 @@ Standardwerte:
 
 import sys
 import re
+from pathlib import Path
 
 # ── Konfiguration ────────────────────────────────────────────────────────────
 
-LOG_FILE    = sys.argv[1] if len(sys.argv) > 1 else "factorio-current.log"
+
+LOG_FILE = sys.argv[1] if len(sys.argv) > 1 else str(Path(__file__).parent.parent.parent.parent / "factorio-current.log")
 OUTPUT_FILE = sys.argv[2] if len(sys.argv) > 2 else "lua_table.lua"
 
 # Muster für Start- und Endmarkierung
 START_PATTERN = re.compile(r"Script @__Ingredient_Scrap__/data-updates\.lua")
-END_PATTERN   = re.compile(r"Error ModManager\.cpp")
+END_PATTERN = re.compile(r"Error ModManager\.cpp.*TEST END")
 
 # ── Extraktion ───────────────────────────────────────────────────────────────
 
@@ -73,7 +75,7 @@ def extract_table(log_path: str) -> str:
     #   Factorio-Logzeilen haben das Format "   1.348 Text..."
     #   Tabellenzeilen haben KEIN Zeitstempel-Präfix -> direkt übernehmen
 
-    result_lines = [table_start_char + "\n"]
+    result_lines = [table_start_char + "\n"] # type: ignore
 
     for line in lines[start_line_idx + 1 : end_line_idx]:
         result_lines.append(line)

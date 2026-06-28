@@ -32,7 +32,7 @@ data:extend({
         name = "yis-fixed-amount",
         localised_name = { "", "[img=fixed-symbol]", " - ", { "mod-setting-name.yis-amount-range" } },
         setting_type = "startup",
-        default_value = true,
+        default_value = false,
         order = "c",
     },
     {

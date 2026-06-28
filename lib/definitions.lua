@@ -45,6 +45,7 @@
 
 
 ---@class ISdata_table.materials
+---@field prefixes string[]
 ---@field suffixes string[]
 ---@field solid string[]
 ---@field fluid string[]

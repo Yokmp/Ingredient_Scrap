@@ -154,6 +154,7 @@ end
 -- log(serpent.block(scrap_lookup))
 -- log(serpent.block(_result_recipes))
 
+---Prepares legacy scrap lookup data for one recipe name.
 function prepare(recipe_name)
   local _in = ylib.recipe.get_ingredients(_result_recipes[recipe_name]) --returns ``{ingredients={}, normal={}, expensive={}}``
 

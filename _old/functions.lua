@@ -2,6 +2,7 @@ local mod_name = "__Ingredient_Scrap__"
 
 local util = { table = {} }
 
+---Appends all array entries from the second table to the first table.
 function util.table.extend(t1, t2)
   if type(t1) == "table" and type(t2) == "table" then
     for i = 1, #t2 do t1[#t1 + 1] = t2[i] end

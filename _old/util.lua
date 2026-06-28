@@ -161,6 +161,7 @@ end
 
 
 
+---Finds the first existing item that can be recovered from a scrap material type.
 function util.get_recycle_result_name(scrap_type)
   if type(scrap_type) ~= "string" then return nil end
   ---@diagnostic disable-next-line: undefined-global
@@ -171,6 +172,7 @@ function util.get_recycle_result_name(scrap_type)
   end
 end
 
+---Builds the technology unlock metadata for a generated scrap recycle recipe.
 function util.get_scrap_recycle_tech(recipe_name, raw_scrap)
   local _techs = { effects = { enabled = true, recipes = {} } }
   for tech_name, value in pairs(data.raw.technology) do
@@ -192,6 +194,7 @@ function util.get_scrap_recycle_tech(recipe_name, raw_scrap)
   return _techs
 end
 
+---Creates legacy scrap item and recycle recipe prototypes for a material type.
 function util.make_scrap(scrap_type, scrap_icon, stack_size)
   local scrap_name = scrap_type .. "-scrap"
   if not data.raw.item[scrap_name] then

@@ -90,3 +90,13 @@ end
 -- log(serpent.block(data.raw["furnace"]["steel-furnace"], {maxlevel = 2}))
 -- log(serpent.block(data.raw["assembling-machine"]["foundry"], {maxlevel = 2}))
 
+
+
+-- Debug-Flag: in data-updates.lua auf true setzen zum Testen
+-- IS_DEBUG = true  (global, damit data-updates.lua es auch sieht)
+IS_DEBUG = true
+
+if IS_DEBUG then
+  require("test/test-data")
+  log("[IS-TEST] Debug-Modus aktiv")
+end
