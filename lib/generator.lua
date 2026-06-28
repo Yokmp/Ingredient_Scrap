@@ -193,7 +193,7 @@ function yokmods.ingredient_scrap.item_recycle_recipes(recipe_defines)
     order = "is-[" .. recipe_name .. "]",
     always_show_products = true,
     allow_as_intermediate = false,
-    hide_from_player_crafting = true,
+    hide_from_player_crafting = false,
     ingredients =
     {
       { type = "item", name = recipe_defines.scrap_type .. "-scrap", amount = 0 },
@@ -232,8 +232,8 @@ function yokmods.ingredient_scrap.technology_prototype(tech_defines)
     type = "technology",
     name = recycle_recipe_name,
     icons = icon_layers,
-    enabled = false,
-    visible_when_disabled = false,
+    enabled = true,
+    hidden = false,
     effects =
     {
       {
@@ -264,5 +264,3 @@ function yokmods.ingredient_scrap.technology_prototype(tech_defines)
     end
   end
 end
-
-

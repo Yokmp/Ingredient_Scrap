@@ -87,7 +87,9 @@
 ---@class ISIngredientPrototype
 ---@field type string
 ---@field name string
----@field amount integer
+---@field amount integer?
+---@field amount_min integer?
+---@field amount_max integer?
 
 ---@class ISResultPrototype
 ---@field type string

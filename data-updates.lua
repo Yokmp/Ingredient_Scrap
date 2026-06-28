@@ -53,12 +53,15 @@ function yokmods.ingredient_scrap.init_data_table()
       recipes = {},
     },
     materials = {
-      prefixes = { "molten-", "liquid-" },
-      suffixes = { "-plate", "-ore", "-ingot", "-alloy", "-sheet", "-gear-wheel", "-cable", "-stick" },
+      solid_prefixes = {},
+      solid_suffixes = { "-plate", "-ore", "-ingot", "-alloy", "-sheet", "-gear-wheel", "-cable", "-stick" },
+      fluid_prefixes = { "molten-", "liquid-" },
+      fluid_suffixes = { "-solution" },
       solid = {},
       fluid = {},
     },
     debug = {
+      logs = {},
       sources = {
         items = {},
         recipes = {},

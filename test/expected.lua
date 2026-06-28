@@ -54,12 +54,13 @@ function expected.build()
   if fluids then
     inserts["yis-test-testium-fluid"] = combined_result("testium-scrap", { 5 })
     inserts["yis-test-testium-fluid-main-product"] = combined_result("testium-scrap", { 5 })
+    inserts["yis-test-solvium-solution"] = combined_result("solvium-scrap", { 6 })
   end
 
   return {
     materials = {
       solid = { testium = true, uranium = false },
-      fluid = { testium = fluids, alienite = false },
+      fluid = { testium = fluids, solvium = fluids, alienite = false },
     },
     inserts = inserts,
     item = {
@@ -78,7 +79,7 @@ function expected.build()
         subgroup = "raw-material",
         category = "yis-recycle-to-item",
         allow_as_intermediate = false,
-        hide_from_player_crafting = true,
+        hide_from_player_crafting = false,
         result = { type = "item", name = "testium-plate", amount = 1 },
       },
       fluid = fluids and {
@@ -88,15 +89,23 @@ function expected.build()
         subgroup = "raw-material",
         category = "yis-recycle-to-fluid",
         allow_as_intermediate = false,
-        hide_from_player_crafting = true,
+        hide_from_player_crafting = false,
         result = { type = "fluid", name = "molten-testium", amount = math.max(50 / needed, 10) },
+      } or nil,
+      solution_fluid = fluids and {
+        type = "recipe",
+        name = "recycle-solvium-scrap-to-fluid",
+        enabled = false,
+        subgroup = "raw-material",
+        category = "yis-recycle-to-fluid",
+        allow_as_intermediate = false,
+        hide_from_player_crafting = false,
+        result = { type = "fluid", name = "solvium-solution", amount = math.max(60 / needed, 10) },
       } or nil,
     },
     technology = {
       type = "technology",
       name = "recycle-testium-scrap",
-      enabled = false,
-      visible_when_disabled = false,
       effect = { type = "unlock-recipe", recipe = "recycle-testium-scrap" },
       research_trigger = { type = "craft-item", item = "testium-scrap", count = 1 },
     },

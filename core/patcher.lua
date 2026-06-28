@@ -124,7 +124,7 @@ function yokmods.ingredient_scrap.patch_recycle_amounts()
       local recipe = data_table.prototypes.recipes[recipe_name]
       if recipe and recipe.ingredients and recipe.ingredients[1] then
         recipe.ingredients[1].amount = needed
-        log("[IS] " .. recipe_name .. " needs " .. needed .. "x " .. scrap_name
+        log("[IS-REECIPE] " .. recipe_name .. " needs " .. needed .. "x " .. scrap_name
           .. " (avg expected: " .. string.format("%.2f", avg) .. ")")
       end
     end

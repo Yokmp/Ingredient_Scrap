@@ -43,6 +43,71 @@ local function find_result(results, name)
   return nil
 end
 
+---Returns true when a collected insert has recipe results.
+local function insert_has_results(data_table, recipe_name)
+  local insert = data_table.inserts.recipes[recipe_name]
+  return insert and insert.results and insert.results[1] ~= nil
+end
+
+---Returns true when any existing technology unlocks the requested recipe.
+local function technology_unlocks_recipe(recipe_name)
+  for _, tech in pairs(data.raw.technology or {}) do
+    for _, effect in ipairs(tech.effects or {}) do
+      if effect.type == "unlock-recipe" and effect.recipe == recipe_name then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+---Returns true when a scrap result uses fixed amount fields only.
+local function has_fixed_amount_shape(result)
+  return result and result.amount ~= nil and result.amount_min == nil and result.amount_max == nil
+end
+
+---Returns true when a scrap result uses range amount fields only.
+local function has_range_amount_shape(result)
+  return result and result.amount == nil and result.amount_min ~= nil and result.amount_max ~= nil
+end
+
+---Returns true when a scrap result matches the current fixed/range setting shape.
+local function has_expected_amount_shape(result)
+  if ISsettings.fixed_amount then
+    return has_fixed_amount_shape(result)
+  end
+  return has_range_amount_shape(result)
+end
+
+---Counts how often a crafting category appears on a machine prototype.
+local function category_count(machine, category)
+  local count = 0
+  for _, crafting_category in ipairs((machine and machine.crafting_categories) or {}) do
+    if crafting_category == category then count = count + 1 end
+  end
+  return count
+end
+
+---Returns true when a machine has any crafting category in the allowed set.
+local function has_any_category(machine, allowed_categories)
+  for _, crafting_category in ipairs((machine and machine.crafting_categories) or {}) do
+    if allowed_categories[crafting_category] then return true end
+  end
+  return false
+end
+
+---Returns the names of all machines of a prototype type that can craft the category.
+local function machine_names_with_category(prototype_type, category)
+  local names = {}
+  for name, machine in pairs(data.raw[prototype_type] or {}) do
+    if category_count(machine, category) > 0 then
+      table.insert(names, name)
+    end
+  end
+  table.sort(names)
+  return names
+end
+
 ---Compares an actual value against the expected subset recursively.
 local function same_value(actual, expected_value)
   if type(expected_value) ~= "table" then return actual == expected_value end
@@ -94,6 +159,12 @@ function runner.run()
 
   local exp = expected.build()
   local data_table = yokmods.ingredient_scrap.data_table
+  report.logs = data_table.debug and data_table.debug.logs or {}
+
+  add_case("logs.table", "structured log table exists",
+    data_table.debug and type(data_table.debug.logs) == "table")
+  add_case("logs.function", "structured log function exists",
+    type(yokmods.ingredient_scrap.is_log) == "function")
 
   add_case("materials.solid.testium", "testium is a solid material",
     array_contains(data_table.materials.solid, "testium"))
@@ -101,13 +172,101 @@ function runner.run()
     not array_contains(data_table.materials.solid, "uranium"))
   add_case("materials.fluid.testium", "testium fluid material matches fluid setting",
     array_contains(data_table.materials.fluid, "testium") == exp.materials.fluid.testium)
+  add_case("materials.fluid.solvium", "fluid suffix material matches fluid setting",
+    array_contains(data_table.materials.fluid, "solvium") == exp.materials.fluid.solvium)
   add_case("materials.fluid.alienite", "alienite fluid is ignored without plate or ingot",
     not array_contains(data_table.materials.fluid, "alienite"))
 
+  local recycle_item_category = "yis-recycle-to-item"
+  local recycle_fluid_category = "yis-recycle-to-fluid"
+  local assembling_recycle_source_categories = {
+    ["basic-crafting"] = true,
+    ["crafting"] = true,
+    ["advanced-crafting"] = true,
+    ["metallurgy"] = true,
+    ["crafting-with-fluid-or-metallurgy"] = true,
+    ["metallurgy-or-assembling"] = true,
+  }
+  local smelting_furnace_count = 0
+  local patched_smelting_furnace_count = 0
+  local duplicate_machine = nil
+  for _, furnace in pairs(data.raw.furnace or {}) do
+    if category_count(furnace, "smelting") > 0 then
+      smelting_furnace_count = smelting_furnace_count + 1
+      if category_count(furnace, recycle_item_category) == 1 then
+        patched_smelting_furnace_count = patched_smelting_furnace_count + 1
+      end
+    end
+    if category_count(furnace, recycle_item_category) > 1 then
+      duplicate_machine = furnace.name
+    end
+  end
+  add_case("categories.furnace.smelting", "smelting furnaces can craft item recycle recipes",
+    smelting_furnace_count > 0 and patched_smelting_furnace_count == smelting_furnace_count,
+    nil,
+    { smelting = smelting_furnace_count, patched = patched_smelting_furnace_count })
+  add_case("categories.furnace.no-duplicates", "furnace recycle categories are not duplicated",
+    duplicate_machine == nil, nil, { duplicate = duplicate_machine })
+
+  local eligible_assembler_count = 0
+  local patched_assembler_count = 0
+  local fluid_assembler_count = 0
+  local patched_fluid_assembler_count = 0
+  duplicate_machine = nil
+  for _, assembling_machine in pairs(data.raw["assembling-machine"] or {}) do
+    if has_any_category(assembling_machine, assembling_recycle_source_categories) then
+      eligible_assembler_count = eligible_assembler_count + 1
+      if category_count(assembling_machine, recycle_item_category) == 1 then
+        patched_assembler_count = patched_assembler_count + 1
+      end
+      if assembling_machine.fluid_boxes then
+        fluid_assembler_count = fluid_assembler_count + 1
+        if category_count(assembling_machine, recycle_fluid_category) == 1 then
+          patched_fluid_assembler_count = patched_fluid_assembler_count + 1
+        end
+      end
+    end
+    if category_count(assembling_machine, recycle_item_category) > 1 or
+      category_count(assembling_machine, recycle_fluid_category) > 1 then
+      duplicate_machine = assembling_machine.name
+    end
+  end
+  add_case("categories.assembling.item", "eligible assembling machines can craft item recycle recipes",
+    eligible_assembler_count > 0 and patched_assembler_count == eligible_assembler_count,
+    nil,
+    { eligible = eligible_assembler_count, patched = patched_assembler_count })
+  add_case("categories.assembling.fluid", "fluid-capable eligible assembling machines can craft fluid recycle recipes",
+    fluid_assembler_count > 0 and patched_fluid_assembler_count == fluid_assembler_count,
+    nil,
+    { eligible = fluid_assembler_count, patched = patched_fluid_assembler_count })
+  add_case("categories.assembling.no-duplicates", "assembling machine recycle categories are not duplicated",
+    duplicate_machine == nil, nil, { duplicate = duplicate_machine })
+
+  local iron_recycle_recipe = data.raw.recipe["recycle-iron-scrap"]
+  local item_recycling_assemblers = machine_names_with_category("assembling-machine", recycle_item_category)
+  local item_recycling_furnaces = machine_names_with_category("furnace", recycle_item_category)
+  add_case("categories.iron-recycle.recipe", "iron-scrap recycle recipe uses item recycling category",
+    iron_recycle_recipe and iron_recycle_recipe.category == recycle_item_category,
+    nil,
+    { recipe_category = iron_recycle_recipe and iron_recycle_recipe.category, expected = recycle_item_category })
+  add_case("categories.iron-recycle.assembling", "at least one assembling machine accepts iron-scrap recycle recipes",
+    iron_recycle_recipe and array_contains(item_recycling_assemblers, "assembling-machine-1"),
+    nil,
+    { recipe_category = iron_recycle_recipe and iron_recycle_recipe.category, machines = item_recycling_assemblers })
+  add_case("categories.iron-recycle.furnace", "at least one furnace accepts iron-scrap recycle recipes",
+    iron_recycle_recipe and #item_recycling_furnaces > 0,
+    nil,
+    { recipe_category = iron_recycle_recipe and iron_recycle_recipe.category, machines = item_recycling_furnaces })
+  add_case("categories.iron-recycle.result", "iron-scrap recycles to iron-plate",
+    iron_recycle_recipe and iron_recycle_recipe.results and
+      iron_recycle_recipe.results[1] and iron_recycle_recipe.results[1].name == "iron-plate",
+    nil,
+    { result = iron_recycle_recipe and iron_recycle_recipe.results and iron_recycle_recipe.results[1] })
+
   for recipe_name, expected_result in pairs(exp.inserts) do
     local insert = data_table.inserts.recipes[recipe_name]
-    local actual = find_result(insert and insert.results, "testium-scrap")
-    add_case("insert." .. recipe_name, recipe_name .. " has expected testium scrap insert",
+    local actual = find_result(insert and insert.results, expected_result.name)
+    add_case("insert." .. recipe_name, recipe_name .. " has expected scrap insert",
       same_value(result_signature(actual), expected_result),
       nil,
       { expected = expected_result, actual = result_signature(actual) })
@@ -121,13 +280,37 @@ function runner.run()
   add_case("mixed.single-result", "mixed solid/fluid input accumulates into one result", mixed_count == 1,
     nil, { count = mixed_count, results = mixed_results })
 
+  local insert_shape_mismatch = nil
+  local raw_shape_mismatch = nil
+  for recipe_name, expected_result in pairs(exp.inserts) do
+    local insert = data_table.inserts.recipes[recipe_name]
+    local insert_result = find_result(insert and insert.results, expected_result.name)
+    local raw_result = find_result(scrap_results(data.raw.recipe[recipe_name]), expected_result.name)
+    if not insert_shape_mismatch and not has_expected_amount_shape(insert_result) then
+      insert_shape_mismatch = { recipe = recipe_name, result = result_signature(insert_result) }
+    end
+    if not raw_shape_mismatch and not has_expected_amount_shape(raw_result) then
+      raw_shape_mismatch = { recipe = recipe_name, result = result_signature(raw_result) }
+    end
+  end
+  add_case("amount.insert-shape", "insert scrap results use the selected fixed/range amount shape",
+    insert_shape_mismatch == nil, nil, insert_shape_mismatch)
+  add_case("amount.raw-patch-shape", "patched data.raw scrap results use the selected fixed/range amount shape",
+    raw_shape_mismatch == nil, nil, raw_shape_mismatch)
+
   local small_fixed, small_min, small_max = yokmods.ingredient_scrap.scrap_amount_range(5)
   local large_fixed, large_min, large_max = yokmods.ingredient_scrap.scrap_amount_range(200)
   local linear_large = math.ceil(200 * (ISsettings.probability / 100))
   add_case("amount.small-positive", "small scrap amount remains positive", small_fixed > 0)
-  add_case("amount.large-smoothed", "large scrap amount is smoothed below linear scaling",
-    large_fixed < linear_large or ISsettings.probability == 0,
-    nil, { large = large_fixed, linear = linear_large })
+  if ISsettings.limit then
+    add_case("amount.large-smoothed", "large scrap amount is smoothed below linear scaling when limit is enabled",
+      large_fixed < linear_large or ISsettings.probability == 0,
+      nil, { large = large_fixed, linear = linear_large })
+  else
+    add_case("amount.large-linear", "large scrap amount follows linear scaling when limit is disabled",
+      large_fixed == math.max(linear_large, 1),
+      nil, { large = large_fixed, linear = linear_large })
+  end
   if ISsettings.fixed_amount then
     add_case("amount.fixed-shape", "fixed mode uses amount only", small_min == nil and small_max == nil)
   else
@@ -147,6 +330,10 @@ function runner.run()
   else
     add_case("edge.fluid-main-product", "fluid main product is ignored when fluid recipes are disabled",
       not (fluid_main_insert and fluid_main_insert.results))
+    add_case("edge.fluid-only-prefix-disabled", "prefix fluid fixture creates no scrap insert when fluid recipes are disabled",
+      not insert_has_results(data_table, "yis-test-testium-fluid"))
+    add_case("edge.fluid-only-suffix-disabled", "suffix fluid fixture creates no scrap insert when fluid recipes are disabled",
+      not insert_has_results(data_table, "yis-test-solvium-solution"))
   end
   local alienite_insert = data_table.inserts.recipes["yis-test-alienite-fluid"]
   add_case("edge.alienite", "unknown fluid creates no scrap insert",
@@ -203,9 +390,26 @@ function runner.run()
     add_case("raw.recipe.recycle-testium-scrap-to-fluid.amount", "fluid recycle recipe has patched input amount",
       fluid_recipe and fluid_recipe.ingredients and fluid_recipe.ingredients[1] and fluid_recipe.ingredients[1].amount > 0,
       nil, { ingredients = fluid_recipe and fluid_recipe.ingredients })
+
+    local solution_recipe = data.raw.recipe["recycle-solvium-scrap-to-fluid"]
+    local normalized_solution_recipe = solution_recipe and {
+      type = solution_recipe.type,
+      name = solution_recipe.name,
+      enabled = solution_recipe.enabled,
+      subgroup = solution_recipe.subgroup,
+      category = solution_recipe.category,
+      allow_as_intermediate = solution_recipe.allow_as_intermediate,
+      hide_from_player_crafting = solution_recipe.hide_from_player_crafting,
+      result = solution_recipe.results and solution_recipe.results[1],
+    } or nil
+    add_case("raw.recipe.recycle-solvium-scrap-to-fluid", "fluid suffix recycle recipe matches expected normalized object",
+      same_value(normalized_solution_recipe, exp.recipes.solution_fluid), nil,
+      { expected = exp.recipes.solution_fluid, actual = normalized_solution_recipe })
   else
-    add_case("raw.recipe.no-fluid-recycle", "fluid recycle recipe is absent when fluids are disabled",
+    add_case("raw.recipe.no-prefix-fluid-recycle", "prefix fluid recycle recipe is absent when fluids are disabled",
       data.raw.recipe["recycle-testium-scrap-to-fluid"] == nil)
+    add_case("raw.recipe.no-suffix-fluid-recycle", "suffix fluid recycle recipe is absent when fluids are disabled",
+      data.raw.recipe["recycle-solvium-scrap-to-fluid"] == nil)
   end
 
   for recipe_name, expected_result in pairs(exp.inserts) do
@@ -215,12 +419,26 @@ function runner.run()
       { expected = expected_result, actual = actual })
   end
 
+  if not ISsettings.fluids then
+    add_case("raw.patch.no-prefix-fluid-scrap", "prefix fluid fixture has no data.raw scrap result when fluid recipes are disabled",
+      #scrap_results(data.raw.recipe["yis-test-testium-fluid"]) == 0,
+      nil, { actual = scrap_results(data.raw.recipe["yis-test-testium-fluid"]) })
+    add_case("raw.patch.no-suffix-fluid-scrap", "suffix fluid fixture has no data.raw scrap result when fluid recipes are disabled",
+      #scrap_results(data.raw.recipe["yis-test-solvium-solution"]) == 0,
+      nil, { actual = scrap_results(data.raw.recipe["yis-test-solvium-solution"]) })
+    add_case("raw.patch.no-fluid-main-product-scrap", "fluid main product fixture has no data.raw scrap result when fluid recipes are disabled",
+      #scrap_results(data.raw.recipe["yis-test-testium-fluid-main-product"]) == 0,
+      nil, { actual = scrap_results(data.raw.recipe["yis-test-testium-fluid-main-product"]) })
+    add_case("raw.technology.no-prefix-fluid-unlock", "prefix fluid recycle recipe is not unlocked when fluid recipes are disabled",
+      not technology_unlocks_recipe("recycle-testium-scrap-to-fluid"))
+    add_case("raw.technology.no-suffix-fluid-unlock", "suffix fluid recycle recipe is not unlocked when fluid recipes are disabled",
+      not technology_unlocks_recipe("recycle-solvium-scrap-to-fluid"))
+  end
+
   local tech = data.raw.technology["recycle-testium-scrap"]
   local normalized_tech = tech and {
     type = tech.type,
     name = tech.name,
-    enabled = tech.enabled,
-    visible_when_disabled = tech.visible_when_disabled,
     effect = tech.effects and tech.effects[1],
     research_trigger = tech.research_trigger,
   } or nil

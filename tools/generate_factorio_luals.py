@@ -37,6 +37,10 @@ BUILTIN_TYPES = {
     "table": "table",
 }
 
+TYPE_ALIASES = {
+    "LocalisedString": "string|number|boolean|nil|table",
+}
+
 LUA_KEYWORDS = {
     "and",
     "break",
@@ -98,6 +102,8 @@ def type_name(type_data: Any) -> str:
     if type_data is None:
         return "any"
     if isinstance(type_data, str):
+        if type_data in TYPE_ALIASES:
+            return TYPE_ALIASES[type_data]
         return BUILTIN_TYPES.get(type_data, type_data)
     if not isinstance(type_data, dict):
         return "any"
@@ -167,6 +173,12 @@ def class_header(name: str, description: str | None, parent: str | None = None) 
     return lines
 
 
+def alias_header(name: str, description: str | None, alias_type: str) -> list[str]:
+    lines = doc_lines(description)
+    lines.append(f"---@alias {name} {alias_type}")
+    return lines
+
+
 def method_type(method: dict[str, Any]) -> str:
     params = []
     for parameter in sorted(method.get("parameters", []), key=lambda item: item.get("order", 0)):
@@ -192,6 +204,10 @@ def emit_prototype_types(api: dict[str, Any]) -> str:
     all_types = sorted(api.get("types", []) + api.get("prototypes", []), key=lambda item: item["name"])
     for item in all_types:
         name = item["name"]
+        if name in TYPE_ALIASES:
+            out.extend(alias_header(name, item.get("description"), TYPE_ALIASES[name]))
+            out.append("")
+            continue
         parent = item.get("parent")
         out.extend(class_header(name, item.get("description"), parent))
         if item.get("typename"):
@@ -235,6 +251,10 @@ def emit_runtime_types(api: dict[str, Any]) -> str:
     ]
 
     for concept in sorted(api.get("concepts", []), key=lambda item: item["name"]):
+        if concept["name"] in TYPE_ALIASES:
+            out.extend(alias_header(concept["name"], concept.get("description"), TYPE_ALIASES[concept["name"]]))
+            out.append("")
+            continue
         out.extend(class_header(concept["name"], concept.get("description")))
         out.append(f"---@field value {type_name(concept.get('type'))}")
         out.append("")

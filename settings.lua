@@ -52,4 +52,11 @@ data:extend({
         setting_type = "startup",
         default_value = true,
     },
+    {
+        hidden = true,
+        type = "bool-setting",
+        name = "yis-IS_DEBUG",
+        setting_type = "startup",
+        default_value = false,
+    },
 })

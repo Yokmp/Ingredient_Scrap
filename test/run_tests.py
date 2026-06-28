@@ -22,17 +22,25 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 MOD_DIR = SCRIPT_DIR.parent
+TOOLS_DIR = MOD_DIR / "tools"
+sys.path.insert(0, str(TOOLS_DIR))
+
+import settingsparser
+
 MODS_DIR = MOD_DIR.parent
 DEFAULT_FACTORIO = Path(r"F:/Games/Factorio_ModTest/bin/x64/factorio.exe")
 REPORT_RELATIVE = Path("Ingredient_Scrap") / "test-report.json"
 DATA_TABLE_RELATIVE = Path("Ingredient_Scrap") / "data-table.lua"
 PROFILE_FILE = SCRIPT_DIR / "profile.lua"
 TMP_DIR = SCRIPT_DIR / "tmp"
+MOD_SETTINGS_FILE = MODS_DIR / "mod-settings.dat"
+MOD_SETTINGS_BACKUP_FILE = MODS_DIR / "mod-settings.dat.codex-test-backup"
 TIMEOUT = 180
 
 PROFILES = {
     "default": {},
     "fixed_amount": {"fixed_amount": True},
+    "limit_off": {"limit": False},
     "probability_zero": {"probability": 0},
     "probability_full": {"probability": 100},
     "needed_min": {"needed": 1},
@@ -81,6 +89,34 @@ def write_profile(profile_name: str, settings: dict[str, object]) -> None:
         lines.append(f"    {key} = {lua_value(value)},")
     lines.extend(["  },", "}", ""])
     PROFILE_FILE.write_text("\n".join(lines), encoding="utf-8")
+
+
+def with_debug_setting_enabled() -> bytes | None:
+    original = MOD_SETTINGS_FILE.read_bytes() if MOD_SETTINGS_FILE.exists() else None
+    if original is not None:
+        MOD_SETTINGS_BACKUP_FILE.write_bytes(original)
+    try:
+        settingsparser.set_startup_setting(MOD_SETTINGS_FILE, "yis-IS_DEBUG", True)
+    except Exception:
+        if original is not None:
+            MOD_SETTINGS_FILE.write_bytes(original)
+        raise
+    return original
+
+
+def restore_mod_settings(original: bytes | None) -> None:
+    backup = MOD_SETTINGS_BACKUP_FILE.read_bytes() if MOD_SETTINGS_BACKUP_FILE.exists() else original
+    if backup is None:
+        try:
+            MOD_SETTINGS_FILE.unlink()
+        except FileNotFoundError:
+            pass
+    else:
+        MOD_SETTINGS_FILE.write_bytes(backup)
+    try:
+        MOD_SETTINGS_BACKUP_FILE.unlink()
+    except FileNotFoundError:
+        pass
 
 
 def remove_profile() -> None:
@@ -144,6 +180,43 @@ def group_cases(cases: list[dict]) -> dict[str, list[dict]]:
     return groups
 
 
+def log_color(level: str) -> str:
+    level = level.lower()
+    if level == "error":
+        return "red"
+    if level in {"warning", "warn"}:
+        return "yellow"
+    return "gray"
+
+
+def print_report_logs(logs: object, color: bool = True, show_passes: bool = False) -> None:
+    if isinstance(logs, dict):
+        logs = list(logs.values())
+    if not isinstance(logs, list):
+        return
+
+    visible_logs = [
+        entry for entry in logs
+        if isinstance(entry, dict)
+        if show_passes or str(entry.get("level", "info")).lower() in {"warning", "warn", "error"}
+    ]
+    if not visible_logs:
+        return
+
+    print()
+    print(colored("[logs]", "blue", color))
+    for entry in visible_logs:
+        level = str(entry.get("level", "info")).upper()
+        source = entry.get("source", "unknown")
+        step = entry.get("step", "unknown")
+        description = entry.get("description", "")
+        line_color = log_color(level)
+        print(f"  {colored(level, line_color, color)} {source}.{step}: {description}")
+        details = entry.get("details")
+        if details is not None:
+            print(colored(f"       details: {compact_json(details)}", "gray", color))
+
+
 def print_pretty_report(report: dict, color: bool = True, show_passes: bool = False) -> None:
     summary = report.get("summary", {})
     total = int(summary.get("total", 0) or 0)
@@ -164,8 +237,10 @@ def print_pretty_report(report: dict, color: bool = True, show_passes: bool = Fa
     print(f"Summary: {progress_bar(passed, total, color=color)} {passed}/{total} passed, {failed} failed")
 
     cases = report.get("cases", [])
+    logs = report.get("logs", [])
     if failed == 0 and not show_passes:
         print(colored("All assertions passed. Use --show-passes to print every case.", "green", color))
+        print_report_logs(logs, color=color, show_passes=show_passes)
         return
 
     print()
@@ -184,6 +259,7 @@ def print_pretty_report(report: dict, color: bool = True, show_passes: bool = Fa
             details = case.get("details")
             if details is not None and (show_passes or case_status != "pass"):
                 print(colored(f"       details: {compact_json(details)}", "gray", color))
+    print_report_logs(logs, color=color, show_passes=show_passes)
 
 
 def run_factorio_profile(factorio_exe: Path, profile_name: str, settings: dict[str, object]) -> tuple[bool, dict | None]:
@@ -267,8 +343,10 @@ def main() -> int:
     selected = list(PROFILES) if args.all else [args.profile]
     failed = []
     reports: list[dict] = []
+    original_mod_settings = None
 
     try:
+        original_mod_settings = with_debug_setting_enabled()
         for profile_name in selected:
             ok, report = run_factorio_profile(factorio_exe, profile_name, PROFILES[profile_name])
             if report is not None:
@@ -276,6 +354,7 @@ def main() -> int:
             if not ok:
                 failed.append(profile_name)
     finally:
+        restore_mod_settings(original_mod_settings)
         remove_profile()
         if not args.keep_saves:
             remove_temp_saves()

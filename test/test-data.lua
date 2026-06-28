@@ -77,11 +77,14 @@ data:extend({
   dummy_item("testium-product-no-tech", "intermediate-product", 100),
   dummy_item("testium-product-void-guard", "intermediate-product", 100),
   dummy_item("testium-product-blacklist-guard", "intermediate-product", 100),
+  dummy_item("solvium-plate", "intermediate-product", 100),
+  dummy_item("solvium-product-fluid", "intermediate-product", 100),
   dummy_item("uranium-plate", "intermediate-product", 100),
 })
 
 data:extend({
   dummy_fluid("molten-testium"),
+  dummy_fluid("solvium-solution"),
   dummy_fluid("molten-alienite"),
 })
 
@@ -144,6 +147,13 @@ data:extend({
   dummy_recipe("yis-test-alienite-fluid",
     { { type = "fluid", name = "molten-alienite", amount = 50 } },
     { { type = "item", name = "testium-product-void-guard", amount = 1 } },
+    nil,
+    "crafting-with-fluid"
+  ),
+
+  dummy_recipe("yis-test-solvium-solution",
+    { { type = "fluid", name = "solvium-solution", amount = 60 } },
+    { { type = "item", name = "solvium-product-fluid", amount = 1 } },
     nil,
     "crafting-with-fluid"
   ),

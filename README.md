@@ -95,6 +95,7 @@ By default, temporary saves under `test/tmp` are removed after the run.
 
 - `default`
 - `fixed_amount`
+- `limit_off`
 - `probability_zero`
 - `probability_full`
 - `needed_min`

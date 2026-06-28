@@ -76,25 +76,61 @@ data:extend({
 })
 
 ---TODO add recycler from quality dlc
--- insert scrap recycling into crafting_categories
-for k,v in pairs(data.raw["furnace"]) do
-  table.insert(v.crafting_categories, "yis-recycle-to-item")
+local recycle_item_category = "yis-recycle-to-item"
+local recycle_fluid_category = "yis-recycle-to-fluid"
+local assembling_recycle_source_categories = {
+  ["basic-crafting"] = true,
+  ["crafting"] = true,
+  ["advanced-crafting"] = true,
+  ["metallurgy"] = true,
+  ["crafting-with-fluid-or-metallurgy"] = true,
+  ["metallurgy-or-assembling"] = true,
+}
+
+---Returns true when a crafting machine already has the requested category.
+local function has_category(machine, category)
+  for _, crafting_category in ipairs(machine.crafting_categories or {}) do
+    if crafting_category == category then return true end
+  end
+  return false
 end
--- if space age is present, add too
-for k,v in pairs(data.raw["assembling-machine"]) do
--- log(v.name)
-  if v.name == "foundry" then
-    table.insert(v.crafting_categories, "yis-recycle-to-fluid")
+
+---Returns true when a crafting machine has any category in the allowed set.
+local function has_any_category(machine, allowed_categories)
+  for _, crafting_category in ipairs(machine.crafting_categories or {}) do
+    if allowed_categories[crafting_category] then return true end
+  end
+  return false
+end
+
+---Adds a crafting category only when the machine does not already have it.
+local function add_category_once(machine, category)
+  machine.crafting_categories = machine.crafting_categories or {}
+  if not has_category(machine, category) then
+    table.insert(machine.crafting_categories, category)
   end
 end
--- log(serpent.block(data.raw["furnace"]["steel-furnace"], {maxlevel = 2}))
--- log(serpent.block(data.raw["assembling-machine"]["foundry"], {maxlevel = 2}))
+
+for _, furnace in pairs(data.raw["furnace"] or {}) do
+  if has_category(furnace, "smelting") then
+    add_category_once(furnace, recycle_item_category)
+  end
+end
+
+for _, assembling_machine in pairs(data.raw["assembling-machine"] or {}) do
+  if has_any_category(assembling_machine, assembling_recycle_source_categories) then
+    add_category_once(assembling_machine, recycle_item_category)
+    if assembling_machine.fluid_boxes then
+      add_category_once(assembling_machine, recycle_fluid_category)
+    end
+  end
+end
 
 
 
 -- Debug-Flag: in data-updates.lua auf true setzen zum Testen
 -- IS_DEBUG = true  (global, damit data-updates.lua es auch sieht)
-IS_DEBUG = true
+IS_DEBUG = settings.startup["yis-IS_DEBUG"].value
 
 if IS_DEBUG then
   require("test/test-data")

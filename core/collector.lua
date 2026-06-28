@@ -4,14 +4,33 @@ function yokmods.ingredient_scrap.collector()
   local data_table = yokmods.ingredient_scrap.data_table
 
   ---Checks whether an ingredient name belongs to the given scrap material type.
-  local function matches_scrap_type(name, scrap_type)
-    for _, suffix in ipairs(data_table.materials.suffixes) do
+  local function matches_scrap_type(name, scrap_type, prefixes, suffixes)
+    for _, suffix in ipairs(suffixes) do
       if name == scrap_type .. suffix then return true end
     end
-    for _, prefix in ipairs(data_table.materials.prefixes) do
+    for _, prefix in ipairs(prefixes) do
       if name == prefix .. scrap_type then return true end
     end
     return name == scrap_type
+  end
+
+  ---Finds the preferred item prototype used as the recycle target for solid-based scrap.
+  local function scrap_source_item_for_solid(scrap_type, ingredient_name)
+    local preferred_names = {
+      scrap_type .. "-plate",
+      scrap_type .. "-ingot",
+      scrap_type .. "-ore",
+      scrap_type,
+      ingredient_name,
+    }
+
+    for _, preferred_name in ipairs(preferred_names) do
+      if preferred_name and data.raw.item[preferred_name] then
+        return preferred_name, data.raw.item[preferred_name]
+      end
+    end
+
+    return ingredient_name, data.raw.item[ingredient_name]
   end
 
   ---Finds the item prototype used as the visual and stack-size source for fluid-based scrap.
@@ -45,20 +64,26 @@ function yokmods.ingredient_scrap.collector()
       if main_product_item or main_product_fluid then
         for _, ingredient in ipairs(recipe.ingredients or {}) do
           for _, scrap_type in ipairs(data_table.materials.solid) do
-            if ingredient.type == "item" and matches_scrap_type(ingredient.name, scrap_type) then
+            if ingredient.type == "item" and matches_scrap_type(
+              ingredient.name,
+              scrap_type,
+              data_table.materials.solid_prefixes,
+              data_table.materials.solid_suffixes
+            ) then
+              local source_item_name, source_item = scrap_source_item_for_solid(scrap_type, ingredient.name)
               table.insert(data_table.ingredients.items[recipe.name], ingredient)
 
               yokmods.ingredient_scrap.add_recipe_results(data_table, ingredient, recipe, scrap_type)
 
               yokmods.ingredient_scrap.make_scrap_item({
-                name = ingredient.name,
+                name = source_item_name,
                 scrap_type = scrap_type,
-                stack_size = util.clamp(data.raw.item[ingredient.name].stack_size * ISsettings.needed, 10, 200)
+                stack_size = util.clamp(source_item.stack_size * ISsettings.needed, 10, 200)
               })
 
               yokmods.ingredient_scrap.item_recycle_recipes({
                 result_type = "item",
-                result_name = ingredient.name,
+                result_name = source_item_name,
                 scrap_type = scrap_type,
                 categories = { data_table.constants.recycle_categories.solid },
               })
@@ -73,7 +98,12 @@ function yokmods.ingredient_scrap.collector()
 
           if ISsettings.fluids then
             for _, scrap_type in ipairs(data_table.materials.fluid) do
-              if ingredient.type == "fluid" and matches_scrap_type(ingredient.name, scrap_type) then
+              if ingredient.type == "fluid" and matches_scrap_type(
+                ingredient.name,
+                scrap_type,
+                data_table.materials.fluid_prefixes,
+                data_table.materials.fluid_suffixes
+              ) then
                 local source_item_name, source_item = scrap_source_item_for_fluid(scrap_type, main_product)
                 if source_item_name and source_item then
                   table.insert(data_table.ingredients.fluids[recipe.name], ingredient)
