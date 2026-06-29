@@ -3,6 +3,17 @@ local function color(hex)
   return util.color(hex)
 end
 
+local function apply_registered_tints(scrap_tints)
+  local material_overrides = require("lib.material-overrides")
+  for material_name, tint in pairs(material_overrides.tints or {}) do
+    if type(tint) == "string" then
+      scrap_tints[material_name] = color(tint)
+    else
+      scrap_tints[material_name] = tint
+    end
+  end
+end
+
 local tint_colors = {
   ["blue"]     = color("#1560bd"),
   ["brown"]    = color("#43464b"),
@@ -30,10 +41,10 @@ local tint_colors = {
   ["titan"]    = color("#DADBCF"),
   ["nickel"]   = color("#CCD3D8"),
   ["mangan"]   = color("#D3BC8D"),
+  ["holmium"]   = color("#bb8997"),
 }
 
---TODO: key name should be mod_prefix-item_type
-return {
+local scrap_tints = {
   adamantite          = tint_colors["purple"],
   aluminum            = tint_colors["lgrey"],
   aluminium           = tint_colors["lgrey"],
@@ -49,6 +60,7 @@ return {
   -- glass            = tint_colors["glass"]
   gold                = tint_colors["yellow"],
   gunmetal            = tint_colors["yellow"],
+  holmium             = tint_colors["holmium"],
   imersium            = tint_colors["purple"],
   invar               = tint_colors["grey"],
   iron                = tint_colors["grey"],
@@ -77,3 +89,25 @@ return {
   tungsten            = tint_colors["dpurple"],
   zinc                = tint_colors["zinc"],
 }
+
+apply_registered_tints(scrap_tints)
+
+---Registers or updates the scrap tint for a material.
+---@param material_name string
+---@param tint table|string|nil
+function scrap_tints.register(material_name, tint)
+  if type(material_name) ~= "string" or material_name == "" or tint == nil then return end
+  if type(tint) == "string" then
+    scrap_tints[material_name] = color(tint)
+  else
+    scrap_tints[material_name] = tint
+  end
+end
+
+---Returns shared named tint colors for API consumers that want them.
+---@return table
+function scrap_tints.colors()
+  return tint_colors
+end
+
+return scrap_tints

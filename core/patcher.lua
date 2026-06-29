@@ -114,7 +114,10 @@ function yokmods.ingredient_scrap.patch_recycle_amounts()
 
   for scrap_name, total in pairs(totals) do
     local avg = total.sum / total.count
-    local needed = util.clamp(math.ceil(avg), 1, ISsettings.needed * 2)
+    local needed = ISsettings.needed
+    if avg > 0 then
+      needed = math.max(math.floor(ISsettings.needed / avg), 1)
+    end
     local recipe_names = {
       "recycle-" .. scrap_name,
       "recycle-" .. scrap_name .. "-to-fluid",
@@ -185,7 +188,6 @@ function yokmods.ingredient_scrap.patch()
   end
   log("Patched " .. inserts .. " recipe(s) with scrap results.")
 end
-
 
 
 

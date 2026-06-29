@@ -63,6 +63,15 @@ data:extend({
     height = 64,
     shift = { 0, 02 }
   },
+  {
+    type = "sprite",
+    name = "none",
+    filename = "__Ingredient_Scrap__/graphics/icons/none.png",
+    priority = "extra-high",
+    width = 64,
+    height = 64,
+    shift = { 0, 02 }
+  },
 })
 data:extend({
   {
@@ -75,56 +84,29 @@ data:extend({
   },
 })
 
----TODO add recycler from quality dlc
 local recycle_item_category = "yis-recycle-to-item"
 local recycle_fluid_category = "yis-recycle-to-fluid"
-local assembling_recycle_source_categories = {
-  ["basic-crafting"] = true,
-  ["crafting"] = true,
-  ["advanced-crafting"] = true,
-  ["metallurgy"] = true,
-  ["crafting-with-fluid-or-metallurgy"] = true,
-  ["metallurgy-or-assembling"] = true,
-}
+local category_overrides = require("lib.category-overrides")
+require("compat.vanilla-categories")
 
----Returns true when a crafting machine already has the requested category.
-local function has_category(machine, category)
-  for _, crafting_category in ipairs(machine.crafting_categories or {}) do
-    if crafting_category == category then return true end
-  end
-  return false
-end
-
----Returns true when a crafting machine has any category in the allowed set.
-local function has_any_category(machine, allowed_categories)
-  for _, crafting_category in ipairs(machine.crafting_categories or {}) do
-    if allowed_categories[crafting_category] then return true end
-  end
-  return false
-end
-
----Adds a crafting category only when the machine does not already have it.
-local function add_category_once(machine, category)
-  machine.crafting_categories = machine.crafting_categories or {}
-  if not has_category(machine, category) then
-    table.insert(machine.crafting_categories, category)
-  end
-end
-
-for _, furnace in pairs(data.raw["furnace"] or {}) do
-  if has_category(furnace, "smelting") then
-    add_category_once(furnace, recycle_item_category)
-  end
-end
-
-for _, assembling_machine in pairs(data.raw["assembling-machine"] or {}) do
-  if has_any_category(assembling_machine, assembling_recycle_source_categories) then
-    add_category_once(assembling_machine, recycle_item_category)
-    if assembling_machine.fluid_boxes then
-      add_category_once(assembling_machine, recycle_fluid_category)
+---Applies registered category rules to one prototype type.
+local function apply_category_rules(prototype_type, rules)
+  for _, machine in pairs(data.raw[prototype_type] or {}) do
+    for _, rule in ipairs(rules or {}) do
+      if category_overrides.has_category(machine, rule.source_categories) then
+        if rule.add_item_recycling then
+          category_overrides.add_category_once(machine, recycle_item_category)
+        end
+        if rule.add_fluid_recycling_if_fluid_boxes and machine.fluid_boxes then
+          category_overrides.add_category_once(machine, recycle_fluid_category)
+        end
+      end
     end
   end
 end
+
+apply_category_rules("furnace", category_overrides.rules.furnace)
+apply_category_rules("assembling-machine", category_overrides.rules.assembling_machine)
 
 
 

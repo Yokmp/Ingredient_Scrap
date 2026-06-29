@@ -1,4 +1,13 @@
 local resolver = require("core.materials.resolver")
+local material_overrides = require("lib.material-overrides")
+
+
+
+--------------------------------
+---*MATERIALS*                --
+--------------------------------
+
+
 
 ---Fills data_table.materials.solid and data_table.materials.fluid from resources, items, fluids, and whitelists.
 function yokmods.ingredient_scrap.collect_materials()
@@ -8,12 +17,19 @@ function yokmods.ingredient_scrap.collect_materials()
   local seen_solid = {}
   local seen_fluid = {}
 
+  ---Returns the configured material mode, defaulting to auto for unknown materials.
+  ---@param scrap_type string
+  ---@return string
+  local function material_mode(scrap_type)
+    return (ISsettings.material_modes and ISsettings.material_modes[scrap_type]) or "auto"
+  end
+
   ---Adds a solid scrap material if it was not already collected.
   ---@param scrap_type string|nil
   ---@param source_name string
   local function add_solid_material(scrap_type, source_name)
     if not scrap_type then return end
-    if not type_blacklist[scrap_type] and not seen_solid[scrap_type] then
+    if not material_overrides.is_ignored(material_mode(scrap_type), "solid") and not seen_solid[scrap_type] then
       seen_solid[scrap_type] = true
       table.insert(solid, scrap_type)
       log("[IS-MAT-SOLID] inserted into solid: " .. scrap_type .. " from " .. source_name .. " (total: " .. #solid .. ")")
@@ -25,19 +41,27 @@ function yokmods.ingredient_scrap.collect_materials()
   ---@param fluid_name string
   local function add_fluid_material(scrap_type, fluid_name)
     if not scrap_type then return end
+    local mode = material_mode(scrap_type)
+    local ignored = material_overrides.is_ignored(mode, "fluid")
+    local forced = material_overrides.is_forced(mode, "fluid")
     if IS_DEBUG then log("[IS-MAT-FLUID] found: " .. fluid_name .. " -> scrap_type: " .. scrap_type
-      .. " blacklisted: " .. tostring(type_blacklist[scrap_type] or false)
+      .. " ignored: " .. tostring(ignored)
+      .. " forced: " .. tostring(forced)
       .. " seen: " .. tostring(seen_fluid[scrap_type] or false)
       .. " has_plate: " .. tostring(data.raw.item[scrap_type .. "-plate"] ~= nil)
       .. " has_ingot: " .. tostring(data.raw.item[scrap_type .. "-ingot"] ~= nil)) end
-    if not type_blacklist[scrap_type] and not seen_fluid[scrap_type] then
-      if data.raw.item[scrap_type .. "-plate"] or data.raw.item[scrap_type .. "-ingot"] then
+    if not ignored and not seen_fluid[scrap_type] then
+      if forced or data.raw.item[scrap_type .. "-plate"] or data.raw.item[scrap_type .. "-ingot"] then
         seen_fluid[scrap_type] = true
         table.insert(fluid, scrap_type)
         if IS_DEBUG then log("[IS-MAT-FLUID] inserted: " .. scrap_type) end
       end
     end
   end
+
+--------------------------------
+---*MINABLE*                  --
+--------------------------------
 
   ---Returns minable result names matching the requested result type.
   ---@param minable table
@@ -56,9 +80,6 @@ function yokmods.ingredient_scrap.collect_materials()
     return names
   end
 
---------------------------------
----*data.raw.resource*        --
---------------------------------
 
   for _, resource in pairs(data.raw.resource) do
     if resource.minable then
@@ -84,21 +105,15 @@ function yokmods.ingredient_scrap.collect_materials()
   end
 
 --------------------------------
----*WHIELIST*                 --
+---*OVERRIDES*                --
 --------------------------------
 
-  for _, prefix in ipairs(scrap_whitelist_solid) do
-    if not type_blacklist[prefix] and not seen_solid[prefix] then
-      seen_solid[prefix] = true
-      table.insert(solid, prefix)
-      log("[IS-MAT-SOLID] inserted into solid: " .. prefix .. " (total: " .. #solid .. ")")
+  for material_name, mode in pairs(ISsettings.material_modes or {}) do
+    if material_overrides.is_forced(mode, "solid") then
+      add_solid_material(material_name, "material override")
     end
-  end
-  for _, prefix in ipairs(scrap_whitelist_fluid) do
-    if not type_blacklist[prefix] and not seen_fluid[prefix] then
-      seen_fluid[prefix] = true
-      table.insert(fluid, prefix)
-      log("[IS-MAT-FLUID] inserted into fluid: " .. prefix .. " (total: " .. #fluid .. ")")
+    if ISsettings.fluids and material_overrides.is_forced(mode, "fluid") then
+      add_fluid_material(material_name, "material override")
     end
   end
 

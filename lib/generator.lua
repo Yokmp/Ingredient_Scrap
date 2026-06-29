@@ -15,8 +15,8 @@ local function icon_scale_and_shift(icon_data, shift)
   return {
     icon = icon_data.icon,
     size = icon_data.icon_size,
-    scale = 0.25 * scale_factor,
-    shift = shift or { -8, 8 }
+    scale = 0.33 * scale_factor,
+    shift = shift or { -6, -3 }
   }
 end
 
@@ -154,13 +154,27 @@ end
 
 
 ---Creates and stores a recycle technology when the source recipe is unlocked by an existing technology.
----@param tech_defines {scrap_type: string, recipe_name: string, data_table: ISdata_table}
+---@param tech_defines {scrap_type: string, recipe_name: string, data_table: ISdata_table, recipe_suffix?: string}
 function yokmods.ingredient_scrap.technology_prototype(tech_defines)
 
   local recycle_recipe_name = yokmods.ingredient_scrap.get_recycle_recipe_name(tech_defines.scrap_type)
+  local unlock_recipe_name = recycle_recipe_name .. (tech_defines.recipe_suffix or "")
   local scrap_name = yokmods.ingredient_scrap.get_scrap_name(tech_defines.scrap_type)
   local constants = yokmods.ingredient_scrap.data_table.constants
   local icon_layers = yokmods.ingredient_scrap.get_icon_layers(tech_defines.scrap_type, true)
+
+  ---Returns true when the technology already unlocks the requested recipe.
+  ---@param technology table
+  ---@param recipe_name string
+  ---@return boolean
+  local function has_unlock_effect(technology, recipe_name)
+    for _, effect in ipairs(technology.effects or {}) do
+      if effect.type == "unlock-recipe" and effect.recipe == recipe_name then
+        return true
+      end
+    end
+    return false
+  end
 
   local scrap_technology = {
     type = "technology",
@@ -174,7 +188,7 @@ function yokmods.ingredient_scrap.technology_prototype(tech_defines)
     {
       {
         type = "unlock-recipe",
-        recipe = recycle_recipe_name
+        recipe = unlock_recipe_name
       }
     },
     research_trigger =
@@ -190,7 +204,11 @@ function yokmods.ingredient_scrap.technology_prototype(tech_defines)
     for _, effect in ipairs(tech.effects or {}) do
         if effect.type == "unlock-recipe" then
           if effect.recipe == tech_defines.recipe_name then
-            tech_defines.data_table.prototypes.technology[recycle_recipe_name] = scrap_technology
+            local technology = tech_defines.data_table.prototypes.technology[recycle_recipe_name] or scrap_technology
+            if not has_unlock_effect(technology, unlock_recipe_name) then
+              table.insert(technology.effects, { type = "unlock-recipe", recipe = unlock_recipe_name })
+            end
+            tech_defines.data_table.prototypes.technology[recycle_recipe_name] = technology
             break
           end
         end

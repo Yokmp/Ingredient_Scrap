@@ -240,47 +240,6 @@ function yokmods.ingredient_scrap.get_import_location(scrap_type)
   return nil
 end
 
----Calculates the amount of scrap required for a recycling recipe
----based on the expected value of the scrap results
----that produce this scrap_type.
----@param scrap_type string
----@return integer
-function yokmods.ingredient_scrap.get_recycle_needed(scrap_type)
-  local probability = ISsettings.probability / 100
-  if probability <= 0 then return ISsettings.needed end
-
-  local scrap_name = scrap_type .. "-scrap"
-  local total_expected = 0
-  local count = 0
-
-  -- Iterate over all inserts that produce this scrap_type
-  for _, insert in pairs(yokmods.ingredient_scrap.data_table.inserts.recipes) do
-    if insert.results and insert.results[scrap_name] then
-      local result = insert.results[scrap_name]
-      -- Erwartungswert berechnen je nach fixed_amount oder min/max
-      local expected
-      if ISsettings.fixed_amount then
-        expected = (result.amount or 1) * (result.probability or 1)
-      else
-        local mid = ((result.amount_min or 1) + (result.amount_max or 1)) / 2
-        expected = mid * (result.probability or 1)
-      end
-      total_expected = total_expected + expected
-      count = count + 1
-    end
-  end
-
-  if count == 0 then return ISsettings.needed end
-
-  -- Average expected value across all prescriptions
-  local avg_expected = total_expected / count
-
-  -- Required = rounded up to a reasonable amount
-  -- clamp so it never becomes absurdly small or large
-  return util.clamp(math.ceil(avg_expected), 1, ISsettings.needed * 2)
-end
-
-
 --------------------------------
 ---*ICONS*                    --
 --------------------------------
@@ -302,21 +261,21 @@ function yokmods.ingredient_scrap.get_icon_layers(scrap_type, tech_icon)
 
   if not tech_icon then
     if mods["quality"] then
-      table.insert(icons, { icon = "__quality__/graphics/icons/recycling.png", icon_size = 64, scale = 1})
-    else
-      table.insert(icons, { icon = constants.icon_path .. "recycle-top-64.png", icon_size = 64, scale = 1})
+      -- table.insert(icons, { icon = "__quality__/graphics/icons/recycling.png", icon_size = 64, scale = 0.8})
+    -- else
+      table.insert(icons, { icon = constants.icon_path .. "recycle-64.png", icon_size = 64, scale = 0.8})
     end
+  else
+    table.insert(icons, { icon = constants.icon_path .. "recycle-256.png", icon_size = 256, scale = 1})
   end
 
-  for _, v in ipairs(source_icons) do table.insert(icons, v) end
+    for _, v in ipairs(source_icons) do table.insert(icons, v) end
 
-  if tech_icon then
-    table.insert(icons, { icon = constants.icon_path .. "recycle-256.png", icon_size = 256, scale = 1})
-  else
+  if not tech_icon then
     if mods["quality"] then
-      table.insert(icons, { icon = "__quality__/graphics/icons/recycling-top.png", icon_size = 64, scale = 1})
-    else
-      table.insert(icons, { icon = constants.icon_path .. "recycle-64.png", icon_size = 64, scale = 1})
+      -- table.insert(icons, { icon = "__quality__/graphics/icons/recycling-top.png", icon_size = 64, scale = 0.8})
+    -- else
+      table.insert(icons, { icon = constants.icon_path .. "recycle-top-64.png", icon_size = 64, scale = 0.8})
     end
   end
 

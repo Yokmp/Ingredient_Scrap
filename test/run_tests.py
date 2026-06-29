@@ -41,7 +41,7 @@ PROFILES = {
     "default": {},
     "fixed_amount": {"fixed_amount": True},
     "limit_off": {"limit": False},
-    "probability_zero": {"probability": 0},
+    "probability_min": {"probability": 1},
     "probability_full": {"probability": 100},
     "needed_min": {"needed": 1},
     "needed_high": {"needed": 20},

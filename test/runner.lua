@@ -1,5 +1,10 @@
 local expected = require("test.expected")
 local material_resolver = require("core.materials.resolver")
+require("lib.category-overrides")
+require("compat.vanilla-materials")
+require("compat.mod-materials")
+require("test.material-overrides")
+local material_overrides = require("lib.material-overrides")
 
 local runner = {}
 
@@ -80,6 +85,31 @@ local function has_expected_amount_shape(result)
   return has_range_amount_shape(result)
 end
 
+---Calculates the expected recycle recipe input amount from collected scrap results.
+local function expected_recycle_input_amount(data_table, scrap_name)
+  local total_expected = 0
+  local count = 0
+  for _, insert in pairs(data_table.inserts.recipes or {}) do
+    for _, result in ipairs((insert and insert.results) or {}) do
+      if result.name == scrap_name then
+        local expected
+        if ISsettings.fixed_amount then
+          expected = (result.amount or 1) * (result.probability or 1)
+        else
+          local mid = ((result.amount_min or 1) + (result.amount_max or 1)) / 2
+          expected = mid * (result.probability or 1)
+        end
+        total_expected = total_expected + expected
+        count = count + 1
+      end
+    end
+  end
+  if count == 0 then return ISsettings.needed end
+  local avg = total_expected / count
+  if avg <= 0 then return ISsettings.needed end
+  return math.max(math.floor(ISsettings.needed / avg), 1)
+end
+
 ---Counts how often a crafting category appears on a machine prototype.
 local function category_count(machine, category)
   local count = 0
@@ -107,6 +137,19 @@ local function machine_names_with_category(prototype_type, category)
   end
   table.sort(names)
   return names
+end
+
+---Returns true when a localised string contains a raw rich-text item/fluid tag.
+local function localised_string_contains_rich_text(value)
+  if type(value) == "string" then
+    return value:find("%[item=", 1) ~= nil or value:find("%[fluid=", 1) ~= nil
+  end
+  if type(value) == "table" then
+    for _, item in pairs(value) do
+      if localised_string_contains_rich_text(item) then return true end
+    end
+  end
+  return false
 end
 
 ---Compares an actual value against the expected subset recursively.
@@ -166,6 +209,20 @@ function runner.run()
     data_table.debug and type(data_table.debug.logs) == "table")
   add_case("logs.function", "structured log function exists",
     type(yokmods.ingredient_scrap.is_log) == "function")
+  local api = yokmods.ingredient_scrap.api or {}
+  add_case("api.material", "public material API exposes nested register and ignore wrappers",
+    api.register and api.register.material and api.ignore and
+      type(api.register.material.override) == "function" and
+      type(api.register.material.auto) == "function" and
+      type(api.register.material.solid) == "function" and
+      type(api.register.material.fluid) == "function" and
+      type(api.register.material.both) == "function" and
+      type(api.ignore.material) == "function" and
+      yokmods.ingredient_scrap.register_material_override == nil)
+  add_case("api.category", "public category API separates furnace and assembling-machine registration",
+    api.register and api.register.category and
+      type(api.register.category.furnace) == "function" and
+      type(api.register.category.assembling_machine) == "function")
 
   add_case("materials.solid.testium", "testium is a solid material",
     array_contains(data_table.materials.solid, "testium"))
@@ -175,6 +232,126 @@ function runner.run()
     not array_contains(data_table.materials.solid, "rare"))
   add_case("materials.solid.uranium", "uranium is blacklisted for solid materials",
     not array_contains(data_table.materials.solid, "uranium"))
+  add_case("materials.override.uranium-none", "uranium override ignores solid and fluid channels",
+    ISsettings.material_modes.uranium == "none" and
+      material_overrides.is_ignored(ISsettings.material_modes.uranium, "solid") and
+      material_overrides.is_ignored(ISsettings.material_modes.uranium, "fluid"))
+  add_case("materials.override.bacteria-none", "bacteria is known but ignored by default",
+    ISsettings.material_modes.bacteria == "none" and
+      material_overrides.is_ignored(ISsettings.material_modes.bacteria, "solid") and
+      material_overrides.is_ignored(ISsettings.material_modes.bacteria, "fluid"),
+    nil,
+    { mode = ISsettings.material_modes.bacteria, name = material_overrides.localised_setting_name("bacteria") })
+  add_case("materials.override.vanilla-auto", "iron, copper, and holmium have material settings without forcing a channel",
+    ISsettings.material_modes.iron == "auto" and
+      ISsettings.material_modes.copper == "auto" and
+      ISsettings.material_modes.holmium == "auto" and
+      array_contains(data_table.materials.solid, "iron") and
+      array_contains(data_table.materials.solid, "copper"),
+    nil,
+    {
+      iron = ISsettings.material_modes.iron,
+      copper = ISsettings.material_modes.copper,
+      holmium = ISsettings.material_modes.holmium,
+      iron_name = material_overrides.localised_setting_name("iron"),
+      copper_name = material_overrides.localised_setting_name("copper"),
+      holmium_name = material_overrides.localised_setting_name("holmium"),
+    })
+  add_case("materials.override.lithium-none", "fluid-only lithium is known but ignored by default",
+    ISsettings.material_modes.lithium == "none" and
+      material_overrides.is_ignored(ISsettings.material_modes.lithium, "solid") and
+      material_overrides.is_ignored(ISsettings.material_modes.lithium, "fluid") and
+      not array_contains(data_table.materials.fluid, "lithium"),
+    nil,
+    { mode = ISsettings.material_modes.lithium, name = material_overrides.localised_setting_name("lithium") })
+  add_case("materials.override.ammonia-none", "ammonia is known but ignored by default",
+    ISsettings.material_modes.ammonia == "none" and
+      material_overrides.is_ignored(ISsettings.material_modes.ammonia, "solid") and
+      material_overrides.is_ignored(ISsettings.material_modes.ammonia, "fluid"),
+    nil,
+    { mode = ISsettings.material_modes.ammonia, name = material_overrides.localised_setting_name("ammonia") })
+  add_case("materials.override.steel-solid", "steel override forces solid and ignores fluid",
+    ISsettings.material_modes.steel == "solid" and
+      material_overrides.is_forced(ISsettings.material_modes.steel, "solid") and
+      material_overrides.is_ignored(ISsettings.material_modes.steel, "fluid") and
+      array_contains(data_table.materials.solid, "steel"))
+  add_case("materials.override.test-api", "debug materials are registered through the material override API",
+    material_overrides.default_modes.testium == "both" and
+      material_overrides.default_modes.solvium == "both" and
+      material_overrides.default_modes["rare-metal"] == "both" and
+      material_overrides.default_modes.alienite == "none",
+    nil,
+    {
+      testium = material_overrides.default_modes.testium,
+      solvium = material_overrides.default_modes.solvium,
+      rare_metal = material_overrides.default_modes["rare-metal"],
+      alienite = material_overrides.default_modes.alienite,
+    })
+  add_case("materials.override.resolver-affixes", "resolver affixes come from the material override registry",
+    array_contains(data_table.materials.solid_suffixes, "-plate") and
+      array_contains(data_table.materials.solid_suffixes, "-ore") and
+      array_contains(data_table.materials.fluid_prefixes, "molten-") and
+      array_contains(data_table.materials.fluid_suffixes, "-solution") and
+      array_contains(data_table.materials.fluid_suffixes, "-brine") and
+      not array_contains(data_table.materials.solid_suffixes, "-gear-wheel"),
+    nil,
+    {
+      solid_suffixes = data_table.materials.solid_suffixes,
+      fluid_prefixes = data_table.materials.fluid_prefixes,
+      fluid_suffixes = data_table.materials.fluid_suffixes,
+    })
+  add_case("materials.override.icon-steel", "material override icon uses an existing item prototype",
+    material_overrides.icon_tag("steel") == "[item=steel-plate]",
+    nil,
+    { icon = material_overrides.icon_tag("steel") })
+  add_case("materials.override.prototype-affixes", "material override prototype affixes build item and fluid candidates",
+    array_contains(material_overrides.prototype_candidates("steel", "item"), "steel-plate") and
+      array_contains(material_overrides.prototype_candidates("crude", "fluid"), "crude-oil"),
+    nil,
+    {
+      steel = material_overrides.prototype_candidates("steel", "item"),
+      crude = material_overrides.prototype_candidates("crude", "fluid"),
+    })
+  add_case("materials.override.icon-crude", "material override icon uses an existing fluid prototype",
+    material_overrides.icon_tag("crude") == "[fluid=crude-oil]",
+    nil,
+    { icon = material_overrides.icon_tag("crude") })
+  add_case("materials.override.localised-name-no-rich-text", "material setting names avoid item/fluid rich-text tags",
+    not localised_string_contains_rich_text(material_overrides.localised_setting_name("steel")) and
+      not localised_string_contains_rich_text(material_overrides.localised_setting_name("crude")) and
+      not localised_string_contains_rich_text(material_overrides.localised_setting_name("bacteria")) and
+      material_overrides.localised_setting_name("iron")[2][1] == "mod-setting-name.yis-material-iron" and
+      material_overrides.localised_setting_name("copper")[2][1] == "mod-setting-name.yis-material-copper" and
+      material_overrides.localised_setting_name("holmium")[2][1] == "mod-setting-name.yis-material-holmium" and
+      material_overrides.localised_setting_name("lithium")[2][1] == "mod-setting-name.yis-material-lithium" and
+      material_overrides.localised_setting_name("ammonia")[2][1] == "mod-setting-name.yis-material-ammonia" and
+      material_overrides.localised_setting_name("steel")[2][1] == "mod-setting-name.yis-material-steel" and
+      material_overrides.localised_setting_name("crude")[2][1] == "mod-setting-name.yis-material-crude" and
+      material_overrides.localised_setting_name("bacteria")[2][1] == "mod-setting-name.yis-material-bacteria" and
+      material_overrides.localised_setting_name("bacteria")[4] == "bacteria",
+    nil,
+    {
+      iron = material_overrides.localised_setting_name("iron"),
+      copper = material_overrides.localised_setting_name("copper"),
+      holmium = material_overrides.localised_setting_name("holmium"),
+      lithium = material_overrides.localised_setting_name("lithium"),
+      ammonia = material_overrides.localised_setting_name("ammonia"),
+      steel = material_overrides.localised_setting_name("steel"),
+      crude = material_overrides.localised_setting_name("crude"),
+      bacteria = material_overrides.localised_setting_name("bacteria"),
+    })
+  add_case("materials.override.bacteria-locale-icon", "known bacteria uses a locale icon while keeping prototype matching disabled",
+    material_overrides.icon_tag("bacteria") == nil and
+      material_overrides.localised_setting_name("bacteria")[2][1] == "mod-setting-name.yis-material-bacteria",
+    nil,
+    { icon = material_overrides.icon_tag("bacteria"), name = material_overrides.localised_setting_name("bacteria") })
+  add_case("materials.override.no-brass-icon", "missing optional material icon stays plain text",
+    (data.raw.item["brass-plate"] ~= nil) or (
+      material_overrides.icon_tag("brass") == nil and
+      material_overrides.localised_setting_name("brass")[2] == "[img=none]"
+    ),
+    nil,
+    { icon = material_overrides.icon_tag("brass"), name = material_overrides.localised_setting_name("brass") })
   add_case("materials.fluid.testium", "testium fluid material matches fluid setting",
     array_contains(data_table.materials.fluid, "testium") == exp.materials.fluid.testium)
   add_case("materials.fluid.solvium", "fluid suffix material matches fluid setting",
@@ -194,37 +371,50 @@ function runner.run()
     material_resolver.resolve_fluid("molten-rare-metal", data_table.materials) == "rare-metal")
   add_case("resolver.fluid.molten-rare-metal-ore", "fluid resolver handles combined prefix and suffix",
     material_resolver.resolve_fluid("molten-rare-metal-ore", data_table.materials) == "rare-metal")
+  add_case("resolver.fluid.lithium-brine", "fluid resolver handles the Space Age brine suffix",
+    material_resolver.resolve_fluid("lithium-brine", data_table.materials) == "lithium")
   add_case("resolver.solid.unknown-composite", "solid resolver avoids blind first-segment fallback",
     material_resolver.resolve_solid("unknown-composite", data_table.materials) == nil)
 
   local recycle_item_category = "yis-recycle-to-item"
   local recycle_fluid_category = "yis-recycle-to-fluid"
+  local furnace_recycle_source_categories = {
+    ["smelting"] = true,
+    ["recycling"] = true,
+    ["metallurgy-or-assembling"] = true,
+  }
   local assembling_recycle_source_categories = {
     ["basic-crafting"] = true,
     ["crafting"] = true,
     ["advanced-crafting"] = true,
-    ["metallurgy"] = true,
     ["crafting-with-fluid-or-metallurgy"] = true,
     ["metallurgy-or-assembling"] = true,
   }
-  local smelting_furnace_count = 0
-  local patched_smelting_furnace_count = 0
+  local eligible_furnace_count = 0
+  local patched_furnace_count = 0
   local duplicate_machine = nil
   for _, furnace in pairs(data.raw.furnace or {}) do
-    if category_count(furnace, "smelting") > 0 then
-      smelting_furnace_count = smelting_furnace_count + 1
+    if has_any_category(furnace, furnace_recycle_source_categories) then
+      eligible_furnace_count = eligible_furnace_count + 1
       if category_count(furnace, recycle_item_category) == 1 then
-        patched_smelting_furnace_count = patched_smelting_furnace_count + 1
+        patched_furnace_count = patched_furnace_count + 1
       end
     end
     if category_count(furnace, recycle_item_category) > 1 then
       duplicate_machine = furnace.name
     end
   end
-  add_case("categories.furnace.smelting", "smelting furnaces can craft item recycle recipes",
-    smelting_furnace_count > 0 and patched_smelting_furnace_count == smelting_furnace_count,
+  add_case("categories.furnace.item", "eligible furnaces can craft item recycle recipes",
+    eligible_furnace_count > 0 and patched_furnace_count == eligible_furnace_count,
     nil,
-    { smelting = smelting_furnace_count, patched = patched_smelting_furnace_count })
+    { eligible = eligible_furnace_count, patched = patched_furnace_count })
+  if data.raw.furnace.recycler then
+    add_case("categories.furnace.recycler", "quality recycler can craft item recycle recipes",
+      category_count(data.raw.furnace.recycler, "recycling") > 0 and
+        category_count(data.raw.furnace.recycler, recycle_item_category) == 1,
+      nil,
+      { categories = data.raw.furnace.recycler.crafting_categories })
+  end
   add_case("categories.furnace.no-duplicates", "furnace recycle categories are not duplicated",
     duplicate_machine == nil, nil, { duplicate = duplicate_machine })
 
@@ -324,7 +514,7 @@ function runner.run()
   add_case("amount.small-positive", "small scrap amount remains positive", small_fixed > 0)
   if ISsettings.limit then
     add_case("amount.large-smoothed", "large scrap amount is smoothed below linear scaling when limit is enabled",
-      large_fixed < linear_large or ISsettings.probability == 0,
+      large_fixed < linear_large,
       nil, { large = large_fixed, linear = linear_large })
   else
     add_case("amount.large-linear", "large scrap amount follows linear scaling when limit is disabled",
@@ -370,6 +560,7 @@ function runner.run()
     order = item.order,
     stack_size = item.stack_size,
     has_icons = item.icons ~= nil or item.icon ~= nil,
+    tint = item.icons and item.icons[1] and item.icons[1].tint,
   } or nil
   add_case("raw.item.testium-scrap", "testium-scrap item matches expected normalized object",
     same_value(normalized_item, exp.item), nil, { expected = exp.item, actual = normalized_item })
@@ -389,8 +580,13 @@ function runner.run()
     same_value(normalized_solid_recipe, exp.recipes.solid), nil,
     { expected = exp.recipes.solid, actual = normalized_solid_recipe })
   add_case("raw.recipe.recycle-testium-scrap.amount", "solid recycle recipe has patched input amount",
-    solid_recipe and solid_recipe.ingredients and solid_recipe.ingredients[1] and solid_recipe.ingredients[1].amount > 0,
-    nil, { ingredients = solid_recipe and solid_recipe.ingredients })
+    solid_recipe and solid_recipe.ingredients and solid_recipe.ingredients[1] and
+      solid_recipe.ingredients[1].amount == expected_recycle_input_amount(data_table, "testium-scrap"),
+    nil,
+    {
+      expected = expected_recycle_input_amount(data_table, "testium-scrap"),
+      ingredients = solid_recipe and solid_recipe.ingredients,
+    })
 
   if exp.recipes.fluid then
     local fluid_recipe = data.raw.recipe["recycle-testium-scrap-to-fluid"]
@@ -408,8 +604,13 @@ function runner.run()
       same_value(normalized_fluid_recipe, exp.recipes.fluid), nil,
       { expected = exp.recipes.fluid, actual = normalized_fluid_recipe })
     add_case("raw.recipe.recycle-testium-scrap-to-fluid.amount", "fluid recycle recipe has patched input amount",
-      fluid_recipe and fluid_recipe.ingredients and fluid_recipe.ingredients[1] and fluid_recipe.ingredients[1].amount > 0,
-      nil, { ingredients = fluid_recipe and fluid_recipe.ingredients })
+      fluid_recipe and fluid_recipe.ingredients and fluid_recipe.ingredients[1] and
+        fluid_recipe.ingredients[1].amount == expected_recycle_input_amount(data_table, "testium-scrap"),
+      nil,
+      {
+        expected = expected_recycle_input_amount(data_table, "testium-scrap"),
+        ingredients = fluid_recipe and fluid_recipe.ingredients,
+      })
 
     local solution_recipe = data.raw.recipe["recycle-solvium-scrap-to-fluid"]
     local normalized_solution_recipe = solution_recipe and {
@@ -425,6 +626,18 @@ function runner.run()
     add_case("raw.recipe.recycle-solvium-scrap-to-fluid", "fluid suffix recycle recipe matches expected normalized object",
       same_value(normalized_solution_recipe, exp.recipes.solution_fluid), nil,
       { expected = exp.recipes.solution_fluid, actual = normalized_solution_recipe })
+    add_case("raw.recipe.recycle-solvium-scrap-to-fluid.amount", "fluid suffix recycle recipe has patched input amount",
+      solution_recipe and solution_recipe.ingredients and solution_recipe.ingredients[1] and
+        solution_recipe.ingredients[1].amount == expected_recycle_input_amount(data_table, "solvium-scrap"),
+      nil,
+      {
+        expected = expected_recycle_input_amount(data_table, "solvium-scrap"),
+        ingredients = solution_recipe and solution_recipe.ingredients,
+      })
+    add_case("raw.technology.prefix-fluid-unlock", "prefix fluid recycle recipe is unlocked when fluid recipes are enabled",
+      technology_unlocks_recipe("recycle-testium-scrap-to-fluid"))
+    add_case("raw.technology.suffix-fluid-unlock", "suffix fluid recycle recipe is unlocked when fluid recipes are enabled",
+      technology_unlocks_recipe("recycle-solvium-scrap-to-fluid"))
   else
     add_case("raw.recipe.no-prefix-fluid-recycle", "prefix fluid recycle recipe is absent when fluids are disabled",
       data.raw.recipe["recycle-testium-scrap-to-fluid"] == nil)

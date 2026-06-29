@@ -1,3 +1,7 @@
+--------------------------------
+---*COLLECTOR*                --
+--------------------------------
+
 ---Collects scrap-producing recipe ingredients and queues generated scrap items, recipes, technologies, and result inserts.
 ---@return table
 function yokmods.ingredient_scrap.collector()
@@ -134,7 +138,8 @@ function yokmods.ingredient_scrap.collector()
                   yokmods.ingredient_scrap.technology_prototype({
                     data_table = data_table,
                     recipe_name = recipe.name,
-                    scrap_type = scrap_type
+                    scrap_type = scrap_type,
+                    recipe_suffix = "-to-fluid",
                   })
                 end
               end

@@ -38,7 +38,7 @@
   ---@field [string] ISRecipePrototype
 
   ---@class ISdata_table.prototypes.technology
-  ---@field [string] ISTechnologyEffect[]
+  ---@field effects ISTechnologyEffect[]
 
 
 ---@class ISdata_table.inserts

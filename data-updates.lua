@@ -5,6 +5,12 @@
 
 yokmods = yokmods or {}
 yokmods.ingredient_scrap = yokmods.ingredient_scrap or {}
+local material_overrides = require("lib.material-overrides")
+require("compat.vanilla-materials")
+require("compat.mod-materials")
+if IS_DEBUG then
+  require("test.material-overrides")
+end
 
 yokmods.ingredient_scrap.settings = yokmods.ingredient_scrap.settings or {}
 yokmods.ingredient_scrap.settings.fixed_amount = settings.startup["yis-fixed-amount"].value
@@ -15,6 +21,11 @@ yokmods.ingredient_scrap.settings.fluids = settings.startup["yis-fluid-recipes"]
 yokmods.ingredient_scrap.settings.hide_tech = settings.startup["yis-hide-tech"].value
 yokmods.ingredient_scrap.settings.shallow_log = settings.startup["yis-shallow-log"].value
 yokmods.ingredient_scrap.settings.barreling = settings.startup["yis-barreling"].value -- recycling scrap needs a barrel for fluids
+yokmods.ingredient_scrap.settings.material_modes = {}
+for _, material_name in ipairs(material_overrides.sorted_materials()) do
+  local setting = settings.startup[material_overrides.setting_name(material_name)]
+  yokmods.ingredient_scrap.settings.material_modes[material_name] = setting and setting.value or material_overrides.default_modes[material_name]
+end
 
 if IS_DEBUG then
   local ok, profile = pcall(require, "test.profile")
@@ -35,6 +46,8 @@ ISsettings = yokmods.ingredient_scrap.settings
 
 ---Creates the shared data table used to collect inputs, generated prototypes, inserts, and debug sources.
 function yokmods.ingredient_scrap.init_data_table()
+  local affixes = material_overrides.resolver_affixes()
+
   return {
     constants = {
       icon_path = "__Ingredient_Scrap__/graphics/icons/",
@@ -55,10 +68,10 @@ function yokmods.ingredient_scrap.init_data_table()
       recipes = {},
     },
     materials = {
-      solid_prefixes = {},
-      solid_suffixes = { "-plate", "-ore", "-ingot", "-alloy", "-sheet", "-gear-wheel", "-cable", "-stick" },
-      fluid_prefixes = { "molten-", "liquid-" },
-      fluid_suffixes = { "-solution" },
+      solid_prefixes = affixes.solid_prefixes,
+      solid_suffixes = affixes.solid_suffixes,
+      fluid_prefixes = affixes.fluid_prefixes,
+      fluid_suffixes = affixes.fluid_suffixes,
       solid = {},
       fluid = {},
     },
@@ -75,22 +88,6 @@ end
 
 yokmods.ingredient_scrap.data_table = yokmods.ingredient_scrap.init_data_table()
 
-type_blacklist = {
-  uranium = true,
-  coal = true,
-  stone = true,
-  crude = true,
-  fluorine = true,
-  sulfuric = true,
-  bacteria = true,
-  scrap = true,
-  calcite = true,
-}
-
-scrap_whitelist_solid = { "steel", "brass", "bronze", "invar", "nitinol" }
-scrap_whitelist_fluid = {}
-
-require("lib.definitions")
 require("core.materials")
 require("lib.utils")
 require("lib.generator")

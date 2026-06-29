@@ -70,6 +70,7 @@ function expected.build()
       order = "is-[testium-scrap]",
       stack_size = testium_stack,
       has_icons = true,
+      tint = util.color("#123456"),
     },
     recipes = {
       solid = {

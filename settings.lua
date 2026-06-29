@@ -1,3 +1,12 @@
+local material_overrides = require("lib.material-overrides")
+require("compat.vanilla-materials")
+require("compat.mod-materials")
+
+local has_test_profile = pcall(require, "test.profile")
+if has_test_profile then
+    require("test.material-overrides")
+end
+
 data:extend({
     {
         type = "int-setting",
@@ -13,7 +22,7 @@ data:extend({
         name = "yis-probability",
         localised_name = { "", "[img=percent-symbol]", " - ", { "mod-setting-name.yis-probability" } },
         setting_type = "startup",
-        minimum_value = 0,
+        minimum_value = 1,
         maximum_value = 100,
         default_value = 24,
         order = "b",
@@ -36,16 +45,6 @@ data:extend({
         default_value = true,
         order = "d",
     },
-
-    {
-        hidden = false,
-        type = "bool-setting",
-        name = "yis-hide-tech",
-        localised_name = { "", "[img=unlock-symbol]", " - ", { "mod-setting-name.yis-hide-tech" } },
-        setting_type = "startup",
-        default_value = true,
-        order = "e",
-    },
     {
         hidden = false,
         type = "bool-setting",
@@ -53,7 +52,7 @@ data:extend({
         localised_name = { "", "[img=gears-symbol]", " - ", { "mod-setting-name.yis-shallow-log" } },
         setting_type = "startup",
         default_value = true,
-        order = "y",
+        order = "e",
     },
     {
         hidden = false,
@@ -62,7 +61,17 @@ data:extend({
         localised_name = { "", "[img=drop-symbol]", " - ", { "mod-setting-name.yis-fluid-recipes" } },
         setting_type = "startup",
         default_value = true,
-        order = "z",
+        order = "f",
+    },
+
+    {
+        hidden = false,
+        type = "bool-setting",
+        name = "yis-hide-tech",
+        localised_name = { "", "[img=unlock-symbol]", " - ", { "mod-setting-name.yis-hide-tech" } },
+        setting_type = "startup",
+        default_value = true,
+        order = "g",
     },
     {
         hidden = true,
@@ -79,3 +88,19 @@ data:extend({
         default_value = false,
     },
 })
+
+local material_settings = {}
+for _, material_name in ipairs(material_overrides.sorted_materials()) do
+    table.insert(material_settings, {
+        type = "string-setting",
+        name = material_overrides.setting_name(material_name),
+        localised_name = material_overrides.localised_setting_name(material_name),
+        localised_description = { "mod-setting-description.yis-material-mode" },
+        setting_type = "startup",
+        default_value = material_overrides.default_modes[material_name],
+        allowed_values = material_overrides.allowed_values,
+        order = "m[" .. material_name .. "]",
+    })
+end
+
+data:extend(material_settings)
