@@ -2,7 +2,6 @@
 ---*LOCALS*                   --
 --------------------------------
 
-
 local item_sounds = require("__base__.prototypes.item_sounds")
 local item_tints  = require("__base__.prototypes.item-tints")
 local scrap_tints = require("lib.item-tints")
@@ -162,8 +161,6 @@ function yokmods.ingredient_scrap.technology_prototype(tech_defines)
   local scrap_name = yokmods.ingredient_scrap.get_scrap_name(tech_defines.scrap_type)
   local constants = yokmods.ingredient_scrap.data_table.constants
   local icon_layers = yokmods.ingredient_scrap.get_icon_layers(tech_defines.scrap_type, true)
-
-  log(serpent.block(icon_layers))
 
   local scrap_technology = {
     type = "technology",

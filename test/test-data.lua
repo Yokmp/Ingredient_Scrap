@@ -32,6 +32,31 @@ local function dummy_fluid(name)
   }
 end
 
+---Builds a synthetic solid resource from the base iron ore prototype.
+local function dummy_solid_resource(name, result_name)
+  local resource = table.deepcopy(data.raw.resource["iron-ore"])
+  resource.name = name
+  resource.order = "zz-test-[" .. name .. "]"
+  resource.minable = {
+    mining_time = 1,
+    results = { { type = "item", name = result_name, amount = 1 } },
+  }
+  return resource
+end
+
+---Builds a synthetic fluid resource from the base crude oil prototype.
+local function dummy_fluid_resource(name, result_name)
+  local resource = table.deepcopy(data.raw.resource["crude-oil"])
+  resource.name = name
+  resource.order = "zz-test-[" .. name .. "]"
+  resource.category = "basic-fluid"
+  resource.minable = {
+    mining_time = 1,
+    results = { { type = "fluid", name = result_name, amount = 10 } },
+  }
+  return resource
+end
+
 ---Builds a minimal recipe prototype for synthetic test fixtures.
 local function dummy_recipe(name, ingredients, results, main_product, category)
   return {
@@ -79,13 +104,23 @@ data:extend({
   dummy_item("testium-product-blacklist-guard", "intermediate-product", 100),
   dummy_item("solvium-plate", "intermediate-product", 100),
   dummy_item("solvium-product-fluid", "intermediate-product", 100),
+  dummy_item("rare-metal-plate", "intermediate-product", 100),
+  dummy_item("rare-metal-ore", "raw-resource", 100),
   dummy_item("uranium-plate", "intermediate-product", 100),
 })
 
 data:extend({
   dummy_fluid("molten-testium"),
   dummy_fluid("solvium-solution"),
+  dummy_fluid("rare-metal-solution"),
+  dummy_fluid("molten-rare-metal"),
+  dummy_fluid("molten-rare-metal-ore"),
   dummy_fluid("molten-alienite"),
+})
+
+data:extend({
+  dummy_solid_resource("yis-test-rare-metal-resource", "rare-metal-ore"),
+  dummy_fluid_resource("yis-test-rare-metal-solution-resource", "rare-metal-solution"),
 })
 
 data:extend({

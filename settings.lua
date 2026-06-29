@@ -36,6 +36,16 @@ data:extend({
         default_value = true,
         order = "d",
     },
+
+    {
+        hidden = false,
+        type = "bool-setting",
+        name = "yis-shallow-log",
+        localised_name = { "", "[img=gears-symbol]", " - ", { "mod-setting-name.yis-shallow-log" } },
+        setting_type = "startup",
+        default_value = true,
+        order = "y",
+    },
     {
         hidden = false,
         type = "bool-setting",

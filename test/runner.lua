@@ -1,4 +1,5 @@
 local expected = require("test.expected")
+local material_resolver = require("core.materials.resolver")
 
 local runner = {}
 
@@ -168,14 +169,33 @@ function runner.run()
 
   add_case("materials.solid.testium", "testium is a solid material",
     array_contains(data_table.materials.solid, "testium"))
+  add_case("materials.solid.rare-metal", "solid suffix resolver keeps multi-part material names",
+    array_contains(data_table.materials.solid, "rare-metal"))
+  add_case("materials.solid.no-rare-prefix", "solid resolver does not collapse rare-metal into rare",
+    not array_contains(data_table.materials.solid, "rare"))
   add_case("materials.solid.uranium", "uranium is blacklisted for solid materials",
     not array_contains(data_table.materials.solid, "uranium"))
   add_case("materials.fluid.testium", "testium fluid material matches fluid setting",
     array_contains(data_table.materials.fluid, "testium") == exp.materials.fluid.testium)
   add_case("materials.fluid.solvium", "fluid suffix material matches fluid setting",
     array_contains(data_table.materials.fluid, "solvium") == exp.materials.fluid.solvium)
+  add_case("materials.fluid.rare-metal", "fluid prefix and suffix resolver keeps multi-part material names",
+    array_contains(data_table.materials.fluid, "rare-metal") == ISsettings.fluids)
+  add_case("materials.fluid.no-suffix-token", "fluid suffix token is not collected as a material",
+    not array_contains(data_table.materials.fluid, "-solution"))
   add_case("materials.fluid.alienite", "alienite fluid is ignored without plate or ingot",
     not array_contains(data_table.materials.fluid, "alienite"))
+
+  add_case("resolver.solid.rare-metal-ore", "solid resolver strips known suffix after multi-part names",
+    material_resolver.resolve_solid("rare-metal-ore", data_table.materials) == "rare-metal")
+  add_case("resolver.fluid.rare-metal-solution", "fluid resolver strips known suffix after multi-part names",
+    material_resolver.resolve_fluid("rare-metal-solution", data_table.materials) == "rare-metal")
+  add_case("resolver.fluid.molten-rare-metal", "fluid resolver strips known prefix before multi-part names",
+    material_resolver.resolve_fluid("molten-rare-metal", data_table.materials) == "rare-metal")
+  add_case("resolver.fluid.molten-rare-metal-ore", "fluid resolver handles combined prefix and suffix",
+    material_resolver.resolve_fluid("molten-rare-metal-ore", data_table.materials) == "rare-metal")
+  add_case("resolver.solid.unknown-composite", "solid resolver avoids blind first-segment fallback",
+    material_resolver.resolve_solid("unknown-composite", data_table.materials) == nil)
 
   local recycle_item_category = "yis-recycle-to-item"
   local recycle_fluid_category = "yis-recycle-to-fluid"

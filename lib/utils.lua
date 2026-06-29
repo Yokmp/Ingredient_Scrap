@@ -150,7 +150,7 @@ function yokmods.ingredient_scrap.is_log(source, level, step, description, detai
     end
   end
 
-  if log then
+  if log and (not ISsettings or ISsettings.shallow_log ~= false) then
     log(message)
   end
 end

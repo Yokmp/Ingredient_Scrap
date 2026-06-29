@@ -131,6 +131,14 @@ def remove_temp_saves() -> None:
         shutil.rmtree(TMP_DIR)
 
 
+def remove_settingsparser_cache() -> None:
+    cache_file = TOOLS_DIR / "__pycache__" / "settingsparser.cpython-39.pyc"
+    try:
+        cache_file.unlink()
+    except FileNotFoundError:
+        pass
+
+
 def factorio_root(factorio_exe: Path) -> Path:
     # Portable Factorio layout: root/bin/x64/factorio.exe
     if factorio_exe.parent.name.lower() == "x64" and factorio_exe.parent.parent.name.lower() == "bin":
@@ -356,6 +364,7 @@ def main() -> int:
     finally:
         restore_mod_settings(original_mod_settings)
         remove_profile()
+        remove_settingsparser_cache()
         if not args.keep_saves:
             remove_temp_saves()
 
