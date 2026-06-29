@@ -40,6 +40,15 @@ data:extend({
     {
         hidden = false,
         type = "bool-setting",
+        name = "yis-hide-tech",
+        localised_name = { "", "[img=unlock-symbol]", " - ", { "mod-setting-name.yis-hide-tech" } },
+        setting_type = "startup",
+        default_value = true,
+        order = "e",
+    },
+    {
+        hidden = false,
+        type = "bool-setting",
         name = "yis-shallow-log",
         localised_name = { "", "[img=gears-symbol]", " - ", { "mod-setting-name.yis-shallow-log" } },
         setting_type = "startup",

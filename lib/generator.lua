@@ -169,7 +169,7 @@ function yokmods.ingredient_scrap.technology_prototype(tech_defines)
     localised_name = { "", {"item-name." .. tech_defines.scrap_type}, " ",{"item-name.scrap"}, " ", {"item-name.recycling"} },
     icons = icon_layers,
     enabled = true,
-    hidden = false,
+    hidden = not yokmods.ingredient_scrap.settings.shallow_log and yokmods.ingredient_scrap.settings.hide_tech,
     effects =
     {
       {

@@ -456,6 +456,11 @@ function runner.run()
   end
 
   local tech = data.raw.technology["recycle-testium-scrap"]
+  local expected_hidden = not ISsettings.shallow_log and ISsettings.hide_tech
+  add_case("raw.technology.hidden-setting", "technology visibility follows hide-tech unless shallow logging is enabled",
+    tech and tech.hidden == expected_hidden,
+    nil,
+    { expected = expected_hidden, actual = tech and tech.hidden, shallow_log = ISsettings.shallow_log, hide_tech = ISsettings.hide_tech })
   local normalized_tech = tech and {
     type = tech.type,
     name = tech.name,
