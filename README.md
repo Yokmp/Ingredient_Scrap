@@ -24,6 +24,18 @@ with additional scrap results.
 - Copies the source recipe `main_product` into the patch table before applying result inserts.
 - Validates generated prototypes before calling `data:extend`, so invalid generated objects can be reported before Factorio rejects them.
 
+## Recycler Scrap Sink
+
+When the Quality DLC is active, Ingredient Scrap adds item recycling recipes to
+compatible recycler-style machines. This intentionally lets the Quality
+recycler process scrap again. Because the recycler applies its own recycling
+yield, scrap can be reduced into a smaller amount of scrap instead of being
+converted back into a full material.
+
+This is intentional gameplay behavior, not a bug. It provides a late-game sink
+for excess scrap while keeping normal scrap-to-material recycling recipes
+available in other compatible machines.
+
 ## Settings
 
 Startup settings are defined in `settings.lua`.
