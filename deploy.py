@@ -8,7 +8,7 @@ and then creates a zip file which is moved to ./_release_/Modname_version.zip
 if deploy_mod is true the zipfiles will be copied to the deploy_dir which is preset to Factorio/mods.
 All options can be changed to your liking.
 
-version: 1.0.0
+version: 1.0.1
 source: https://github.com/Yokmp/Factorio-Scripts
 author: Yokmp
 """
@@ -25,9 +25,9 @@ import getopt
 deploy_mod = False      # create a zip file or not
 verbose = False     # print processed files
 # # Blacklist
-exclude = ["_release_", "_lib", "_testing.lua", "vscode", "workspace", "orig", "new",
-  "_working", ".git", ".py", ".xcf", ".7z", "single", "multi", "shot_", "README.md",
-  ".vs", "lua-format", "shot-"]
+exclude = ["_release_", "_lib", "_testing.lua", "vscode", "workspace", "orig", "new", "old",
+  "_working", ".git", ".py", ".xcf", ".7z", "single", "multi", "shot_",
+  ".vs", "lua-format", "shot-", "test", "tools", ".luarc.json"]
 
 # # Get information from filesystem
 workspace = "."
