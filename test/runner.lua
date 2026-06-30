@@ -769,6 +769,15 @@ function runner.run()
   add_case("raw.technology.recycle-testium-scrap", "testium recycle technology matches expected normalized object",
     same_value(normalized_tech, exp.technology), nil,
     { expected = exp.technology, actual = normalized_tech })
+  add_case("raw.technology.recycle-testium-scrap.icon-tint", "technology scrap icon layer uses the scrap material tint",
+    tech and tech.icons and tech.icons[2] and item and item.icons and item.icons[1] and
+      tech.icons[2].icon == "__Ingredient_Scrap__/graphics/icons/scrap-128.png" and
+      same_value(tech.icons[2].tint, item.icons[1].tint),
+    nil,
+    {
+      technology_layer = tech and tech.icons and tech.icons[2],
+      item_tint = item and item.icons and item.icons[1] and item.icons[1].tint,
+    })
   add_case("raw.technology.no-phantom", "no recipe-specific phantom technology is created",
     data.raw.technology["yis-test-testium-no-tech"] == nil)
 

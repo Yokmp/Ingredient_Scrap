@@ -284,8 +284,13 @@ function yokmods.ingredient_scrap.get_icon_layers(scrap_type, tech_icon, result_
   end
 
   if tech_icon then
-    table.insert(icons, { icon = constants.icon_path .. "recycle-256.png", icon_size = 256, scale = 1})
-    table.insert(icons, { icon = constants.icon_path .. "recycle-256.png", icon_size = 256, scale = 1})
+    table.insert(icons, { icon = constants.icon_path .. "recycle-256.png", icon_size = 256, scale = 0.8})
+    table.insert(icons, {
+      icon = constants.icon_path .. "scrap-128.png",
+      icon_size = 128,
+      scale = 0.8,
+      tint = scrap_item.icons and scrap_item.icons[1] and scrap_item.icons[1].tint,
+    })
   else
     if mods["quality"] then
       table.insert(icons, { icon = "__quality__/graphics/icons/recycling.png", icon_size = 64, scale = 0.8})
@@ -294,7 +299,6 @@ function yokmods.ingredient_scrap.get_icon_layers(scrap_type, tech_icon, result_
     end
     for _, v in ipairs(source_icons) do table.insert(icons, v) end
   end
-
 
   if not tech_icon then
     if mods["quality"] then
