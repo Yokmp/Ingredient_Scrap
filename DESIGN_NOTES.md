@@ -2,6 +2,22 @@
 
 ## Future: Recipe-Chain Based Recycle Targets
 
+Status and sequencing:
+
+- Krastorio 2 currently stays as an explicit compat smoke test. It verifies that
+  the mod loads with K2, that known K2 aliases resolve to clean material names,
+  and that no `kr-*` scrap types leak into generated prototypes.
+- Do not hand-audit every K2 recipe before improving the resolver. A broader
+  generated recipe summary would be more useful than manual inspection.
+- Angels should wait until the recipe-chain work has at least an analysis mode.
+  Angels is expected to add many ores, intermediate processing steps, fluids,
+  gases, and parallel recipe routes; testing it too early would likely create
+  one-off compat exceptions that a chain resolver may later replace.
+- The first implementation step should be passive: collect and dump candidate
+  chain information into the debug report/data-table without changing recycle
+  recipe behavior. Once the report is understandable, enable selected behavior
+  behind tests.
+
 The current recycle target resolver intentionally uses a simple, player-friendly
 priority for solid materials:
 
