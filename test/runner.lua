@@ -230,6 +230,58 @@ function runner.run()
     data_table.debug and type(data_table.debug.logs) == "table")
   add_case("logs.function", "structured log function exists",
     type(yokmods.ingredient_scrap.is_log) == "function")
+  local recipe_chain_analysis = data_table.debug and data_table.debug.recipe_chain_analysis
+  add_case("analysis.recipe-chain.exists", "passive recipe-chain analysis dump exists",
+    recipe_chain_analysis and recipe_chain_analysis.mode == "passive")
+  add_case("analysis.recipe-chain.recipe-index", "recipe-chain analysis indexes producers and consumers",
+    recipe_chain_analysis and recipe_chain_analysis.recipe_index and
+      recipe_chain_analysis.recipe_index.producers.item["testium-plate"] and
+      recipe_chain_analysis.recipe_index.consumers.item["testium-plate"])
+  add_case("analysis.recipe-chain.name-patterns", "recipe-chain analysis records material infix name patterns",
+    recipe_chain_analysis and recipe_chain_analysis.name_patterns and
+      recipe_chain_analysis.name_patterns.ngrams["rare-metal"] and
+      recipe_chain_analysis.name_patterns.ngrams["rare-metal"].positions.infix > 0,
+    nil,
+    recipe_chain_analysis and recipe_chain_analysis.name_patterns and
+      recipe_chain_analysis.name_patterns.ngrams["rare-metal"])
+  add_case("analysis.recipe-chain.current-targets", "recipe-chain analysis records current resolver recycle targets",
+    recipe_chain_analysis and recipe_chain_analysis.current and
+      recipe_chain_analysis.current.recycle_targets and
+      recipe_chain_analysis.current.recycle_targets.testium and
+      recipe_chain_analysis.current.recycle_targets.testium[1] and
+      recipe_chain_analysis.current.recycle_targets.testium[1].result_name == "testium-plate")
+  add_case("analysis.recipe-chain.target-candidates", "recipe-chain analysis records passive recycle target candidates",
+    recipe_chain_analysis and recipe_chain_analysis.target_candidates and
+      recipe_chain_analysis.target_candidates.testium and
+      recipe_chain_analysis.target_candidates.testium.suggested and
+      recipe_chain_analysis.target_candidates.testium.suggested.result_name == "testium-plate" and
+      recipe_chain_analysis.target_candidates["rare-metal"] and
+      recipe_chain_analysis.target_candidates["rare-metal"].suggested,
+    nil,
+    recipe_chain_analysis and recipe_chain_analysis.target_candidates and {
+      testium = recipe_chain_analysis.target_candidates.testium,
+      rare_metal = recipe_chain_analysis.target_candidates["rare-metal"],
+    })
+  add_case("analysis.recipe-chain.target-summary", "recipe-chain analysis summarizes passive recycle target candidates",
+    recipe_chain_analysis and recipe_chain_analysis.target_candidate_summary and
+      recipe_chain_analysis.target_candidate_summary.materials > 0 and
+      recipe_chain_analysis.target_candidate_summary.with_current_target > 0)
+  add_case("analysis.recipe-chain.material-candidates", "recipe-chain analysis records passive material candidates",
+    recipe_chain_analysis and recipe_chain_analysis.material_candidates and
+      recipe_chain_analysis.material_candidates["rare-metal"] and
+      recipe_chain_analysis.material_candidates["rare-metal"].pattern and
+      recipe_chain_analysis.material_candidates["rare-metal"].pattern.positions.infix > 0)
+  add_case("analysis.recipe-chain.place-result-filter", "recipe-chain analysis excludes place_result items from inferred materials",
+    recipe_chain_analysis and recipe_chain_analysis.filters and
+      recipe_chain_analysis.filters.place_result and
+      recipe_chain_analysis.filters.place_result.patterns["assembling-machine"] and
+      not recipe_chain_analysis.material_candidates["assembling-machine"])
+  add_case("analysis.recipe-chain.comparison", "recipe-chain analysis compares current and passive material candidates",
+    recipe_chain_analysis and recipe_chain_analysis.comparison and
+      array_contains(recipe_chain_analysis.comparison.materials_shared, "testium") and
+      array_contains(recipe_chain_analysis.comparison.materials_shared, "rare-metal"),
+    nil,
+    recipe_chain_analysis and recipe_chain_analysis.comparison)
   local api = yokmods.ingredient_scrap.api or {}
   add_case("api.material", "public material API exposes nested register and ignore wrappers",
     api.register and api.register.material and api.ignore and

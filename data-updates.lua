@@ -109,6 +109,12 @@ yokmods.ingredient_scrap.collect_materials()
 yokmods.ingredient_scrap.collector()
 yokmods.ingredient_scrap.patch_recycle_amounts()
 
+if IS_DEBUG then
+  local recipe_chain_analysis = require("core.analysis.recipe-chain")
+  yokmods.ingredient_scrap.data_table.debug.recipe_chain_analysis =
+    recipe_chain_analysis.build(yokmods.ingredient_scrap.data_table)
+end
+
 yokmods.ingredient_scrap.preflight_errors = yokmods.ingredient_scrap.validate_generated_prototypes()
 if #yokmods.ingredient_scrap.preflight_errors > 0 then
   if IS_DEBUG then
