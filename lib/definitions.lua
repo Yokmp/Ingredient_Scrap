@@ -48,8 +48,10 @@
 ---@class ISdata_table.materials
 ---@field solid_prefixes string[]
 ---@field solid_suffixes string[]
+---@field solid_aliases table<string, string>
 ---@field fluid_prefixes string[]
 ---@field fluid_suffixes string[]
+---@field fluid_aliases table<string, string>
 ---@field solid string[]
 ---@field fluid string[]
 

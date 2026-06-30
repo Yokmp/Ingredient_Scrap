@@ -95,7 +95,7 @@ for _, material_name in ipairs(material_overrides.sorted_materials()) do
         type = "string-setting",
         name = material_overrides.setting_name(material_name),
         localised_name = material_overrides.localised_setting_name(material_name),
-        localised_description = { "mod-setting-description.yis-material-mode" },
+        localised_description = material_overrides.localised_setting_description(material_name),
         setting_type = "startup",
         default_value = material_overrides.default_modes[material_name],
         allowed_values = material_overrides.allowed_values,

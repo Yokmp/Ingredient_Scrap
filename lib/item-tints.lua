@@ -41,7 +41,6 @@ local tint_colors = {
   ["titan"]    = color("#DADBCF"),
   ["nickel"]   = color("#CCD3D8"),
   ["mangan"]   = color("#D3BC8D"),
-  ["holmium"]   = color("#bb8997"),
 }
 
 local scrap_tints = {
@@ -53,19 +52,15 @@ local scrap_tints = {
   bronze              = tint_colors["bronze"],
   chromium            = tint_colors["chrome"],
   cobalt              = tint_colors["blue"],
-  copper              = tint_colors["orange"],
   ["cobalt-steel"]    = tint_colors["blue"],
   ["copper-tungsten"] = tint_colors["red"],
   elionagate          = tint_colors["teal"],
   -- glass            = tint_colors["glass"]
   gold                = tint_colors["yellow"],
   gunmetal            = tint_colors["yellow"],
-  holmium             = tint_colors["holmium"],
   imersium            = tint_colors["purple"],
   invar               = tint_colors["grey"],
-  iron                = tint_colors["grey"],
   lead                = tint_colors["brown"],
-  lithium             = tint_colors["dgrey"],
   manganic            = tint_colors["mangan"],
   ["meta-garnierite"] = tint_colors["yellow"],
   nickel              = tint_colors["nickel"],
@@ -81,12 +76,10 @@ local scrap_tints = {
   silicon             = tint_colors["brown"],
   silver              = tint_colors["grey"],
   stannic             = tint_colors["green"],
-  steel               = tint_colors["grey"],
   tellurium           = tint_colors["purple"],
   tin                 = tint_colors["grey"],
   titanic             = tint_colors["titan"],
   titanium            = tint_colors["dgrey"],
-  tungsten            = tint_colors["dpurple"],
   zinc                = tint_colors["zinc"],
 }
 

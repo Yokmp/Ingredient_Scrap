@@ -8,7 +8,8 @@ function yokmods.ingredient_scrap.collector()
   local data_table = yokmods.ingredient_scrap.data_table
 
   ---Checks whether an ingredient name belongs to the given scrap material type.
-  local function matches_scrap_type(name, scrap_type, prefixes, suffixes)
+  local function matches_scrap_type(name, scrap_type, prefixes, suffixes, aliases)
+    if aliases and aliases[name] == scrap_type then return true end
     for _, suffix in ipairs(suffixes) do
       if name == scrap_type .. suffix then return true end
     end
@@ -72,7 +73,8 @@ function yokmods.ingredient_scrap.collector()
               ingredient.name,
               scrap_type,
               data_table.materials.solid_prefixes,
-              data_table.materials.solid_suffixes
+              data_table.materials.solid_suffixes,
+              data_table.materials.solid_aliases
             ) then
               local source_item_name, source_item = scrap_source_item_for_solid(scrap_type, ingredient.name)
               table.insert(data_table.ingredients.items[recipe.name], ingredient)
@@ -106,7 +108,8 @@ function yokmods.ingredient_scrap.collector()
                 ingredient.name,
                 scrap_type,
                 data_table.materials.fluid_prefixes,
-                data_table.materials.fluid_suffixes
+                data_table.materials.fluid_suffixes,
+                data_table.materials.fluid_aliases
               ) then
                 local source_item_name, source_item = scrap_source_item_for_fluid(scrap_type, main_product)
                 if source_item_name and source_item then

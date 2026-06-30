@@ -3,6 +3,7 @@
 
 local icon_base = "__base__/graphics/icons/"
 local dummy_icon = icon_base .. "iron-plate.png"
+local dummy_fluid_icon = icon_base .. "fluid/water.png"
 
 ---Builds a minimal item prototype for synthetic test fixtures.
 local function dummy_item(name, subgroup, stack_size)
@@ -27,7 +28,7 @@ local function dummy_fluid(name)
     heat_capacity = "1kJ",
     base_color = { r = 0.5, g = 0.5, b = 0.5 },
     flow_color = { r = 0.7, g = 0.7, b = 0.7 },
-    icon = dummy_icon,
+    icon = dummy_fluid_icon,
     icon_size = 64,
   }
 end

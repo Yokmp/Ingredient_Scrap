@@ -7,7 +7,12 @@ overrides.allowed_values = { "auto", "solid", "fluid", "both", "none" }
 
 overrides.default_modes = {}
 overrides.localized_setting_names = {}
+overrides.sources = {}
 overrides.tints = {}
+overrides.prototype_aliases = {
+  item = {},
+  fluid = {},
+}
 overrides.prototype_affixes = {
   default = {
     item = {
@@ -60,6 +65,18 @@ local function normalize_affixes(affixes)
   }
 end
 
+---Registers exact prototype aliases for one prototype type.
+---@param prototype_type "item"|"fluid"
+---@param aliases string[]|nil
+---@param material_name string
+local function register_aliases(prototype_type, aliases, material_name)
+  for _, prototype_name in ipairs(aliases or {}) do
+    if type(prototype_name) == "string" and prototype_name ~= "" then
+      overrides.prototype_aliases[prototype_type][prototype_name] = material_name
+    end
+  end
+end
+
 ---Adds a value to a list only once.
 ---@param values string[]
 ---@param seen table<string, boolean>
@@ -79,7 +96,7 @@ end
 
 ---Registers or updates a material override definition.
 ---See API examples: https://github.com/Yokmp/Ingredient_Scrap
----@param definition {name: string, default?: string, prototype_affixes?: table, localized_setting_name?: boolean, tint?: table|string}
+---@param definition {name: string, default?: string, prototype_affixes?: table, prototype_aliases?: table, localized_setting_name?: boolean, source?: string|table, tint?: table|string}
 function overrides.register_material_override(definition)
   if type(definition) ~= "table" or type(definition.name) ~= "string" or definition.name == "" then
     error("Ingredient Scrap material override requires a non-empty name")
@@ -104,6 +121,25 @@ function overrides.register_material_override(definition)
     }
   end
 
+  if definition.prototype_aliases then
+    register_aliases("item", definition.prototype_aliases.item, definition.name)
+    register_aliases("fluid", definition.prototype_aliases.fluid, definition.name)
+  end
+
+  if definition.source ~= nil then
+    if type(definition.source) == "table" then
+      overrides.sources[definition.name] = {
+        name = definition.source.name or "Unknown",
+        color = definition.source.color or "#bbbbbb",
+      }
+    else
+      overrides.sources[definition.name] = {
+        name = tostring(definition.source),
+        color = "#bbbbbb",
+      }
+    end
+  end
+
   if definition.tint ~= nil then
     overrides.tints[definition.name] = definition.tint
   end
@@ -121,6 +157,8 @@ local function material_definition(name, mode, options)
     default = mode,
     localized_setting_name = options.localized_setting_name,
     prototype_affixes = options.prototype_affixes,
+    prototype_aliases = options.prototype_aliases,
+    source = options.source,
     tint = options.tint,
   }
 end
@@ -151,6 +189,13 @@ local function publish_material_api()
       overrides.tints[name] = tint
     end
   end
+  api.register.material.alias = function(name, prototype_type, prototype_name)
+    if type(name) == "string" and name ~= "" and
+        (prototype_type == "item" or prototype_type == "fluid") and
+        type(prototype_name) == "string" and prototype_name ~= "" then
+      overrides.prototype_aliases[prototype_type][prototype_name] = name
+    end
+  end
   api.ignore.material = function(name, options) register_material_mode(name, "none", options) end
 end
 
@@ -179,6 +224,12 @@ function overrides.prototype_candidates(material_name, prototype_type)
   local candidates = {}
   local affixes = (overrides.affixes_for(material_name)[prototype_type]) or {}
 
+  for prototype_name, alias_material in pairs(overrides.prototype_aliases[prototype_type] or {}) do
+    if alias_material == material_name then
+      table.insert(candidates, prototype_name)
+    end
+  end
+
   for _, prefix in ipairs(affixes.prefixes or {}) do
     table.insert(candidates, prefix .. material_name)
   end
@@ -187,6 +238,12 @@ function overrides.prototype_candidates(material_name, prototype_type)
   end
 
   return candidates
+end
+
+---Returns exact prototype aliases for resolver and collector use.
+---@return {item: table<string, string>, fluid: table<string, string>}
+function overrides.resolver_aliases()
+  return overrides.prototype_aliases
 end
 
 ---Returns all non-empty affixes registered for resolver use.
@@ -256,6 +313,26 @@ function overrides.localised_setting_name(material_name)
     return { "", { "mod-setting-name." .. overrides.setting_name(material_name) }, " - ", material_name, ": ", { "mod-setting-name.yis-material-mode" } }
   end
   return { "", "[img=none]", " - ", material_name, ": ", { "mod-setting-name.yis-material-mode" } }
+end
+
+---Returns the localized setting description for a material override.
+---@param material_name string
+---@return table
+function overrides.localised_setting_description(material_name)
+  local source = overrides.sources[material_name]
+  if not source then
+    return { "mod-setting-description.yis-material-mode" }
+  end
+  return {
+    "",
+    { "mod-setting-description.yis-material-mode" },
+    "\n",
+    "[color=", source.color, "]",
+    { "mod-setting-description.yis-material-source" },
+    ": ",
+    source.name,
+    "[/color]",
+  }
 end
 
 ---Returns material names in stable alphabetical order.

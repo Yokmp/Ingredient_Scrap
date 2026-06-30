@@ -16,7 +16,7 @@ local function icon_scale_and_shift(icon_data, shift)
     icon = icon_data.icon,
     size = icon_data.icon_size,
     scale = 0.33 * scale_factor,
-    shift = shift or { -6, -3 }
+    shift = shift or { -6, -0 }
   }
 end
 
@@ -113,7 +113,12 @@ function yokmods.ingredient_scrap.item_recycle_recipes(recipe_defines)
   or yokmods.ingredient_scrap.data_table.prototypes.recipes[recipe_name] then return end -- no duplicates
 
   local result_amount = recipe_defines.result_amount or (recipe_defines.result_type == "item" and 1 or 10)
-  local icon_layers = yokmods.ingredient_scrap.get_icon_layers(recipe_defines.scrap_type)
+  local icon_layers = yokmods.ingredient_scrap.get_icon_layers(
+    recipe_defines.scrap_type,
+    false,
+    recipe_defines.result_type,
+    recipe_defines.result_name
+  )
 
   ---@type ISRecipePrototype
   local recycle_recipe = {

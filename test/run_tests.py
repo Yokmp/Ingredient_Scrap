@@ -18,6 +18,7 @@ import shutil
 import subprocess
 import sys
 import time
+import zipfile
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -35,6 +36,8 @@ PROFILE_FILE = SCRIPT_DIR / "profile.lua"
 TMP_DIR = SCRIPT_DIR / "tmp"
 MOD_SETTINGS_FILE = MODS_DIR / "mod-settings.dat"
 MOD_SETTINGS_BACKUP_FILE = MODS_DIR / "mod-settings.dat.codex-test-backup"
+MOD_LIST_FILE = MODS_DIR / "mod-list.json"
+MOD_LIST_BACKUP_FILE = MODS_DIR / "mod-list-old.json"
 TIMEOUT = 180
 
 PROFILES = {
@@ -46,6 +49,27 @@ PROFILES = {
     "needed_min": {"needed": 1},
     "needed_high": {"needed": 20},
     "toggles_off": {"limit": False, "fluids": False},
+}
+
+BASELINE_MODS = [
+    "base",
+    "elevated-rails",
+    "quality",
+    "space-age",
+    "Ingredient_Scrap",
+]
+
+COMPAT_MODS = {
+    "krastorio2": {
+        "label": "Krastorio 2",
+        "mods": [
+            "flib",
+            "Krastorio2",
+            "Krastorio2Assets",
+            "Krastorio2MenuSimulations",
+            "ChangeInserterDropLane",
+        ],
+    },
 }
 
 COLOR = {
@@ -137,6 +161,87 @@ def remove_settingsparser_cache() -> None:
         cache_file.unlink()
     except FileNotFoundError:
         pass
+
+
+def mod_name_from_zip(zip_path: Path) -> str | None:
+    try:
+        with zipfile.ZipFile(zip_path) as archive:
+            info_names = [name for name in archive.namelist() if name.endswith("/info.json")]
+            if not info_names:
+                return None
+            with archive.open(info_names[0]) as info_file:
+                info = json.loads(info_file.read().decode("utf-8-sig"))
+                return info.get("name")
+    except (OSError, zipfile.BadZipFile, json.JSONDecodeError, KeyError, UnicodeDecodeError):
+        return None
+
+
+def mod_name_from_directory(directory: Path) -> str | None:
+    info_path = directory / "info.json"
+    if not info_path.exists():
+        return None
+    try:
+        info = json.loads(info_path.read_text(encoding="utf-8-sig"))
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError):
+        return None
+    return info.get("name")
+
+
+def installed_mod_names(factorio_exe: Path) -> set[str]:
+    names = {"base"}
+    data_dir = factorio_root(factorio_exe) / "data"
+    if data_dir.exists():
+        for path in data_dir.iterdir():
+            if path.is_dir() and (path / "info.json").exists():
+                name = mod_name_from_directory(path)
+                if isinstance(name, str) and name:
+                    names.add(name)
+    for path in MODS_DIR.iterdir():
+        name = None
+        if path.is_dir():
+            name = mod_name_from_directory(path)
+        elif path.suffix.lower() == ".zip":
+            name = mod_name_from_zip(path)
+        if isinstance(name, str) and name:
+            names.add(name)
+    return names
+
+
+def write_mod_list(enabled_mods: set[str], installed_mods: set[str]) -> None:
+    all_mods = sorted(installed_mods | enabled_mods, key=str.lower)
+    payload = {
+        "mods": [
+            {"name": name, "enabled": name in enabled_mods}
+            for name in all_mods
+        ]
+    }
+    MOD_LIST_FILE.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def prepare_test_mod_list(factorio_exe: Path, compat_name: str | None) -> None:
+    enabled_mods = set(BASELINE_MODS)
+    if compat_name is not None:
+        enabled_mods.update(COMPAT_MODS[compat_name]["mods"])
+    installed_mods = installed_mod_names(factorio_exe)
+    missing = sorted(enabled_mods - installed_mods, key=str.lower)
+    if missing:
+        raise RuntimeError(f"Test-Mods fehlen im Mods-Ordner oder Factorio-data: {', '.join(missing)}")
+    if MOD_LIST_BACKUP_FILE.exists():
+        raise RuntimeError(f"Sicherungsdatei existiert bereits, breche ab: {MOD_LIST_BACKUP_FILE}")
+    if MOD_LIST_FILE.exists():
+        shutil.copy2(MOD_LIST_FILE, MOD_LIST_BACKUP_FILE)
+    write_mod_list(enabled_mods, installed_mods)
+
+
+def restore_test_mod_list() -> None:
+    if MOD_LIST_BACKUP_FILE.exists():
+        shutil.copy2(MOD_LIST_BACKUP_FILE, MOD_LIST_FILE)
+        MOD_LIST_BACKUP_FILE.unlink()
+    else:
+        try:
+            MOD_LIST_FILE.unlink()
+        except FileNotFoundError:
+            pass
 
 
 def factorio_root(factorio_exe: Path) -> Path:
@@ -240,6 +345,8 @@ def print_pretty_report(report: dict, color: bool = True, show_passes: bool = Fa
     print(colored("=" * 72, "cyan", color))
     print(f"Status:  {status_label(status, color)}")
     print(f"Mod:     {report.get('mod', 'unknown')}")
+    if report.get("compat"):
+        print(f"Compat:  {report.get('compat_label', report.get('compat'))}")
     print(f"Schema:  {report.get('schema', 'unknown')}")
     print(f"Factorio:{report.get('factorio_version', 'unknown'):>9}")
     print(f"Summary: {progress_bar(passed, total, color=color)} {passed}/{total} passed, {failed} failed")
@@ -333,11 +440,18 @@ def run_factorio_profile(factorio_exe: Path, profile_name: str, settings: dict[s
     return status == "pass", report
 
 
+def compat_label(compat_name: str | None) -> str:
+    if compat_name is None:
+        return "none"
+    return str(COMPAT_MODS[compat_name]["label"])
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run Ingredient Scrap Factorio tests")
     parser.add_argument("--factorio", type=Path, default=DEFAULT_FACTORIO)
     parser.add_argument("--profile", choices=sorted(PROFILES), default="default")
     parser.add_argument("--all", action="store_true", help="run all standard profiles")
+    parser.add_argument("--compat", choices=sorted(COMPAT_MODS), help="run with an explicit third-party mod set")
     parser.add_argument("--no-color", action="store_true", help="disable ANSI colors")
     parser.add_argument("--show-passes", action="store_true", help="print every passing assertion in the final report")
     parser.add_argument("--keep-saves", action="store_true", help="keep temporary Factorio saves under test/tmp")
@@ -354,15 +468,22 @@ def main() -> int:
     original_mod_settings = None
 
     try:
+        prepare_test_mod_list(factorio_exe, args.compat)
+        if args.compat:
+            print(f"Compat: {compat_label(args.compat)}")
         original_mod_settings = with_debug_setting_enabled()
         for profile_name in selected:
             ok, report = run_factorio_profile(factorio_exe, profile_name, PROFILES[profile_name])
             if report is not None:
+                if args.compat:
+                    report["compat"] = args.compat
+                    report["compat_label"] = compat_label(args.compat)
                 reports.append(report)
             if not ok:
                 failed.append(profile_name)
     finally:
         restore_mod_settings(original_mod_settings)
+        restore_test_mod_list()
         remove_profile()
         remove_settingsparser_cache()
         if not args.keep_saves:

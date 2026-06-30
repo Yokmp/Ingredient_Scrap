@@ -210,7 +210,7 @@ end
 ---@param scrap_type string
 ---@return string|nil
 function yokmods.ingredient_scrap.get_import_location(scrap_type)
-  -- Nauvis-Grundressourcen haben keine import location
+  -- Nauvis-basseresources dont have an import location
   local nauvis_native = { iron = true, copper = true, coal = true, stone = true }
   if nauvis_native[scrap_type] then return nil end
 
@@ -221,7 +221,7 @@ function yokmods.ingredient_scrap.get_import_location(scrap_type)
   end
 
   -- Fallback: check Plate/Ingot, but exclude planets if
-  -- the material also exiistts on Nauvis (via resource check)
+  -- the material also exists on Nauvis (via resource check)
   local plate = data.raw.item[scrap_type .. "-plate"]
               or data.raw.item[scrap_type .. "-ingot"]
               or data.raw.item[scrap_type]
@@ -246,39 +246,63 @@ end
 
 ---@param scrap_type string
 ---@param tech_icon? boolean
+---@param result_type? string
+---@param result_name? string
 ---@return table
 ---Returns the icon layers used by recycle recipes for the given scrap type.
-function yokmods.ingredient_scrap.get_icon_layers(scrap_type, tech_icon)
--- log(serpent.block(scrap_type))
+function yokmods.ingredient_scrap.get_icon_layers(scrap_type, tech_icon, result_type, result_name)
   local constants = yokmods.ingredient_scrap.data_table.constants
-  local source_icons = yokmods.ingredient_scrap.data_table.prototypes.items[scrap_type .. "-scrap"].icons
+  local scrap_item = yokmods.ingredient_scrap.data_table.prototypes.items[scrap_type .. "-scrap"]
   local icons = {}
 
-  if not yokmods.ingredient_scrap.data_table.prototypes.items[scrap_type .. "-scrap"] then
+  if not scrap_item then
     log("No scrap item for: " .. scrap_type .. " default to 'signal-deny.png'")
     return { { icon = "__base__/graphics/icons/signal/signal-deny.png", icon_size = 64 } }
   end
 
-  if not tech_icon then
-    if mods["quality"] then
-      -- table.insert(icons, { icon = "__quality__/graphics/icons/recycling.png", icon_size = 64, scale = 0.8})
-    -- else
-      table.insert(icons, { icon = constants.icon_path .. "recycle-64.png", icon_size = 64, scale = 0.8})
+  ---Returns icon layers from an item or fluid prototype.
+  ---@param prototype table|nil
+  ---@return table[]|nil
+  local function prototype_icon_layers(prototype)
+    if not prototype then return nil end
+    if prototype.icons then return prototype.icons end
+    if prototype.icon then
+      return {
+        {
+          icon = prototype.icon,
+          icon_size = prototype.icon_size or 64,
+          icon_mipmaps = prototype.icon_mipmaps,
+        }
+      }
     end
-  else
-    table.insert(icons, { icon = constants.icon_path .. "recycle-256.png", icon_size = 256, scale = 1})
+    return nil
   end
 
+  local source_icons = scrap_item.icons
+  if result_type == "fluid" and result_name and data.raw.fluid[result_name] then
+    source_icons = prototype_icon_layers(data.raw.fluid[result_name]) or source_icons
+  end
+
+  if tech_icon then
+    table.insert(icons, { icon = constants.icon_path .. "recycle-256.png", icon_size = 256, scale = 1})
+    table.insert(icons, { icon = constants.icon_path .. "recycle-256.png", icon_size = 256, scale = 1})
+  else
+    if mods["quality"] then
+      table.insert(icons, { icon = "__quality__/graphics/icons/recycling.png", icon_size = 64, scale = 0.8})
+    else
+      table.insert(icons, { icon = constants.icon_path .. "recycle-64.png", icon_size = 64, scale = 0.8})
+    end
     for _, v in ipairs(source_icons) do table.insert(icons, v) end
+  end
+
 
   if not tech_icon then
     if mods["quality"] then
-      -- table.insert(icons, { icon = "__quality__/graphics/icons/recycling-top.png", icon_size = 64, scale = 0.8})
-    -- else
+      table.insert(icons, { icon = "__quality__/graphics/icons/recycling-top.png", icon_size = 64, scale = 0.8})
+    else
       table.insert(icons, { icon = constants.icon_path .. "recycle-top-64.png", icon_size = 64, scale = 0.8})
     end
   end
-
 
   return icons
 end

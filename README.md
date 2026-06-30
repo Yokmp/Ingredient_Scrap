@@ -56,7 +56,11 @@ local api = yokmods.ingredient_scrap.api
 
 api.register.material.both("rare-metal", {
   localized_setting_name = true,
+  source = { name = "Example Mod", color = "#78C850" },
   tint = "#8031A7",
+  prototype_aliases = {
+    item = { "example-rare-metals" },
+  },
   prototype_affixes = {
     item = {
       prefixes = {},
@@ -77,7 +81,12 @@ api.register.material.override({
   name = "rare-metal",
   default = "both",
   localized_setting_name = true,
+  source = { name = "Example Mod", color = "#78C850" },
   tint = "#8031A7",
+  prototype_aliases = {
+    item = { "example-rare-metals" },
+    fluid = { "example-rare-metal-slurry" },
+  },
   prototype_affixes = {
     item = {
       prefixes = {},
@@ -109,6 +118,7 @@ api.register.material.solid("steel", options)
 api.register.material.fluid("dirty-water", options)
 api.register.material.both("rare-metal", options)
 api.register.material.tint("rare-metal", "#8031A7")
+api.register.material.alias("rare-metal", "item", "example-rare-metals")
 api.ignore.material("uranium", options)
 ```
 
@@ -119,6 +129,13 @@ also aggregated into the data-stage resolver. The core affix set intentionally
 stays close to vanilla and Space Age, including fluid names such as
 `lithium-brine`; mod-specific affixes such as `"-ingot"` or `"liquid-"` belong
 in compat registrations.
+
+`prototype_aliases` maps exact prototype names to a material when affixes are
+not enough or would be too broad. This is useful for mods with names such as
+`kr-rare-metals`, where treating `kr-` or plural `s` as a global affix would
+create false positives. The direct wrapper
+`api.register.material.alias(material, "item"|"fluid", prototype_name)` adds one
+alias at a time.
 
 `localized_setting_name = true` tells Ingredient Scrap to use
 `mod-setting-name.yis-material-<name>` from the locale files as the icon part of
@@ -131,6 +148,11 @@ icons.
 
 `tint` sets the generated scrap icon tint for the material. It accepts a
 Factorio color table or a hex color string such as `"#8031A7"`.
+
+`source` annotates the generated material startup setting description with the
+mod or DLC that registered the material. It can be a plain string or a table
+such as `{ name = "Krastorio 2", color = "#78C850" }`; the color is written as
+rich text so related settings stand out in Factorio's settings UI.
 
 Startup settings are generated during Factorio's settings stage. If a mod
 registers overrides only in the data stage, those overrides can affect later

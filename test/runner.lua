@@ -152,6 +152,27 @@ local function localised_string_contains_rich_text(value)
   return false
 end
 
+---Returns true when a nested localized string table contains a raw string fragment.
+local function localised_string_contains(value, fragment)
+  if type(value) == "string" then
+    return value:find(fragment, 1, true) ~= nil
+  end
+  if type(value) == "table" then
+    for _, item in pairs(value) do
+      if localised_string_contains(item, fragment) then return true end
+    end
+  end
+  return false
+end
+
+---Returns true when an icon layer list contains a specific icon path.
+local function icon_layers_contain(icons, icon_path)
+  for _, layer in ipairs(icons or {}) do
+    if layer.icon == icon_path then return true end
+  end
+  return false
+end
+
 ---Compares an actual value against the expected subset recursively.
 local function same_value(actual, expected_value)
   if type(expected_value) ~= "table" then return actual == expected_value end
@@ -217,6 +238,7 @@ function runner.run()
       type(api.register.material.solid) == "function" and
       type(api.register.material.fluid) == "function" and
       type(api.register.material.both) == "function" and
+      type(api.register.material.alias) == "function" and
       type(api.ignore.material) == "function" and
       yokmods.ingredient_scrap.register_material_override == nil)
   add_case("api.category", "public category API separates furnace and assembling-machine registration",
@@ -287,6 +309,16 @@ function runner.run()
       rare_metal = material_overrides.default_modes["rare-metal"],
       alienite = material_overrides.default_modes.alienite,
     })
+  add_case("materials.override.vanilla-tints", "vanilla scrap tints are registered through the material API",
+    material_overrides.tints.iron == "#888b8d" and
+      material_overrides.tints.copper == "#CB6015" and
+      material_overrides.tints.steel == "#888b8d",
+    nil,
+    {
+      iron = material_overrides.tints.iron,
+      copper = material_overrides.tints.copper,
+      steel = material_overrides.tints.steel,
+    })
   add_case("materials.override.resolver-affixes", "resolver affixes come from the material override registry",
     array_contains(data_table.materials.solid_suffixes, "-plate") and
       array_contains(data_table.materials.solid_suffixes, "-ore") and
@@ -340,6 +372,18 @@ function runner.run()
       crude = material_overrides.localised_setting_name("crude"),
       bacteria = material_overrides.localised_setting_name("bacteria"),
     })
+  add_case("materials.override.source-description", "material setting descriptions include a colored source label",
+    localised_string_contains(material_overrides.localised_setting_description("iron"), "[color=") and
+      localised_string_contains(material_overrides.localised_setting_description("iron"), "#8DA0AA") and
+      localised_string_contains(material_overrides.localised_setting_description("iron"), "Base") and
+      localised_string_contains(material_overrides.localised_setting_description("holmium"), "Space Age") and
+      localised_string_contains(material_overrides.localised_setting_description("testium"), "Ingredient Scrap Test"),
+    nil,
+    {
+      iron = material_overrides.localised_setting_description("iron"),
+      holmium = material_overrides.localised_setting_description("holmium"),
+      testium = material_overrides.localised_setting_description("testium"),
+    })
   add_case("materials.override.bacteria-locale-icon", "known bacteria uses a locale icon while keeping prototype matching disabled",
     material_overrides.icon_tag("bacteria") == nil and
       material_overrides.localised_setting_name("bacteria")[2][1] == "mod-setting-name.yis-material-bacteria",
@@ -375,6 +419,31 @@ function runner.run()
     material_resolver.resolve_fluid("lithium-brine", data_table.materials) == "lithium")
   add_case("resolver.solid.unknown-composite", "solid resolver avoids blind first-segment fallback",
     material_resolver.resolve_solid("unknown-composite", data_table.materials) == nil)
+  if mods and mods["Krastorio2"] then
+    add_case("compat.krastorio2.alias-rare-metal", "Krastorio rare metals resolve to rare-metal",
+      material_resolver.resolve_solid("kr-rare-metals", data_table.materials) == "rare-metal" and
+        material_resolver.resolve_solid("kr-rare-metal-ore", data_table.materials) == "rare-metal" and
+        array_contains(data_table.materials.solid, "rare-metal") and
+        not array_contains(data_table.materials.solid, "kr-rare-metal"),
+      nil,
+      { solid = data_table.materials.solid })
+    add_case("compat.krastorio2.alias-imersium", "Krastorio imersium prototypes resolve to imersium",
+      material_resolver.resolve_solid("kr-imersium-plate", data_table.materials) == "imersium" and
+        material_resolver.resolve_solid("kr-imersium-beam", data_table.materials) == "imersium" and
+        array_contains(data_table.materials.solid, "imersium") and
+        not array_contains(data_table.materials.solid, "kr-imersium"),
+      nil,
+      { solid = data_table.materials.solid })
+    add_case("compat.krastorio2.alias-reinforced-plates", "Krastorio reinforced plates resolve without the kr prefix",
+      material_resolver.resolve_solid("kr-black-reinforced-plate", data_table.materials) == "black-reinforced" and
+        material_resolver.resolve_solid("kr-white-reinforced-plate", data_table.materials) == "white-reinforced" and
+        array_contains(data_table.materials.solid, "black-reinforced") and
+        array_contains(data_table.materials.solid, "white-reinforced") and
+        not array_contains(data_table.materials.solid, "kr-black-reinforced") and
+        not array_contains(data_table.materials.solid, "kr-white-reinforced"),
+      nil,
+      { solid = data_table.materials.solid })
+  end
 
   local recycle_item_category = "yis-recycle-to-item"
   local recycle_fluid_category = "yis-recycle-to-fluid"
@@ -565,6 +634,13 @@ function runner.run()
   add_case("raw.item.testium-scrap", "testium-scrap item matches expected normalized object",
     same_value(normalized_item, exp.item), nil, { expected = exp.item, actual = normalized_item })
 
+  local iron_item = data.raw.item["iron-scrap"]
+  local iron_tint = iron_item and iron_item.icons and iron_item.icons[1] and iron_item.icons[1].tint
+  add_case("raw.item.iron-scrap.tint", "iron-scrap item uses the vanilla material API tint",
+    same_value(iron_tint, util.color("#888b8d")),
+    nil,
+    { expected = util.color("#888b8d"), actual = iron_tint })
+
   local solid_recipe = data.raw.recipe["recycle-testium-scrap"]
   local normalized_solid_recipe = solid_recipe and {
     type = solid_recipe.type,
@@ -610,6 +686,16 @@ function runner.run()
       {
         expected = expected_recycle_input_amount(data_table, "testium-scrap"),
         ingredients = fluid_recipe and fluid_recipe.ingredients,
+      })
+    add_case("raw.recipe.recycle-testium-scrap-to-fluid.icon", "fluid recycle recipe uses the fluid result icon layer",
+      fluid_recipe and solid_recipe and data.raw.fluid["molten-testium"] and
+        icon_layers_contain(fluid_recipe.icons, data.raw.fluid["molten-testium"].icon) and
+        not icon_layers_contain(solid_recipe.icons, data.raw.fluid["molten-testium"].icon),
+      nil,
+      {
+        fluid_icon = data.raw.fluid["molten-testium"] and data.raw.fluid["molten-testium"].icon,
+        solid_icons = solid_recipe and solid_recipe.icons,
+        fluid_icons = fluid_recipe and fluid_recipe.icons,
       })
 
     local solution_recipe = data.raw.recipe["recycle-solvium-scrap-to-fluid"]

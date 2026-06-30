@@ -40,9 +40,21 @@ end
 ---@param allow_plain? boolean
 ---@return string|nil
 function resolver.resolve_solid(name, materials, allow_plain)
-  return strip_suffix(name, materials.solid_suffixes)
-      or strip_prefix(name, materials.solid_prefixes)
-      or (allow_plain and plain_name_fallback(name) or nil)
+  if materials.solid_aliases and materials.solid_aliases[name] then
+    return materials.solid_aliases[name]
+  end
+
+  local without_prefix = strip_prefix(name, materials.solid_prefixes)
+  if without_prefix then
+    return strip_suffix(without_prefix, materials.solid_suffixes) or without_prefix
+  end
+
+  local without_suffix = strip_suffix(name, materials.solid_suffixes)
+  if without_suffix then
+    return strip_prefix(without_suffix, materials.solid_prefixes) or without_suffix
+  end
+
+  return allow_plain and plain_name_fallback(name) or nil
 end
 
 ---Resolves a fluid name into a scrap material type.
@@ -50,6 +62,10 @@ end
 ---@param materials ISdata_table.materials
 ---@return string|nil
 function resolver.resolve_fluid(name, materials)
+  if materials.fluid_aliases and materials.fluid_aliases[name] then
+    return materials.fluid_aliases[name]
+  end
+
   local without_prefix = strip_prefix(name, materials.fluid_prefixes)
   if without_prefix then
     return strip_suffix(without_prefix, materials.fluid_suffixes)

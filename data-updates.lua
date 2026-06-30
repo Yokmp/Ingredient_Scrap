@@ -36,6 +36,14 @@ if IS_DEBUG then
         yokmods.ingredient_scrap.settings[key] = value
       end
     end
+    for material_name, default_mode in pairs(material_overrides.default_modes) do
+      yokmods.ingredient_scrap.settings.material_modes[material_name] = default_mode
+    end
+    for material_name, mode in pairs(profile.material_modes or {}) do
+      if material_overrides.default_modes[material_name] then
+        yokmods.ingredient_scrap.settings.material_modes[material_name] = mode
+      end
+    end
     log("[IS-TEST] Loaded profile: " .. yokmods.ingredient_scrap.test_profile)
   else
     yokmods.ingredient_scrap.test_profile = "default"
@@ -47,6 +55,7 @@ ISsettings = yokmods.ingredient_scrap.settings
 ---Creates the shared data table used to collect inputs, generated prototypes, inserts, and debug sources.
 function yokmods.ingredient_scrap.init_data_table()
   local affixes = material_overrides.resolver_affixes()
+  local aliases = material_overrides.resolver_aliases()
 
   return {
     constants = {
@@ -70,8 +79,10 @@ function yokmods.ingredient_scrap.init_data_table()
     materials = {
       solid_prefixes = affixes.solid_prefixes,
       solid_suffixes = affixes.solid_suffixes,
+      solid_aliases = aliases.item,
       fluid_prefixes = affixes.fluid_prefixes,
       fluid_suffixes = affixes.fluid_suffixes,
+      fluid_aliases = aliases.fluid,
       solid = {},
       fluid = {},
     },
