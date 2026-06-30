@@ -19,6 +19,9 @@ with additional scrap results.
 - Generates scrap items like `iron-scrap` or `testium-scrap`.
 - Generates recycle recipes like `recycle-iron-scrap`.
 - Generates fluid recycle recipes like `recycle-testium-scrap-to-fluid` when applicable.
+- Keeps generated recycle recipes present and does not disable them with
+  `enabled = false`; recipes that should not be visible yet are hidden with
+  `hidden = true` instead.
 - Adds scrap results to recipes based on matching solid and fluid ingredients.
 - Accumulates mixed solid/fluid inputs into one scrap result per scrap type.
 - Copies the source recipe `main_product` into the patch table before applying result inserts.
@@ -170,6 +173,32 @@ Startup settings are generated during Factorio's settings stage. If a mod
 registers overrides only in the data stage, those overrides can affect later
 data-stage logic only if that integration loads before Ingredient Scrap collects
 materials; they cannot create new startup settings for the same load.
+
+Generated prototype accessors are available after Ingredient Scrap has built its
+data-stage tables. They return the staged tables by reference, so compat mods can
+inspect or patch generated prototypes in a later data stage such as
+`data-final-fixes.lua`:
+
+```lua
+local api = yokmods.ingredient_scrap.api
+
+local items = api.generated.items()
+local fluids = api.generated.fluids()
+local recipes = api.generated.recipes()
+local technologies = api.generated.technologies()
+local techs = api.generated.techs()
+```
+
+`items`, `recipes`, and `technologies` point at the generated prototype tables
+inside `yokmods.ingredient_scrap.data_table.prototypes`. `fluids` lists fluid
+prototype names used as generated fluid recycle results; Ingredient Scrap does
+not create new fluid prototypes. Because generated recycle recipes are hidden
+rather than disabled, another mod can reveal one by clearing `hidden`:
+
+```lua
+local recipe = api.generated.recipes()["recycle-example-scrap"]
+if recipe then recipe.hidden = nil end
+```
 
 Crafting category support is also registered through the public API and is kept
 separate by prototype type:

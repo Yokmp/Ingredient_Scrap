@@ -60,7 +60,7 @@
 ---@field type string
 ---@field name string
 ---@field localised_name table?[string]
----@field enabled boolean
+---@field hidden boolean?
 ---@field categories table?[string]
 ---@field main_product string?
 ---@field ingredients [ISIngredientPrototype]?
@@ -80,6 +80,7 @@
 ---@field pictures table[]
 ---@field subgroup string
 ---@field order string
+---@field hidden boolean?
 ---@field stack_size integer
 ---@field inventory_move_sound table
 ---@field pick_sound table
