@@ -1,0 +1,78 @@
+{
+  "profiles": {
+    "krastorio_is": {
+      "label": "Krastorio+IS",
+      "mods": [
+        "base",
+        "ChangeInserterDropLane",
+        "elevated-rails",
+        "flib",
+        "Ingredient_Scrap",
+        "Krastorio2",
+        "Krastorio2Assets",
+        "Krastorio2MenuSimulations",
+        "pipe_plus",
+        "quality",
+        "space-age"
+      ]
+    },
+    "angels_is": {
+      "label": "Angels+IS",
+      "mods": [
+        "base",
+        "elevated-rails",
+        "Ingredient_Scrap",
+        "quality",
+        "space-age",
+        "angelspetrochem",
+        "angelspetrochemgraphics",
+        "angelsrefining",
+        "angelsrefininggraphics",
+        "angelssmelting",
+        "angelssmeltinggraphics"
+      ]
+    },
+    "bobs_is": {
+      "label": "Bob's+IS",
+      "mods": [
+        "base",
+        "elevated-rails",
+        "Ingredient_Scrap",
+        "quality",
+        "space-age",
+        "boblibrary",
+        "bobores",
+        "bobplates"
+      ]
+    },
+    "bob_angels_is": {
+      "label": "Bob+Angels+IS",
+      "mods": [
+        "angelspetrochem",
+        "angelspetrochemgraphics",
+        "angelsrefining",
+        "angelsrefininggraphics",
+        "angelssmelting",
+        "angelssmeltinggraphics",
+        "base",
+        "boblibrary",
+        "bobores",
+        "bobplates",
+        "elevated-rails",
+        "Ingredient_Scrap",
+        "quality",
+        "space-age"
+      ]
+    },
+    "is_sa": {
+      "label": "IS+SA",
+      "mods": [
+        "base",
+        "elevated-rails",
+        "Ingredient_Scrap",
+        "quality",
+        "space-age"
+      ]
+    }
+  }
+}

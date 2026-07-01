@@ -15,7 +15,7 @@ with additional scrap results.
 ## Current behavior
 
 - Detects solid materials from resources, known item suffixes, and explicit whitelists.
-- Detects fluid material families such as `molten-*` and `liquid-*` when fluid support is enabled.
+- Detects fluid material families such as `molten-*` and `liquid-*`.
 - Generates scrap items like `iron-scrap` or `testium-scrap`.
 - Generates recycle recipes like `recycle-iron-scrap`.
 - Generates fluid recycle recipes like `recycle-testium-scrap-to-fluid` when applicable.
@@ -50,9 +50,12 @@ Startup settings are defined in `settings.lua`.
 | `yis-fixed-amount` | `false` | Uses fixed `amount` instead of `amount_min`/`amount_max`. |
 | `yis-amount-limit` | `true` | Keeps generated amounts smoothed instead of scaling large recipes linearly. |
 | `yis-shallow-log` | `true` | Writes short generation summaries to the Factorio log. |
-| `yis-fluid-recipes` | `true` | Enables fluid ingredient detection and generated fluid recycle recipes. |
 | `yis-hide-tech` | `true` | Hides generated recycling technologies unless shallow logging is enabled. |
 | `yis-material-*` | varies | Per-material override mode: `auto`, `solid`, `fluid`, `both`, or `none`. |
+
+Fluid handling is currently always enabled. The old `yis-fluid-recipes` startup
+setting remains hidden as an internal compatibility switch while solid/fluid
+separation is revisited.
 
 ## Public API
 

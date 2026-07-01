@@ -25,8 +25,9 @@ reasoning, edge cases, and future ideas.
 7. Classify `review-difference` decisions into manual review and strong
    `active-candidate` suggestions. Only strong candidates are mirrored into the
    staged table.
-8. Add synthetic hidden and disabled source fixtures. Hidden and disabled source
-   chains generate stable hidden prototypes, generated recipes do not set
+8. Add synthetic hidden and disabled source fixtures. Hidden source chains
+   generate stable hidden prototypes, while disabled-but-unlocked-by-tech source
+   chains keep generated scrap prototypes visible. Generated recipes do not set
    `enabled = false`, and disabled-only chain evidence does not lower decider
    confidence by itself.
 9. Allow API/compat-modified generated recipes or technologies to be
@@ -44,7 +45,88 @@ reasoning, edge cases, and future ideas.
 ### Next
 
 1. Run broader compat passes against Angels and Bobs, using the recipe-chain API
-   hooks only for cases where automatic evidence is not enough.
+   hooks only for cases where automatic evidence is not enough:
+   - Done 2026-07-02: Generate fresh `material-flow.json` and
+     `production-flow.json` dumps for `krastorio_is`, `angels_is`, `bobs_is`,
+     and `bob_angels_is`.
+     The archived copies live under `tools/toolset/dumps/<profile>/`.
+     The JSON viewer is now the primary review surface; the older text target
+     lists are considered a legacy helper and do not need to be regenerated for
+     normal compat passes.
+     Current counts:
+     - `krastorio_is`: 18 materials, 271 material-flow entries, 1935
+       production recipes, 673 production nodes.
+     - `angels_is`: 29 materials, 277 material-flow entries, 2318 production
+       recipes, 1017 production nodes.
+     - `bobs_is`: 33 materials, 226 material-flow entries, 1047 production
+       recipes, 533 production nodes.
+     - `bob_angels_is`: 36 materials, 391 material-flow entries, 2659
+       production recipes, 1116 production nodes.
+   - Review the generated material list for obvious missing base materials such
+     as `plastic-bar`/plastic, rubber, glass, and other non-metal process
+     materials that should still produce scrap. Plastic is now visible through
+     the `-bar` suffix; glass and rubber are not visible in the current generated
+     material-flow dumps and need review against the production-flow dumps.
+     First review pass:
+     - K2 `kr-glass` is used by real recipes such as `chemical-science-pack`,
+       `kr-electronic-components`, `solar-panel`, and machines. It should be a
+       stable `glass` material override. Done: K2 `glass` override maps
+       `kr-glass` to `glass`.
+     - K2 `kr-silicon` is used by real recipes such as
+       `kr-electronic-components` and `solar-panel`. It should be a stable
+       `silicon` material override. Done: K2 `silicon` override maps
+       `kr-silicon` to `silicon`.
+     - Bob's `bob-rubber` exists in the base Bob profile, but current evidence
+       mostly shows production/recycling rather than normal downstream
+       consumption. Keep it under review instead of forcing it immediately.
+     - Angel's glass/rubber/resin/silicon chains are mostly hidden,
+       disabled, `auto_recycle=false`, barreling, or intermediate process
+       chains in the current profiles. Keep them visible in `production-flow`
+       review before adding overrides.
+   - Use `production-flow.json` to separate true materials from ore-processing,
+     slag, sorting, powder, ingot, chemical, barreling, recycling, and other
+     side-chain artifacts.
+   - Record any ambiguous chains as review notes instead of immediately adding
+     compat overrides.
+   - Add recipe-chain API overrides only for stable, mod-specific facts that the
+     automatic evidence cannot infer reliably.
+   - Re-run the compat profiles after every override batch and compare the
+     material-flow/production-flow dumps in the viewer before moving the case to
+     Done.
+   - Last experiment in this queue: test composable evidence/weight profiles.
+     The idea is to feed the recipe-chain decider profile-specific weights and
+     aliases, then mix profiles for active mod combinations. This is explicitly
+     experimental because it may cost more time than it saves; keep hard facts
+     such as aliases, forced targets, and blocked materials in the existing API
+     unless the experiment proves useful.
+2. Before a release build, restore the `yis-hide-tech` behavior for generated
+   recycling technologies. During development they stay `hidden = false` so
+   in-game testing can see every generated unlock and research trigger.
+3. Before a release build, update `deploy.py` ignore rules so local-only tooling
+   and generated debug artifacts stay out of the release archive. In particular,
+   exclude `tools/`, `tools/toolset/dumps/`, `tools/toolset/target-lists/`,
+   `__pycache__/`, and other generated viewer/test outputs unless a specific
+   file is intentionally packaged. The deploy script should produce two release
+   artifacts:
+   - `_release_/public/Ingredient_Scrap/` as clean production source intended to
+     be merged/pushed to the public GitHub `main` branch.
+   - `_release_/Ingredient_Scrap_<version>.zip` as the Mod Portal upload.
+4. Before publishing on GitHub, decide the repository/release layout. The
+   project should keep private/local development source, test harnesses, dumps,
+   tools, and backup data separate from the public production mod code. The
+   intended split is "backup/source project" vs "public production code", not
+   simply pushing the whole local working tree to `main`.
+5. Generated Ingredient Scrap prototypes use a mod-owned `yis-` prefix:
+   `yis-<material>-scrap` for scrap items and
+   `yis-recycle-<material>-scrap` for recycle recipes/technologies. Before a
+   release, check whether development saves need a migration from the older
+   unprefixed names.
+   Name helpers must not double-prefix API-provided material names that already
+   start with `yis-`.
+6. Once the mod has been published, future prototype renames must ship with
+   Factorio migration scripts. The current prefix rename can stay unmigrated
+   because it happened before release, but this should not become the update
+   policy for public versions.
 
 ### Later
 
@@ -58,6 +140,18 @@ reasoning, edge cases, and future ideas.
 4. Build a Python weight tuner after a golden-table test set exists.
 5. Implement `Preserve recipe shape` in small tested steps.
 6. Expand the Python tool UI beyond the mod-list workflow.
+7. Consider an `Advanced scrap recycling` chain. This should be separate from
+   the basic recycle recipes and could consume an acid to improve yield per
+   scrap while producing wastewater or another cleanup byproduct. It needs
+   careful tech placement: if a suitable acid and acid technology already exist,
+   advanced recycling should depend on that technology; if no suitable acid
+   exists, the mod would need to provide one and place the unlock at a sensible
+   point in the tech tree.
+8. Split test/report severities so review output can distinguish:
+   - minor issues such as missing localisations;
+   - important behavior problems such as wrong recycle results;
+   - critical failures such as crashes or invalid icon definitions that make
+     Factorio reject prototypes.
 
 ## Intentional Behavior: Recycler Scrap Sink
 
@@ -70,6 +164,26 @@ recipe shape and Factorio recycler behavior.
 Keep this behavior. It acts as a useful late-game scrap sink and should not be
 "fixed" away by future recipe-chain or category changes unless a separate
 setting is deliberately introduced.
+
+## Note: Quality Recycling Recipes Are Side Chains
+
+Quality does not create separate item prototypes for each quality level. Item
+quality is carried as quality state on an item stack/filter rather than through
+names such as `rare-iron-plate`. The auto-generated Quality recycling recipes
+do have a reliable recipe shape:
+
+- recipe name usually ends in `-recycling`;
+- recipe category is `recycling`.
+
+Use `recipe.category == "recycling"` as the robust filter for normal material
+collection and production-chain analysis. The name suffix can be useful for
+debugging, but should not be the primary rule because other mods may use similar
+names for unrelated recipes.
+
+Quality recycling recipes should stay visible in future side-chain/debug views,
+but they must not be treated as ordinary production recipes that generate extra
+scrap results. A later tree-viewer mode can show them as a dedicated Quality or
+recycling side chain.
 
 Status and sequencing:
 

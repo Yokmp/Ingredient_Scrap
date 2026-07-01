@@ -7,6 +7,13 @@
 function yokmods.ingredient_scrap.collector()
   local data_table = yokmods.ingredient_scrap.data_table
 
+  ---Returns true for Quality-style recycling recipes that should not create additional scrap.
+  ---@param recipe table
+  ---@return boolean
+  local function is_recycling_recipe(recipe)
+    return recipe.category == "recycling" or (recipe.name and recipe.name:match("%-recycling$") ~= nil)
+  end
+
   ---Checks whether an ingredient name belongs to the given scrap material type.
   local function matches_scrap_type(name, scrap_type, prefixes, suffixes, aliases)
     if aliases and aliases[name] == scrap_type then return true end
@@ -46,6 +53,7 @@ function yokmods.ingredient_scrap.collector()
 
     local fallback_name = scrap_type .. "-plate"
     local fallback_item = data.raw.item[fallback_name]
+      or data.raw.item[scrap_type .. "-bar"]
       or data.raw.item[scrap_type .. "-ingot"]
       or data.raw.item[scrap_type]
 
@@ -59,12 +67,15 @@ function yokmods.ingredient_scrap.collector()
   ---Returns true when generated prototypes should exist but stay hidden.
   local function should_hide_generated_prototypes(recipe, source_item, source_fluid)
     return recipe.hidden == true
-      or recipe.enabled == false
       or (source_item and source_item.hidden == true)
       or (source_fluid and source_fluid.hidden == true)
   end
 
   for _, recipe in pairs(data.raw.recipe) do
+    if is_recycling_recipe(recipe) then
+      goto continue
+    end
+
     if recipe.ingredients and recipe.ingredients[1] then
       data_table.ingredients.items[recipe.name] = data_table.ingredients.items[recipe.name] or {}
       data_table.ingredients.fluids[recipe.name] = data_table.ingredients.fluids[recipe.name] or {}
@@ -180,6 +191,8 @@ function yokmods.ingredient_scrap.collector()
     else
       log("No ingredients: " .. recipe.name)
     end
+
+    ::continue::
   end
 
   return data_table

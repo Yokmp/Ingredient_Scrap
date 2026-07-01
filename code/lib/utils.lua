@@ -13,7 +13,7 @@ local scrap_tints = require("code.lib.item-tints")
 ---@param scrap_type string
 function yokmods.ingredient_scrap.add_recipe_results(data_table, ingredient, recipe, scrap_type)
   local amount, min, max = yokmods.ingredient_scrap.scrap_amount_range(ingredient.amount)
-  local scrap_name = scrap_type .. "-scrap"
+  local scrap_name = yokmods.ingredient_scrap.get_scrap_name(scrap_type)
 
   if data_table.debug and data_table.debug.sources then
     data_table.debug.sources.inserts[recipe.name] = data_table.debug.sources.inserts[recipe.name] or {}
@@ -190,17 +190,32 @@ function yokmods.ingredient_scrap.scrap_amount_range(base_amount)
 end
 
 
+---Adds the mod-owned prototype prefix only when it is not already present.
+---@param name string
+---@return string
+local function with_yis_prefix(name)
+  if name:match("^yis%-") then return name end
+  return "yis-" .. name
+end
+
+---Removes the mod-owned prefix from a material token before composing names.
+---@param scrap_type string
+---@return string
+local function without_yis_prefix(scrap_type)
+  return scrap_type:gsub("^yis%-", "")
+end
+
 ---Returns the generated recycle recipe name for a scrap material type.
 ---@param scrap_type string
 ---@return string
 function yokmods.ingredient_scrap.get_recycle_recipe_name(scrap_type)
-  return "recycle-" .. scrap_type .. "-scrap"
+  return with_yis_prefix("recycle-" .. without_yis_prefix(scrap_type) .. "-scrap")
 end
 ---Returns the generated scrap item name for a scrap material type.
 ---@param scrap_type string
 ---@return string
 function yokmods.ingredient_scrap.get_scrap_name(scrap_type)
-  return scrap_type .. "-scrap"
+  return with_yis_prefix(without_yis_prefix(scrap_type) .. "-scrap")
 end
 
 
@@ -252,7 +267,7 @@ end
 ---Returns the icon layers used by recycle recipes for the given scrap type.
 function yokmods.ingredient_scrap.get_icon_layers(scrap_type, tech_icon, result_type, result_name)
   local constants = yokmods.ingredient_scrap.data_table.constants
-  local scrap_item = yokmods.ingredient_scrap.data_table.prototypes.items[scrap_type .. "-scrap"]
+  local scrap_item = yokmods.ingredient_scrap.data_table.prototypes.items[yokmods.ingredient_scrap.get_scrap_name(scrap_type)]
   local icons = {}
 
   if not scrap_item then
@@ -278,8 +293,23 @@ function yokmods.ingredient_scrap.get_icon_layers(scrap_type, tech_icon, result_
     return nil
   end
 
+  ---Returns a copied icon layer with Factorio's icon_size field populated.
+  ---@param icon_layer table
+  ---@return table
+  local function normalize_icon_layer(icon_layer)
+    local copy = {}
+    for key, value in pairs(icon_layer) do
+      copy[key] = value
+    end
+    copy.icon_size = copy.icon_size or copy.size or 64
+    copy.size = nil
+    return copy
+  end
+
   local source_icons = scrap_item.icons
-  if result_type == "fluid" and result_name and data.raw.fluid[result_name] then
+  if result_type == "item" and result_name and data.raw.item[result_name] then
+    source_icons = prototype_icon_layers(data.raw.item[result_name]) or source_icons
+  elseif result_type == "fluid" and result_name and data.raw.fluid[result_name] then
     source_icons = prototype_icon_layers(data.raw.fluid[result_name]) or source_icons
   end
 
@@ -291,13 +321,19 @@ function yokmods.ingredient_scrap.get_icon_layers(scrap_type, tech_icon, result_
       scale = 0.8,
       tint = scrap_item.icons and scrap_item.icons[1] and scrap_item.icons[1].tint,
     })
+    for _, v in ipairs(source_icons) do
+      local layer = normalize_icon_layer(v)
+      layer.scale = layer.scale or 0.85
+      layer.shift = layer.shift or { 0, 0 }
+      table.insert(icons, layer)
+    end
   else
     if mods["quality"] then
       table.insert(icons, { icon = "__quality__/graphics/icons/recycling.png", icon_size = 64, scale = 0.8})
     else
       table.insert(icons, { icon = constants.icon_path .. "recycle-64.png", icon_size = 64, scale = 0.8})
     end
-    for _, v in ipairs(source_icons) do table.insert(icons, v) end
+    for _, v in ipairs(source_icons) do table.insert(icons, normalize_icon_layer(v)) end
   end
 
   if not tech_icon then

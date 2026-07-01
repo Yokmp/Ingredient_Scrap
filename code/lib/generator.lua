@@ -14,7 +14,7 @@ local function icon_scale_and_shift(icon_data, shift)
   local scale_factor = 64 / (icon_data.icon_size or 64)
   return {
     icon = icon_data.icon,
-    size = icon_data.icon_size,
+    icon_size = icon_data.icon_size,
     scale = 0.33 * scale_factor,
     shift = shift or { -6, -0 }
   }
@@ -107,6 +107,33 @@ end
 ---*RECYCLE RECIPES*          --
 --------------------------------
 
+---Scores solid recycle targets so base materials can replace later intermediates.
+---@param result_type string|nil
+---@param result_name string|nil
+---@param scrap_type string
+---@return number
+local function solid_recycle_target_priority(result_type, result_name, scrap_type)
+  if result_type ~= "item" or not result_name then return 0 end
+  if result_name == scrap_type .. "-plate" or result_name:match("%-plate$") then return 50 end
+  if result_name == scrap_type .. "-ingot" or result_name:match("%-ingot$") then return 40 end
+  if result_name == scrap_type .. "-ore" or result_name:match("%-ore$") then return 30 end
+  if result_name == scrap_type then return 20 end
+  return 10
+end
+
+---Returns true when a newly seen recycle target should replace the current one.
+---@param existing_recipe table
+---@param recipe_defines table
+---@return boolean
+local function should_replace_recycle_target(existing_recipe, recipe_defines)
+  local existing_result = existing_recipe.results and existing_recipe.results[1]
+  if not existing_result then return true end
+  if existing_result.type ~= "item" or recipe_defines.result_type ~= "item" then return false end
+  local existing_priority = solid_recycle_target_priority(existing_result.type, existing_result.name, recipe_defines.scrap_type)
+  local new_priority = solid_recycle_target_priority(recipe_defines.result_type, recipe_defines.result_name, recipe_defines.scrap_type)
+  return new_priority > existing_priority
+end
+
 
 ---Creates and stores the generated recycle recipe prototype for item or fluid recovery.
 ---@param recipe_defines {scrap_type: string, result_type: string, result_name: string, categories: category, result_amount?: number, recipe_suffix?: string, hidden?: boolean}
@@ -120,6 +147,24 @@ function yokmods.ingredient_scrap.item_recycle_recipes(recipe_defines)
   if existing_recycle_recipe then
     if existing_recycle_recipe.hidden and not recipe_defines.hidden then
       existing_recycle_recipe.hidden = nil
+    end
+    if should_replace_recycle_target(existing_recycle_recipe, recipe_defines) then
+      local result_amount = recipe_defines.result_amount or 1
+      existing_recycle_recipe.results = {
+        { type = recipe_defines.result_type, name = recipe_defines.result_name, amount = result_amount }
+      }
+      existing_recycle_recipe.icons = yokmods.ingredient_scrap.get_icon_layers(
+        recipe_defines.scrap_type,
+        false,
+        recipe_defines.result_type,
+        recipe_defines.result_name
+      )
+      if yokmods.ingredient_scrap.data_table.debug and yokmods.ingredient_scrap.data_table.debug.sources then
+        yokmods.ingredient_scrap.data_table.debug.sources.recipes[recipe_name] =
+          yokmods.ingredient_scrap.data_table.debug.sources.recipes[recipe_name] or {}
+        yokmods.ingredient_scrap.data_table.debug.sources.recipes[recipe_name].result_type = recipe_defines.result_type
+        yokmods.ingredient_scrap.data_table.debug.sources.recipes[recipe_name].result_name = recipe_defines.result_name
+      end
     end
     return
   end -- no duplicates
@@ -147,7 +192,7 @@ function yokmods.ingredient_scrap.item_recycle_recipes(recipe_defines)
     hide_from_player_crafting = false,
     ingredients =
     {
-      { type = "item", name = recipe_defines.scrap_type .. "-scrap", amount = 0 },
+      { type = "item", name = yokmods.ingredient_scrap.get_scrap_name(recipe_defines.scrap_type), amount = 0 },
     },
     results = { { type = recipe_defines.result_type, name = recipe_defines.result_name, amount = result_amount } }
   }
@@ -177,8 +222,14 @@ function yokmods.ingredient_scrap.technology_prototype(tech_defines)
   local recycle_recipe_name = yokmods.ingredient_scrap.get_recycle_recipe_name(tech_defines.scrap_type)
   local unlock_recipe_name = recycle_recipe_name .. (tech_defines.recipe_suffix or "")
   local scrap_name = yokmods.ingredient_scrap.get_scrap_name(tech_defines.scrap_type)
-  local constants = yokmods.ingredient_scrap.data_table.constants
-  local icon_layers = yokmods.ingredient_scrap.get_icon_layers(tech_defines.scrap_type, true)
+  local recycle_recipe = tech_defines.data_table.prototypes.recipes[unlock_recipe_name]
+  local recycle_result = recycle_recipe and recycle_recipe.results and recycle_recipe.results[1]
+  local icon_layers = yokmods.ingredient_scrap.get_icon_layers(
+    tech_defines.scrap_type,
+    true,
+    recycle_result and recycle_result.type,
+    recycle_result and recycle_result.name
+  )
 
   ---Returns true when the technology already unlocks the requested recipe.
   ---@param technology table
@@ -200,7 +251,9 @@ function yokmods.ingredient_scrap.technology_prototype(tech_defines)
     localised_name = { "", {"item-name." .. tech_defines.scrap_type}, " ",{"item-name.scrap"}, " ", {"item-name.recycling"} },
     icons = icon_layers,
     enabled = true,
-    hidden = not yokmods.ingredient_scrap.settings.shallow_log and yokmods.ingredient_scrap.settings.hide_tech,
+    -- Keep generated recycle technologies visible during development. Re-enable
+    -- yis-hide-tech handling before release.
+    hidden = false,
     effects =
     {
       {

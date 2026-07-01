@@ -136,9 +136,11 @@ function yokmods.ingredient_scrap.patch_recycle_amounts()
     if avg > 0 then
       needed = math.max(math.floor(ISsettings.needed / avg), 1)
     end
+    local scrap_type = scrap_name:gsub("^yis%-", ""):gsub("%-scrap$", "")
+    local base_recipe_name = yokmods.ingredient_scrap.get_recycle_recipe_name(scrap_type)
     local recipe_names = {
-      "recycle-" .. scrap_name,
-      "recycle-" .. scrap_name .. "-to-fluid",
+      base_recipe_name,
+      base_recipe_name .. "-to-fluid",
     }
 
     for _, recipe_name in ipairs(recipe_names) do
@@ -186,7 +188,9 @@ function yokmods.ingredient_scrap.patch()
   local inserts = 0
   for recipe_name, insert_data in pairs(data_table.inserts.recipes) do
     local recipe = data.raw.recipe[recipe_name]
-    if recipe and insert_data.results then
+    local is_recycling_recipe = recipe and
+      (recipe.category == "recycling" or recipe_name:match("%-recycling$") ~= nil)
+    if recipe and insert_data.results and not is_recycling_recipe then
       recipe.main_product = insert_data.main_product
       recipe.results = recipe.results or {}
       for _, result in ipairs(insert_data.results) do
@@ -206,5 +210,3 @@ function yokmods.ingredient_scrap.patch()
   end
   log("Patched " .. inserts .. " recipe(s) with scrap results.")
 end
-
-

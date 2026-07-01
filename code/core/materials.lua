@@ -49,9 +49,10 @@ function yokmods.ingredient_scrap.collect_materials()
       .. " forced: " .. tostring(forced)
       .. " seen: " .. tostring(seen_fluid[scrap_type] or false)
       .. " has_plate: " .. tostring(data.raw.item[scrap_type .. "-plate"] ~= nil)
+      .. " has_bar: " .. tostring(data.raw.item[scrap_type .. "-bar"] ~= nil)
       .. " has_ingot: " .. tostring(data.raw.item[scrap_type .. "-ingot"] ~= nil)) end
     if not ignored and not seen_fluid[scrap_type] then
-      if forced or data.raw.item[scrap_type .. "-plate"] or data.raw.item[scrap_type .. "-ingot"] then
+      if forced or data.raw.item[scrap_type .. "-plate"] or data.raw.item[scrap_type .. "-bar"] or data.raw.item[scrap_type .. "-ingot"] then
         seen_fluid[scrap_type] = true
         table.insert(fluid, scrap_type)
         if IS_DEBUG then log("[IS-MAT-FLUID] inserted: " .. scrap_type) end

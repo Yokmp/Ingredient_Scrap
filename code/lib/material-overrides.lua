@@ -17,7 +17,7 @@ overrides.prototype_affixes = {
   default = {
     item = {
       prefixes = {},
-      suffixes = { "-plate", "-ore", "" },
+      suffixes = { "-plate", "-bar", "-ore", "" },
     },
     fluid = {
       prefixes = { "molten-" },

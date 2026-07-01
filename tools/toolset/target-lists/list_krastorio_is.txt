@@ -1,0 +1,380 @@
+Ingredient Scrap Target List: krastorio_is
+================================================================================
+
+[fluid] copper
+  resources:
+    copper-ore -> item:copper-ore
+  recycle targets:
+    yis-recycle-copper-scrap -> item:copper-plate x1
+    yis-recycle-copper-scrap-to-fluid -> fluid:molten-copper x10
+  source recipes:
+    fluid:molten-copper x1 -> casting-copper-cable -> item:copper-cable x2, item:yis-copper-scrap x1
+    fluid:molten-copper x2 -> casting-copper -> item:copper-plate x2, item:yis-copper-scrap x1
+    fluid:molten-copper x25 -> casting-low-density-structure -> item:low-density-structure x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+
+[fluid] hiddenfluidium
+  resources:
+    yis-test-hiddenfluidium-resource -> fluid:hiddenfluidium-solution x10
+  recycle targets:
+    yis-recycle-hiddenfluidium-scrap-to-fluid -> fluid:hiddenfluidium-solution x14
+  source recipes:
+    fluid:hiddenfluidium-solution x5 -> hiddenfluidium-solution-barrel -> item:hiddenfluidium-solution-barrel x1, item:yis-hiddenfluidium-scrap x1
+    fluid:hiddenfluidium-solution x7 -> yis-test-hiddenfluidium-fluid -> item:hiddenfluidium-product x1, item:yis-hiddenfluidium-scrap x1
+
+[fluid] holmium
+  recycle targets:
+    yis-recycle-holmium-scrap -> item:holmium-plate x1
+    yis-recycle-holmium-scrap-to-fluid -> fluid:holmium-solution x10
+  source recipes:
+    fluid:holmium-solution x1 -> electrolyte -> fluid:electrolyte x10, item:yis-holmium-scrap x1
+    fluid:holmium-solution x2 -> holmium-plate -> item:holmium-plate x1, item:yis-holmium-scrap x1
+
+[fluid] iron
+  resources:
+    iron-ore -> item:iron-ore
+  recycle targets:
+    yis-recycle-iron-scrap -> item:iron-plate x1
+    yis-recycle-iron-scrap-to-fluid -> fluid:molten-iron x10
+  source recipes:
+    fluid:molten-iron x1 -> casting-iron-gear-wheel -> item:iron-gear-wheel x1, item:yis-iron-scrap x1
+    fluid:molten-iron x1 -> casting-pipe -> item:pipe x1, item:yis-iron-scrap x1
+    fluid:molten-iron x1 -> tungsten-plate -> item:tungsten-plate x1, item:yis-tungsten-scrap x1, item:yis-iron-scrap x1
+    fluid:molten-iron x2 -> casting-iron -> item:iron-plate x2, item:yis-iron-scrap x1
+    fluid:molten-iron x2 -> casting-iron-stick -> item:iron-stick x4, item:yis-iron-scrap x1
+    fluid:molten-iron x2 -> concrete-from-molten-iron -> item:concrete x10, item:yis-iron-scrap x1
+    fluid:molten-iron x20 -> big-mining-drill -> item:big-mining-drill x1, item:yis-iron-scrap x1
+    fluid:molten-iron x3 -> casting-steel -> item:steel-plate x1, item:yis-iron-scrap x1
+    fluid:molten-iron x5 -> casting-pipe-to-ground -> item:pipe-to-ground x2, item:yis-iron-scrap x1
+    fluid:molten-iron x8 -> casting-low-density-structure -> item:low-density-structure x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+
+[fluid] rare-metal
+  resources:
+    kr-rare-metal-ore -> item:kr-rare-metal-ore
+    yis-test-rare-metal-resource -> item:rare-metal-ore x1
+    yis-test-rare-metal-solution-resource -> fluid:rare-metal-solution x10
+  recycle targets:
+    yis-recycle-rare-metal-scrap -> item:rare-metal-plate x1
+    yis-recycle-rare-metal-scrap-to-fluid -> fluid:rare-metal-solution x10
+  source recipes:
+    fluid:molten-rare-metal x5 -> molten-rare-metal-barrel -> item:molten-rare-metal-barrel x1, item:yis-rare-metal-scrap x1
+    fluid:rare-metal-solution x5 -> rare-metal-solution-barrel -> item:rare-metal-solution-barrel x1, item:yis-rare-metal-scrap x1
+
+[fluid] solvium
+  recycle targets:
+    yis-recycle-solvium-scrap-to-fluid -> fluid:solvium-solution x12
+  source recipes:
+    fluid:solvium-solution x5 -> solvium-solution-barrel -> item:solvium-solution-barrel x1, item:yis-solvium-scrap x1
+    fluid:solvium-solution x6 -> yis-test-solvium-solution -> item:solvium-product-fluid x1, item:yis-solvium-scrap x1
+
+[fluid] testium
+  recycle targets:
+    yis-recycle-testium-scrap -> item:testium-plate x1
+    yis-recycle-testium-scrap-to-fluid -> fluid:molten-testium x10
+  source recipes:
+    fluid:molten-testium x4 -> yis-test-testium-mixed -> item:testium-product-mixed x1, item:yis-testium-scrap x2
+    fluid:molten-testium x5 -> molten-testium-barrel -> item:molten-testium-barrel x1, item:yis-testium-scrap x1
+    fluid:molten-testium x5 -> yis-test-testium-fluid -> item:testium-product-fluid x1, item:yis-testium-scrap x1
+
+[solid] blockium
+  resources:
+    yis-test-blockium-resource -> item:blockium-ore x1
+  recycle targets:
+    yis-recycle-blockium-scrap -> item:blockium-plate x1
+  source recipes:
+    item:blockium-ore x4 -> yis-test-blockium-disabled -> item:blockium-plate x1, item:yis-blockium-scrap x1
+
+[solid] copper
+  resources:
+    copper-ore -> item:copper-ore
+  recycle targets:
+    yis-recycle-copper-scrap -> item:copper-plate x1
+    yis-recycle-copper-scrap-to-fluid -> fluid:molten-copper x10
+  source recipes:
+    item:copper-ore x2 -> copper-plate -> item:copper-plate x1, item:yis-copper-scrap x1
+    item:copper-ore x2 -> kr-copper-cable-from-copper-ore -> item:copper-cable x2, item:yis-copper-scrap x1
+    item:copper-ore x50 -> molten-copper -> fluid:molten-copper x500, item:yis-copper-scrap x2
+    item:copper-ore x9 -> kr-enriched-copper -> item:kr-enriched-copper x6, fluid:kr-dirty-water x25, item:yis-copper-scrap x1
+    item:copper-plate x1 -> battery -> item:battery x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+    item:copper-plate x1 -> copper-cable -> item:copper-cable x2, item:yis-copper-scrap x1
+    item:copper-plate x1 -> kr-big-battery-equipment -> item:kr-big-battery-equipment x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+    item:copper-plate x1 -> kr-lithium-sulfur-battery -> item:kr-lithium-sulfur-battery x1, item:yis-copper-scrap x1
+    item:copper-plate x1 -> superconductor -> item:superconductor x2, item:yis-holmium-scrap x1, item:yis-copper-scrap x1
+    item:copper-plate x10 -> kr-electrolysis-plant -> item:kr-electrolysis-plant x1, item:yis-copper-scrap x1
+    item:copper-plate x10 -> lab -> item:lab x1, item:yis-copper-scrap x1
+    item:copper-plate x10 -> low-density-structure -> item:low-density-structure x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1
+    item:copper-plate x100 -> heat-exchanger -> item:heat-exchanger x1, item:yis-steel-scrap x1, item:yis-copper-scrap x2
+    item:copper-plate x20 -> heat-pipe -> item:heat-pipe x1, item:yis-copper-scrap x1
+    item:copper-plate x20 -> kr-quantum-computer -> item:kr-quantum-computer x1, item:yis-copper-scrap x1, item:yis-rare-metal-scrap x2
+    item:copper-plate x50 -> fission-reactor-equipment -> item:fission-reactor-equipment x1, item:yis-copper-scrap x2, item:yis-steel-scrap x2
+    item:copper-plate x50 -> steam-turbine -> item:steam-turbine x1, item:yis-copper-scrap x2
+    item:copper-plate x500 -> kr-fusion-reactor -> item:kr-fusion-reactor x1, item:yis-copper-scrap x4, item:yis-steel-scrap x4, item:yis-rare-metal-scrap x4
+    item:copper-plate x6 -> kr-automation-core -> item:kr-automation-core x2, item:yis-copper-scrap x1
+    item:copper-plate x6 -> kr-energy-absorber-equipment -> item:kr-energy-absorber-equipment x1, item:yis-copper-scrap x1
+    item:copper-plate x60 -> kr-advanced-furnace -> item:kr-advanced-furnace x1, item:yis-imersium-scrap x1, item:yis-rare-metal-scrap x2, item:yis-copper-scrap x2
+
+[solid] disabledium
+  resources:
+    yis-test-disabledium-resource -> item:disabledium-ore x1
+  recycle targets:
+    yis-recycle-disabledium-scrap -> item:disabledium-plate x1
+  source recipes:
+    item:disabledium-ore x4 -> yis-test-disabledium-disabled -> item:disabledium-plate x1, item:yis-disabledium-scrap x1
+
+[solid] hiddenium
+  resources:
+    yis-test-hiddenium-resource -> item:hiddenium-ore x1
+  recycle targets:
+    yis-recycle-hiddenium-scrap -> item:hiddenium-plate x1
+  source recipes:
+    item:hiddenium-plate x4 -> yis-test-hiddenium-hidden -> item:hiddenium-product x1, item:yis-hiddenium-scrap x1
+
+[solid] holmium
+  recycle targets:
+    yis-recycle-holmium-scrap -> item:holmium-plate x1
+    yis-recycle-holmium-scrap-to-fluid -> fluid:holmium-solution x10
+  source recipes:
+    item:holmium-ore x2 -> holmium-solution -> fluid:holmium-solution x100, item:yis-holmium-scrap x1
+    item:holmium-plate x1 -> fusion-power-cell -> item:fusion-power-cell x1, item:yis-holmium-scrap x1
+    item:holmium-plate x1 -> lithium -> item:lithium x5, item:yis-holmium-scrap x1
+    item:holmium-plate x1 -> superconductor -> item:superconductor x2, item:yis-holmium-scrap x1, item:yis-copper-scrap x1
+    item:holmium-plate x150 -> electromagnetic-plant -> item:electromagnetic-plant x1, item:yis-holmium-scrap x3, item:yis-steel-scrap x2
+    item:holmium-plate x2 -> supercapacitor -> item:supercapacitor x1, item:yis-holmium-scrap x1
+
+[solid] imersium
+  recycle targets:
+    yis-recycle-imersium-scrap -> item:kr-imersium-plate x1
+  source recipes:
+    item:kr-imersium-beam x10 -> kr-matter-plant -> item:kr-matter-plant x1, item:yis-imersium-scrap x1
+    item:kr-imersium-beam x10 -> kr-planetary-teleporter -> item:kr-planetary-teleporter x1, item:yis-imersium-scrap x1
+    item:kr-imersium-beam x100 -> kr-antimatter-reactor -> item:kr-antimatter-reactor x1, item:yis-imersium-scrap x6, item:yis-rare-metal-scrap x4, item:yis-steel-scrap x4
+    item:kr-imersium-beam x20 -> kr-advanced-chemical-plant -> item:kr-advanced-chemical-plant x1, item:yis-imersium-scrap x2, item:yis-rare-metal-scrap x2
+    item:kr-imersium-beam x20 -> kr-advanced-furnace -> item:kr-advanced-furnace x1, item:yis-imersium-scrap x1, item:yis-rare-metal-scrap x2, item:yis-copper-scrap x2
+    item:kr-imersium-beam x20 -> kr-big-roboport -> item:kr-big-roboport x1, item:yis-steel-scrap x1, item:yis-imersium-scrap x2, item:yis-rare-metal-scrap x2
+    item:kr-imersium-beam x3 -> kr-small-roboport -> item:kr-small-roboport x2, item:yis-imersium-scrap x1, item:yis-steel-scrap x1, item:yis-rare-metal-scrap x1
+    item:kr-imersium-beam x3 -> kr-superior-substation -> item:kr-superior-substation x1, item:yis-imersium-scrap x1, item:yis-rare-metal-scrap x1
+    item:kr-imersium-beam x4 -> kr-advanced-assembling-machine -> item:kr-advanced-assembling-machine x1, item:yis-imersium-scrap x1
+    item:kr-imersium-beam x4 -> kr-matter-associator -> item:kr-matter-associator x1, item:yis-imersium-scrap x1
+    item:kr-imersium-beam x4 -> kr-stabilizer-charging-station -> item:kr-stabilizer-charging-station x1, item:yis-imersium-scrap x1
+    item:kr-imersium-beam x500 -> kr-intergalactic-transceiver -> item:kr-intergalactic-transceiver x1, item:yis-imersium-scrap x8, item:yis-rare-metal-scrap x5
+    item:kr-imersium-gear-wheel x10 -> kr-superior-loader -> item:kr-superior-loader x1, item:yis-imersium-scrap x1
+    item:kr-imersium-gear-wheel x20 -> kr-advanced-chemical-plant -> item:kr-advanced-chemical-plant x1, item:yis-imersium-scrap x2, item:yis-rare-metal-scrap x2
+    item:kr-imersium-gear-wheel x20 -> kr-big-roboport -> item:kr-big-roboport x1, item:yis-steel-scrap x1, item:yis-imersium-scrap x2, item:yis-rare-metal-scrap x2
+    item:kr-imersium-gear-wheel x4 -> kr-superior-inserter -> item:kr-superior-inserter x1, item:yis-imersium-scrap x2
+    item:kr-imersium-gear-wheel x4 -> kr-superior-long-inserter -> item:kr-superior-long-inserter x1, item:yis-imersium-scrap x2
+    item:kr-imersium-gear-wheel x4 -> kr-superior-splitter -> item:kr-superior-splitter x1, item:yis-imersium-scrap x1
+    item:kr-imersium-gear-wheel x4 -> kr-superior-transport-belt -> item:kr-superior-transport-belt x1, item:yis-imersium-scrap x1
+    item:kr-imersium-gear-wheel x5 -> kr-electric-mining-drill-mk3 -> item:kr-electric-mining-drill-mk3 x1, item:yis-imersium-scrap x1
+    item:kr-imersium-plate x1 -> kr-imersium-gear-wheel -> item:kr-imersium-gear-wheel x1, item:yis-imersium-scrap x1
+    item:kr-imersium-plate x1 -> kr-superior-inserter -> item:kr-superior-inserter x1, item:yis-imersium-scrap x2
+    item:kr-imersium-plate x10 -> kr-energy-shield-mk4-equipment -> item:kr-energy-shield-mk4-equipment x1, item:yis-imersium-scrap x1
+    item:kr-imersium-plate x10 -> kr-superior-exoskeleton-equipment -> item:kr-superior-exoskeleton-equipment x1, item:yis-imersium-scrap x1
+    item:kr-imersium-plate x100 -> kr-antimatter-reactor-equipment -> item:kr-antimatter-reactor-equipment x1, item:yis-imersium-scrap x2
+    item:kr-imersium-plate x2 -> kr-imersium-beam -> item:kr-imersium-beam x1, item:yis-imersium-scrap x1
+    item:kr-imersium-plate x2 -> kr-superior-long-inserter -> item:kr-superior-long-inserter x1, item:yis-imersium-scrap x2
+    item:kr-imersium-plate x350 -> kr-antimatter-reactor -> item:kr-antimatter-reactor x1, item:yis-imersium-scrap x6, item:yis-rare-metal-scrap x4, item:yis-steel-scrap x4
+    item:kr-imersium-plate x5 -> kr-personal-laser-defense-mk3-equipment -> item:kr-personal-laser-defense-mk3-equipment x1, item:yis-imersium-scrap x1
+    item:kr-imersium-plate x500 -> kr-intergalactic-transceiver -> item:kr-intergalactic-transceiver x1, item:yis-imersium-scrap x8, item:yis-rare-metal-scrap x5
+    item:kr-imersium-plate x6 -> kr-matter-stabilizer -> item:kr-matter-stabilizer x1, item:yis-imersium-scrap x1
+    item:kr-imersium-plate x8 -> kr-empty-antimatter-fuel-cell -> item:kr-empty-antimatter-fuel-cell x1, item:yis-imersium-scrap x1
+
+[solid] iron
+  resources:
+    iron-ore -> item:iron-ore
+  recycle targets:
+    yis-recycle-iron-scrap -> item:iron-plate x1
+    yis-recycle-iron-scrap-to-fluid -> fluid:molten-iron x10
+  source recipes:
+    item:iron-ore x1 -> concrete -> item:concrete x10, item:yis-iron-scrap x1
+    item:iron-ore x2 -> advanced-thruster-oxidizer -> fluid:thruster-oxidizer x1500, item:yis-iron-scrap x1
+    item:iron-ore x2 -> iron-plate -> item:iron-plate x1, item:yis-iron-scrap x1
+    item:iron-ore x2 -> kr-iron-gear-wheel-from-iron-ore -> item:iron-gear-wheel x1, item:yis-iron-scrap x1
+    item:iron-ore x2 -> kr-iron-stick-from-iron-ore -> item:iron-stick x2, item:yis-iron-scrap x1
+    item:iron-ore x2 -> thruster-oxidizer -> fluid:thruster-oxidizer x75, item:yis-iron-scrap x1
+    item:iron-ore x4 -> kr-iron-beam-from-iron-ore -> item:kr-iron-beam x1, item:yis-iron-scrap x1
+    item:iron-ore x50 -> molten-iron -> fluid:molten-iron x500, item:yis-iron-scrap x2
+    item:iron-ore x9 -> kr-enriched-iron -> item:kr-enriched-iron x6, fluid:kr-dirty-water x25, item:yis-iron-scrap x1
+    item:iron-plate x1 -> battery -> item:battery x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+    item:iron-plate x1 -> burner-inserter -> item:burner-inserter x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> display-panel -> item:display-panel x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> electronic-circuit -> item:electronic-circuit x2, item:yis-iron-scrap x1
+    item:iron-plate x1 -> engine-unit -> item:engine-unit x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> iron-gear-wheel -> item:iron-gear-wheel x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> iron-stick -> item:iron-stick x2, item:yis-iron-scrap x1
+    item:iron-plate x1 -> kr-rocket-fuel-with-ammonia -> item:rocket-fuel x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> kr-rocket-fuel-with-hydrogen-chloride -> item:rocket-fuel x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> night-vision-equipment -> item:night-vision-equipment x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> pipe -> item:pipe x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> rocket-fuel -> item:rocket-fuel x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> small-lamp -> item:small-lamp x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> sulfuric-acid -> fluid:sulfuric-acid x50, item:yis-iron-scrap x1
+    item:iron-plate x1 -> transport-belt -> item:transport-belt x2, item:yis-iron-scrap x1
+    item:iron-plate x10 -> kr-easy-steel-gear-wheel -> item:kr-steel-gear-wheel x5, item:yis-iron-scrap x1
+    item:iron-plate x10 -> radar -> item:radar x1, item:yis-iron-scrap x1
+    item:iron-plate x10 -> steam-engine -> item:steam-engine x1, item:yis-iron-scrap x1
+    item:iron-plate x10 -> steel-plate -> item:steel-plate x5, item:yis-iron-scrap x1
+    item:iron-plate x10 -> storage-tank -> item:storage-tank x1, item:yis-iron-scrap x1
+    item:iron-plate x2 -> accumulator -> item:accumulator x1, item:yis-iron-scrap x1
+    item:iron-plate x2 -> battery-equipment -> item:battery-equipment x1, item:yis-iron-scrap x1
+    item:iron-plate x2 -> kr-blank-tech-card -> item:kr-blank-tech-card x5, item:yis-iron-scrap x1
+    item:iron-plate x2 -> kr-iron-beam -> item:kr-iron-beam x1, item:yis-iron-scrap x1
+    item:iron-plate x2 -> kr-sentinel -> item:kr-sentinel x1, item:yis-iron-scrap x1
+    item:iron-plate x20 -> biochamber -> item:biochamber x1, item:yis-iron-scrap x1
+    item:iron-plate x20 -> kr-easy-steel-beam -> item:kr-steel-beam x5, item:yis-iron-scrap x1
+    item:iron-plate x25 -> kr-shelter -> item:kr-shelter x1, item:yis-iron-scrap x1
+    item:iron-plate x3 -> burner-mining-drill -> item:burner-mining-drill x1, item:yis-iron-scrap x1
+    item:iron-plate x3 -> programmable-speaker -> item:programmable-speaker x1, item:yis-iron-scrap x1
+    item:iron-plate x4 -> kr-big-battery-equipment -> item:kr-big-battery-equipment x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+    item:iron-plate x5 -> loader -> item:loader x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> pipe-to-ground -> item:pipe-to-ground x2, item:yis-iron-scrap x1
+    item:iron-plate x5 -> pipe-to-ground-2 -> item:pipe-to-ground-2 x2, item:yis-iron-scrap x1
+    item:iron-plate x5 -> pipe-to-ground-3 -> item:pipe-to-ground-3 x2, item:yis-iron-scrap x1
+    item:iron-plate x5 -> power-switch -> item:power-switch x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> rail-chain-signal -> item:rail-chain-signal x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> rail-signal -> item:rail-signal x1, item:yis-iron-scrap x1
+    item:iron-plate x6 -> kr-wind-turbine -> item:kr-wind-turbine x1, item:yis-iron-scrap x1
+    item:iron-plate x6 -> train-stop -> item:train-stop x1, item:yis-iron-scrap x1, item:yis-steel-scrap x1
+    item:iron-plate x8 -> iron-chest -> item:iron-chest x1, item:yis-iron-scrap x1
+
+[solid] quietium
+  recycle targets:
+    yis-recycle-quietium-scrap -> item:quietium-plate x1
+  source recipes:
+    item:quietium-plate x4 -> yis-test-quietium-neutral -> item:neutral-product x1, item:yis-quietium-scrap x1
+
+[solid] rare-metal
+  resources:
+    kr-rare-metal-ore -> item:kr-rare-metal-ore
+    yis-test-rare-metal-resource -> item:rare-metal-ore x1
+    yis-test-rare-metal-solution-resource -> fluid:rare-metal-solution x10
+  recycle targets:
+    yis-recycle-rare-metal-scrap -> item:rare-metal-plate x1
+    yis-recycle-rare-metal-scrap-to-fluid -> fluid:rare-metal-solution x10
+  source recipes:
+    item:kr-rare-metal-ore x10 -> kr-rare-metals -> item:kr-rare-metals x5, item:yis-rare-metal-scrap x1
+    item:kr-rare-metal-ore x9 -> kr-enriched-rare-metals -> item:kr-enriched-rare-metals x6, fluid:kr-dirty-water x25, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x1 -> kr-advanced-transport-belt -> item:kr-advanced-transport-belt x1, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x1 -> kr-empty-dt-fuel-cell -> item:kr-empty-dt-fuel-cell x1, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x1 -> kr-nitric-acid -> fluid:kr-nitric-acid x50, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x10 -> kr-advanced-loader -> item:kr-advanced-loader x1, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x1000 -> kr-intergalactic-transceiver -> item:kr-intergalactic-transceiver x1, item:yis-imersium-scrap x8, item:yis-rare-metal-scrap x5
+    item:kr-rare-metals x2 -> kr-easy-imersium-gear-wheel -> item:kr-imersium-gear-wheel x1, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x20 -> kr-laser-artillery-turret -> item:kr-laser-artillery-turret x1, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x20 -> kr-railgun-turret -> item:kr-railgun-turret x1, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x20 -> kr-rocket-turret -> item:kr-rocket-turret x1, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x20 -> kr-small-roboport -> item:kr-small-roboport x2, item:yis-imersium-scrap x1, item:yis-steel-scrap x1, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x20 -> recycler -> item:recycler x1, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x200 -> nuclear-reactor -> item:nuclear-reactor x1, item:yis-steel-scrap x3, item:yis-rare-metal-scrap x3
+    item:kr-rare-metals x3 -> processing-unit -> item:processing-unit x2, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x350 -> kr-antimatter-reactor -> item:kr-antimatter-reactor x1, item:yis-imersium-scrap x6, item:yis-rare-metal-scrap x4, item:yis-steel-scrap x4
+    item:kr-rare-metals x350 -> kr-fusion-reactor -> item:kr-fusion-reactor x1, item:yis-copper-scrap x4, item:yis-steel-scrap x4, item:yis-rare-metal-scrap x4
+    item:kr-rare-metals x4 -> kr-easy-imersium-beam -> item:kr-imersium-beam x1, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x4 -> kr-electric-mining-drill-mk2 -> item:kr-electric-mining-drill-mk2 x1, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x5 -> kr-advanced-radar -> item:kr-advanced-radar x1, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x5 -> kr-matter-research-data -> item:kr-matter-research-data x5, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x5 -> kr-tritium -> item:kr-tritium x5, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x50 -> kr-energy-storage -> item:kr-energy-storage x1, item:yis-rare-metal-scrap x2
+    item:kr-rare-metals x50 -> kr-quantum-computer -> item:kr-quantum-computer x1, item:yis-copper-scrap x1, item:yis-rare-metal-scrap x2
+    item:kr-rare-metals x50 -> kr-quarry-drill -> item:kr-quarry-drill x1, item:yis-steel-scrap x2, item:yis-rare-metal-scrap x2
+    item:kr-rare-metals x6 -> kr-imersium-plate -> item:kr-imersium-plate x3, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x6 -> kr-superior-substation -> item:kr-superior-substation x1, item:yis-imersium-scrap x1, item:yis-rare-metal-scrap x1
+    item:kr-rare-metals x60 -> kr-advanced-steam-turbine -> item:kr-advanced-steam-turbine x1, item:yis-rare-metal-scrap x2
+    item:kr-rare-metals x60 -> kr-singularity-lab -> item:kr-singularity-lab x1, item:yis-steel-scrap x2, item:yis-rare-metal-scrap x2
+    item:kr-rare-metals x80 -> kr-advanced-chemical-plant -> item:kr-advanced-chemical-plant x1, item:yis-imersium-scrap x2, item:yis-rare-metal-scrap x2
+    item:kr-rare-metals x80 -> kr-advanced-furnace -> item:kr-advanced-furnace x1, item:yis-imersium-scrap x1, item:yis-rare-metal-scrap x2, item:yis-copper-scrap x2
+    item:kr-rare-metals x80 -> kr-big-roboport -> item:kr-big-roboport x1, item:yis-steel-scrap x1, item:yis-imersium-scrap x2, item:yis-rare-metal-scrap x2
+
+[solid] steel
+  recycle targets:
+    yis-recycle-steel-scrap -> item:steel-plate x1
+  source recipes:
+    item:steel-plate x1 -> barrel -> item:barrel x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> bulk-inserter -> item:bulk-inserter x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> fast-inserter -> item:fast-inserter x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> flying-robot-frame -> item:flying-robot-frame x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> kr-steel-gear-wheel -> item:kr-steel-gear-wheel x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> kr-steel-pipe -> item:kr-steel-pipe x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> land-mine -> item:land-mine x4, item:yis-steel-scrap x1
+    item:steel-plate x1 -> pump -> item:pump x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> uranium-fuel-cell -> item:uranium-fuel-cell x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> agricultural-tower -> item:agricultural-tower x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> beacon -> item:beacon x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> belt-immunity-equipment -> item:belt-immunity-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> crusher -> item:crusher x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> electric-furnace -> item:electric-furnace x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> energy-shield-equipment -> item:energy-shield-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> exoskeleton-equipment -> item:exoskeleton-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> heat-exchanger -> item:heat-exchanger x1, item:yis-steel-scrap x1, item:yis-copper-scrap x2
+    item:steel-plate x10 -> kr-small-roboport -> item:kr-small-roboport x2, item:yis-imersium-scrap x1, item:yis-steel-scrap x1, item:yis-rare-metal-scrap x1
+    item:steel-plate x10 -> rail-support -> item:rail-support x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> thruster -> item:thruster x1, item:yis-steel-scrap x1
+    item:steel-plate x1000 -> rocket-silo -> item:rocket-silo x1, item:yis-steel-scrap x5
+    item:steel-plate x15 -> laser-turret -> item:laser-turret x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> assembling-machine-2 -> item:assembling-machine-2 x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> battery-mk2-equipment -> item:battery-mk2-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> gate -> item:gate x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> kr-pollution-filter -> item:kr-pollution-filter x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> kr-steel-beam -> item:kr-steel-beam x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> low-density-structure -> item:low-density-structure x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1
+    item:steel-plate x20 -> cargo-bay -> item:cargo-bay x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> discharge-defense-equipment -> item:discharge-defense-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> flamethrower-turret -> item:flamethrower-turret x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> kr-big-roboport -> item:kr-big-roboport x1, item:yis-steel-scrap x1, item:yis-imersium-scrap x2, item:yis-rare-metal-scrap x2
+    item:steel-plate x20 -> kr-big-storage-tank -> item:kr-big-storage-tank x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> kr-flare-stack -> item:kr-flare-stack x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> rocket-turret -> item:rocket-turret x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> space-platform-foundation -> item:space-platform-foundation x1, item:yis-steel-scrap x1
+    item:steel-plate x200 -> nuclear-reactor -> item:nuclear-reactor x1, item:yis-steel-scrap x3, item:yis-rare-metal-scrap x3
+    item:steel-plate x25 -> cargo-landing-pad -> item:cargo-landing-pad x1, item:yis-steel-scrap x1
+    item:steel-plate x3 -> train-stop -> item:train-stop x1, item:yis-iron-scrap x1, item:yis-steel-scrap x1
+    item:steel-plate x350 -> kr-antimatter-reactor -> item:kr-antimatter-reactor x1, item:yis-imersium-scrap x6, item:yis-rare-metal-scrap x4, item:yis-steel-scrap x4
+    item:steel-plate x4 -> kr-big-battery-mk2-equipment -> item:kr-big-battery-mk2-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x4 -> kr-vehicle-roboport-equipment -> item:kr-vehicle-roboport-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x40 -> kr-singularity-lab -> item:kr-singularity-lab x1, item:yis-steel-scrap x2, item:yis-rare-metal-scrap x2
+    item:steel-plate x5 -> chemical-plant -> item:chemical-plant x1, item:yis-steel-scrap x1
+    item:steel-plate x5 -> kr-additional-engine-equipment -> item:kr-additional-engine-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x5 -> kr-advanced-additional-engine-equipment -> item:kr-advanced-additional-engine-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x5 -> kr-biter-research-data -> item:kr-biter-research-data x5, item:yis-steel-scrap x1
+    item:steel-plate x5 -> kr-fuel-refinery -> item:kr-fuel-refinery x1, item:yis-steel-scrap x1
+    item:steel-plate x5 -> kr-steel-pipe-to-ground -> item:kr-steel-pipe-to-ground x2, item:yis-steel-scrap x1
+    item:steel-plate x5 -> solar-panel -> item:solar-panel x1, item:yis-steel-scrap x1
+    item:steel-plate x5 -> solar-panel-equipment -> item:solar-panel-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x50 -> centrifuge -> item:centrifuge x1, item:yis-steel-scrap x2
+    item:steel-plate x50 -> electromagnetic-plant -> item:electromagnetic-plant x1, item:yis-holmium-scrap x3, item:yis-steel-scrap x2
+    item:steel-plate x50 -> fission-reactor-equipment -> item:fission-reactor-equipment x1, item:yis-copper-scrap x2, item:yis-steel-scrap x2
+    item:steel-plate x50 -> foundry -> item:foundry x1, item:yis-steel-scrap x2
+    item:steel-plate x50 -> kr-quarry-drill -> item:kr-quarry-drill x1, item:yis-steel-scrap x2, item:yis-rare-metal-scrap x2
+    item:steel-plate x500 -> kr-fusion-reactor -> item:kr-fusion-reactor x1, item:yis-copper-scrap x4, item:yis-steel-scrap x4, item:yis-rare-metal-scrap x4
+    item:steel-plate x6 -> steel-furnace -> item:steel-furnace x1, item:yis-steel-scrap x1
+    item:steel-plate x60 -> kr-huge-storage-tank -> item:kr-huge-storage-tank x1, item:yis-steel-scrap x2
+    item:steel-plate x8 -> lightning-rod -> item:lightning-rod x1, item:yis-steel-scrap x1
+    item:steel-plate x8 -> steel-chest -> item:steel-chest x1, item:yis-steel-scrap x1
+
+[solid] testium
+  recycle targets:
+    yis-recycle-testium-scrap -> item:testium-plate x1
+    yis-recycle-testium-scrap-to-fluid -> fluid:molten-testium x10
+  source recipes:
+    item:testium-ore x3 -> yis-test-testium-no-tech -> item:testium-product-no-tech x1, item:yis-testium-scrap x1
+    item:testium-plate x200 -> yis-test-testium-large -> item:testium-product-large x1, item:yis-testium-scrap x3
+    item:testium-plate x5 -> yis-test-testium-fluid-main-product -> fluid:steam x100, item:yis-testium-scrap x1
+    item:testium-plate x5 -> yis-test-testium-solid -> item:testium-product-solid x1, item:yis-testium-scrap x1
+    item:testium-plate x5 -> yis-test-testium-with-tech -> item:testium-product-tech x1, item:yis-testium-scrap x1
+    item:testium-plate x6 -> yis-test-testium-mixed -> item:testium-product-mixed x1, item:yis-testium-scrap x2
+
+[solid] tungsten
+  resources:
+    tungsten-ore -> item:tungsten-ore
+  recycle targets:
+    yis-recycle-tungsten-scrap -> item:tungsten-plate x1
+  source recipes:
+    item:tungsten-ore x2 -> tungsten-carbide -> item:tungsten-carbide x1, item:yis-tungsten-scrap x1
+    item:tungsten-ore x4 -> tungsten-plate -> item:tungsten-plate x1, item:yis-tungsten-scrap x1, item:yis-iron-scrap x1
+    item:tungsten-plate x100 -> fusion-generator -> item:fusion-generator x1, item:yis-tungsten-scrap x2
+    item:tungsten-plate x15 -> turbo-splitter -> item:turbo-splitter x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x200 -> fusion-reactor -> item:fusion-reactor x1, item:yis-tungsten-scrap x3
+    item:tungsten-plate x250 -> fusion-reactor-equipment -> item:fusion-reactor-equipment x1, item:yis-tungsten-scrap x3
+    item:tungsten-plate x30 -> railgun-turret -> item:railgun-turret x1, item:yis-tungsten-scrap x2
+    item:tungsten-plate x4 -> foundation -> item:foundation x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x40 -> turbo-underground-belt -> item:turbo-underground-belt x2, item:yis-tungsten-scrap x2
+    item:tungsten-plate x5 -> turbo-transport-belt -> item:turbo-transport-belt x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x60 -> artillery-turret -> item:artillery-turret x1, item:yis-tungsten-scrap x2

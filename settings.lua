@@ -56,7 +56,7 @@ data:extend({
         order = "e",
     },
     {
-        hidden = false,
+        hidden = true,
         type = "bool-setting",
         name = "yis-fluid-recipes",
         localised_name = { "", "[img=drop-symbol]", " - ", { "mod-setting-name.yis-fluid-recipes" } },

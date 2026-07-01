@@ -18,7 +18,8 @@ yokmods.ingredient_scrap.settings.fixed_amount = settings.startup["yis-fixed-amo
 yokmods.ingredient_scrap.settings.probability = settings.startup["yis-probability"].value
 yokmods.ingredient_scrap.settings.limit = settings.startup["yis-amount-limit"].value
 yokmods.ingredient_scrap.settings.needed = settings.startup["yis-needed"].value
-yokmods.ingredient_scrap.settings.fluids = settings.startup["yis-fluid-recipes"].value
+yokmods.ingredient_scrap.settings.fluid_setting = settings.startup["yis-fluid-recipes"].value
+yokmods.ingredient_scrap.settings.fluids = true
 yokmods.ingredient_scrap.settings.hide_tech = settings.startup["yis-hide-tech"].value
 yokmods.ingredient_scrap.settings.shallow_log = settings.startup["yis-shallow-log"].value
 yokmods.ingredient_scrap.settings.barreling = settings.startup["yis-barreling"].value -- recycling scrap needs a barrel for fluids
@@ -52,6 +53,7 @@ if IS_DEBUG then
   end
 end
 
+yokmods.ingredient_scrap.settings.fluids = true
 ISsettings = yokmods.ingredient_scrap.settings
 
 ---Creates the shared data table used to collect inputs, generated prototypes, inserts, and debug sources.

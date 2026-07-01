@@ -19,7 +19,7 @@ end
 local common_mod_solid_affixes = {
   item = {
     prefixes = {},
-    suffixes = { "-plate", "-ore", "" },
+    suffixes = { "-plate", "-bar", "-ore", "" },
   },
   fluid = {
     prefixes = { "molten-", "liquid-" },
@@ -86,6 +86,22 @@ end
 --------------------------------
 
 if has_any_mod({ "Krastorio2" }) then
+  api.register.material.solid("glass", {
+    localized_setting_name = true,
+    source = krastorio_source,
+    prototype_aliases = {
+      item = { "kr-glass" },
+    },
+    tint = "#A9D7E8",
+  })
+  api.register.material.solid("silicon", {
+    localized_setting_name = true,
+    source = krastorio_source,
+    prototype_aliases = {
+      item = { "kr-silicon" },
+    },
+    tint = "#6E6F72",
+  })
   api.register.material.solid("rare-metal", {
     localized_setting_name = true,
     source = krastorio_source,
@@ -102,6 +118,10 @@ if has_any_mod({ "Krastorio2" }) then
     prototype_aliases = {
       item = { "kr-imersium-plate", "kr-imersium-beam", "kr-imersium-gear-wheel" },
     },
+  })
+  api.register.recipe_chain.solid_target("imersium", "kr-imersium-plate", {
+    source = krastorio_source,
+    reason = "K2 imersium scrap should recycle to the base plate, not the beam intermediate.",
   })
   api.register.material.solid("black-reinforced", {
     localized_setting_name = true,

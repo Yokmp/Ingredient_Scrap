@@ -1,0 +1,614 @@
+Ingredient Scrap Target List: bob_angels_is
+================================================================================
+
+[fluid] copper
+  recycle targets:
+    yis-recycle-copper-scrap -> item:copper-plate x1
+    yis-recycle-copper-scrap-to-fluid -> fluid:molten-copper x10
+  source recipes:
+    fluid:molten-copper x1 -> casting-copper-cable -> item:copper-cable x2, item:yis-copper-scrap x1
+    fluid:molten-copper x2 -> bob-copper-tungsten-alloy -> item:bob-copper-tungsten-alloy x25, item:yis-copper-scrap x1
+    fluid:molten-copper x2 -> casting-copper -> item:copper-plate x2, item:yis-copper-scrap x1
+    fluid:molten-copper x25 -> casting-low-density-structure -> item:low-density-structure x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1, item:yis-plastic-scrap x1
+
+[fluid] holmium
+  recycle targets:
+    yis-recycle-holmium-scrap -> item:holmium-plate x1
+    yis-recycle-holmium-scrap-to-fluid -> fluid:holmium-solution x10
+  source recipes:
+    fluid:holmium-solution x1 -> electrolyte -> fluid:electrolyte x10, item:yis-holmium-scrap x1
+    fluid:holmium-solution x2 -> holmium-plate -> item:holmium-plate x1, item:yis-holmium-scrap x1
+
+[fluid] iron
+  recycle targets:
+    yis-recycle-iron-scrap -> item:iron-plate x1
+    yis-recycle-iron-scrap-to-fluid -> fluid:molten-iron x10
+  source recipes:
+    fluid:molten-iron x1 -> casting-iron-gear-wheel -> item:iron-gear-wheel x1, item:yis-iron-scrap x1
+    fluid:molten-iron x1 -> casting-pipe -> item:pipe x1, item:yis-iron-scrap x1
+    fluid:molten-iron x1 -> tungsten-plate -> item:tungsten-plate x1, item:yis-iron-scrap x1
+    fluid:molten-iron x2 -> casting-iron -> item:iron-plate x2, item:yis-iron-scrap x1
+    fluid:molten-iron x2 -> casting-iron-stick -> item:iron-stick x4, item:yis-iron-scrap x1
+    fluid:molten-iron x2 -> concrete-from-molten-iron -> item:concrete x10, item:yis-iron-scrap x1
+    fluid:molten-iron x20 -> big-mining-drill -> item:big-mining-drill x1, item:yis-iron-scrap x1
+    fluid:molten-iron x3 -> casting-steel -> item:steel-plate x1, item:yis-iron-scrap x1
+    fluid:molten-iron x5 -> casting-pipe-to-ground -> item:pipe-to-ground x2, item:yis-iron-scrap x1
+    fluid:molten-iron x8 -> casting-low-density-structure -> item:low-density-structure x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1, item:yis-plastic-scrap x1
+
+[fluid] yis-hiddenfluidium
+  resources:
+    yis-test-yis-hiddenfluidium-resource -> fluid:yis-hiddenfluidium-solution x10
+  recycle targets:
+    yis-recycle-hiddenfluidium-scrap-to-fluid -> fluid:yis-hiddenfluidium-solution x14
+  source recipes:
+    fluid:yis-hiddenfluidium-solution x5 -> yis-hiddenfluidium-solution-barrel -> item:yis-hiddenfluidium-solution-barrel x1, item:yis-hiddenfluidium-scrap x1
+    fluid:yis-hiddenfluidium-solution x7 -> yis-test-yis-hiddenfluidium-fluid -> item:yis-hiddenfluidium-product x1, item:yis-hiddenfluidium-scrap x1
+
+[fluid] yis-rare-metal
+  resources:
+    yis-test-rare-metal-resource -> item:yis-rare-metal-ore x1
+    yis-test-yis-rare-metal-solution-resource -> fluid:yis-rare-metal-solution x10
+  recycle targets:
+    yis-recycle-rare-metal-scrap-to-fluid -> fluid:yis-rare-metal-solution x10
+  source recipes:
+    fluid:molten-yis-rare-metal x5 -> molten-yis-rare-metal-barrel -> item:molten-yis-rare-metal-barrel x1, item:yis-rare-metal-scrap x1
+    fluid:yis-rare-metal-solution x5 -> yis-rare-metal-solution-barrel -> item:yis-rare-metal-solution-barrel x1, item:yis-rare-metal-scrap x1
+
+[fluid] yis-solvium
+  recycle targets:
+    yis-recycle-solvium-scrap-to-fluid -> fluid:yis-solvium-solution x12
+  source recipes:
+    fluid:yis-solvium-solution x5 -> yis-solvium-solution-barrel -> item:yis-solvium-solution-barrel x1, item:yis-solvium-scrap x1
+    fluid:yis-solvium-solution x6 -> yis-test-yis-solvium-solution -> item:yis-solvium-product-fluid x1, item:yis-solvium-scrap x1
+
+[fluid] yis-testium
+  recycle targets:
+    yis-recycle-testium-scrap -> item:yis-testium-plate x1
+    yis-recycle-testium-scrap-to-fluid -> fluid:molten-yis-testium x10
+  source recipes:
+    fluid:molten-yis-testium x4 -> yis-test-yis-testium-mixed -> item:yis-testium-product-mixed x1, item:yis-testium-scrap x2
+    fluid:molten-yis-testium x5 -> molten-yis-testium-barrel -> item:molten-yis-testium-barrel x1, item:yis-testium-scrap x1
+    fluid:molten-yis-testium x5 -> yis-test-yis-testium-fluid -> item:yis-testium-product-fluid x1, item:yis-testium-scrap x1
+
+[solid] angels-chrome
+  recycle targets:
+    yis-recycle-angels-chrome-scrap -> item:angels-chrome-ore x1
+  source recipes:
+    item:angels-chrome-ore x24 -> angels-ingot-chrome -> item:angels-ingot-chrome x24, fluid:angels-gas-carbon-monoxide x60, item:yis-angels-chrome-scrap x1
+    item:angels-chrome-ore x4 -> angels-processed-chrome -> item:angels-processed-chrome x2, item:yis-angels-chrome-scrap x1
+
+[solid] angels-fluorite
+  recycle targets:
+    yis-recycle-angels-fluorite-scrap -> item:angels-fluorite-ore x1
+  source recipes:
+    item:angels-fluorite-ore x5 -> angels-liquid-hydrofluoric-acid -> fluid:angels-liquid-hydrofluoric-acid x50, item:angels-solid-calcium-sulfate x1, item:yis-angels-fluorite-scrap x1
+
+[solid] angels-manganese
+  recycle targets:
+    yis-recycle-angels-manganese-scrap -> item:angels-manganese-ore x1
+  source recipes:
+    item:angels-manganese-ore x24 -> angels-ingot-manganese -> item:angels-ingot-manganese x24, item:yis-angels-manganese-scrap x1
+    item:angels-manganese-ore x4 -> angels-processed-manganese -> item:angels-processed-manganese x2, item:yis-angels-manganese-scrap x1
+
+[solid] angels-platinum
+  recycle targets:
+    yis-recycle-angels-platinum-scrap -> item:angels-platinum-ore x1
+  source recipes:
+    item:angels-platinum-ore x24 -> angels-platinum-ore-smelting -> item:angels-ingot-platinum x24, item:yis-angels-platinum-scrap x1
+    item:angels-platinum-ore x4 -> angels-platinum-ore-processing -> item:angels-processed-platinum x2, item:yis-angels-platinum-scrap x1
+
+[solid] bob-aluminium
+  recycle targets:
+    yis-recycle-bob-aluminium-scrap -> item:bob-aluminium-plate x1
+  source recipes:
+    item:bob-aluminium-plate x12 -> angels-casting-machine-3 -> item:angels-casting-machine-3 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x12 -> angels-electrolyser-3 -> item:angels-electrolyser-3 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x12 -> angels-ore-crusher-3 -> item:angels-ore-crusher-3 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x16 -> angels-air-filter-3 -> item:angels-air-filter-3 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x16 -> angels-blast-furnace-3 -> item:angels-blast-furnace-3 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x16 -> angels-hydro-plant-3 -> item:angels-hydro-plant-3 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x16 -> angels-ore-floatation-cell-2 -> item:angels-ore-floatation-cell-2 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x16 -> angels-ore-leaching-plant -> item:angels-ore-leaching-plant x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x2 -> bob-air-pump-3 -> item:bob-air-pump-3 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x20 -> angels-gas-refinery -> item:angels-gas-refinery x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x20 -> angels-induction-furnace-3 -> item:angels-induction-furnace-3 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x24 -> angels-strand-casting-machine-2 -> item:angels-strand-casting-machine-2 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x24 -> angels-thermal-extractor -> item:angels-thermal-extractor x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x32 -> angels-sintering-oven-3 -> item:angels-sintering-oven-3 x1, item:yis-bob-aluminium-scrap x2
+    item:bob-aluminium-plate x4 -> angels-electric-boiler-2 -> item:angels-electric-boiler-2 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x4 -> angels-powder-mixer-2 -> item:angels-powder-mixer-2 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x4 -> angels-powderizer-2 -> item:angels-powderizer-2 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x40 -> angels-crystallizer-2 -> item:angels-crystallizer-2 x1, item:yis-bob-aluminium-scrap x2
+    item:bob-aluminium-plate x48 -> angels-ore-sorting-facility-3 -> item:angels-ore-sorting-facility-3 x1, item:yis-bob-aluminium-scrap x2
+    item:bob-aluminium-plate x56 -> angels-salination-plant -> item:angels-salination-plant x1, item:yis-bob-aluminium-scrap x2
+    item:bob-aluminium-plate x8 -> angels-chemical-furnace-2 -> item:angels-chemical-furnace-2 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x8 -> angels-chemical-plant-3 -> item:angels-chemical-plant-3 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x8 -> angels-filtration-unit-2 -> item:angels-filtration-unit-2 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x8 -> angels-gas-refinery-small-2 -> item:angels-gas-refinery-small-2 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x8 -> angels-liquifier-3 -> item:angels-liquifier-3 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x8 -> angels-oil-refinery-2 -> item:angels-oil-refinery-2 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x8 -> angels-ore-processing-machine-2 -> item:angels-ore-processing-machine-2 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x8 -> angels-pellet-press -> item:angels-pellet-press x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x8 -> angels-sea-pump -> item:angels-sea-pump x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x8 -> angels-separator-2 -> item:angels-separator-2 x1, item:yis-bob-aluminium-scrap x1
+    item:bob-aluminium-plate x8 -> angels-steam-cracker-2 -> item:angels-steam-cracker-2 x1, item:yis-bob-aluminium-scrap x1
+
+[solid] bob-amethyst
+  recycle targets:
+    yis-recycle-bob-amethyst-scrap -> item:bob-amethyst-ore x1
+  source recipes:
+    item:bob-amethyst-ore x1 -> bob-amethyst-3 -> item:bob-amethyst-3 x1, item:yis-bob-amethyst-scrap x1
+
+[solid] bob-bauxite
+  recycle targets:
+    yis-recycle-bob-bauxite-scrap -> item:bob-bauxite-ore x1
+  source recipes:
+    item:bob-bauxite-ore x1 -> angels-catalyst-metal-green -> item:angels-catalyst-metal-green x10, item:yis-bob-bauxite-scrap x1, item:yis-bob-silver-scrap x1
+    item:bob-bauxite-ore x1 -> bob-alumina -> item:bob-alumina x1, item:yis-bob-bauxite-scrap x1
+    item:bob-bauxite-ore x12 -> angels-solid-aluminium-hydroxide -> item:angels-solid-aluminium-hydroxide x12, item:yis-bob-bauxite-scrap x1
+    item:bob-bauxite-ore x4 -> angels-processed-aluminium -> item:angels-processed-aluminium x2, item:yis-bob-bauxite-scrap x1
+
+[solid] bob-cobalt
+  recycle targets:
+    yis-recycle-bob-cobalt-scrap -> item:bob-cobalt-plate x1
+  source recipes:
+    item:bob-cobalt-ore x1 -> angels-catalyst-metal-blue -> item:angels-catalyst-metal-blue x10, item:yis-bob-rutile-scrap x1, item:yis-bob-cobalt-scrap x1
+    item:bob-cobalt-ore x2 -> bob-cobalt-oxide -> item:bob-cobalt-oxide x2, item:yis-bob-cobalt-scrap x1
+    item:bob-cobalt-ore x24 -> angels-ingot-cobalt -> item:angels-ingot-cobalt x24, item:yis-bob-cobalt-scrap x1
+    item:bob-cobalt-ore x4 -> angels-processed-cobalt -> item:angels-processed-cobalt x2, item:yis-bob-cobalt-scrap x1
+    item:bob-cobalt-ore x8 -> angels-solid-cobalt-oxide -> item:bob-cobalt-oxide x8, item:yis-bob-cobalt-scrap x1
+    item:bob-cobalt-plate x1 -> bob-cobalt-steel-alloy -> item:bob-cobalt-steel-alloy x10, item:yis-iron-scrap x1, item:yis-bob-cobalt-scrap x1
+
+[solid] bob-diamond
+  recycle targets:
+    yis-recycle-bob-diamond-scrap -> item:bob-diamond-ore x1
+  source recipes:
+    item:bob-diamond-ore x1 -> bob-diamond-3 -> item:bob-diamond-3 x1, item:yis-bob-diamond-scrap x1
+
+[solid] bob-emerald
+  recycle targets:
+    yis-recycle-bob-emerald-scrap -> item:bob-emerald-ore x1
+  source recipes:
+    item:bob-emerald-ore x1 -> bob-emerald-3 -> item:bob-emerald-3 x1, item:yis-bob-emerald-scrap x1
+
+[solid] bob-gold
+  recycle targets:
+    yis-recycle-bob-gold-scrap -> item:bob-gold-plate x1
+  source recipes:
+    item:bob-gold-ore x1 -> bob-gold-plate -> item:bob-gold-plate x1, item:yis-bob-gold-scrap x1
+    item:bob-gold-ore x24 -> angels-ingot-gold -> item:angels-ingot-gold x24, item:yis-bob-gold-scrap x1
+    item:bob-gold-ore x4 -> angels-processed-gold -> item:angels-processed-gold x2, item:yis-bob-gold-scrap x1
+    item:bob-gold-plate x4 -> angels-wire-gold -> item:angels-wire-gold x5, item:yis-bob-gold-scrap x1
+
+[solid] bob-lead
+  recycle targets:
+    yis-recycle-bob-lead-scrap -> item:bob-lead-plate x1
+  source recipes:
+    item:bob-lead-ore x1 -> bob-lead-oxide -> item:bob-lead-oxide x1, fluid:angels-gas-sulfur-dioxide x10, item:yis-bob-lead-scrap x1
+    item:bob-lead-ore x1 -> bob-lead-oxide-2 -> item:bob-lead-oxide x1, fluid:angels-gas-hydrogen-sulfide x10, item:yis-bob-lead-scrap x1
+    item:bob-lead-ore x1 -> bob-lead-plate -> item:bob-lead-plate x1, item:yis-bob-lead-scrap x1
+    item:bob-lead-ore x24 -> angels-ingot-lead -> item:angels-ingot-lead x24, fluid:angels-gas-sulfur-dioxide x60, item:yis-bob-lead-scrap x1
+    item:bob-lead-ore x4 -> angels-processed-lead -> item:angels-processed-lead x2, item:yis-bob-lead-scrap x1
+    item:bob-lead-plate x2 -> battery -> item:battery x1, item:yis-bob-lead-scrap x1, item:yis-steel-scrap x1
+    item:bob-lead-plate x20 -> angels-mixed-oxide-cell -> item:angels-mixed-oxide-cell x20, item:yis-bob-lead-scrap x1
+    item:bob-lead-plate x350 -> angels-burner-reactor -> item:angels-burner-reactor x1, item:yis-bob-titanium-scrap x4, item:yis-tungsten-scrap x4, item:yis-bob-lead-scrap x4
+    item:bob-lead-plate x5 -> bob-empty-nuclear-fuel-cell -> item:bob-empty-nuclear-fuel-cell x10, item:yis-steel-scrap x1, item:yis-bob-lead-scrap x1
+
+[solid] bob-nickel
+  recycle targets:
+    yis-recycle-bob-nickel-scrap -> item:bob-nickel-plate x1
+  source recipes:
+    item:bob-nickel-ore x1 -> angels-catalyst-metal-yellow -> item:angels-catalyst-metal-yellow x10, item:yis-tungsten-scrap x1, item:yis-bob-nickel-scrap x1
+    item:bob-nickel-ore x1 -> bob-nickel-plate -> fluid:angels-gas-sulfur-dioxide x10, item:bob-nickel-plate x1, item:yis-bob-nickel-scrap x1
+    item:bob-nickel-ore x24 -> angels-ingot-nickel -> item:angels-ingot-nickel x24, item:yis-bob-nickel-scrap x1
+    item:bob-nickel-ore x4 -> angels-processed-nickel -> item:angels-processed-nickel x2, item:yis-bob-nickel-scrap x1
+    item:bob-nickel-plate x1 -> bob-silver-from-lead -> item:bob-lead-plate x7, item:bob-silver-ore x1, item:yis-bob-nickel-scrap x1
+    item:bob-nickel-plate x2 -> bob-invar-alloy -> item:bob-invar-alloy x5, item:yis-bob-nickel-scrap x1, item:yis-iron-scrap x1
+    item:bob-nickel-plate x3 -> bob-nitinol-alloy -> item:bob-nitinol-alloy x5, item:yis-bob-nickel-scrap x1, item:yis-bob-titanium-scrap x1
+
+[solid] bob-ruby
+  recycle targets:
+    yis-recycle-bob-ruby-scrap -> item:bob-ruby-ore x1
+  source recipes:
+    item:bob-ruby-ore x1 -> bob-ruby-3 -> item:bob-ruby-3 x1, item:yis-bob-ruby-scrap x1
+
+[solid] bob-rutile
+  recycle targets:
+    yis-recycle-bob-rutile-scrap -> item:bob-rutile-ore x1
+  source recipes:
+    item:bob-rutile-ore x1 -> angels-catalyst-metal-blue -> item:angels-catalyst-metal-blue x10, item:yis-bob-rutile-scrap x1, item:yis-bob-cobalt-scrap x1
+    item:bob-rutile-ore x2 -> bob-titanium-plate -> item:bob-titanium-plate x2, item:yis-bob-rutile-scrap x1
+    item:bob-rutile-ore x24 -> angels-liquid-titanium-tetrachloride -> fluid:angels-liquid-titanium-tetrachloride x120, item:yis-bob-rutile-scrap x1
+    item:bob-rutile-ore x4 -> angels-processed-titanium -> item:angels-processed-titanium x2, item:yis-bob-rutile-scrap x1
+
+[solid] bob-sapphire
+  recycle targets:
+    yis-recycle-bob-sapphire-scrap -> item:bob-sapphire-ore x1
+  source recipes:
+    item:bob-sapphire-ore x1 -> bob-sapphire-3 -> item:bob-sapphire-3 x1, item:yis-bob-sapphire-scrap x1
+
+[solid] bob-silver
+  recycle targets:
+    yis-recycle-bob-silver-scrap -> item:bob-silver-plate x1
+  source recipes:
+    item:bob-silver-ore x1 -> angels-catalyst-metal-green -> item:angels-catalyst-metal-green x10, item:yis-bob-bauxite-scrap x1, item:yis-bob-silver-scrap x1
+    item:bob-silver-ore x1 -> bob-silver-plate -> item:bob-silver-plate x1, item:yis-bob-silver-scrap x1
+    item:bob-silver-ore x24 -> angels-ingot-silver -> item:angels-ingot-silver x24, item:yis-bob-silver-scrap x1
+    item:bob-silver-ore x4 -> angels-processed-silver -> item:angels-processed-silver x2, item:yis-bob-silver-scrap x1
+    item:bob-silver-plate x1 -> bob-silver-nitrate -> item:bob-silver-nitrate x1, item:yis-bob-silver-scrap x1
+    item:bob-silver-plate x4 -> angels-wire-silver -> item:angels-wire-silver x5, item:yis-bob-silver-scrap x1
+
+[solid] bob-thorium
+  recycle targets:
+    yis-recycle-bob-thorium-scrap -> item:bob-thorium-ore x1
+  source recipes:
+    item:bob-thorium-ore x10 -> bob-thorium-processing -> item:bob-thorium-232 x1, item:yis-bob-thorium-scrap x1
+    item:bob-thorium-ore x5 -> angels-thorium-processing -> item:bob-thorium-232 x4, item:bob-plutonium-239 x1, item:yis-bob-thorium-scrap x1
+
+[solid] bob-tin
+  recycle targets:
+    yis-recycle-bob-tin-scrap -> item:bob-tin-plate x1
+  source recipes:
+    item:bob-tin-ore x1 -> bob-tin-plate -> item:bob-tin-plate x1, item:yis-bob-tin-scrap x1
+    item:bob-tin-ore x24 -> angels-ingot-tin -> item:angels-ingot-tin x24, item:yis-bob-tin-scrap x1
+    item:bob-tin-ore x4 -> angels-processed-tin -> item:angels-processed-tin x2, item:yis-bob-tin-scrap x1
+    item:bob-tin-plate x1 -> bob-gunmetal-alloy -> item:bob-gunmetal-alloy x10, item:yis-copper-scrap x1, item:yis-bob-tin-scrap x1, item:yis-bob-zinc-scrap x1
+    item:bob-tin-plate x2 -> bob-bronze-alloy -> item:bob-bronze-alloy x5, item:yis-copper-scrap x1, item:yis-bob-tin-scrap x1
+    item:bob-tin-plate x4 -> angels-wire-tin -> item:angels-wire-tin x5, item:yis-bob-tin-scrap x1
+
+[solid] bob-titanium
+  recycle targets:
+    yis-recycle-bob-titanium-scrap -> item:bob-titanium-plate x1
+  source recipes:
+    item:bob-titanium-plate x1 -> bob-titanium-bearing -> item:bob-titanium-bearing x2, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x1 -> bob-titanium-bearing-ball -> item:bob-titanium-bearing-ball x12, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x12 -> angels-casting-machine-4 -> item:angels-casting-machine-4 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x12 -> angels-electrolyser-4 -> item:angels-electrolyser-4 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x16 -> angels-blast-furnace-4 -> item:angels-blast-furnace-4 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x16 -> angels-electro-whinning-cell -> item:angels-electro-whinning-cell x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x16 -> angels-ore-floatation-cell-3 -> item:angels-ore-floatation-cell-3 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x16 -> angels-ore-leaching-plant-2 -> item:angels-ore-leaching-plant-2 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x2 -> bob-nitinol-alloy -> item:bob-nitinol-alloy x5, item:yis-bob-nickel-scrap x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x2 -> bob-titanium-gear-wheel -> item:bob-titanium-gear-wheel x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x2 -> bob-water-pump-4 -> item:bob-water-pump-4 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x20 -> angels-gas-refinery-2 -> item:angels-gas-refinery-2 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x20 -> angels-induction-furnace-4 -> item:angels-induction-furnace-4 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x24 -> angels-strand-casting-machine-3 -> item:angels-strand-casting-machine-3 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x32 -> angels-sintering-oven-4 -> item:angels-sintering-oven-4 x1, item:yis-bob-titanium-scrap x2
+    item:bob-titanium-plate x4 -> angels-chemical-plant-4 -> item:angels-chemical-plant-4 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x4 -> angels-powder-mixer-3 -> item:angels-powder-mixer-3 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x4 -> angels-powderizer-3 -> item:angels-powderizer-3 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x40 -> angels-crystallizer-3 -> item:angels-crystallizer-3 x1, item:yis-bob-titanium-scrap x2
+    item:bob-titanium-plate x400 -> angels-burner-reactor -> item:angels-burner-reactor x1, item:yis-bob-titanium-scrap x4, item:yis-tungsten-scrap x4, item:yis-bob-lead-scrap x4
+    item:bob-titanium-plate x48 -> angels-ore-refinery -> item:angels-ore-refinery x1, item:yis-bob-titanium-scrap x2
+    item:bob-titanium-plate x48 -> angels-ore-sorting-facility-4 -> item:angels-ore-sorting-facility-4 x1, item:yis-bob-titanium-scrap x2
+    item:bob-titanium-plate x56 -> angels-salination-plant-2 -> item:angels-salination-plant-2 x1, item:yis-bob-titanium-scrap x2
+    item:bob-titanium-plate x8 -> angels-advanced-chemical-plant-2 -> item:angels-advanced-chemical-plant-2 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x8 -> angels-chemical-furnace-3 -> item:angels-chemical-furnace-3 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x8 -> angels-filtration-unit-3 -> item:angels-filtration-unit-3 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x8 -> angels-gas-refinery-small-3 -> item:angels-gas-refinery-small-3 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x8 -> angels-liquifier-4 -> item:angels-liquifier-4 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x8 -> angels-oil-refinery-3 -> item:angels-oil-refinery-3 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x8 -> angels-ore-processing-machine-3 -> item:angels-ore-processing-machine-3 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x8 -> angels-pellet-press-2 -> item:angels-pellet-press-2 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x8 -> angels-separator-3 -> item:angels-separator-3 x1, item:yis-bob-titanium-scrap x1
+    item:bob-titanium-plate x8 -> angels-steam-cracker-3 -> item:angels-steam-cracker-3 x1, item:yis-bob-titanium-scrap x1
+
+[solid] bob-topaz
+  recycle targets:
+    yis-recycle-bob-topaz-scrap -> item:bob-topaz-ore x1
+  source recipes:
+    item:bob-topaz-ore x1 -> bob-topaz-3 -> item:bob-topaz-3 x1, item:yis-bob-topaz-scrap x1
+
+[solid] bob-zinc
+  recycle targets:
+    yis-recycle-bob-zinc-scrap -> item:bob-zinc-plate x1
+  source recipes:
+    item:bob-zinc-ore x1 -> bob-zinc-plate -> item:bob-zinc-plate x1, item:yis-bob-zinc-scrap x1
+    item:bob-zinc-ore x24 -> angels-ingot-zinc -> item:angels-ingot-zinc x24, item:angels-ingot-lead x6, fluid:angels-gas-sulfur-dioxide x30, item:yis-bob-zinc-scrap x1
+    item:bob-zinc-ore x4 -> angels-processed-zinc -> item:angels-processed-zinc x2, item:yis-bob-zinc-scrap x1
+    item:bob-zinc-ore x8 -> angels-solid-zinc-oxide -> item:angels-solid-zinc-oxide x8, fluid:angels-gas-sulfur-dioxide x30, item:yis-bob-zinc-scrap x1
+    item:bob-zinc-plate x1 -> angels-deuterium-fuel-cell -> item:angels-deuterium-fuel-cell x1, item:yis-bob-zinc-scrap x1
+    item:bob-zinc-plate x1 -> bob-battery-2 -> item:bob-battery-2 x1, item:yis-bob-zinc-scrap x1, item:yis-plastic-scrap x1
+    item:bob-zinc-plate x1 -> bob-gunmetal-alloy -> item:bob-gunmetal-alloy x10, item:yis-copper-scrap x1, item:yis-bob-tin-scrap x1, item:yis-bob-zinc-scrap x1
+    item:bob-zinc-plate x15 -> angels-thorium-fuel-cell -> item:angels-thorium-fuel-cell x15, item:yis-bob-zinc-scrap x1
+    item:bob-zinc-plate x2 -> bob-brass-alloy -> item:bob-brass-alloy x5, item:yis-copper-scrap x1, item:yis-bob-zinc-scrap x1
+    item:bob-zinc-plate x2 -> bob-water-pump-3 -> item:bob-water-pump-3 x1, item:yis-bob-zinc-scrap x1
+
+[solid] copper
+  recycle targets:
+    yis-recycle-copper-scrap -> item:copper-plate x1
+    yis-recycle-copper-scrap-to-fluid -> fluid:molten-copper x10
+  source recipes:
+    item:copper-ore x1 -> angels-catalyst-metal-red -> item:angels-catalyst-metal-red x10, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+    item:copper-ore x1 -> angels-copper-ore-smelting -> item:copper-plate x1, item:yis-copper-scrap x1
+    item:copper-ore x2 -> angels-copper-pebbles -> item:angels-copper-pebbles x4, item:yis-copper-scrap x1
+    item:copper-ore x2 -> angels-liquid-cupric-chloride-solution -> fluid:angels-liquid-cupric-chloride-solution x40, item:yis-copper-scrap x1
+    item:copper-ore x24 -> angels-ingot-copper -> item:angels-ingot-copper x24, item:yis-copper-scrap x1
+    item:copper-ore x4 -> angels-processed-copper -> item:angels-processed-copper x2, item:yis-copper-scrap x1
+    item:copper-ore x50 -> molten-copper -> fluid:molten-copper x500, item:yis-copper-scrap x2
+    item:copper-ore x7 -> bob-cobalt-oxide-from-copper -> item:copper-plate x7, item:bob-cobalt-oxide x1, item:yis-copper-scrap x1
+    item:copper-plate x1 -> copper-cable -> item:copper-cable x2, item:yis-copper-scrap x1
+    item:copper-plate x1 -> superconductor -> item:superconductor x2, item:yis-holmium-scrap x1, item:yis-copper-scrap x1, item:yis-plastic-scrap x1
+    item:copper-plate x10 -> gun-turret -> item:gun-turret x1, item:yis-copper-scrap x1, item:yis-iron-scrap x1
+    item:copper-plate x100 -> heat-exchanger -> item:heat-exchanger x1, item:yis-steel-scrap x1, item:yis-copper-scrap x2
+    item:copper-plate x20 -> heat-pipe -> item:heat-pipe x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1
+    item:copper-plate x20 -> low-density-structure -> item:low-density-structure x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1, item:yis-plastic-scrap x1
+    item:copper-plate x3 -> bob-brass-alloy -> item:bob-brass-alloy x5, item:yis-copper-scrap x1, item:yis-bob-zinc-scrap x1
+    item:copper-plate x3 -> bob-bronze-alloy -> item:bob-bronze-alloy x5, item:yis-copper-scrap x1, item:yis-bob-tin-scrap x1
+    item:copper-plate x3 -> bob-distillery -> item:chemical-plant x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+    item:copper-plate x5 -> solar-panel -> item:solar-panel x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1
+    item:copper-plate x50 -> steam-turbine -> item:steam-turbine x1, item:yis-copper-scrap x2
+    item:copper-plate x500 -> nuclear-reactor -> item:nuclear-reactor x1, item:yis-steel-scrap x4, item:yis-copper-scrap x4
+    item:copper-plate x8 -> bob-gunmetal-alloy -> item:bob-gunmetal-alloy x10, item:yis-copper-scrap x1, item:yis-bob-tin-scrap x1, item:yis-bob-zinc-scrap x1
+
+[solid] holmium
+  recycle targets:
+    yis-recycle-holmium-scrap -> item:holmium-plate x1
+    yis-recycle-holmium-scrap-to-fluid -> fluid:holmium-solution x10
+  source recipes:
+    item:holmium-ore x2 -> holmium-solution -> fluid:holmium-solution x100, item:yis-holmium-scrap x1
+    item:holmium-plate x1 -> fusion-power-cell -> item:fusion-power-cell x1, item:yis-holmium-scrap x1
+    item:holmium-plate x1 -> lithium -> item:lithium x5, item:yis-holmium-scrap x1
+    item:holmium-plate x1 -> superconductor -> item:superconductor x2, item:yis-holmium-scrap x1, item:yis-copper-scrap x1, item:yis-plastic-scrap x1
+    item:holmium-plate x150 -> electromagnetic-plant -> item:electromagnetic-plant x1, item:yis-holmium-scrap x3, item:yis-steel-scrap x2
+    item:holmium-plate x2 -> supercapacitor -> item:supercapacitor x1, item:yis-holmium-scrap x1
+
+[solid] iron
+  recycle targets:
+    yis-recycle-iron-scrap -> item:iron-plate x1
+    yis-recycle-iron-scrap-to-fluid -> fluid:molten-iron x10
+  source recipes:
+    item:iron-ore x1 -> angels-catalyst-metal-red -> item:angels-catalyst-metal-red x10, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+    item:iron-ore x1 -> angels-iron-ore-smelting -> item:iron-plate x1, item:yis-iron-scrap x1
+    item:iron-ore x1 -> bob-ferric-chloride-solution -> fluid:angels-liquid-ferric-chloride-solution x50, item:yis-iron-scrap x1
+    item:iron-ore x1 -> concrete -> item:concrete x10, item:yis-iron-scrap x1
+    item:iron-ore x2 -> advanced-thruster-oxidizer -> fluid:thruster-oxidizer x1500, item:yis-iron-scrap x1
+    item:iron-ore x2 -> angels-iron-pebbles -> item:angels-iron-pebbles x4, item:yis-iron-scrap x1
+    item:iron-ore x2 -> angels-liquid-ferric-chloride-solution -> fluid:angels-liquid-ferric-chloride-solution x40, item:yis-iron-scrap x1
+    item:iron-ore x2 -> thruster-oxidizer -> fluid:thruster-oxidizer x75, item:yis-iron-scrap x1
+    item:iron-ore x24 -> angels-ingot-iron -> item:angels-ingot-iron x24, item:yis-iron-scrap x1
+    item:iron-ore x4 -> angels-processed-iron -> item:angels-processed-iron x2, item:yis-iron-scrap x1
+    item:iron-ore x50 -> molten-iron -> fluid:molten-iron x500, item:yis-iron-scrap x2
+    item:iron-plate x1 -> angels-filter-frame -> item:angels-filter-frame x1, item:yis-steel-scrap x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> bob-empty-canister -> item:bob-empty-canister x5, item:yis-iron-scrap x1, item:yis-plastic-scrap x1
+    item:iron-plate x1 -> burner-inserter -> item:burner-inserter x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> display-panel -> item:display-panel x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> electronic-circuit -> item:electronic-circuit x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> inserter -> item:inserter x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> iron-stick -> item:iron-stick x2, item:yis-iron-scrap x1
+    item:iron-plate x1 -> long-handed-inserter -> item:long-handed-inserter x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> pipe -> item:pipe x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> small-lamp -> item:small-lamp x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> sulfuric-acid -> fluid:sulfuric-acid x50, item:yis-iron-scrap x1
+    item:iron-plate x1 -> transport-belt -> item:transport-belt x2, item:yis-iron-scrap x1
+    item:iron-plate x10 -> electric-mining-drill -> item:electric-mining-drill x1, item:yis-iron-scrap x1
+    item:iron-plate x10 -> radar -> item:radar x1, item:yis-iron-scrap x1
+    item:iron-plate x10 -> steam-engine -> item:steam-engine x1, item:yis-iron-scrap x1
+    item:iron-plate x10 -> underground-belt -> item:underground-belt x2, item:yis-iron-scrap x1
+    item:iron-plate x100 -> angels-uranium-fuel-cell -> item:angels-uranium-fuel-cell x100, item:yis-iron-scrap x2
+    item:iron-plate x12 -> angels-air-filter -> item:angels-air-filter x1, item:yis-iron-scrap x1
+    item:iron-plate x12 -> angels-blast-furnace -> item:angels-blast-furnace x1, item:yis-iron-scrap x1
+    item:iron-plate x12 -> angels-clarifier -> item:angels-clarifier x1, item:yis-iron-scrap x1
+    item:iron-plate x12 -> angels-hydro-plant -> item:angels-hydro-plant x1, item:yis-iron-scrap x1
+    item:iron-plate x12 -> angels-washing-plant -> item:angels-washing-plant x1, item:yis-iron-scrap x1
+    item:iron-plate x14 -> bob-cobalt-steel-alloy -> item:bob-cobalt-steel-alloy x10, item:yis-iron-scrap x1, item:yis-bob-cobalt-scrap x1
+    item:iron-plate x15 -> angels-induction-furnace -> item:angels-induction-furnace x1, item:yis-iron-scrap x1
+    item:iron-plate x15 -> uranium-fuel-cell -> item:uranium-fuel-cell x15, item:yis-iron-scrap x1
+    item:iron-plate x2 -> accumulator -> item:accumulator x1, item:yis-iron-scrap x1
+    item:iron-plate x2 -> angels-rod-iron -> item:iron-stick x1, item:yis-iron-scrap x1
+    item:iron-plate x2 -> bob-air-pump -> item:bob-air-pump x1, item:yis-iron-scrap x1
+    item:iron-plate x2 -> bob-void-pump -> item:bob-void-pump x1, item:yis-iron-scrap x1
+    item:iron-plate x2 -> bob-water-pump -> item:bob-water-pump x1, item:yis-iron-scrap x1
+    item:iron-plate x2 -> fast-inserter -> item:fast-inserter x1, item:yis-iron-scrap x1
+    item:iron-plate x2 -> iron-gear-wheel -> item:iron-gear-wheel x1, item:yis-iron-scrap x1
+    item:iron-plate x20 -> biochamber -> item:biochamber x1, item:yis-iron-scrap x1
+    item:iron-plate x20 -> gun-turret -> item:gun-turret x1, item:yis-copper-scrap x1, item:yis-iron-scrap x1
+    item:iron-plate x20 -> storage-tank -> item:storage-tank x1, item:yis-iron-scrap x1, item:yis-steel-scrap x1
+    item:iron-plate x3 -> angels-flare-stack -> item:angels-flare-stack x1, item:yis-iron-scrap x1
+    item:iron-plate x3 -> angels-storage-tank-3 -> item:angels-storage-tank-3 x1, item:yis-iron-scrap x1
+    item:iron-plate x3 -> bob-distillery -> item:chemical-plant x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+    item:iron-plate x3 -> bob-invar-alloy -> item:bob-invar-alloy x5, item:yis-bob-nickel-scrap x1, item:yis-iron-scrap x1
+    item:iron-plate x3 -> bob-small-inline-storage-tank -> item:bob-small-inline-storage-tank x1, item:yis-iron-scrap x1
+    item:iron-plate x3 -> burner-mining-drill -> item:burner-mining-drill x1, item:yis-iron-scrap x1
+    item:iron-plate x3 -> programmable-speaker -> item:programmable-speaker x1, item:yis-iron-scrap x1
+    item:iron-plate x36 -> angels-ore-sorting-facility -> item:angels-ore-sorting-facility x1, item:yis-iron-scrap x2
+    item:iron-plate x5 -> angels-catalyst-metal-carrier -> item:angels-catalyst-metal-carrier x10, item:yis-iron-scrap x1
+    item:iron-plate x5 -> bob-electrolyser -> item:angels-electrolyser x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> loader -> item:loader x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> pipe-to-ground -> item:pipe-to-ground x2, item:yis-iron-scrap x1
+    item:iron-plate x5 -> power-switch -> item:power-switch x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> rail-chain-signal -> item:rail-chain-signal x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> rail-signal -> item:rail-signal x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> splitter -> item:splitter x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> steel-plate -> item:steel-plate x2, item:yis-iron-scrap x1
+    item:iron-plate x6 -> angels-liquifier -> item:angels-liquifier x1, item:yis-iron-scrap x1
+    item:iron-plate x6 -> angels-seafloor-pump -> item:angels-seafloor-pump x1, item:yis-iron-scrap x1
+    item:iron-plate x6 -> chemical-plant -> item:chemical-plant x1, item:yis-iron-scrap x1
+    item:iron-plate x6 -> train-stop -> item:train-stop x1, item:yis-iron-scrap x1, item:yis-steel-scrap x1
+    item:iron-plate x8 -> iron-chest -> item:iron-chest x1, item:yis-iron-scrap x1
+    item:iron-plate x9 -> angels-casting-machine -> item:angels-casting-machine x1, item:yis-iron-scrap x1
+    item:iron-plate x9 -> angels-electrolyser -> item:angels-electrolyser x1, item:yis-iron-scrap x1
+    item:iron-plate x9 -> angels-ore-crusher -> item:angels-ore-crusher x1, item:yis-iron-scrap x1
+    item:iron-plate x9 -> assembling-machine-1 -> item:assembling-machine-1 x1, item:yis-iron-scrap x1
+
+[solid] plastic
+  recycle targets:
+    yis-recycle-plastic-scrap -> item:plastic-bar x1
+  source recipes:
+    item:plastic-bar x1 -> bob-battery-2 -> item:bob-battery-2 x1, item:yis-bob-zinc-scrap x1, item:yis-plastic-scrap x1
+    item:plastic-bar x1 -> bob-battery-3 -> item:bob-battery-3 x1, item:yis-plastic-scrap x1
+    item:plastic-bar x1 -> bob-empty-canister -> item:bob-empty-canister x5, item:yis-iron-scrap x1, item:yis-plastic-scrap x1
+    item:plastic-bar x1 -> superconductor -> item:superconductor x2, item:yis-holmium-scrap x1, item:yis-copper-scrap x1, item:yis-plastic-scrap x1
+    item:plastic-bar x2 -> advanced-circuit -> item:advanced-circuit x1, item:yis-plastic-scrap x1
+    item:plastic-bar x5 -> bob-polishing-wheel -> item:bob-polishing-wheel x2, item:yis-steel-scrap x1, item:yis-plastic-scrap x1
+    item:plastic-bar x5 -> casting-low-density-structure -> item:low-density-structure x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1, item:yis-plastic-scrap x1
+    item:plastic-bar x5 -> low-density-structure -> item:low-density-structure x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1, item:yis-plastic-scrap x1
+
+[solid] steel
+  recycle targets:
+    yis-recycle-steel-scrap -> item:steel-plate x1
+  source recipes:
+    item:steel-plate x1 -> angels-electrode -> item:angels-electrode x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> angels-filter-frame -> item:angels-filter-frame x1, item:yis-steel-scrap x1, item:yis-iron-scrap x1
+    item:steel-plate x1 -> angels-milling-drum -> item:angels-milling-drum x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> barrel -> item:barrel x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> battery -> item:battery x1, item:yis-bob-lead-scrap x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> bob-gas-canister -> item:bob-gas-canister x5, item:yis-steel-scrap x1
+    item:steel-plate x1 -> bob-grinding-wheel -> item:bob-grinding-wheel x2, item:yis-steel-scrap x1
+    item:steel-plate x1 -> bob-polishing-wheel -> item:bob-polishing-wheel x2, item:yis-steel-scrap x1, item:yis-plastic-scrap x1
+    item:steel-plate x1 -> bob-steel-bearing -> item:bob-steel-bearing x2, item:yis-steel-scrap x1
+    item:steel-plate x1 -> bob-steel-bearing-ball -> item:bob-steel-bearing-ball x12, item:yis-steel-scrap x1
+    item:steel-plate x1 -> engine-unit -> item:engine-unit x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> flying-robot-frame -> item:flying-robot-frame x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> land-mine -> item:land-mine x4, item:yis-steel-scrap x1
+    item:steel-plate x1 -> pump -> item:pump x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> refined-concrete -> item:refined-concrete x10, item:yis-steel-scrap x1
+    item:steel-plate x10 -> agricultural-tower -> item:agricultural-tower x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> battery-equipment -> item:battery-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> beacon -> item:beacon x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> belt-immunity-equipment -> item:belt-immunity-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> bob-electric-chemical-furnace -> item:electric-furnace x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> bob-electric-mixing-furnace -> item:bob-electric-mixing-furnace x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> crusher -> item:crusher x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> electric-furnace -> item:electric-furnace x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> energy-shield-equipment -> item:energy-shield-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> heat-exchanger -> item:heat-exchanger x1, item:yis-steel-scrap x1, item:yis-copper-scrap x2
+    item:steel-plate x10 -> heat-pipe -> item:heat-pipe x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1
+    item:steel-plate x10 -> night-vision-equipment -> item:night-vision-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> rail-support -> item:rail-support x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> substation -> item:substation x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> thruster -> item:thruster x1, item:yis-steel-scrap x1
+    item:steel-plate x1000 -> rocket-silo -> item:rocket-silo x1, item:yis-steel-scrap x5
+    item:steel-plate x12 -> angels-blast-furnace-2 -> item:angels-blast-furnace-2 x1, item:yis-steel-scrap x1
+    item:steel-plate x12 -> angels-hydro-plant-2 -> item:angels-hydro-plant-2 x1, item:yis-steel-scrap x1
+    item:steel-plate x12 -> angels-storage-tank-2 -> item:angels-storage-tank-2 x1, item:yis-steel-scrap x1
+    item:steel-plate x15 -> angels-induction-furnace-2 -> item:angels-induction-furnace-2 x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> angels-rod-steel -> item:angels-rod-steel x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> assembling-machine-2 -> item:assembling-machine-2 x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> bob-air-pump-2 -> item:bob-air-pump-2 x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> bob-empty-nuclear-fuel-cell -> item:bob-empty-nuclear-fuel-cell x10, item:yis-steel-scrap x1, item:yis-bob-lead-scrap x1
+    item:steel-plate x2 -> bob-steel-gear-wheel -> item:bob-steel-gear-wheel x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> bob-water-pump-2 -> item:bob-water-pump-2 x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> gate -> item:gate x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> low-density-structure -> item:low-density-structure x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1, item:yis-plastic-scrap x1
+    item:steel-plate x2 -> medium-electric-pole -> item:medium-electric-pole x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> cargo-bay -> item:cargo-bay x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> discharge-defense-equipment -> item:discharge-defense-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> exoskeleton-equipment -> item:exoskeleton-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> laser-turret -> item:laser-turret x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> personal-roboport-equipment -> item:personal-roboport-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> recycler -> item:recycler x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> rocket-turret -> item:rocket-turret x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> space-platform-foundation -> item:space-platform-foundation x1, item:yis-steel-scrap x1
+    item:steel-plate x24 -> angels-sintering-oven -> item:angels-sintering-oven x1, item:yis-steel-scrap x1
+    item:steel-plate x25 -> cargo-landing-pad -> item:cargo-landing-pad x1, item:yis-steel-scrap x1
+    item:steel-plate x3 -> train-stop -> item:train-stop x1, item:yis-iron-scrap x1, item:yis-steel-scrap x1
+    item:steel-plate x30 -> angels-crystallizer -> item:angels-crystallizer x1, item:yis-steel-scrap x2
+    item:steel-plate x30 -> flamethrower-turret -> item:flamethrower-turret x1, item:yis-steel-scrap x2
+    item:steel-plate x36 -> angels-ore-sorting-facility-2 -> item:angels-ore-sorting-facility-2 x1, item:yis-steel-scrap x2
+    item:steel-plate x4 -> angels-reinforced-concrete-brick -> item:angels-reinforced-concrete-brick x4, item:yis-steel-scrap x1
+    item:steel-plate x45 -> roboport -> item:roboport x1, item:yis-steel-scrap x2
+    item:steel-plate x5 -> big-electric-pole -> item:big-electric-pole x1, item:yis-steel-scrap x1
+    item:steel-plate x5 -> pumpjack -> item:pumpjack x1, item:yis-steel-scrap x1
+    item:steel-plate x5 -> solar-panel -> item:solar-panel x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1
+    item:steel-plate x5 -> solar-panel-equipment -> item:solar-panel-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x5 -> storage-tank -> item:storage-tank x1, item:yis-iron-scrap x1, item:yis-steel-scrap x1
+    item:steel-plate x50 -> centrifuge -> item:centrifuge x1, item:yis-steel-scrap x2
+    item:steel-plate x50 -> electromagnetic-plant -> item:electromagnetic-plant x1, item:yis-holmium-scrap x3, item:yis-steel-scrap x2
+    item:steel-plate x50 -> foundry -> item:foundry x1, item:yis-steel-scrap x2
+    item:steel-plate x500 -> nuclear-reactor -> item:nuclear-reactor x1, item:yis-steel-scrap x4, item:yis-copper-scrap x4
+    item:steel-plate x6 -> angels-barreling-pump -> item:angels-barreling-pump x1, item:yis-steel-scrap x1
+    item:steel-plate x6 -> angels-chemical-furnace -> item:angels-chemical-furnace x1, item:yis-steel-scrap x1
+    item:steel-plate x6 -> angels-filtration-unit -> item:angels-filtration-unit x1, item:yis-steel-scrap x1
+    item:steel-plate x6 -> angels-gas-refinery-small -> item:angels-gas-refinery-small x1, item:yis-steel-scrap x1
+    item:steel-plate x6 -> angels-separator -> item:angels-separator x1, item:yis-steel-scrap x1
+    item:steel-plate x6 -> angels-storage-tank-1 -> item:angels-storage-tank-1 x1, item:yis-steel-scrap x1
+    item:steel-plate x6 -> bob-steel-chemical-furnace -> item:steel-furnace x1, item:yis-steel-scrap x1
+    item:steel-plate x6 -> bob-steel-mixing-furnace -> item:bob-steel-mixing-furnace x1, item:yis-steel-scrap x1
+    item:steel-plate x6 -> oil-refinery -> item:oil-refinery x1, item:yis-steel-scrap x1
+    item:steel-plate x6 -> steel-furnace -> item:steel-furnace x1, item:yis-steel-scrap x1
+    item:steel-plate x8 -> lightning-rod -> item:lightning-rod x1, item:yis-steel-scrap x1
+    item:steel-plate x8 -> steel-chest -> item:steel-chest x1, item:yis-steel-scrap x1
+    item:steel-plate x9 -> angels-casting-machine-2 -> item:angels-casting-machine-2 x1, item:yis-steel-scrap x1
+    item:steel-plate x9 -> angels-ore-crusher-2 -> item:angels-ore-crusher-2 x1, item:yis-steel-scrap x1
+
+[solid] tungsten
+  resources:
+    tungsten-ore -> item:tungsten-ore
+  recycle targets:
+    yis-recycle-tungsten-scrap -> item:tungsten-plate x1
+  source recipes:
+    item:tungsten-ore x1 -> angels-catalyst-metal-yellow -> item:angels-catalyst-metal-yellow x10, item:yis-tungsten-scrap x1, item:yis-bob-nickel-scrap x1
+    item:tungsten-ore x12 -> angels-solid-tungsten-oxide -> item:bob-tungsten-oxide x12, item:yis-tungsten-scrap x1
+    item:tungsten-ore x2 -> bob-tungstic-acid -> fluid:angels-liquid-tungstic-acid x20, item:angels-solid-calcium-chloride x1, item:yis-tungsten-scrap x1
+    item:tungsten-ore x4 -> angels-processed-tungsten -> item:angels-processed-tungsten x2, item:yis-tungsten-scrap x1
+    item:tungsten-plate x100 -> fusion-generator -> item:fusion-generator x1, item:yis-tungsten-scrap x2
+    item:tungsten-plate x15 -> turbo-splitter -> item:turbo-splitter x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x16 -> angels-electro-whinning-cell-2 -> item:angels-electro-whinning-cell-2 x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x16 -> angels-ore-leaching-plant-3 -> item:angels-ore-leaching-plant-3 x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x2 -> bob-tungsten-gear-wheel -> item:bob-tungsten-gear-wheel x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x20 -> angels-gas-refinery-3 -> item:angels-gas-refinery-3 x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x200 -> fusion-reactor -> item:fusion-reactor x1, item:yis-tungsten-scrap x3
+    item:tungsten-plate x24 -> angels-strand-casting-machine-4 -> item:angels-strand-casting-machine-4 x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x250 -> fusion-reactor-equipment -> item:fusion-reactor-equipment x1, item:yis-tungsten-scrap x3
+    item:tungsten-plate x30 -> railgun-turret -> item:railgun-turret x1, item:yis-tungsten-scrap x2
+    item:tungsten-plate x32 -> angels-sintering-oven-5 -> item:angels-sintering-oven-5 x1, item:yis-tungsten-scrap x2
+    item:tungsten-plate x4 -> angels-electric-boiler-3 -> item:angels-electric-boiler-3 x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x4 -> angels-powder-mixer-4 -> item:angels-powder-mixer-4 x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x4 -> foundation -> item:foundation x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x40 -> turbo-underground-belt -> item:turbo-underground-belt x2, item:yis-tungsten-scrap x2
+    item:tungsten-plate x400 -> angels-burner-reactor -> item:angels-burner-reactor x1, item:yis-bob-titanium-scrap x4, item:yis-tungsten-scrap x4, item:yis-bob-lead-scrap x4
+    item:tungsten-plate x48 -> angels-ore-refinery-2 -> item:angels-ore-refinery-2 x1, item:yis-tungsten-scrap x2
+    item:tungsten-plate x48 -> angels-ore-sorting-facility-5 -> item:angels-ore-sorting-facility-5 x1, item:yis-tungsten-scrap x2
+    item:tungsten-plate x5 -> turbo-transport-belt -> item:turbo-transport-belt x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x60 -> artillery-turret -> item:artillery-turret x1, item:yis-tungsten-scrap x2
+    item:tungsten-plate x8 -> angels-chemical-furnace-4 -> item:angels-chemical-furnace-4 x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x8 -> angels-gas-refinery-small-4 -> item:angels-gas-refinery-small-4 x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x8 -> angels-oil-refinery-4 -> item:angels-oil-refinery-4 x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x8 -> angels-ore-processing-machine-4 -> item:angels-ore-processing-machine-4 x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x8 -> angels-pellet-press-3 -> item:angels-pellet-press-3 x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x8 -> angels-separator-4 -> item:angels-separator-4 x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x8 -> angels-steam-cracker-4 -> item:angels-steam-cracker-4 x1, item:yis-tungsten-scrap x1
+
+[solid] yis-blockium
+  resources:
+    yis-test-yis-blockium-resource -> item:yis-blockium-ore x1
+  recycle targets:
+    yis-recycle-blockium-scrap -> item:yis-blockium-plate x1
+  source recipes:
+    item:yis-blockium-ore x4 -> yis-test-yis-blockium-disabled -> item:yis-blockium-plate x1, item:yis-blockium-scrap x1
+
+[solid] yis-disabledium
+  resources:
+    yis-test-yis-disabledium-resource -> item:yis-disabledium-ore x1
+  recycle targets:
+    yis-recycle-disabledium-scrap -> item:yis-disabledium-plate x1
+  source recipes:
+    item:yis-disabledium-ore x4 -> yis-test-yis-disabledium-disabled -> item:yis-disabledium-plate x1, item:yis-disabledium-scrap x1
+
+[solid] yis-hiddenium
+  resources:
+    yis-test-yis-hiddenium-resource -> item:yis-hiddenium-ore x1
+  recycle targets:
+    yis-recycle-hiddenium-scrap -> item:yis-hiddenium-plate x1
+  source recipes:
+    item:yis-hiddenium-plate x4 -> yis-test-yis-hiddenium-hidden -> item:yis-hiddenium-product x1, item:yis-hiddenium-scrap x1
+
+[solid] yis-quietium
+  recycle targets:
+    yis-recycle-quietium-scrap -> item:yis-quietium-plate x1
+  source recipes:
+    item:yis-quietium-plate x4 -> yis-test-yis-quietium-neutral -> item:yis-neutral-product x1, item:yis-quietium-scrap x1
+
+[solid] yis-testium
+  recycle targets:
+    yis-recycle-testium-scrap -> item:yis-testium-plate x1
+    yis-recycle-testium-scrap-to-fluid -> fluid:molten-yis-testium x10
+  source recipes:
+    item:yis-testium-ore x3 -> yis-test-yis-testium-no-tech -> item:yis-testium-product-no-tech x1, item:yis-testium-scrap x1
+    item:yis-testium-plate x200 -> yis-test-yis-testium-large -> item:yis-testium-product-large x1, item:yis-testium-scrap x3
+    item:yis-testium-plate x5 -> yis-test-yis-testium-fluid-main-product -> fluid:steam x100, item:yis-testium-scrap x1
+    item:yis-testium-plate x5 -> yis-test-yis-testium-solid -> item:yis-testium-product-solid x1, item:yis-testium-scrap x1
+    item:yis-testium-plate x5 -> yis-test-yis-testium-with-tech -> item:yis-testium-product-tech x1, item:yis-testium-scrap x1
+    item:yis-testium-plate x6 -> yis-test-yis-testium-mixed -> item:yis-testium-product-mixed x1, item:yis-testium-scrap x2

@@ -1,0 +1,3271 @@
+{
+  "schema": "ingredient-scrap-target-list/v1",
+  "profile": "krastorio_is",
+  "materials": [
+    {
+      "material": "copper",
+      "mode": "fluid",
+      "resources": [
+        {
+          "resource": "copper-ore",
+          "result": "item:copper-ore",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/copper-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "fluid:molten-copper x1",
+          "recipe": "casting-copper-cable",
+          "results": [
+            "item:copper-cable x2",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "copper-cable",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-copper.png"
+        },
+        {
+          "ingredient": "fluid:molten-copper x2",
+          "recipe": "casting-copper",
+          "results": [
+            "item:copper-plate x2",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "copper-plate",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-copper.png"
+        },
+        {
+          "ingredient": "fluid:molten-copper x25",
+          "recipe": "casting-low-density-structure",
+          "results": [
+            "item:low-density-structure x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "low-density-structure",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-copper.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-copper-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:copper-plate x1",
+          "result_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-copper-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:molten-copper x10",
+          "result_icon": "__space-age__/graphics/icons/fluid/molten-copper.png"
+        }
+      ]
+    },
+    {
+      "material": "hiddenfluidium",
+      "mode": "fluid",
+      "resources": [
+        {
+          "resource": "yis-test-hiddenfluidium-resource",
+          "result": "fluid:hiddenfluidium-solution x10",
+          "category": "basic-fluid",
+          "icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "fluid:hiddenfluidium-solution x5",
+          "recipe": "hiddenfluidium-solution-barrel",
+          "results": [
+            "item:hiddenfluidium-solution-barrel x1",
+            "item:yis-hiddenfluidium-scrap x1"
+          ],
+          "main_product": "hiddenfluidium-solution-barrel",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        },
+        {
+          "ingredient": "fluid:hiddenfluidium-solution x7",
+          "recipe": "yis-test-hiddenfluidium-fluid",
+          "results": [
+            "item:hiddenfluidium-product x1",
+            "item:yis-hiddenfluidium-scrap x1"
+          ],
+          "main_product": "hiddenfluidium-product",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-hiddenfluidium-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": true,
+          "result": "fluid:hiddenfluidium-solution x14",
+          "result_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ]
+    },
+    {
+      "material": "holmium",
+      "mode": "fluid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "fluid:holmium-solution x1",
+          "recipe": "electrolyte",
+          "results": [
+            "fluid:electrolyte x10",
+            "item:yis-holmium-scrap x1"
+          ],
+          "main_product": "electrolyte",
+          "recipe_category": "electromagnetics",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/holmium-solution.png"
+        },
+        {
+          "ingredient": "fluid:holmium-solution x2",
+          "recipe": "holmium-plate",
+          "results": [
+            "item:holmium-plate x1",
+            "item:yis-holmium-scrap x1"
+          ],
+          "main_product": "holmium-plate",
+          "recipe_category": "crafting-with-fluid-or-metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/holmium-solution.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-holmium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:holmium-plate x1",
+          "result_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-holmium-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:holmium-solution x10",
+          "result_icon": "__space-age__/graphics/icons/fluid/holmium-solution.png"
+        }
+      ]
+    },
+    {
+      "material": "iron",
+      "mode": "fluid",
+      "resources": [
+        {
+          "resource": "iron-ore",
+          "result": "item:iron-ore",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/iron-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "fluid:molten-iron x1",
+          "recipe": "casting-iron-gear-wheel",
+          "results": [
+            "item:iron-gear-wheel x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-gear-wheel",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x1",
+          "recipe": "casting-pipe",
+          "results": [
+            "item:pipe x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "pipe",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x1",
+          "recipe": "tungsten-plate",
+          "results": [
+            "item:tungsten-plate x1",
+            "item:yis-tungsten-scrap x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "tungsten-plate",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x2",
+          "recipe": "casting-iron",
+          "results": [
+            "item:iron-plate x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-plate",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x2",
+          "recipe": "casting-iron-stick",
+          "results": [
+            "item:iron-stick x4",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-stick",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x2",
+          "recipe": "concrete-from-molten-iron",
+          "results": [
+            "item:concrete x10",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "concrete",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x20",
+          "recipe": "big-mining-drill",
+          "results": [
+            "item:big-mining-drill x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "big-mining-drill",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x3",
+          "recipe": "casting-steel",
+          "results": [
+            "item:steel-plate x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "steel-plate",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x5",
+          "recipe": "casting-pipe-to-ground",
+          "results": [
+            "item:pipe-to-ground x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "pipe-to-ground",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x8",
+          "recipe": "casting-low-density-structure",
+          "results": [
+            "item:low-density-structure x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "low-density-structure",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-iron-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:iron-plate x1",
+          "result_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-iron-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:molten-iron x10",
+          "result_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        }
+      ]
+    },
+    {
+      "material": "rare-metal",
+      "mode": "fluid",
+      "resources": [
+        {
+          "resource": "kr-rare-metal-ore",
+          "result": "item:kr-rare-metal-ore",
+          "category": "basic-solid",
+          "icon": "__Krastorio2Assets__/icons/items/rare-metal-ore.png"
+        },
+        {
+          "resource": "yis-test-rare-metal-resource",
+          "result": "item:rare-metal-ore x1",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "resource": "yis-test-rare-metal-solution-resource",
+          "result": "fluid:rare-metal-solution x10",
+          "category": "basic-fluid",
+          "icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "fluid:molten-rare-metal x5",
+          "recipe": "molten-rare-metal-barrel",
+          "results": [
+            "item:molten-rare-metal-barrel x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "molten-rare-metal-barrel",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        },
+        {
+          "ingredient": "fluid:rare-metal-solution x5",
+          "recipe": "rare-metal-solution-barrel",
+          "results": [
+            "item:rare-metal-solution-barrel x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "rare-metal-solution-barrel",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-rare-metal-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:rare-metal-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-rare-metal-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:rare-metal-solution x10",
+          "result_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ]
+    },
+    {
+      "material": "solvium",
+      "mode": "fluid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "fluid:solvium-solution x5",
+          "recipe": "solvium-solution-barrel",
+          "results": [
+            "item:solvium-solution-barrel x1",
+            "item:yis-solvium-scrap x1"
+          ],
+          "main_product": "solvium-solution-barrel",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        },
+        {
+          "ingredient": "fluid:solvium-solution x6",
+          "recipe": "yis-test-solvium-solution",
+          "results": [
+            "item:solvium-product-fluid x1",
+            "item:yis-solvium-scrap x1"
+          ],
+          "main_product": "solvium-product-fluid",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-solvium-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:solvium-solution x12",
+          "result_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ]
+    },
+    {
+      "material": "testium",
+      "mode": "fluid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "fluid:molten-testium x4",
+          "recipe": "yis-test-testium-mixed",
+          "results": [
+            "item:testium-product-mixed x1",
+            "item:yis-testium-scrap x2"
+          ],
+          "main_product": "testium-product-mixed",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        },
+        {
+          "ingredient": "fluid:molten-testium x5",
+          "recipe": "molten-testium-barrel",
+          "results": [
+            "item:molten-testium-barrel x1",
+            "item:yis-testium-scrap x1"
+          ],
+          "main_product": "molten-testium-barrel",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        },
+        {
+          "ingredient": "fluid:molten-testium x5",
+          "recipe": "yis-test-testium-fluid",
+          "results": [
+            "item:testium-product-fluid x1",
+            "item:yis-testium-scrap x1"
+          ],
+          "main_product": "testium-product-fluid",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-testium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:testium-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-testium-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:molten-testium x10",
+          "result_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ]
+    },
+    {
+      "material": "blockium",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "yis-test-blockium-resource",
+          "result": "item:blockium-ore x1",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:blockium-ore x4",
+          "recipe": "yis-test-blockium-disabled",
+          "results": [
+            "item:blockium-plate x1",
+            "item:yis-blockium-scrap x1"
+          ],
+          "main_product": "blockium-plate",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-blockium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:blockium-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "copper",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "copper-ore",
+          "result": "item:copper-ore",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/copper-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:copper-ore x2",
+          "recipe": "copper-plate",
+          "results": [
+            "item:copper-plate x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "copper-plate",
+          "recipe_category": "smelting",
+          "ingredient_icon": "__base__/graphics/icons/copper-ore.png"
+        },
+        {
+          "ingredient": "item:copper-ore x2",
+          "recipe": "kr-copper-cable-from-copper-ore",
+          "results": [
+            "item:copper-cable x2",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "copper-cable",
+          "recipe_category": "kr-smelting-crafting",
+          "ingredient_icon": "__base__/graphics/icons/copper-ore.png"
+        },
+        {
+          "ingredient": "item:copper-ore x50",
+          "recipe": "molten-copper",
+          "results": [
+            "fluid:molten-copper x500",
+            "item:yis-copper-scrap x2"
+          ],
+          "main_product": "molten-copper",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__base__/graphics/icons/copper-ore.png"
+        },
+        {
+          "ingredient": "item:copper-ore x9",
+          "recipe": "kr-enriched-copper",
+          "results": [
+            "item:kr-enriched-copper x6",
+            "fluid:kr-dirty-water x25",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "kr-enriched-copper",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__base__/graphics/icons/copper-ore.png"
+        },
+        {
+          "ingredient": "item:copper-plate x1",
+          "recipe": "battery",
+          "results": [
+            "item:battery x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "battery",
+          "recipe_category": "chemistry-or-cryogenics",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x1",
+          "recipe": "copper-cable",
+          "results": [
+            "item:copper-cable x2",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "copper-cable",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x1",
+          "recipe": "kr-big-battery-equipment",
+          "results": [
+            "item:kr-big-battery-equipment x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "kr-big-battery-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x1",
+          "recipe": "kr-lithium-sulfur-battery",
+          "results": [
+            "item:kr-lithium-sulfur-battery x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "kr-lithium-sulfur-battery",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x1",
+          "recipe": "superconductor",
+          "results": [
+            "item:superconductor x2",
+            "item:yis-holmium-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "superconductor",
+          "recipe_category": "electromagnetics",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x10",
+          "recipe": "kr-electrolysis-plant",
+          "results": [
+            "item:kr-electrolysis-plant x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "kr-electrolysis-plant",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x10",
+          "recipe": "lab",
+          "results": [
+            "item:lab x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "lab",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x10",
+          "recipe": "low-density-structure",
+          "results": [
+            "item:low-density-structure x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "low-density-structure",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x100",
+          "recipe": "heat-exchanger",
+          "results": [
+            "item:heat-exchanger x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-copper-scrap x2"
+          ],
+          "main_product": "heat-exchanger",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x20",
+          "recipe": "heat-pipe",
+          "results": [
+            "item:heat-pipe x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "heat-pipe",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x20",
+          "recipe": "kr-quantum-computer",
+          "results": [
+            "item:kr-quantum-computer x1",
+            "item:yis-copper-scrap x1",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-quantum-computer",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x50",
+          "recipe": "fission-reactor-equipment",
+          "results": [
+            "item:fission-reactor-equipment x1",
+            "item:yis-copper-scrap x2",
+            "item:yis-steel-scrap x2"
+          ],
+          "main_product": "fission-reactor-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x50",
+          "recipe": "steam-turbine",
+          "results": [
+            "item:steam-turbine x1",
+            "item:yis-copper-scrap x2"
+          ],
+          "main_product": "steam-turbine",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x500",
+          "recipe": "kr-fusion-reactor",
+          "results": [
+            "item:kr-fusion-reactor x1",
+            "item:yis-copper-scrap x4",
+            "item:yis-steel-scrap x4",
+            "item:yis-rare-metal-scrap x4"
+          ],
+          "main_product": "kr-fusion-reactor",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x6",
+          "recipe": "kr-automation-core",
+          "results": [
+            "item:kr-automation-core x2",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "kr-automation-core",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x6",
+          "recipe": "kr-energy-absorber-equipment",
+          "results": [
+            "item:kr-energy-absorber-equipment x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "kr-energy-absorber-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x60",
+          "recipe": "kr-advanced-furnace",
+          "results": [
+            "item:kr-advanced-furnace x1",
+            "item:yis-imersium-scrap x1",
+            "item:yis-rare-metal-scrap x2",
+            "item:yis-copper-scrap x2"
+          ],
+          "main_product": "kr-advanced-furnace",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-copper-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:copper-plate x1",
+          "result_icon": "__Krastorio2Assets__/icons/items/copper-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-copper-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:molten-copper x10",
+          "result_icon": "__space-age__/graphics/icons/fluid/molten-copper.png"
+        }
+      ]
+    },
+    {
+      "material": "disabledium",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "yis-test-disabledium-resource",
+          "result": "item:disabledium-ore x1",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:disabledium-ore x4",
+          "recipe": "yis-test-disabledium-disabled",
+          "results": [
+            "item:disabledium-plate x1",
+            "item:yis-disabledium-scrap x1"
+          ],
+          "main_product": "disabledium-plate",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-disabledium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:disabledium-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "hiddenium",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "yis-test-hiddenium-resource",
+          "result": "item:hiddenium-ore x1",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:hiddenium-plate x4",
+          "recipe": "yis-test-hiddenium-hidden",
+          "results": [
+            "item:hiddenium-product x1",
+            "item:yis-hiddenium-scrap x1"
+          ],
+          "main_product": "hiddenium-product",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-hiddenium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": true,
+          "result": "item:hiddenium-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "holmium",
+      "mode": "solid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "item:holmium-ore x2",
+          "recipe": "holmium-solution",
+          "results": [
+            "fluid:holmium-solution x100",
+            "item:yis-holmium-scrap x1"
+          ],
+          "main_product": "holmium-solution",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__space-age__/graphics/icons/holmium-ore.png"
+        },
+        {
+          "ingredient": "item:holmium-plate x1",
+          "recipe": "fusion-power-cell",
+          "results": [
+            "item:fusion-power-cell x1",
+            "item:yis-holmium-scrap x1"
+          ],
+          "main_product": "fusion-power-cell",
+          "recipe_category": "cryogenics",
+          "ingredient_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        },
+        {
+          "ingredient": "item:holmium-plate x1",
+          "recipe": "lithium",
+          "results": [
+            "item:lithium x5",
+            "item:yis-holmium-scrap x1"
+          ],
+          "main_product": "lithium",
+          "recipe_category": "chemistry-or-cryogenics",
+          "ingredient_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        },
+        {
+          "ingredient": "item:holmium-plate x1",
+          "recipe": "superconductor",
+          "results": [
+            "item:superconductor x2",
+            "item:yis-holmium-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "superconductor",
+          "recipe_category": "electromagnetics",
+          "ingredient_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        },
+        {
+          "ingredient": "item:holmium-plate x150",
+          "recipe": "electromagnetic-plant",
+          "results": [
+            "item:electromagnetic-plant x1",
+            "item:yis-holmium-scrap x3",
+            "item:yis-steel-scrap x2"
+          ],
+          "main_product": "electromagnetic-plant",
+          "recipe_category": "electronics-or-assembling",
+          "ingredient_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        },
+        {
+          "ingredient": "item:holmium-plate x2",
+          "recipe": "supercapacitor",
+          "results": [
+            "item:supercapacitor x1",
+            "item:yis-holmium-scrap x1"
+          ],
+          "main_product": "supercapacitor",
+          "recipe_category": "electromagnetics",
+          "ingredient_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-holmium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:holmium-plate x1",
+          "result_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-holmium-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:holmium-solution x10",
+          "result_icon": "__space-age__/graphics/icons/fluid/holmium-solution.png"
+        }
+      ]
+    },
+    {
+      "material": "imersium",
+      "mode": "solid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "item:kr-imersium-beam x10",
+          "recipe": "kr-matter-plant",
+          "results": [
+            "item:kr-matter-plant x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-matter-plant",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-beam.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-beam x10",
+          "recipe": "kr-planetary-teleporter",
+          "results": [
+            "item:kr-planetary-teleporter x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-planetary-teleporter",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-beam.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-beam x100",
+          "recipe": "kr-antimatter-reactor",
+          "results": [
+            "item:kr-antimatter-reactor x1",
+            "item:yis-imersium-scrap x6",
+            "item:yis-rare-metal-scrap x4",
+            "item:yis-steel-scrap x4"
+          ],
+          "main_product": "kr-antimatter-reactor",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-beam.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-beam x20",
+          "recipe": "kr-advanced-chemical-plant",
+          "results": [
+            "item:kr-advanced-chemical-plant x1",
+            "item:yis-imersium-scrap x2",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-advanced-chemical-plant",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-beam.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-beam x20",
+          "recipe": "kr-advanced-furnace",
+          "results": [
+            "item:kr-advanced-furnace x1",
+            "item:yis-imersium-scrap x1",
+            "item:yis-rare-metal-scrap x2",
+            "item:yis-copper-scrap x2"
+          ],
+          "main_product": "kr-advanced-furnace",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-beam.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-beam x20",
+          "recipe": "kr-big-roboport",
+          "results": [
+            "item:kr-big-roboport x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-imersium-scrap x2",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-big-roboport",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-beam.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-beam x3",
+          "recipe": "kr-small-roboport",
+          "results": [
+            "item:kr-small-roboport x2",
+            "item:yis-imersium-scrap x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-small-roboport",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-beam.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-beam x3",
+          "recipe": "kr-superior-substation",
+          "results": [
+            "item:kr-superior-substation x1",
+            "item:yis-imersium-scrap x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-superior-substation",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-beam.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-beam x4",
+          "recipe": "kr-advanced-assembling-machine",
+          "results": [
+            "item:kr-advanced-assembling-machine x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-advanced-assembling-machine",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-beam.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-beam x4",
+          "recipe": "kr-matter-associator",
+          "results": [
+            "item:kr-matter-associator x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-matter-associator",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-beam.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-beam x4",
+          "recipe": "kr-stabilizer-charging-station",
+          "results": [
+            "item:kr-stabilizer-charging-station x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-stabilizer-charging-station",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-beam.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-beam x500",
+          "recipe": "kr-intergalactic-transceiver",
+          "results": [
+            "item:kr-intergalactic-transceiver x1",
+            "item:yis-imersium-scrap x8",
+            "item:yis-rare-metal-scrap x5"
+          ],
+          "main_product": "kr-intergalactic-transceiver",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-beam.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-gear-wheel x10",
+          "recipe": "kr-superior-loader",
+          "results": [
+            "item:kr-superior-loader x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-superior-loader",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-gear-wheel.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-gear-wheel x20",
+          "recipe": "kr-advanced-chemical-plant",
+          "results": [
+            "item:kr-advanced-chemical-plant x1",
+            "item:yis-imersium-scrap x2",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-advanced-chemical-plant",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-gear-wheel.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-gear-wheel x20",
+          "recipe": "kr-big-roboport",
+          "results": [
+            "item:kr-big-roboport x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-imersium-scrap x2",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-big-roboport",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-gear-wheel.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-gear-wheel x4",
+          "recipe": "kr-superior-inserter",
+          "results": [
+            "item:kr-superior-inserter x1",
+            "item:yis-imersium-scrap x2"
+          ],
+          "main_product": "kr-superior-inserter",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-gear-wheel.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-gear-wheel x4",
+          "recipe": "kr-superior-long-inserter",
+          "results": [
+            "item:kr-superior-long-inserter x1",
+            "item:yis-imersium-scrap x2"
+          ],
+          "main_product": "kr-superior-long-inserter",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-gear-wheel.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-gear-wheel x4",
+          "recipe": "kr-superior-splitter",
+          "results": [
+            "item:kr-superior-splitter x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-superior-splitter",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-gear-wheel.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-gear-wheel x4",
+          "recipe": "kr-superior-transport-belt",
+          "results": [
+            "item:kr-superior-transport-belt x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-superior-transport-belt",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-gear-wheel.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-gear-wheel x5",
+          "recipe": "kr-electric-mining-drill-mk3",
+          "results": [
+            "item:kr-electric-mining-drill-mk3 x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-electric-mining-drill-mk3",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-gear-wheel.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-plate x1",
+          "recipe": "kr-imersium-gear-wheel",
+          "results": [
+            "item:kr-imersium-gear-wheel x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-imersium-gear-wheel",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-plate.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-plate x1",
+          "recipe": "kr-superior-inserter",
+          "results": [
+            "item:kr-superior-inserter x1",
+            "item:yis-imersium-scrap x2"
+          ],
+          "main_product": "kr-superior-inserter",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-plate.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-plate x10",
+          "recipe": "kr-energy-shield-mk4-equipment",
+          "results": [
+            "item:kr-energy-shield-mk4-equipment x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-energy-shield-mk4-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-plate.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-plate x10",
+          "recipe": "kr-superior-exoskeleton-equipment",
+          "results": [
+            "item:kr-superior-exoskeleton-equipment x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-superior-exoskeleton-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-plate.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-plate x100",
+          "recipe": "kr-antimatter-reactor-equipment",
+          "results": [
+            "item:kr-antimatter-reactor-equipment x1",
+            "item:yis-imersium-scrap x2"
+          ],
+          "main_product": "kr-antimatter-reactor-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-plate.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-plate x2",
+          "recipe": "kr-imersium-beam",
+          "results": [
+            "item:kr-imersium-beam x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-imersium-beam",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-plate.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-plate x2",
+          "recipe": "kr-superior-long-inserter",
+          "results": [
+            "item:kr-superior-long-inserter x1",
+            "item:yis-imersium-scrap x2"
+          ],
+          "main_product": "kr-superior-long-inserter",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-plate.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-plate x350",
+          "recipe": "kr-antimatter-reactor",
+          "results": [
+            "item:kr-antimatter-reactor x1",
+            "item:yis-imersium-scrap x6",
+            "item:yis-rare-metal-scrap x4",
+            "item:yis-steel-scrap x4"
+          ],
+          "main_product": "kr-antimatter-reactor",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-plate.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-plate x5",
+          "recipe": "kr-personal-laser-defense-mk3-equipment",
+          "results": [
+            "item:kr-personal-laser-defense-mk3-equipment x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-personal-laser-defense-mk3-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-plate.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-plate x500",
+          "recipe": "kr-intergalactic-transceiver",
+          "results": [
+            "item:kr-intergalactic-transceiver x1",
+            "item:yis-imersium-scrap x8",
+            "item:yis-rare-metal-scrap x5"
+          ],
+          "main_product": "kr-intergalactic-transceiver",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-plate.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-plate x6",
+          "recipe": "kr-matter-stabilizer",
+          "results": [
+            "item:kr-matter-stabilizer x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-matter-stabilizer",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-plate.png"
+        },
+        {
+          "ingredient": "item:kr-imersium-plate x8",
+          "recipe": "kr-empty-antimatter-fuel-cell",
+          "results": [
+            "item:kr-empty-antimatter-fuel-cell x1",
+            "item:yis-imersium-scrap x1"
+          ],
+          "main_product": "kr-empty-antimatter-fuel-cell",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/imersium-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-imersium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:kr-imersium-plate x1",
+          "result_icon": "__Krastorio2Assets__/icons/items/imersium-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "iron",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "iron-ore",
+          "result": "item:iron-ore",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/iron-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:iron-ore x1",
+          "recipe": "concrete",
+          "results": [
+            "item:concrete x10",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "concrete",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-ore x2",
+          "recipe": "advanced-thruster-oxidizer",
+          "results": [
+            "fluid:thruster-oxidizer x1500",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "thruster-oxidizer",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-ore x2",
+          "recipe": "iron-plate",
+          "results": [
+            "item:iron-plate x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-plate",
+          "recipe_category": "smelting",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-ore x2",
+          "recipe": "kr-iron-gear-wheel-from-iron-ore",
+          "results": [
+            "item:iron-gear-wheel x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-gear-wheel",
+          "recipe_category": "kr-smelting-crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-ore x2",
+          "recipe": "kr-iron-stick-from-iron-ore",
+          "results": [
+            "item:iron-stick x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-stick",
+          "recipe_category": "kr-smelting-crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-ore x2",
+          "recipe": "thruster-oxidizer",
+          "results": [
+            "fluid:thruster-oxidizer x75",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "thruster-oxidizer",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-ore x4",
+          "recipe": "kr-iron-beam-from-iron-ore",
+          "results": [
+            "item:kr-iron-beam x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "kr-iron-beam",
+          "recipe_category": "kr-smelting-crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-ore x50",
+          "recipe": "molten-iron",
+          "results": [
+            "fluid:molten-iron x500",
+            "item:yis-iron-scrap x2"
+          ],
+          "main_product": "molten-iron",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-ore x9",
+          "recipe": "kr-enriched-iron",
+          "results": [
+            "item:kr-enriched-iron x6",
+            "fluid:kr-dirty-water x25",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "kr-enriched-iron",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "battery",
+          "results": [
+            "item:battery x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "battery",
+          "recipe_category": "chemistry-or-cryogenics",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "burner-inserter",
+          "results": [
+            "item:burner-inserter x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "burner-inserter",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "display-panel",
+          "results": [
+            "item:display-panel x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "display-panel",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "electronic-circuit",
+          "results": [
+            "item:electronic-circuit x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "electronic-circuit",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "engine-unit",
+          "results": [
+            "item:engine-unit x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "engine-unit",
+          "recipe_category": "advanced-crafting",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "iron-gear-wheel",
+          "results": [
+            "item:iron-gear-wheel x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-gear-wheel",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "iron-stick",
+          "results": [
+            "item:iron-stick x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-stick",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "kr-rocket-fuel-with-ammonia",
+          "results": [
+            "item:rocket-fuel x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "rocket-fuel",
+          "recipe_category": "kr-fuel-refinery",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "kr-rocket-fuel-with-hydrogen-chloride",
+          "results": [
+            "item:rocket-fuel x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "rocket-fuel",
+          "recipe_category": "kr-fuel-refinery",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "night-vision-equipment",
+          "results": [
+            "item:night-vision-equipment x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "night-vision-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "pipe",
+          "results": [
+            "item:pipe x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "pipe",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "rocket-fuel",
+          "results": [
+            "item:rocket-fuel x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "rocket-fuel",
+          "recipe_category": "kr-fuel-refinery",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "small-lamp",
+          "results": [
+            "item:small-lamp x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "small-lamp",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "sulfuric-acid",
+          "results": [
+            "fluid:sulfuric-acid x50",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "sulfuric-acid",
+          "recipe_category": "chemistry-or-cryogenics",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "transport-belt",
+          "results": [
+            "item:transport-belt x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "transport-belt",
+          "recipe_category": "pressing",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x10",
+          "recipe": "kr-easy-steel-gear-wheel",
+          "results": [
+            "item:kr-steel-gear-wheel x5",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "kr-steel-gear-wheel",
+          "recipe_category": "kr-smelting-crafting",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x10",
+          "recipe": "radar",
+          "results": [
+            "item:radar x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "radar",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x10",
+          "recipe": "steam-engine",
+          "results": [
+            "item:steam-engine x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "steam-engine",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x10",
+          "recipe": "steel-plate",
+          "results": [
+            "item:steel-plate x5",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "steel-plate",
+          "recipe_category": "smelting",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x10",
+          "recipe": "storage-tank",
+          "results": [
+            "item:storage-tank x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "storage-tank",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x2",
+          "recipe": "accumulator",
+          "results": [
+            "item:accumulator x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "accumulator",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x2",
+          "recipe": "battery-equipment",
+          "results": [
+            "item:battery-equipment x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "battery-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x2",
+          "recipe": "kr-blank-tech-card",
+          "results": [
+            "item:kr-blank-tech-card x5",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "kr-blank-tech-card",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x2",
+          "recipe": "kr-iron-beam",
+          "results": [
+            "item:kr-iron-beam x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "kr-iron-beam",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x2",
+          "recipe": "kr-sentinel",
+          "results": [
+            "item:kr-sentinel x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "kr-sentinel",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x20",
+          "recipe": "biochamber",
+          "results": [
+            "item:biochamber x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "biochamber",
+          "recipe_category": "organic-or-assembling",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x20",
+          "recipe": "kr-easy-steel-beam",
+          "results": [
+            "item:kr-steel-beam x5",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "kr-steel-beam",
+          "recipe_category": "kr-smelting-crafting",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x25",
+          "recipe": "kr-shelter",
+          "results": [
+            "item:kr-shelter x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "kr-shelter",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x3",
+          "recipe": "burner-mining-drill",
+          "results": [
+            "item:burner-mining-drill x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "burner-mining-drill",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x3",
+          "recipe": "programmable-speaker",
+          "results": [
+            "item:programmable-speaker x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "programmable-speaker",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x4",
+          "recipe": "kr-big-battery-equipment",
+          "results": [
+            "item:kr-big-battery-equipment x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "kr-big-battery-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "loader",
+          "results": [
+            "item:loader x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "loader",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "pipe-to-ground",
+          "results": [
+            "item:pipe-to-ground x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "pipe-to-ground",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "pipe-to-ground-2",
+          "results": [
+            "item:pipe-to-ground-2 x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "pipe-to-ground-2",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "pipe-to-ground-3",
+          "results": [
+            "item:pipe-to-ground-3 x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "pipe-to-ground-3",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "power-switch",
+          "results": [
+            "item:power-switch x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "power-switch",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "rail-chain-signal",
+          "results": [
+            "item:rail-chain-signal x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "rail-chain-signal",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "rail-signal",
+          "results": [
+            "item:rail-signal x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "rail-signal",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x6",
+          "recipe": "kr-wind-turbine",
+          "results": [
+            "item:kr-wind-turbine x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "kr-wind-turbine",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x6",
+          "recipe": "train-stop",
+          "results": [
+            "item:train-stop x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "train-stop",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x8",
+          "recipe": "iron-chest",
+          "results": [
+            "item:iron-chest x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-chest",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-iron-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:iron-plate x1",
+          "result_icon": "__Krastorio2Assets__/icons/items/iron-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-iron-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:molten-iron x10",
+          "result_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        }
+      ]
+    },
+    {
+      "material": "quietium",
+      "mode": "solid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "item:quietium-plate x4",
+          "recipe": "yis-test-quietium-neutral",
+          "results": [
+            "item:neutral-product x1",
+            "item:yis-quietium-scrap x1"
+          ],
+          "main_product": "neutral-product",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-quietium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:quietium-plate x1",
+          "result_icon": "__base__/graphics/icons/copper-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "rare-metal",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "kr-rare-metal-ore",
+          "result": "item:kr-rare-metal-ore",
+          "category": "basic-solid",
+          "icon": "__Krastorio2Assets__/icons/items/rare-metal-ore.png"
+        },
+        {
+          "resource": "yis-test-rare-metal-resource",
+          "result": "item:rare-metal-ore x1",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "resource": "yis-test-rare-metal-solution-resource",
+          "result": "fluid:rare-metal-solution x10",
+          "category": "basic-fluid",
+          "icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:kr-rare-metal-ore x10",
+          "recipe": "kr-rare-metals",
+          "results": [
+            "item:kr-rare-metals x5",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-rare-metals",
+          "recipe_category": "smelting",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metal-ore.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metal-ore x9",
+          "recipe": "kr-enriched-rare-metals",
+          "results": [
+            "item:kr-enriched-rare-metals x6",
+            "fluid:kr-dirty-water x25",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-enriched-rare-metals",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metal-ore.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x1",
+          "recipe": "kr-advanced-transport-belt",
+          "results": [
+            "item:kr-advanced-transport-belt x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-advanced-transport-belt",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x1",
+          "recipe": "kr-empty-dt-fuel-cell",
+          "results": [
+            "item:kr-empty-dt-fuel-cell x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-empty-dt-fuel-cell",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x1",
+          "recipe": "kr-nitric-acid",
+          "results": [
+            "fluid:kr-nitric-acid x50",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-nitric-acid",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x10",
+          "recipe": "kr-advanced-loader",
+          "results": [
+            "item:kr-advanced-loader x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-advanced-loader",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x1000",
+          "recipe": "kr-intergalactic-transceiver",
+          "results": [
+            "item:kr-intergalactic-transceiver x1",
+            "item:yis-imersium-scrap x8",
+            "item:yis-rare-metal-scrap x5"
+          ],
+          "main_product": "kr-intergalactic-transceiver",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x2",
+          "recipe": "kr-easy-imersium-gear-wheel",
+          "results": [
+            "item:kr-imersium-gear-wheel x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-imersium-gear-wheel",
+          "recipe_category": "kr-smelting-crafting",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x20",
+          "recipe": "kr-laser-artillery-turret",
+          "results": [
+            "item:kr-laser-artillery-turret x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-laser-artillery-turret",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x20",
+          "recipe": "kr-railgun-turret",
+          "results": [
+            "item:kr-railgun-turret x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-railgun-turret",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x20",
+          "recipe": "kr-rocket-turret",
+          "results": [
+            "item:kr-rocket-turret x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-rocket-turret",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x20",
+          "recipe": "kr-small-roboport",
+          "results": [
+            "item:kr-small-roboport x2",
+            "item:yis-imersium-scrap x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-small-roboport",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x20",
+          "recipe": "recycler",
+          "results": [
+            "item:recycler x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "recycler",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x200",
+          "recipe": "nuclear-reactor",
+          "results": [
+            "item:nuclear-reactor x1",
+            "item:yis-steel-scrap x3",
+            "item:yis-rare-metal-scrap x3"
+          ],
+          "main_product": "nuclear-reactor",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x3",
+          "recipe": "processing-unit",
+          "results": [
+            "item:processing-unit x2",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "processing-unit",
+          "recipe_category": "electronics-with-fluid",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x350",
+          "recipe": "kr-antimatter-reactor",
+          "results": [
+            "item:kr-antimatter-reactor x1",
+            "item:yis-imersium-scrap x6",
+            "item:yis-rare-metal-scrap x4",
+            "item:yis-steel-scrap x4"
+          ],
+          "main_product": "kr-antimatter-reactor",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x350",
+          "recipe": "kr-fusion-reactor",
+          "results": [
+            "item:kr-fusion-reactor x1",
+            "item:yis-copper-scrap x4",
+            "item:yis-steel-scrap x4",
+            "item:yis-rare-metal-scrap x4"
+          ],
+          "main_product": "kr-fusion-reactor",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x4",
+          "recipe": "kr-easy-imersium-beam",
+          "results": [
+            "item:kr-imersium-beam x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-imersium-beam",
+          "recipe_category": "kr-smelting-crafting",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x4",
+          "recipe": "kr-electric-mining-drill-mk2",
+          "results": [
+            "item:kr-electric-mining-drill-mk2 x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-electric-mining-drill-mk2",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x5",
+          "recipe": "kr-advanced-radar",
+          "results": [
+            "item:kr-advanced-radar x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-advanced-radar",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x5",
+          "recipe": "kr-matter-research-data",
+          "results": [
+            "item:kr-matter-research-data x5",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-matter-research-data",
+          "recipe_category": "kr-t3-tech-cards",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x5",
+          "recipe": "kr-tritium",
+          "results": [
+            "item:kr-tritium x5",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-tritium",
+          "recipe_category": "centrifuging",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x50",
+          "recipe": "kr-energy-storage",
+          "results": [
+            "item:kr-energy-storage x1",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-energy-storage",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x50",
+          "recipe": "kr-quantum-computer",
+          "results": [
+            "item:kr-quantum-computer x1",
+            "item:yis-copper-scrap x1",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-quantum-computer",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x50",
+          "recipe": "kr-quarry-drill",
+          "results": [
+            "item:kr-quarry-drill x1",
+            "item:yis-steel-scrap x2",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-quarry-drill",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x6",
+          "recipe": "kr-imersium-plate",
+          "results": [
+            "item:kr-imersium-plate x3",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-imersium-plate",
+          "recipe_category": "smelting",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x6",
+          "recipe": "kr-superior-substation",
+          "results": [
+            "item:kr-superior-substation x1",
+            "item:yis-imersium-scrap x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-superior-substation",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x60",
+          "recipe": "kr-advanced-steam-turbine",
+          "results": [
+            "item:kr-advanced-steam-turbine x1",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-advanced-steam-turbine",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x60",
+          "recipe": "kr-singularity-lab",
+          "results": [
+            "item:kr-singularity-lab x1",
+            "item:yis-steel-scrap x2",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-singularity-lab",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x80",
+          "recipe": "kr-advanced-chemical-plant",
+          "results": [
+            "item:kr-advanced-chemical-plant x1",
+            "item:yis-imersium-scrap x2",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-advanced-chemical-plant",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x80",
+          "recipe": "kr-advanced-furnace",
+          "results": [
+            "item:kr-advanced-furnace x1",
+            "item:yis-imersium-scrap x1",
+            "item:yis-rare-metal-scrap x2",
+            "item:yis-copper-scrap x2"
+          ],
+          "main_product": "kr-advanced-furnace",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        },
+        {
+          "ingredient": "item:kr-rare-metals x80",
+          "recipe": "kr-big-roboport",
+          "results": [
+            "item:kr-big-roboport x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-imersium-scrap x2",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-big-roboport",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/rare-metals.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-rare-metal-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:rare-metal-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-rare-metal-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:rare-metal-solution x10",
+          "result_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ]
+    },
+    {
+      "material": "steel",
+      "mode": "solid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "barrel",
+          "results": [
+            "item:barrel x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "barrel",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "bulk-inserter",
+          "results": [
+            "item:bulk-inserter x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "bulk-inserter",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "fast-inserter",
+          "results": [
+            "item:fast-inserter x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "fast-inserter",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "flying-robot-frame",
+          "results": [
+            "item:flying-robot-frame x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "flying-robot-frame",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "kr-steel-gear-wheel",
+          "results": [
+            "item:kr-steel-gear-wheel x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "kr-steel-gear-wheel",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "kr-steel-pipe",
+          "results": [
+            "item:kr-steel-pipe x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "kr-steel-pipe",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "land-mine",
+          "results": [
+            "item:land-mine x4",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "land-mine",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "pump",
+          "results": [
+            "item:pump x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "pump",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "uranium-fuel-cell",
+          "results": [
+            "item:uranium-fuel-cell x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "uranium-fuel-cell",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "agricultural-tower",
+          "results": [
+            "item:agricultural-tower x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "agricultural-tower",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "beacon",
+          "results": [
+            "item:beacon x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "beacon",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "belt-immunity-equipment",
+          "results": [
+            "item:belt-immunity-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "belt-immunity-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "crusher",
+          "results": [
+            "item:crusher x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "crusher",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "electric-furnace",
+          "results": [
+            "item:electric-furnace x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "electric-furnace",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "energy-shield-equipment",
+          "results": [
+            "item:energy-shield-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "energy-shield-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "exoskeleton-equipment",
+          "results": [
+            "item:exoskeleton-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "exoskeleton-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "heat-exchanger",
+          "results": [
+            "item:heat-exchanger x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-copper-scrap x2"
+          ],
+          "main_product": "heat-exchanger",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "kr-small-roboport",
+          "results": [
+            "item:kr-small-roboport x2",
+            "item:yis-imersium-scrap x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "kr-small-roboport",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "rail-support",
+          "results": [
+            "item:rail-support x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "rail-support",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "thruster",
+          "results": [
+            "item:thruster x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "thruster",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1000",
+          "recipe": "rocket-silo",
+          "results": [
+            "item:rocket-silo x1",
+            "item:yis-steel-scrap x5"
+          ],
+          "main_product": "rocket-silo",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x15",
+          "recipe": "laser-turret",
+          "results": [
+            "item:laser-turret x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "laser-turret",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "assembling-machine-2",
+          "results": [
+            "item:assembling-machine-2 x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "assembling-machine-2",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "battery-mk2-equipment",
+          "results": [
+            "item:battery-mk2-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "battery-mk2-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "gate",
+          "results": [
+            "item:gate x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "gate",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "kr-pollution-filter",
+          "results": [
+            "item:kr-pollution-filter x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "kr-pollution-filter",
+          "recipe_category": "kr-bioprocessing",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "kr-steel-beam",
+          "results": [
+            "item:kr-steel-beam x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "kr-steel-beam",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "low-density-structure",
+          "results": [
+            "item:low-density-structure x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "low-density-structure",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "cargo-bay",
+          "results": [
+            "item:cargo-bay x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "cargo-bay",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "discharge-defense-equipment",
+          "results": [
+            "item:discharge-defense-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "discharge-defense-equipment",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "flamethrower-turret",
+          "results": [
+            "item:flamethrower-turret x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "flamethrower-turret",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "kr-big-roboport",
+          "results": [
+            "item:kr-big-roboport x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-imersium-scrap x2",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-big-roboport",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "kr-big-storage-tank",
+          "results": [
+            "item:kr-big-storage-tank x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "kr-big-storage-tank",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "kr-flare-stack",
+          "results": [
+            "item:kr-flare-stack x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "kr-flare-stack",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "rocket-turret",
+          "results": [
+            "item:rocket-turret x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "rocket-turret",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "space-platform-foundation",
+          "results": [
+            "item:space-platform-foundation x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "space-platform-foundation",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x200",
+          "recipe": "nuclear-reactor",
+          "results": [
+            "item:nuclear-reactor x1",
+            "item:yis-steel-scrap x3",
+            "item:yis-rare-metal-scrap x3"
+          ],
+          "main_product": "nuclear-reactor",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x25",
+          "recipe": "cargo-landing-pad",
+          "results": [
+            "item:cargo-landing-pad x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "cargo-landing-pad",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x3",
+          "recipe": "train-stop",
+          "results": [
+            "item:train-stop x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "train-stop",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x350",
+          "recipe": "kr-antimatter-reactor",
+          "results": [
+            "item:kr-antimatter-reactor x1",
+            "item:yis-imersium-scrap x6",
+            "item:yis-rare-metal-scrap x4",
+            "item:yis-steel-scrap x4"
+          ],
+          "main_product": "kr-antimatter-reactor",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x4",
+          "recipe": "kr-big-battery-mk2-equipment",
+          "results": [
+            "item:kr-big-battery-mk2-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "kr-big-battery-mk2-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x4",
+          "recipe": "kr-vehicle-roboport-equipment",
+          "results": [
+            "item:kr-vehicle-roboport-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "kr-vehicle-roboport-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x40",
+          "recipe": "kr-singularity-lab",
+          "results": [
+            "item:kr-singularity-lab x1",
+            "item:yis-steel-scrap x2",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-singularity-lab",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "chemical-plant",
+          "results": [
+            "item:chemical-plant x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "chemical-plant",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "kr-additional-engine-equipment",
+          "results": [
+            "item:kr-additional-engine-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "kr-additional-engine-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "kr-advanced-additional-engine-equipment",
+          "results": [
+            "item:kr-advanced-additional-engine-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "kr-advanced-additional-engine-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "kr-biter-research-data",
+          "results": [
+            "item:kr-biter-research-data x5",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "kr-biter-research-data",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "kr-fuel-refinery",
+          "results": [
+            "item:kr-fuel-refinery x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "kr-fuel-refinery",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "kr-steel-pipe-to-ground",
+          "results": [
+            "item:kr-steel-pipe-to-ground x2",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "kr-steel-pipe-to-ground",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "solar-panel",
+          "results": [
+            "item:solar-panel x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "solar-panel",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "solar-panel-equipment",
+          "results": [
+            "item:solar-panel-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "solar-panel-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x50",
+          "recipe": "centrifuge",
+          "results": [
+            "item:centrifuge x1",
+            "item:yis-steel-scrap x2"
+          ],
+          "main_product": "centrifuge",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x50",
+          "recipe": "electromagnetic-plant",
+          "results": [
+            "item:electromagnetic-plant x1",
+            "item:yis-holmium-scrap x3",
+            "item:yis-steel-scrap x2"
+          ],
+          "main_product": "electromagnetic-plant",
+          "recipe_category": "electronics-or-assembling",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x50",
+          "recipe": "fission-reactor-equipment",
+          "results": [
+            "item:fission-reactor-equipment x1",
+            "item:yis-copper-scrap x2",
+            "item:yis-steel-scrap x2"
+          ],
+          "main_product": "fission-reactor-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x50",
+          "recipe": "foundry",
+          "results": [
+            "item:foundry x1",
+            "item:yis-steel-scrap x2"
+          ],
+          "main_product": "foundry",
+          "recipe_category": "metallurgy-or-assembling",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x50",
+          "recipe": "kr-quarry-drill",
+          "results": [
+            "item:kr-quarry-drill x1",
+            "item:yis-steel-scrap x2",
+            "item:yis-rare-metal-scrap x2"
+          ],
+          "main_product": "kr-quarry-drill",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x500",
+          "recipe": "kr-fusion-reactor",
+          "results": [
+            "item:kr-fusion-reactor x1",
+            "item:yis-copper-scrap x4",
+            "item:yis-steel-scrap x4",
+            "item:yis-rare-metal-scrap x4"
+          ],
+          "main_product": "kr-fusion-reactor",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x6",
+          "recipe": "steel-furnace",
+          "results": [
+            "item:steel-furnace x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "steel-furnace",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x60",
+          "recipe": "kr-huge-storage-tank",
+          "results": [
+            "item:kr-huge-storage-tank x1",
+            "item:yis-steel-scrap x2"
+          ],
+          "main_product": "kr-huge-storage-tank",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x8",
+          "recipe": "lightning-rod",
+          "results": [
+            "item:lightning-rod x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "lightning-rod",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x8",
+          "recipe": "steel-chest",
+          "results": [
+            "item:steel-chest x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "steel-chest",
+          "recipe_category": null,
+          "ingredient_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-steel-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:steel-plate x1",
+          "result_icon": "__Krastorio2Assets__/icons/items/steel-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "testium",
+      "mode": "solid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "item:testium-ore x3",
+          "recipe": "yis-test-testium-no-tech",
+          "results": [
+            "item:testium-product-no-tech x1",
+            "item:yis-testium-scrap x1"
+          ],
+          "main_product": "testium-product-no-tech",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:testium-plate x200",
+          "recipe": "yis-test-testium-large",
+          "results": [
+            "item:testium-product-large x1",
+            "item:yis-testium-scrap x3"
+          ],
+          "main_product": "testium-product-large",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:testium-plate x5",
+          "recipe": "yis-test-testium-fluid-main-product",
+          "results": [
+            "fluid:steam x100",
+            "item:yis-testium-scrap x1"
+          ],
+          "main_product": "steam",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:testium-plate x5",
+          "recipe": "yis-test-testium-solid",
+          "results": [
+            "item:testium-product-solid x1",
+            "item:yis-testium-scrap x1"
+          ],
+          "main_product": "testium-product-solid",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:testium-plate x5",
+          "recipe": "yis-test-testium-with-tech",
+          "results": [
+            "item:testium-product-tech x1",
+            "item:yis-testium-scrap x1"
+          ],
+          "main_product": "testium-product-tech",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:testium-plate x6",
+          "recipe": "yis-test-testium-mixed",
+          "results": [
+            "item:testium-product-mixed x1",
+            "item:yis-testium-scrap x2"
+          ],
+          "main_product": "testium-product-mixed",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-testium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:testium-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-testium-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:molten-testium x10",
+          "result_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ]
+    },
+    {
+      "material": "tungsten",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "tungsten-ore",
+          "result": "item:tungsten-ore",
+          "category": "hard-solid",
+          "icon": "__space-age__/graphics/icons/tungsten-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:tungsten-ore x2",
+          "recipe": "tungsten-carbide",
+          "results": [
+            "item:tungsten-carbide x1",
+            "item:yis-tungsten-scrap x1"
+          ],
+          "main_product": "tungsten-carbide",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-ore.png"
+        },
+        {
+          "ingredient": "item:tungsten-ore x4",
+          "recipe": "tungsten-plate",
+          "results": [
+            "item:tungsten-plate x1",
+            "item:yis-tungsten-scrap x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "tungsten-plate",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-ore.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x100",
+          "recipe": "fusion-generator",
+          "results": [
+            "item:fusion-generator x1",
+            "item:yis-tungsten-scrap x2"
+          ],
+          "main_product": "fusion-generator",
+          "recipe_category": "cryogenics",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x15",
+          "recipe": "turbo-splitter",
+          "results": [
+            "item:turbo-splitter x1",
+            "item:yis-tungsten-scrap x1"
+          ],
+          "main_product": "turbo-splitter",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x200",
+          "recipe": "fusion-reactor",
+          "results": [
+            "item:fusion-reactor x1",
+            "item:yis-tungsten-scrap x3"
+          ],
+          "main_product": "fusion-reactor",
+          "recipe_category": "cryogenics",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x250",
+          "recipe": "fusion-reactor-equipment",
+          "results": [
+            "item:fusion-reactor-equipment x1",
+            "item:yis-tungsten-scrap x3"
+          ],
+          "main_product": "fusion-reactor-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x30",
+          "recipe": "railgun-turret",
+          "results": [
+            "item:railgun-turret x1",
+            "item:yis-tungsten-scrap x2"
+          ],
+          "main_product": "railgun-turret",
+          "recipe_category": "cryogenics",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x4",
+          "recipe": "foundation",
+          "results": [
+            "item:foundation x1",
+            "item:yis-tungsten-scrap x1"
+          ],
+          "main_product": "foundation",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x40",
+          "recipe": "turbo-underground-belt",
+          "results": [
+            "item:turbo-underground-belt x2",
+            "item:yis-tungsten-scrap x2"
+          ],
+          "main_product": "turbo-underground-belt",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x5",
+          "recipe": "turbo-transport-belt",
+          "results": [
+            "item:turbo-transport-belt x1",
+            "item:yis-tungsten-scrap x1"
+          ],
+          "main_product": "turbo-transport-belt",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x60",
+          "recipe": "artillery-turret",
+          "results": [
+            "item:artillery-turret x1",
+            "item:yis-tungsten-scrap x2"
+          ],
+          "main_product": "artillery-turret",
+          "recipe_category": null,
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-tungsten-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:tungsten-plate x1",
+          "result_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        }
+      ]
+    }
+  ]
+}

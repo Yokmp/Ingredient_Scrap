@@ -21,7 +21,7 @@ end
 ---@return string
 local function recycle_recipe_name(material_name, mode)
   local suffix = mode == "fluid" and "-to-fluid" or ""
-  return "recycle-" .. material_name .. "-scrap" .. suffix
+  return yokmods.ingredient_scrap.get_recycle_recipe_name(material_name) .. suffix
 end
 
 ---Returns the generated recycle category for a mode.
@@ -431,7 +431,7 @@ local function build_staged_recipe(decision, mode, data_table)
     allow_as_intermediate = false,
     hide_from_player_crafting = false,
     ingredients = {
-      { type = "item", name = decision.material .. "-scrap", amount = 0 },
+      { type = "item", name = yokmods.ingredient_scrap.get_scrap_name(decision.material), amount = 0 },
     },
   }
 
@@ -439,7 +439,7 @@ local function build_staged_recipe(decision, mode, data_table)
   recipe.name = recipe_name
   recipe.category = recycle_category(mode, data_table)
   recipe.ingredients = recipe.ingredients or {
-    { type = "item", name = decision.material .. "-scrap", amount = 0 },
+    { type = "item", name = yokmods.ingredient_scrap.get_scrap_name(decision.material), amount = 0 },
   }
   recipe.results = {
     {
