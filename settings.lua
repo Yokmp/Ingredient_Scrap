@@ -1,10 +1,11 @@
-local material_overrides = require("lib.material-overrides")
-require("compat.vanilla-materials")
-require("compat.mod-materials")
+local material_overrides = require("code.lib.material-overrides")
+require("code.lib.recipe-chain-overrides")
+require("code.compat.vanilla-materials")
+require("code.compat.mod-materials")
 
-local has_test_profile = pcall(require, "test.profile")
+local has_test_profile = pcall(require, "tools.test.profile")
 if has_test_profile then
-    require("test.material-overrides")
+    require("tools.test.material-overrides")
 end
 
 data:extend({
@@ -84,6 +85,13 @@ data:extend({
         hidden = true,
         type = "bool-setting",
         name = "yis-IS_DEBUG",
+        setting_type = "startup",
+        default_value = false,
+    },
+    {
+        hidden = true,
+        type = "bool-setting",
+        name = "yis-use-recipe-chain-targets",
         setting_type = "startup",
         default_value = false,
     },

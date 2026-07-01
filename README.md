@@ -56,8 +56,8 @@ Startup settings are defined in `settings.lua`.
 
 ## Public API
 
-The material registry lives in `lib/material-overrides.lua`. Vanilla, Space Age,
-and optional mod support live in `compat/` modules and use the same public API
+The material registry lives in `code/lib/material-overrides.lua`. Vanilla, Space Age,
+and optional mod support live in `code/compat/` modules and use the same public API
 that other mods can use. Material overrides generate per-material startup
 settings and decide whether a material is handled as solid, fluid, both, or
 ignored.
@@ -65,7 +65,7 @@ ignored.
 Mods can register additional known materials during the settings stage:
 
 ```lua
-require("__Ingredient_Scrap__.lib.material-overrides")
+require("__Ingredient_Scrap__.code.lib.material-overrides")
 
 local api = yokmods.ingredient_scrap.api
 
@@ -200,11 +200,38 @@ local recipe = api.generated.recipes()["recycle-example-scrap"]
 if recipe then recipe.hidden = nil end
 ```
 
+Recipe-chain target support can be nudged explicitly when the automatic decider
+does not have enough context. These hooks affect the passive analysis dump and,
+when `yis-use-recipe-chain-targets` is enabled, the staged recycle target that
+Ingredient Scrap applies:
+
+```lua
+require("__Ingredient_Scrap__.code.lib.recipe-chain-overrides")
+
+local api = yokmods.ingredient_scrap.api
+
+api.register.recipe_chain.solid_target("steel", "kr-steel-beam", {
+  source = { name = "Example Compat", color = "#78C850" },
+  reason = "this mod turns steel scrap back into beams",
+})
+
+api.register.recipe_chain.fluid_target("rare-metal", "rare-metal-solution", {
+  source = "Example Compat",
+})
+
+api.ignore.recipe_chain.solid_target("unstable-material", "manual compat rule")
+```
+
+Use `api.register.recipe_chain.target(material, mode, result_type, result_name,
+options)` for the full form. `mode` is `"solid"` or `"fluid"` and `result_type`
+is `"item"` or `"fluid"`. The convenience wrappers keep the common solid-to-item
+and fluid-to-fluid cases readable.
+
 Crafting category support is also registered through the public API and is kept
 separate by prototype type:
 
 ```lua
-require("__Ingredient_Scrap__.lib.category-overrides")
+require("__Ingredient_Scrap__.code.lib.category-overrides")
 
 local api = yokmods.ingredient_scrap.api
 
@@ -228,17 +255,18 @@ api.register.category.assembling_machine({
 | `data-updates.lua` | Initializes settings and the shared data table, then runs collection/generation/patching. |
 | `data-final-fixes.lua` | Builds debug test and data-table dumps as `mod-data`. |
 | `control.lua` | Writes debug reports to `script-output` when a temporary game is created. |
-| `core/materials.lua` | Collects solid and fluid material families. |
-| `core/collector.lua` | Scans recipes and queues scrap result inserts and generated prototypes. |
-| `core/patcher.lua` | Validates and applies generated prototypes and recipe patches. |
-| `compat/vanilla-materials.lua` | Registers Base and Space Age material support through the public API. |
-| `compat/vanilla-categories.lua` | Registers Base, Quality, and Space Age crafting category support through the public API. |
-| `compat/mod-materials.lua` | Registers optional mod material overrides through the public API. |
-| `lib/material-overrides.lua` | Public material registry and material setting helpers. |
-| `lib/category-overrides.lua` | Public crafting category registry and duplicate-safe category helpers. |
-| `lib/generator.lua` | Builds scrap items, recycle recipes, technologies, and scrap result entries. |
-| `lib/utils.lua` | Shared helpers for scrap amounts, names, icon layers, and import locations. |
-| `lib/item-tints.lua` | Scrap tint definitions. Hex color codes are intentionally kept for VS Code color previews. |
+| `code/core/materials.lua` | Collects solid and fluid material families. |
+| `code/core/collector.lua` | Scans recipes and queues scrap result inserts and generated prototypes. |
+| `code/core/patcher.lua` | Validates and applies generated prototypes and recipe patches. |
+| `code/compat/vanilla-materials.lua` | Registers Base and Space Age material support through the public API. |
+| `code/compat/vanilla-categories.lua` | Registers Base, Quality, and Space Age crafting category support through the public API. |
+| `code/compat/mod-materials.lua` | Registers optional mod material overrides through the public API. |
+| `code/lib/material-overrides.lua` | Public material registry and material setting helpers. |
+| `code/lib/category-overrides.lua` | Public crafting category registry and duplicate-safe category helpers. |
+| `code/lib/recipe-chain-overrides.lua` | Public recipe-chain target override registry. |
+| `code/lib/generator.lua` | Builds scrap items, recycle recipes, technologies, and scrap result entries. |
+| `code/lib/utils.lua` | Shared helpers for scrap amounts, names, icon layers, and import locations. |
+| `code/lib/item-tints.lua` | Scrap tint definitions. Hex color codes are intentionally kept for VS Code color previews. |
 
 ## Debug and tests
 
@@ -246,9 +274,9 @@ The current test harness runs inside Factorio instead of parsing the Factorio lo
 
 When `IS_DEBUG = true` in `data.lua`:
 
-- `test/test-data.lua` creates synthetic `testium` fixtures.
-- `test/material-overrides.lua` registers synthetic materials through the public material override API.
-- `test/runner.lua` compares normalized expected objects against `data.raw` and `yokmods.ingredient_scrap.data_table`.
+- `tools/test/test-data.lua` creates synthetic `testium` fixtures.
+- `tools/test/material-overrides.lua` registers synthetic materials through the public material override API.
+- `tools/test/runner.lua` compares normalized expected objects against `data.raw` and `yokmods.ingredient_scrap.data_table`.
 - `data-final-fixes.lua` stores the report and data-table dump as `mod-data`.
 - `control.lua` writes the files into `script-output/Ingredient_Scrap`.
 
@@ -262,26 +290,26 @@ Generated runtime files:
 Run one profile:
 
 ```powershell
-python test\run_tests.py --profile default
+python tools\test\run_tests.py --profile default
 ```
 
 Run all standard profiles:
 
 ```powershell
-python test\run_tests.py --all
+python tools\test\run_tests.py --all
 ```
 
 Keep temporary saves for debugging:
 
 ```powershell
-python test\run_tests.py --profile default --keep-saves
+python tools\test\run_tests.py --profile default --keep-saves
 ```
 
-By default, temporary saves under `test/tmp` are removed after the run.
+By default, temporary saves under `tools/test/tmp` are removed after the run.
 
 ### Test profiles
 
-`test/run_tests.py --all` runs:
+`tools/test/run_tests.py --all` runs:
 
 - `default`
 - `fixed_amount`
@@ -296,10 +324,10 @@ By default, temporary saves under `test/tmp` are removed after the run.
 
 | File | Purpose |
 | --- | --- |
-| `test/run_tests.py` | Starts Factorio, creates temporary saves, reads and prints the JSON report. |
-| `test/test-data.lua` | Defines synthetic test prototypes. |
-| `test/expected.lua` | Builds expected normalized objects for the current profile. |
-| `test/runner.lua` | Runs data-stage assertions and returns the report. |
+| `tools/test/run_tests.py` | Starts Factorio, creates temporary saves, reads and prints the JSON report. |
+| `tools/test/test-data.lua` | Defines synthetic test prototypes. |
+| `tools/test/expected.lua` | Builds expected normalized objects for the current profile. |
+| `tools/test/runner.lua` | Runs data-stage assertions and returns the report. |
 
 Older Python/log-parsing test files are no longer part of the current harness.
 

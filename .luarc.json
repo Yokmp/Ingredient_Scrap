@@ -1,8 +1,7 @@
 {
   "runtime.version": "Lua 5.2",
   "workspace.library": [
-    ".vscode/factorio-types",
-    "/"
+    ".vscode/factorio-types"
   ],
   "diagnostics.globals": [
     "data",

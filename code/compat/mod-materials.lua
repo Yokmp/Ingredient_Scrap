@@ -1,10 +1,10 @@
-require("lib.material-overrides")
+require("code.lib.material-overrides")
 
 local api = yokmods.ingredient_scrap.api
 local angel_source = { name = "Angel's Mods", color = "#C97A40" }
 local bob_source = { name = "Bob's Mods", color = "#4DA3D9" }
-local bz_source = { name = "BZ Mods", color = "#9E7BD9" }
-local krastorio_source = { name = "Krastorio 2", color = "#78C850" }
+local bz_source = { name = "BZ Mods", color = "FF7BD9A7" }
+local krastorio_source = { name = "Krastorio 2", color = "#9e50c8" }
 
 ---Returns true when at least one mod in the list is active.
 ---@param mod_names string[]
@@ -30,7 +30,7 @@ local common_mod_solid_affixes = {
 --------------------------------
 ---*ANGELMODS*               --
 --------------------------------
---TODO: glass is not a vvalid material for scrap -> ignore
+
 if has_any_mod({ "angelsrefining", "angelssmelting", "angelspetrochem", "SeaBlock" }) then
   for _, material_name in ipairs({ "aluminium", "brass", "bronze", "cobalt", "cobalt-steel", "copper-tungsten",
     "glass", "gold", "gunmetal", "invar", "lead", "nickel", "nitinol", "silver", "tin", "titanium", "zinc" }) do

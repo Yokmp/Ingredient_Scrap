@@ -1,5 +1,5 @@
 if IS_DEBUG then
-  local runner = require("test.runner")
+  local runner = require("tools.test.runner")
   local report = runner.run()
   local data_table_dump = "return " .. serpent.block(yokmods.ingredient_scrap.data_table, {
     comment = false,

@@ -4,7 +4,7 @@
 
 local item_sounds = require("__base__.prototypes.item_sounds")
 local item_tints  = require("__base__.prototypes.item-tints")
-local scrap_tints = require("lib.item-tints")
+local scrap_tints = require("code.lib.item-tints")
 
 ---Scales and shifts a source item icon so it can be layered over the scrap icon.
 ---@param icon_data ISIcon
@@ -27,11 +27,16 @@ end
 --------------------------------
 
 
----@param scrap_defines {name: string, scrap_type: string, stack_size?: number}
+---@param scrap_defines {name: string, scrap_type: string, stack_size?: number, hidden?: boolean}
 ---Creates and stores the generated scrap item prototype for a material type.
 function yokmods.ingredient_scrap.make_scrap_item(scrap_defines)
   local scrap_name = yokmods.ingredient_scrap.get_scrap_name(scrap_defines.scrap_type)
-  if data.raw["item"][scrap_name] or yokmods.ingredient_scrap.data_table.prototypes.items[scrap_name] then return end
+  local existing_scrap_item = yokmods.ingredient_scrap.data_table.prototypes.items[scrap_name]
+  if data.raw["item"][scrap_name] then return end
+  if existing_scrap_item then
+    existing_scrap_item.hidden = existing_scrap_item.hidden and scrap_defines.hidden or nil
+    return
+  end
 
   local scrap_pictures = yokmods.ingredient_scrap.data_table.constants.scrap_pictures
   local scrap_icons = yokmods.ingredient_scrap.data_table.constants.icon_scrap
@@ -57,6 +62,7 @@ function yokmods.ingredient_scrap.make_scrap_item(scrap_defines)
     pictures = pictures,
     subgroup = "raw-material",
     order = "is-[" .. scrap_name .. "]",
+    hidden = scrap_defines.hidden or nil,
     stack_size = scrap_defines.stack_size or 100,
     inventory_move_sound = item_sounds.metal_small_inventory_move,
     pick_sound = item_sounds.metal_small_inventory_pickup,
@@ -103,14 +109,20 @@ end
 
 
 ---Creates and stores the generated recycle recipe prototype for item or fluid recovery.
----@param recipe_defines {scrap_type: string, result_type: string, result_name: string, categories: category, result_amount?: number, recipe_suffix?: string}
+---@param recipe_defines {scrap_type: string, result_type: string, result_name: string, categories: category, result_amount?: number, recipe_suffix?: string, hidden?: boolean}
 function yokmods.ingredient_scrap.item_recycle_recipes(recipe_defines)
 
   local recipe_name = yokmods.ingredient_scrap.get_recycle_recipe_name(recipe_defines.scrap_type) .. (recipe_defines.recipe_suffix or "")
   -- local scrap_name = yokmods.ingredient_scrap.get_scrap_name(recipe_defines.scrap_type)
 
-  if data.raw["recipe"][recipe_name]
-  or yokmods.ingredient_scrap.data_table.prototypes.recipes[recipe_name] then return end -- no duplicates
+  local existing_recycle_recipe = yokmods.ingredient_scrap.data_table.prototypes.recipes[recipe_name]
+  if data.raw["recipe"][recipe_name] then return end
+  if existing_recycle_recipe then
+    if existing_recycle_recipe.hidden and not recipe_defines.hidden then
+      existing_recycle_recipe.hidden = nil
+    end
+    return
+  end -- no duplicates
 
   local result_amount = recipe_defines.result_amount or (recipe_defines.result_type == "item" and 1 or 10)
   local icon_layers = yokmods.ingredient_scrap.get_icon_layers(
@@ -126,7 +138,7 @@ function yokmods.ingredient_scrap.item_recycle_recipes(recipe_defines)
     name = recipe_name,
     localised_name = { "", {"item-name.recycle"}, " ", {"item-name." .. recipe_defines.scrap_type}},
     icons = icon_layers,
-    enabled = false,
+    hidden = recipe_defines.hidden or nil,
     subgroup = "raw-material",
     category = recipe_defines.categories[1],
     order = "is-[" .. recipe_name .. "]",

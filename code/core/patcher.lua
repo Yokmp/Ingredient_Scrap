@@ -12,6 +12,22 @@ local function add_error(errors, id, name, message, details)
   })
 end
 
+---Logs a disabled generated prototype as a warning without failing validation.
+local function warn_disabled_prototype(prototype_type, name, prototype, source)
+  if prototype.enabled ~= false then return end
+  if yokmods.ingredient_scrap.is_log then
+    yokmods.ingredient_scrap.is_log(
+      "patcher",
+      "warn",
+      "validate-generated-prototypes",
+      "Generated " .. prototype_type .. " is disabled; keeping it because API or compat mods may do this intentionally.",
+      { prototype_type = prototype_type, name = name, source = source }
+    )
+  elseif log then
+    log("[IS][warn][patcher][validate-generated-prototypes] Generated " .. prototype_type .. " is disabled: " .. name)
+  end
+end
+
 ---Returns true when a value is a valid RGB or RGBA Factorio color table.
 local function is_color(value)
   if type(value) ~= "table" then return false end
@@ -54,6 +70,7 @@ function yokmods.ingredient_scrap.validate_generated_prototypes()
 
   for name, recipe in pairs(data_table.prototypes.recipes or {}) do
     local source = data_table.debug and data_table.debug.sources and data_table.debug.sources.recipes[name] or nil
+    warn_disabled_prototype("recipe", name, recipe, source)
     if recipe.type ~= "recipe" then
       add_error(errors, "recipe.type", name, "Generated recipe has invalid type", { type = recipe.type, source = source })
     end
@@ -72,6 +89,7 @@ function yokmods.ingredient_scrap.validate_generated_prototypes()
   end
 
   for name, tech in pairs(data_table.prototypes.technology or {}) do
+    warn_disabled_prototype("technology", name, tech)
     if tech.type ~= "technology" then
       add_error(errors, "technology.type", name, "Generated technology has invalid type", { type = tech.type })
     end
@@ -188,6 +206,5 @@ function yokmods.ingredient_scrap.patch()
   end
   log("Patched " .. inserts .. " recipe(s) with scrap results.")
 end
-
 
 

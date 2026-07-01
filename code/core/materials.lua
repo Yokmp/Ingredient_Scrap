@@ -1,5 +1,5 @@
-local resolver = require("core.materials.resolver")
-local material_overrides = require("lib.material-overrides")
+local resolver = require("code.core.materials.resolver")
+local material_overrides = require("code.lib.material-overrides")
 
 
 

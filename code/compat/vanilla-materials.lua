@@ -1,4 +1,4 @@
-require("lib.material-overrides")
+require("code.lib.material-overrides")
 
 local api = yokmods.ingredient_scrap.api
 local has_space_age = mods and mods["space-age"] ~= nil

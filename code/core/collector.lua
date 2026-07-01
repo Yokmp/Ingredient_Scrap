@@ -56,6 +56,14 @@ function yokmods.ingredient_scrap.collector()
     return nil, nil
   end
 
+  ---Returns true when generated prototypes should exist but stay hidden.
+  local function should_hide_generated_prototypes(recipe, source_item, source_fluid)
+    return recipe.hidden == true
+      or recipe.enabled == false
+      or (source_item and source_item.hidden == true)
+      or (source_fluid and source_fluid.hidden == true)
+  end
+
   for _, recipe in pairs(data.raw.recipe) do
     if recipe.ingredients and recipe.ingredients[1] then
       data_table.ingredients.items[recipe.name] = data_table.ingredients.items[recipe.name] or {}
@@ -77,6 +85,7 @@ function yokmods.ingredient_scrap.collector()
               data_table.materials.solid_aliases
             ) then
               local source_item_name, source_item = scrap_source_item_for_solid(scrap_type, ingredient.name)
+              local hide_generated = should_hide_generated_prototypes(recipe, source_item)
               table.insert(data_table.ingredients.items[recipe.name], ingredient)
 
               yokmods.ingredient_scrap.add_recipe_results(data_table, ingredient, recipe, scrap_type)
@@ -84,6 +93,7 @@ function yokmods.ingredient_scrap.collector()
               yokmods.ingredient_scrap.make_scrap_item({
                 name = source_item_name,
                 scrap_type = scrap_type,
+                hidden = hide_generated,
                 stack_size = util.clamp(source_item.stack_size * ISsettings.needed, 10, 200)
               })
 
@@ -92,6 +102,7 @@ function yokmods.ingredient_scrap.collector()
                 result_name = source_item_name,
                 scrap_type = scrap_type,
                 categories = { data_table.constants.recycle_categories.solid },
+                hidden = hide_generated,
               })
 
               yokmods.ingredient_scrap.technology_prototype({
@@ -113,6 +124,8 @@ function yokmods.ingredient_scrap.collector()
               ) then
                 local source_item_name, source_item = scrap_source_item_for_fluid(scrap_type, main_product)
                 if source_item_name and source_item then
+                  local source_fluid = data.raw.fluid[ingredient.name]
+                  local hide_generated = should_hide_generated_prototypes(recipe, source_item, source_fluid)
                   table.insert(data_table.ingredients.fluids[recipe.name], ingredient)
 
                   local normalized_amount = math.max(math.floor(ingredient.amount / 10), 1)
@@ -126,6 +139,7 @@ function yokmods.ingredient_scrap.collector()
                   yokmods.ingredient_scrap.make_scrap_item({
                     name = source_item_name,
                     scrap_type = scrap_type,
+                    hidden = hide_generated,
                     stack_size = util.clamp(source_item.stack_size * ISsettings.needed, 10, 200)
                   })
 
@@ -136,6 +150,7 @@ function yokmods.ingredient_scrap.collector()
                     scrap_type = scrap_type,
                     categories = { data_table.constants.recycle_categories.fluid },
                     recipe_suffix = "-to-fluid",
+                    hidden = hide_generated,
                   })
 
                   yokmods.ingredient_scrap.technology_prototype({

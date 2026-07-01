@@ -4,7 +4,7 @@ local function color(hex)
 end
 
 local function apply_registered_tints(scrap_tints)
-  local material_overrides = require("lib.material-overrides")
+  local material_overrides = require("code.lib.material-overrides")
   for material_name, tint in pairs(material_overrides.tints or {}) do
     if type(tint) == "string" then
       scrap_tints[material_name] = color(tint)

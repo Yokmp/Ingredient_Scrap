@@ -1,5 +1,5 @@
 -- helper functions
-local scrap_tints = require("lib.item-tints")
+local scrap_tints = require("code.lib.item-tints")
 
 --------------------------------
 ---*FUNCTIONS*                --
