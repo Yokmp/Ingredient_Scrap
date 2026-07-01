@@ -1,4 +1,4 @@
-require("lib.definitions")
+require("code.lib.definitions")
 data:extend({
   {
     type = "sprite",
@@ -65,6 +65,15 @@ data:extend({
   },
   {
     type = "sprite",
+    name = "recipe-symbol",
+    filename = "__Ingredient_Scrap__/graphics/icons/recipe-symbol.png",
+    priority = "extra-high",
+    width = 64,
+    height = 64,
+    shift = { 0, 02 }
+  },
+  {
+    type = "sprite",
     name = "none",
     filename = "__Ingredient_Scrap__/graphics/icons/none.png",
     priority = "extra-high",
@@ -86,8 +95,8 @@ data:extend({
 
 local recycle_item_category = "yis-recycle-to-item"
 local recycle_fluid_category = "yis-recycle-to-fluid"
-local category_overrides = require("lib.category-overrides")
-require("compat.vanilla-categories")
+local category_overrides = require("code.lib.category-overrides")
+require("code.compat.vanilla-categories")
 
 ---Applies registered category rules to one prototype type.
 local function apply_category_rules(prototype_type, rules)
@@ -115,6 +124,6 @@ apply_category_rules("assembling-machine", category_overrides.rules.assembling_m
 IS_DEBUG = settings.startup["yis-IS_DEBUG"].value
 
 if IS_DEBUG then
-  require("test/test-data")
+  require("tools.test.test-data")
   log("[IS-TEST] Debug-Modus aktiv")
 end
