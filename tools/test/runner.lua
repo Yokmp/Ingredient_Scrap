@@ -1,17 +1,29 @@
 local expected = require("tools.test.expected")
 local material_resolver = require("code.core.materials.resolver")
+local material_flow = require("code.core.debug.material-flow")
+local data_table_writer = require("code.core.data-table.writer")
 require("code.lib.category-overrides")
+local source_overrides = require("code.lib.source-overrides")
 require("code.compat.vanilla-materials")
 require("code.compat.mod-materials")
 require("tools.test.material-overrides")
 local material_overrides = require("code.lib.material-overrides")
 
 local runner = {}
+local patcher = require("code.core.patcher")
 
 ---Returns true when an array-like table contains the requested value.
 local function array_contains(values, value)
   for _, item in ipairs(values or {}) do
     if item == value then return true end
+  end
+  return false
+end
+
+---Returns true when any array entry satisfies the predicate.
+local function table_contains(values, predicate)
+  for _, item in ipairs(values or {}) do
+    if predicate(item) then return true end
   end
   return false
 end
@@ -86,6 +98,14 @@ local function shape_entries_contain_relation(entries, relation)
     if entry.relation == relation then return true end
   end
   return false
+end
+
+---Returns the passive production-flow classification for a typed prototype key.
+local function production_node_class(production_flow, prototype_type, name)
+  local key = prototype_type .. "/" .. name
+  local node = production_flow and production_flow.classification and
+    production_flow.classification.nodes and production_flow.classification.nodes[key]
+  return node and node.class
 end
 
 ---Returns true when a collected insert has recipe results.
@@ -246,7 +266,8 @@ local function inspect(value)
 end
 
 ---Runs the data-stage assertions and returns the JSON-friendly test report.
-function runner.run()
+---Runs the Factorio data-stage assertion suite and returns a JSON-ready report.
+function runner.run(production_flow_dump)
   local report = {
     schema = "ingredient-scrap-test-report/v1",
     mod = "Ingredient_Scrap",
@@ -293,10 +314,14 @@ function runner.run()
     { startup_setting = ISsettings.fluid_setting, effective = ISsettings.fluids })
   add_case("names.scrap-prefix", "scrap item names receive the yis prefix only once",
     yokmods.ingredient_scrap.get_scrap_name("yis-testium") == "yis-testium-scrap" and
-      yokmods.ingredient_scrap.get_scrap_name("yis-testium") == "yis-testium-scrap")
-  add_case("names.recycle-prefix", "recycle recipe names receive the yis prefix",
+      yokmods.ingredient_scrap.get_scrap_name("testium") == "yis-testium-scrap")
+  add_case("names.recycle-prefix", "recycle recipe and technology names receive the yis prefix only once",
     yokmods.ingredient_scrap.get_recycle_recipe_name("yis-testium") == "yis-recycle-testium-scrap" and
-      yokmods.ingredient_scrap.get_recycle_recipe_name("yis-testium") == "yis-recycle-testium-scrap")
+      yokmods.ingredient_scrap.get_recycle_recipe_name("testium") == "yis-recycle-testium-scrap")
+  add_case("names.no-double-yis-prototypes", "generated scrap items, recycle recipes, and technologies do not double-prefix yis materials",
+    data_table.prototypes.items["yis-yis-testium-scrap"] == nil and
+      data_table.prototypes.recipes["yis-recycle-yis-testium-scrap"] == nil and
+      data_table.prototypes.technology["yis-recycle-yis-testium-scrap"] == nil)
   local recipe_chain_analysis = data_table.debug and data_table.debug.recipe_chain_analysis
   add_case("analysis.recipe-chain.exists", "passive recipe-chain analysis dump exists",
     recipe_chain_analysis and recipe_chain_analysis.mode == "passive")
@@ -407,6 +432,161 @@ function runner.run()
       array_contains(recipe_chain_analysis.comparison.materials_shared, "yis-rare-metal"),
     nil,
     recipe_chain_analysis and recipe_chain_analysis.comparison)
+  local production_flow = production_flow_dump or material_flow.build_production_flow()
+  add_case("analysis.production-flow.classification", "production-flow dump includes passive node classifications",
+    production_flow and
+      production_flow.schema == "ingredient-scrap-production-flow/v1" and
+      production_flow.classification and
+      production_flow.classification.summary and
+      production_flow.classification.nodes and
+      production_flow.classification.by_class and
+      production_flow.classification.summary.production and
+      production_flow.classification.summary.smelting_process and
+      production_flow.classification.summary.chemical,
+    nil,
+    production_flow and production_flow.classification and production_flow.classification.summary)
+  add_case("analysis.production-flow.iron-ore-process", "production-flow classifies iron ore as process evidence when present",
+    not data.raw.item["iron-ore"] or
+      production_node_class(production_flow, "item", "iron-ore") == "smelting_process",
+    nil,
+    production_flow and production_flow.classification and
+      production_flow.classification.nodes and production_flow.classification.nodes["item/iron-ore"])
+  add_case("analysis.production-flow.iron-plate-production", "production-flow classifies iron plate as downstream production material when present",
+    not data.raw.item["iron-plate"] or
+      production_node_class(production_flow, "item", "iron-plate") == "production",
+    nil,
+    production_flow and production_flow.classification and
+      production_flow.classification.nodes and production_flow.classification.nodes["item/iron-plate"])
+  add_case("analysis.production-flow.sulfuric-acid-chemical", "production-flow keeps sulfuric acid in chemical evidence when present",
+    not data.raw.fluid["sulfuric-acid"] or
+      production_node_class(production_flow, "fluid", "sulfuric-acid") == "chemical",
+    nil,
+    production_flow and production_flow.classification and
+      production_flow.classification.nodes and production_flow.classification.nodes["fluid/sulfuric-acid"])
+  local passive_runtime = data_table.debug and data_table.debug.passive_runtime
+  local passive_ancestry = passive_runtime and passive_runtime.ancestry
+  add_case("analysis.ancestry-runtime.exists", "passive runtime ancestry analysis is available without patching prototypes",
+    passive_runtime and
+      passive_runtime.schema == "ingredient-scrap-passive-runtime/v1" and
+      passive_ancestry and
+      passive_ancestry.schema == "ingredient-scrap-passive-runtime-ancestry/v1" and
+      passive_ancestry.mode == ISsettings.ancestry_policy.mode and
+      passive_ancestry.root_policy == ISsettings.ancestry_policy.root_policy and
+      passive_ancestry.mixed_limit == ISsettings.ancestry_policy.mixed_limit and
+      passive_ancestry.max_depth == ISsettings.ancestry_policy.max_depth,
+    nil,
+    passive_ancestry and {
+      schema = passive_ancestry.schema,
+      mode = passive_ancestry.mode,
+      root_policy = passive_ancestry.root_policy,
+      mixed_limit = passive_ancestry.mixed_limit,
+      max_depth = passive_ancestry.max_depth,
+      component_fallback = passive_ancestry.component_fallback,
+    })
+  add_case("analysis.ancestry-runtime.summary", "passive runtime ancestry summary matches comparison rows",
+    passive_ancestry and
+      passive_ancestry.summary and
+      passive_ancestry.summary.comparisons and
+      passive_ancestry.summary.comparisons.same and
+      #(passive_ancestry.comparisons or {}) > 0 and
+      ((passive_ancestry.summary.comparisons.same or 0) +
+        (passive_ancestry.summary.comparisons.different or 0) +
+        (passive_ancestry.summary.comparisons.unresolved or 0)) == #(passive_ancestry.comparisons or {}),
+    nil,
+    passive_ancestry and passive_ancestry.summary)
+  add_case("analysis.ancestry-runtime.items", "passive runtime ancestry records resolved item evidence",
+    passive_ancestry and
+      passive_ancestry.items and
+      passive_ancestry.root_aliases and
+      passive_ancestry.exact_components and
+      passive_ancestry.items["yis-testium-plate"] and
+      (
+        (passive_ancestry.root_policy == "resources" and passive_ancestry.items["yis-testium-plate"].status == "unresolved") or
+        (
+          passive_ancestry.items["yis-testium-plate"].composition and
+          passive_ancestry.items["yis-testium-plate"].composition["yis-testium"]
+        )
+      ),
+    nil,
+    passive_ancestry and passive_ancestry.items and passive_ancestry.items["yis-testium-plate"])
+  local active_ancestry = data_table.debug and data_table.debug.active_ancestry
+  local resolver_report = data_table.debug and data_table.debug.resolver
+  add_case("analysis.resolver.summary", "resolver entrypoint records baseline and active-stage summaries",
+    resolver_report and
+      resolver_report.schema == "ingredient-scrap-resolver/v1" and
+      resolver_report.baseline and
+      resolver_report.baseline.method == "collector" and
+      resolver_report.baseline.inserts ~= nil and
+      resolver_report.active and
+      resolver_report.active.schema == "ingredient-scrap-resolver-active/v1" and
+      (
+        (ISsettings.ancestry_policy.mode == "component-heavy" and resolver_report.active.skipped == true) or
+        (ISsettings.ancestry_policy.mode ~= "component-heavy" and resolver_report.active.skipped == false)
+      ),
+    nil,
+    resolver_report)
+  if ISsettings.ancestry_policy.mode == "component-heavy" then
+    add_case("analysis.active-ancestry.disabled", "active ancestry is skipped for component-heavy/current behavior mode",
+      active_ancestry == nil,
+      nil,
+      active_ancestry)
+  else
+    add_case("analysis.active-ancestry.summary", "active ancestry records its applied direct-output summary",
+      active_ancestry and
+        active_ancestry.schema == "ingredient-scrap-active-ancestry/v1" and
+        active_ancestry.mode == ISsettings.ancestry_policy.mode and
+        active_ancestry.root_policy == ISsettings.ancestry_policy.root_policy and
+        active_ancestry.summary and
+        active_ancestry.summary.rewritten_recipes ~= nil and
+        active_ancestry.summary.applied_rows ~= nil and
+        active_ancestry.summary.skipped_rows ~= nil and
+        active_ancestry.summary.mixed_rows ~= nil,
+      nil,
+      active_ancestry and {
+        schema = active_ancestry.schema,
+        mode = active_ancestry.mode,
+        root_policy = active_ancestry.root_policy,
+        summary = active_ancestry.summary,
+      })
+  end
+  local recipe_forms = passive_runtime and passive_runtime.recipe_forms
+  add_case("analysis.recipe-forms.exists", "passive recipe-form classification is available without patching prototypes",
+    recipe_forms and
+      recipe_forms.schema == "ingredient-scrap-recipe-forms/v1" and
+      recipe_forms.root_philosophy == "recipe-derived-with-edge-case-overrides" and
+      recipe_forms.resource_outputs and
+      recipe_forms.item_classes and
+      recipe_forms.recipe_results and
+      recipe_forms.summary,
+    nil,
+    recipe_forms and {
+      schema = recipe_forms.schema,
+      root_philosophy = recipe_forms.root_philosophy,
+      summary = recipe_forms.summary,
+    })
+  add_case("analysis.recipe-forms.resource-roots", "recipe-form classification records resource outputs as root evidence",
+    recipe_forms and
+      recipe_forms.resource_outputs and
+      recipe_forms.item_classes and
+      recipe_forms.summary and
+      recipe_forms.summary.resource_outputs and
+      recipe_forms.summary.resource_outputs > 0,
+    nil,
+    recipe_forms and {
+      resource_outputs = recipe_forms.summary and recipe_forms.summary.resource_outputs,
+      iron_ore = recipe_forms.resource_outputs and recipe_forms.resource_outputs["iron-ore"],
+    })
+  add_case("analysis.recipe-forms.first-material-product", "recipe-form classification derives first material products from resource outputs",
+    recipe_forms and
+      recipe_forms.summary and
+      recipe_forms.summary.item_classes and
+      recipe_forms.summary.item_classes.first_material_product and
+      recipe_forms.summary.item_classes.first_material_product > 0,
+    nil,
+    recipe_forms and {
+      summary = recipe_forms.summary,
+      iron_plate = recipe_forms.item_classes and recipe_forms.item_classes["iron-plate"],
+    })
   local recipe_chain_decisions = data_table.debug and data_table.debug.recipe_chain_decisions
   add_case("analysis.recipe-chain.decisions", "recipe-chain decider records passive target decisions",
     recipe_chain_decisions and
@@ -492,14 +672,15 @@ function runner.run()
   end
   if data.raw.item["kr-enriched-rare-metals"] then
     local rare_metal_decision = find_recipe_chain_decision(recipe_chain_decisions, "solid", "rare-metal")
-    add_case("analysis.recipe-chain.k2-rare-metal-manual-review", "weak K2 rare-metal target difference stays out of staged active candidates",
+    add_case("analysis.recipe-chain.k2-rare-metal-api-forced", "K2 rare-metal target is forced to processed rare metals",
       rare_metal_decision and
-        rare_metal_decision.action == "review-difference" and
-        rare_metal_decision.active_candidate == false and
-        rare_metal_decision.confidence == "manual-review" and
+        rare_metal_decision.action == "api-forced-target" and
+        rare_metal_decision.active_candidate == true and
+        rare_metal_decision.confidence == "active-candidate" and
         rare_metal_decision.suggested and
-        rare_metal_decision.suggested.result_name == "kr-enriched-rare-metals" and
-        recipe_chain_decisions.staged_data_table.prototypes.recipes["yis-recycle-rare-metal-scrap"] == nil,
+        rare_metal_decision.suggested.result_name == "kr-rare-metals" and
+        recipe_chain_decisions.staged_data_table.prototypes.recipes["yis-recycle-rare-metal-scrap"] and
+        recipe_chain_decisions.staged_data_table.prototypes.recipes["yis-recycle-rare-metal-scrap"].results[1].name == "kr-rare-metals",
       nil,
       rare_metal_decision)
   end
@@ -572,11 +753,59 @@ function runner.run()
   add_case("api.recipe-chain", "public recipe-chain API exposes target override and block wrappers",
     api.register and api.register.recipe_chain and api.ignore and api.ignore.recipe_chain and
       type(api.register.recipe_chain.target) == "function" and
-      type(api.register.recipe_chain.solid_target) == "function" and
-      type(api.register.recipe_chain.fluid_target) == "function" and
+      type(api.register.recipe_chain.solid) == "table" and
+      type(api.register.recipe_chain.solid.to_item) == "function" and
+      type(api.register.recipe_chain.solid.to_fluid) == "function" and
+      type(api.register.recipe_chain.fluid) == "table" and
+      type(api.register.recipe_chain.fluid.to_item) == "function" and
+      type(api.register.recipe_chain.fluid.to_fluid) == "function" and
       type(api.ignore.recipe_chain.target) == "function" and
-      type(api.ignore.recipe_chain.solid_target) == "function" and
-      type(api.ignore.recipe_chain.fluid_target) == "function")
+      type(api.ignore.recipe_chain.solid) == "function" and
+      type(api.ignore.recipe_chain.fluid) == "function" and
+      api.register.recipe_chain.solid_target == nil and
+      api.register.recipe_chain.fluid_target == nil and
+      api.ignore.recipe_chain.solid_target == nil and
+      api.ignore.recipe_chain.fluid_target == nil)
+  add_case("api.source", "public source API exposes recipe and category ignore wrappers",
+    api.ignore and api.ignore.source and
+      type(api.ignore.source.recipe) == "function" and
+      type(api.ignore.source.category) == "function")
+  api.ignore.source.category("yis-test-source-filter", {
+    ingredient_suffixes = { "-ore" },
+    ingredient_exclude_prefixes = { "yis-" },
+    reason = "test source filter excludes debug ore fixtures",
+  })
+  api.ignore.source.category("yis-test-source-filter", {
+    ingredient_names = { "specific-plate" },
+    reason = "test source filter supports multiple rules per category",
+  })
+  add_case("api.source.filters", "source filters support multiple rules and ingredient exclusions",
+    source_overrides.ignored_source(
+      { name = "test-ore-source", category = "yis-test-source-filter" },
+      { type = "item", name = "iron-ore" },
+      "iron",
+      "solid"
+    ) and
+      not source_overrides.ignored_source(
+        { name = "test-debug-ore-source", category = "yis-test-source-filter" },
+        { type = "item", name = "yis-testium-ore" },
+        "yis-testium",
+        "solid"
+      ) and
+      source_overrides.ignored_source(
+        { name = "test-specific-source", category = "yis-test-source-filter" },
+        { type = "item", name = "specific-plate" },
+        "specific",
+        "solid"
+      ))
+  add_case("api.source.skipped-audit", "source filter skips are auditable without hiding excluded debug ores",
+    data_table.debug and data_table.debug.sources and data_table.debug.sources.skipped and
+      type(data_table.debug.sources.skipped) == "table" and
+      not table_contains(data_table.debug.sources.skipped, function(skip)
+        return skip.ingredient == "yis-testium-ore"
+      end),
+    nil,
+    { skipped = data_table.debug and data_table.debug.sources and data_table.debug.sources.skipped })
   add_case("api.generated", "public API exposes generated prototype staging tables",
     api.generated and
       type(api.generated.items) == "function" and
@@ -594,7 +823,7 @@ function runner.run()
   local api_disabled_errors = nil
   if api_disabled_recipe then
     api_disabled_recipe.enabled = false
-    api_disabled_errors = yokmods.ingredient_scrap.validate_generated_prototypes()
+    api_disabled_errors = patcher.validate_generated_prototypes(data_table)
     api_disabled_recipe.enabled = previous_enabled
   end
   add_case("api.generated.disabled-recipe-warning", "API-disabled generated recipes warn but do not fail validation",
@@ -802,6 +1031,158 @@ function runner.run()
       nil,
       { solid = data_table.materials.solid })
   end
+  if data.raw.item["bob-aluminium-plate"] then
+    add_case("compat.bobs.alias-prefixed-materials", "Bob's prefixed material prototypes resolve to stable material names",
+      material_resolver.resolve_solid("bob-aluminium-plate", data_table.materials) == "aluminium" and
+        material_resolver.resolve_solid("bob-brass-alloy", data_table.materials) == "brass" and
+        material_resolver.resolve_solid("bob-bronze-alloy", data_table.materials) == "bronze" and
+        material_resolver.resolve_solid("bob-copper-tungsten-alloy", data_table.materials) == "copper-tungsten" and
+        material_resolver.resolve_solid("bob-gold-ore", data_table.materials) == "gold" and
+        material_resolver.resolve_solid("bob-gold-plate", data_table.materials) == "gold" and
+        material_resolver.resolve_solid("bob-gunmetal-alloy", data_table.materials) == "gunmetal" and
+        material_resolver.resolve_solid("bob-silicon-plate", data_table.materials) == "silicon" and
+        material_resolver.resolve_solid("bob-silicon-wafer", data_table.materials) == "silicon" and
+        material_resolver.resolve_solid("bob-titanium-plate", data_table.materials) == "titanium" and
+        array_contains(data_table.materials.solid, "aluminium") and
+        array_contains(data_table.materials.solid, "brass") and
+        array_contains(data_table.materials.solid, "copper-tungsten") and
+        array_contains(data_table.materials.solid, "gunmetal") and
+        array_contains(data_table.materials.solid, "silicon") and
+        not array_contains(data_table.materials.solid, "bob-aluminium") and
+        not array_contains(data_table.materials.solid, "bob-brass") and
+        not array_contains(data_table.materials.solid, "bob-copper-tungsten") and
+        not array_contains(data_table.materials.solid, "bob-gold") and
+        not array_contains(data_table.materials.solid, "bob-gunmetal") and
+        not array_contains(data_table.materials.solid, "bob-silicon"),
+      nil,
+      { solid = data_table.materials.solid })
+    add_case("compat.bobs.alias-component-families", "Bob's component prototypes resolve to stable component families",
+      material_resolver.resolve_solid("bob-brass-gear-wheel", data_table.materials) == "gear" and
+        material_resolver.resolve_solid("bob-titanium-bearing", data_table.materials) == "bearing" and
+        material_resolver.resolve_solid("bob-brass-bearing-ball", data_table.materials) == "bearing-ball" and
+        material_resolver.resolve_solid("bob-tinned-copper-cable", data_table.materials) == "cable" and
+        material_resolver.resolve_solid("bob-battery-2", data_table.materials) == "battery" and
+        material_resolver.resolve_solid("bob-basic-circuit-board", data_table.materials) == "board" and
+        material_resolver.resolve_solid("advanced-circuit", data_table.materials) == "circuit" and
+        material_resolver.resolve_solid("bob-brass-pipe", data_table.materials) == "pipe" and
+        array_contains(data_table.materials.solid, "gear") and
+        array_contains(data_table.materials.solid, "bearing") and
+        array_contains(data_table.materials.solid, "bearing-ball") and
+        array_contains(data_table.materials.solid, "cable") and
+        array_contains(data_table.materials.solid, "battery") and
+        array_contains(data_table.materials.solid, "board") and
+        array_contains(data_table.materials.solid, "circuit") and
+        array_contains(data_table.materials.solid, "pipe"),
+      nil,
+      { solid = data_table.materials.solid })
+    local titanium_bearing_scrap = yokmods.ingredient_scrap.get_scrap_name("bob-titanium-bearing")
+    local titanium_bearing_recipe = data.raw.recipe[yokmods.ingredient_scrap.get_recycle_recipe_name("bob-titanium-bearing")]
+    local titanium_bearing_result = titanium_bearing_recipe and titanium_bearing_recipe.results and titanium_bearing_recipe.results[1]
+    local brass_pipe_scrap = yokmods.ingredient_scrap.get_scrap_name("bob-brass-pipe")
+    local brass_pipe_recipe = data.raw.recipe[yokmods.ingredient_scrap.get_recycle_recipe_name("bob-brass-pipe")]
+    local brass_pipe_result = brass_pipe_recipe and brass_pipe_recipe.results and brass_pipe_recipe.results[1]
+    local processing_unit_scrap = yokmods.ingredient_scrap.get_scrap_name("processing-unit")
+    local processing_unit_recipe = data.raw.recipe[yokmods.ingredient_scrap.get_recycle_recipe_name("processing-unit")]
+    local processing_unit_result = processing_unit_recipe and processing_unit_recipe.results and processing_unit_recipe.results[1]
+    local component_heavy = ISsettings.ancestry_policy.mode == "component-heavy"
+    if component_heavy then
+      add_case("compat.bobs.component-exact-scrap", "component-heavy mode keeps component scrap and recycle targets exact",
+        data.raw.item[titanium_bearing_scrap] and
+          titanium_bearing_result and titanium_bearing_result.name == "bob-titanium-bearing" and
+          data.raw.item[brass_pipe_scrap] and
+          brass_pipe_result and brass_pipe_result.name == "bob-brass-pipe" and
+          data.raw.item[processing_unit_scrap] and
+          processing_unit_result and processing_unit_result.name == "processing-unit" and
+          data.raw.item["yis-bearing-scrap"] == nil and
+          data.raw.recipe["yis-recycle-bearing-scrap"] == nil,
+        nil,
+        {
+          titanium_bearing = {
+            scrap = titanium_bearing_scrap,
+            result = titanium_bearing_result,
+          },
+          brass_pipe = {
+            scrap = brass_pipe_scrap,
+            result = brass_pipe_result,
+          },
+          processing_unit = {
+            scrap = processing_unit_scrap,
+            result = processing_unit_result,
+          },
+        })
+    else
+      local brass_pipe_insert = data_table.inserts.recipes["bob-brass-pipe"]
+      local titanium_bearing_insert = data_table.inserts.recipes["bob-titanium-bearing"]
+      local brass_recycle = data.raw.recipe["yis-recycle-brass-scrap"]
+      local titanium_recycle = data.raw.recipe["yis-recycle-titanium-scrap"]
+      local mixed_scrap = yokmods.ingredient_scrap.get_scrap_name("yis-mixed")
+      local mixed_recycle = data.raw.recipe[yokmods.ingredient_scrap.get_recycle_recipe_name("yis-mixed")]
+      local active_ancestry = data_table.debug and data_table.debug.active_ancestry
+      local mixed_pseudo_results = 0
+      local normalized_mixed_pseudo_results = 0
+      for _, insert in pairs(data_table.inserts.recipes or {}) do
+        for _, result in ipairs((insert and insert.results) or {}) do
+          if result.name and result.name:sub(1, #mixed_scrap + 1) == mixed_scrap .. "_" and
+              data_table_writer.final_result_name(result.name) == mixed_scrap then
+            mixed_pseudo_results = mixed_pseudo_results + 1
+            if result.yis_normalized_after_results == true and
+                (result.amount ~= nil or (result.amount_min ~= nil and result.amount_max ~= nil)) then
+              normalized_mixed_pseudo_results = normalized_mixed_pseudo_results + 1
+            end
+          end
+        end
+      end
+      local raw_mixed_pseudo_results = 0
+      for _, recipe in pairs(data.raw.recipe or {}) do
+        for _, result in ipairs((recipe and recipe.results) or {}) do
+          if result.name and result.name:sub(1, #mixed_scrap + 1) == mixed_scrap .. "_" then
+            raw_mixed_pseudo_results = raw_mixed_pseudo_results + 1
+          end
+        end
+      end
+      local brass_recycle_result = brass_recycle and brass_recycle.results and brass_recycle.results[1]
+      local titanium_recycle_result = titanium_recycle and titanium_recycle.results and titanium_recycle.results[1]
+      add_case("compat.bobs.component-ancestry-scrap", "active ancestry collapses simple Bob components and sends broad components to mixed scrap",
+        data.raw.item[brass_pipe_scrap] == nil and
+          data.raw.recipe[yokmods.ingredient_scrap.get_recycle_recipe_name("bob-brass-pipe")] == nil and
+          data.raw.item[titanium_bearing_scrap] == nil and
+          data.raw.recipe[yokmods.ingredient_scrap.get_recycle_recipe_name("bob-titanium-bearing")] == nil and
+          find_result(brass_pipe_insert and brass_pipe_insert.results, "yis-brass-scrap") and
+          find_result(titanium_bearing_insert and titanium_bearing_insert.results, "yis-titanium-scrap") and
+          brass_recycle_result and brass_recycle_result.name == "bob-brass-alloy" and
+          titanium_recycle_result and titanium_recycle_result.name == "bob-titanium-plate" and
+          data.raw.item[processing_unit_scrap] == nil and
+          data.raw.recipe[yokmods.ingredient_scrap.get_recycle_recipe_name("processing-unit")] == nil and
+          data.raw.item[mixed_scrap] and
+          mixed_recycle and mixed_recycle.results and mixed_recycle.results[1] and
+          mixed_pseudo_results > 0 and
+          normalized_mixed_pseudo_results == mixed_pseudo_results and
+          raw_mixed_pseudo_results == 0 and
+          active_ancestry and active_ancestry.summary and active_ancestry.summary.mixed_rows > 0,
+        nil,
+        {
+          brass_pipe = {
+            exact_scrap = brass_pipe_scrap,
+            insert = brass_pipe_insert,
+            recycle_result = brass_recycle_result,
+          },
+          titanium_bearing = {
+            exact_scrap = titanium_bearing_scrap,
+            insert = titanium_bearing_insert,
+            recycle_result = titanium_recycle_result,
+          },
+          processing_unit = {
+            exact_scrap = processing_unit_scrap,
+            mixed_scrap = mixed_scrap,
+            mixed_recycle = mixed_recycle,
+            mixed_pseudo_results = mixed_pseudo_results,
+            normalized_mixed_pseudo_results = normalized_mixed_pseudo_results,
+            raw_mixed_pseudo_results = raw_mixed_pseudo_results,
+            active_summary = active_ancestry and active_ancestry.summary,
+          },
+        })
+    end
+  end
 
   local recycle_item_category = "yis-recycle-to-item"
   local recycle_fluid_category = "yis-recycle-to-fluid"
@@ -872,6 +1253,33 @@ function runner.run()
   end
   add_case("categories.furnace.no-duplicates", "furnace recycle categories are not duplicated",
     duplicate_machine == nil, nil, { duplicate = duplicate_machine })
+  local furnace_width_audit = data_table.debug and data_table.debug.furnace_result_inventory
+  local narrow_furnace = nil
+  for _, furnace in pairs(data.raw.furnace or {}) do
+    for _, crafting_category in ipairs(furnace.crafting_categories or {}) do
+      local required_width = furnace_width_audit
+        and furnace_width_audit.max_width_by_category
+        and furnace_width_audit.max_width_by_category[crafting_category]
+        or 0
+      if required_width > (furnace.result_inventory_size or 0) then
+        narrow_furnace = {
+          name = furnace.name,
+          category = crafting_category,
+          required = required_width,
+          actual = furnace.result_inventory_size,
+        }
+        break
+      end
+    end
+    if narrow_furnace then break end
+  end
+  add_case("categories.furnace.result-inventory-width", "furnace output slots fit the widest supported item-result recipe",
+    furnace_width_audit and narrow_furnace == nil,
+    nil,
+    {
+      narrow = narrow_furnace,
+      audit = furnace_width_audit,
+    })
 
   local eligible_assembler_count = 0
   local patched_assembler_count = 0
@@ -1003,12 +1411,12 @@ function runner.run()
 
     local rare_metal_recycle_recipe = data.raw.recipe["yis-recycle-rare-metal-scrap"]
     local rare_metal_result = rare_metal_recycle_recipe and rare_metal_recycle_recipe.results and rare_metal_recycle_recipe.results[1]
-    add_case("recipe-chain-targets.k2-rare-metal-manual-review", "K2 rare-metal manual review target is not applied automatically",
-      rare_metal_result and rare_metal_result.name == "kr-rare-metal-ore",
+    add_case("recipe-chain-targets.k2-rare-metal-api-forced", "K2 rare-metal target uses processed rare metals",
+      rare_metal_result and rare_metal_result.name == "kr-rare-metals",
       nil,
       {
         enabled = ISsettings.recipe_chain_targets,
-        expected = "kr-rare-metal-ore",
+        expected = "kr-rare-metals",
         actual = rare_metal_result,
       })
   end
@@ -1326,10 +1734,11 @@ function runner.run()
   end
 
   local tech = data.raw.technology["yis-recycle-testium-scrap"]
-  add_case("raw.technology.visible-during-development", "generated recycle technologies stay visible during development",
-    tech and tech.hidden == false,
+  local expected_technology_hidden = ISsettings.hide_tech == true and ISsettings.shallow_log == false
+  add_case("raw.technology.hide-tech-setting", "generated recycle technologies follow yis-hide-tech unless shallow logging is enabled",
+    tech and tech.hidden == expected_technology_hidden,
     nil,
-    { expected = false, actual = tech and tech.hidden, shallow_log = ISsettings.shallow_log, hide_tech = ISsettings.hide_tech })
+    { expected = expected_technology_hidden, actual = tech and tech.hidden, shallow_log = ISsettings.shallow_log, hide_tech = ISsettings.hide_tech })
   local normalized_tech = tech and {
     type = tech.type,
     name = tech.name,

@@ -36,7 +36,7 @@ end
 
 ---Resolves a solid item or resource result name into a scrap material type.
 ---@param name string
----@param materials ISdata_table.materials
+---@param materials ISdata_table_materials
 ---@param allow_plain? boolean
 ---@return string|nil
 function resolver.resolve_solid(name, materials, allow_plain)
@@ -59,7 +59,7 @@ end
 
 ---Resolves a fluid name into a scrap material type.
 ---@param name string
----@param materials ISdata_table.materials
+---@param materials ISdata_table_materials
 ---@return string|nil
 function resolver.resolve_fluid(name, materials)
   if materials.fluid_aliases and materials.fluid_aliases[name] then

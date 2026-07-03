@@ -40,6 +40,10 @@ MATERIAL_FLOW_RELATIVE = Path("Ingredient_Scrap") / "material-flow.json"
 MATERIAL_FLOW_STATE_RELATIVE = Path("Ingredient_Scrap") / "material-flow-data.js"
 PRODUCTION_FLOW_RELATIVE = Path("Ingredient_Scrap") / "production-flow.json"
 PRODUCTION_FLOW_STATE_RELATIVE = Path("Ingredient_Scrap") / "production-flow-data.js"
+TECHNOLOGY_FLOW_RELATIVE = Path("Ingredient_Scrap") / "technology-flow.json"
+TECHNOLOGY_FLOW_STATE_RELATIVE = Path("Ingredient_Scrap") / "technology-flow-data.js"
+ANCESTRY_RUNTIME_RELATIVE = Path("Ingredient_Scrap") / "ancestry-runtime.json"
+RECIPE_FORMS_RELATIVE = Path("Ingredient_Scrap") / "recipe-forms.json"
 ICON_ASSETS_RELATIVE = Path("Ingredient_Scrap") / "icon-assets"
 PROFILE_FILE = SCRIPT_DIR / "profile.lua"
 TMP_DIR = SCRIPT_DIR / "tmp"
@@ -58,7 +62,13 @@ PROFILES = {
     "probability_full": {"probability": 100},
     "needed_min": {"needed": 1},
     "needed_high": {"needed": 20},
+    "hide_tech_quiet": {"shallow_log": False},
     "recipe_chain_targets": {"recipe_chain_targets": True},
+    "ancestry_component_heavy": {"ancestry_mode": "component-heavy"},
+    "ancestry_material_heavy": {"ancestry_mode": "material-heavy"},
+    "ancestry_width_1": {"ancestry_mixed_limit": 1},
+    "ancestry_width_2": {"ancestry_mixed_limit": 2},
+    "ancestry_depth_3": {"ancestry_max_depth": 3},
     "toggles_off": {"limit": False, "fluids": False},
 }
 
@@ -200,6 +210,22 @@ def production_flow_state_path(factorio_exe: Path) -> Path:
     return script_output_path(factorio_exe, PRODUCTION_FLOW_STATE_RELATIVE)
 
 
+def technology_flow_path(factorio_exe: Path) -> Path:
+    return script_output_path(factorio_exe, TECHNOLOGY_FLOW_RELATIVE)
+
+
+def technology_flow_state_path(factorio_exe: Path) -> Path:
+    return script_output_path(factorio_exe, TECHNOLOGY_FLOW_STATE_RELATIVE)
+
+
+def ancestry_runtime_path(factorio_exe: Path) -> Path:
+    return script_output_path(factorio_exe, ANCESTRY_RUNTIME_RELATIVE)
+
+
+def recipe_forms_path(factorio_exe: Path) -> Path:
+    return script_output_path(factorio_exe, RECIPE_FORMS_RELATIVE)
+
+
 def icon_assets_path(factorio_exe: Path) -> Path:
     return script_output_path(factorio_exe, ICON_ASSETS_RELATIVE)
 
@@ -327,9 +353,9 @@ def enrich_material_flow_metadata(factorio_exe: Path, flow_path: Path, state_pat
     flow_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     state_path = state_path or material_flow_state_path(factorio_exe)
     state_path.write_text(
-        "window.__INGREDIENT_SCRAP_MATERIAL_FLOW__ = "
+        "window.__INGREDIENT_SCRAP_VIEWER_DATA__ = "
         + json.dumps(data, ensure_ascii=False)
-        + ";\n",
+        + ";\nwindow.__INGREDIENT_SCRAP_MATERIAL_FLOW__ = window.__INGREDIENT_SCRAP_VIEWER_DATA__;\n",
         encoding="utf-8",
     )
 
@@ -477,8 +503,11 @@ def run_factorio_profile(
     dump_path = data_table_path(factorio_exe)
     flow_path = material_flow_path(factorio_exe)
     production_path = production_flow_path(factorio_exe)
+    technology_path = technology_flow_path(factorio_exe)
+    ancestry_path = ancestry_runtime_path(factorio_exe)
+    forms_path = recipe_forms_path(factorio_exe)
 
-    for path in (save_path, output_path, dump_path, flow_path, production_path):
+    for path in (save_path, output_path, dump_path, flow_path, production_path, technology_path, ancestry_path, forms_path):
         if path.exists():
             path.unlink()
 
@@ -499,6 +528,8 @@ def run_factorio_profile(
     print(f"Data:     {dump_path}")
     print(f"Flow:     {flow_path}")
     print(f"Prod:     {production_path}")
+    print(f"Tech:     {technology_path}")
+    print(f"Forms:    {forms_path}")
 
     try:
         proc = subprocess.run(command, timeout=TIMEOUT, capture_output=True, text=True)
@@ -553,6 +584,19 @@ def run_factorio_profile(
         print(f"Production flow: {production_path}")
     else:
         print("WARNUNG: production-flow.json wurde nicht erzeugt.")
+    if technology_path.exists():
+        enrich_material_flow_metadata(factorio_exe, technology_path, technology_flow_state_path(factorio_exe))
+        print(f"Technology flow: {technology_path}")
+    else:
+        print("WARNUNG: technology-flow.json wurde nicht erzeugt.")
+    if ancestry_path.exists():
+        print(f"Ancestry:        {ancestry_path}")
+    else:
+        print("WARNUNG: ancestry-runtime.json wurde nicht erzeugt.")
+    if forms_path.exists():
+        print(f"Recipe forms:    {forms_path}")
+    else:
+        print("WARNUNG: recipe-forms.json wurde nicht erzeugt.")
     return status == "pass", report
 
 

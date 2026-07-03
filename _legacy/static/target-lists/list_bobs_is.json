@@ -1,0 +1,3396 @@
+{
+  "schema": "ingredient-scrap-target-list/v1",
+  "profile": "bobs_is",
+  "materials": [
+    {
+      "material": "copper",
+      "mode": "fluid",
+      "resources": [
+        {
+          "resource": "copper-ore",
+          "result": "item:copper-ore",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/copper-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "fluid:molten-copper x1",
+          "recipe": "casting-copper-cable",
+          "results": [
+            "item:copper-cable x2",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "copper-cable",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-copper.png"
+        },
+        {
+          "ingredient": "fluid:molten-copper x2",
+          "recipe": "bob-copper-tungsten-alloy",
+          "results": [
+            "item:bob-copper-tungsten-alloy x5",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "bob-copper-tungsten-alloy",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-copper.png"
+        },
+        {
+          "ingredient": "fluid:molten-copper x2",
+          "recipe": "casting-copper",
+          "results": [
+            "item:copper-plate x2",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "copper-plate",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-copper.png"
+        },
+        {
+          "ingredient": "fluid:molten-copper x25",
+          "recipe": "casting-low-density-structure",
+          "results": [
+            "item:low-density-structure x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-copper-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "low-density-structure",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-copper.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-copper-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:copper-plate x1",
+          "result_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-copper-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:molten-copper x10",
+          "result_icon": "__space-age__/graphics/icons/fluid/molten-copper.png"
+        }
+      ]
+    },
+    {
+      "material": "holmium",
+      "mode": "fluid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "fluid:holmium-solution x1",
+          "recipe": "electrolyte",
+          "results": [
+            "fluid:electrolyte x10",
+            "item:yis-holmium-scrap x1"
+          ],
+          "main_product": "electrolyte",
+          "recipe_category": "electromagnetics",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/holmium-solution.png"
+        },
+        {
+          "ingredient": "fluid:holmium-solution x2",
+          "recipe": "holmium-plate",
+          "results": [
+            "item:holmium-plate x1",
+            "item:yis-holmium-scrap x1"
+          ],
+          "main_product": "holmium-plate",
+          "recipe_category": "crafting-with-fluid-or-metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/holmium-solution.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-holmium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:holmium-plate x1",
+          "result_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-holmium-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:holmium-solution x10",
+          "result_icon": "__space-age__/graphics/icons/fluid/holmium-solution.png"
+        }
+      ]
+    },
+    {
+      "material": "iron",
+      "mode": "fluid",
+      "resources": [
+        {
+          "resource": "iron-ore",
+          "result": "item:iron-ore",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/iron-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "fluid:molten-iron x1",
+          "recipe": "casting-iron-gear-wheel",
+          "results": [
+            "item:iron-gear-wheel x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-gear-wheel",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x1",
+          "recipe": "casting-pipe",
+          "results": [
+            "item:pipe x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "pipe",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x1",
+          "recipe": "tungsten-plate",
+          "results": [
+            "item:tungsten-plate x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "tungsten-plate",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x2",
+          "recipe": "casting-iron",
+          "results": [
+            "item:iron-plate x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-plate",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x2",
+          "recipe": "casting-iron-stick",
+          "results": [
+            "item:iron-stick x4",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-stick",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x2",
+          "recipe": "concrete-from-molten-iron",
+          "results": [
+            "item:concrete x10",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "concrete",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x20",
+          "recipe": "big-mining-drill",
+          "results": [
+            "item:big-mining-drill x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "big-mining-drill",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x3",
+          "recipe": "casting-steel",
+          "results": [
+            "item:steel-plate x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "steel-plate",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x5",
+          "recipe": "casting-pipe-to-ground",
+          "results": [
+            "item:pipe-to-ground x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "pipe-to-ground",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        },
+        {
+          "ingredient": "fluid:molten-iron x8",
+          "recipe": "casting-low-density-structure",
+          "results": [
+            "item:low-density-structure x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-copper-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "low-density-structure",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-iron-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:iron-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-iron-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:molten-iron x10",
+          "result_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        }
+      ]
+    },
+    {
+      "material": "yis-hiddenfluidium",
+      "mode": "fluid",
+      "resources": [
+        {
+          "resource": "yis-test-yis-hiddenfluidium-resource",
+          "result": "fluid:yis-hiddenfluidium-solution x10",
+          "category": "basic-fluid",
+          "icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "fluid:yis-hiddenfluidium-solution x5",
+          "recipe": "yis-hiddenfluidium-solution-barrel",
+          "results": [
+            "item:yis-hiddenfluidium-solution-barrel x1",
+            "item:yis-hiddenfluidium-scrap x1"
+          ],
+          "main_product": "yis-hiddenfluidium-solution-barrel",
+          "recipe_category": "barrelling",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        },
+        {
+          "ingredient": "fluid:yis-hiddenfluidium-solution x7",
+          "recipe": "yis-test-yis-hiddenfluidium-fluid",
+          "results": [
+            "item:yis-hiddenfluidium-product x1",
+            "item:yis-hiddenfluidium-scrap x1"
+          ],
+          "main_product": "yis-hiddenfluidium-product",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-hiddenfluidium-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": true,
+          "result": "fluid:yis-hiddenfluidium-solution x14",
+          "result_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ]
+    },
+    {
+      "material": "yis-rare-metal",
+      "mode": "fluid",
+      "resources": [
+        {
+          "resource": "yis-test-rare-metal-resource",
+          "result": "item:yis-rare-metal-ore x1",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "resource": "yis-test-yis-rare-metal-solution-resource",
+          "result": "fluid:yis-rare-metal-solution x10",
+          "category": "basic-fluid",
+          "icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "fluid:molten-yis-rare-metal x5",
+          "recipe": "molten-yis-rare-metal-barrel",
+          "results": [
+            "item:molten-yis-rare-metal-barrel x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "molten-yis-rare-metal-barrel",
+          "recipe_category": "barrelling",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        },
+        {
+          "ingredient": "fluid:yis-rare-metal-solution x5",
+          "recipe": "yis-rare-metal-solution-barrel",
+          "results": [
+            "item:yis-rare-metal-solution-barrel x1",
+            "item:yis-rare-metal-scrap x1"
+          ],
+          "main_product": "yis-rare-metal-solution-barrel",
+          "recipe_category": "barrelling",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-rare-metal-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:yis-rare-metal-solution x10",
+          "result_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ]
+    },
+    {
+      "material": "yis-solvium",
+      "mode": "fluid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "fluid:yis-solvium-solution x5",
+          "recipe": "yis-solvium-solution-barrel",
+          "results": [
+            "item:yis-solvium-solution-barrel x1",
+            "item:yis-solvium-scrap x1"
+          ],
+          "main_product": "yis-solvium-solution-barrel",
+          "recipe_category": "barrelling",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        },
+        {
+          "ingredient": "fluid:yis-solvium-solution x6",
+          "recipe": "yis-test-yis-solvium-solution",
+          "results": [
+            "item:yis-solvium-product-fluid x1",
+            "item:yis-solvium-scrap x1"
+          ],
+          "main_product": "yis-solvium-product-fluid",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-solvium-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:yis-solvium-solution x12",
+          "result_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ]
+    },
+    {
+      "material": "yis-testium",
+      "mode": "fluid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "fluid:molten-yis-testium x4",
+          "recipe": "yis-test-yis-testium-mixed",
+          "results": [
+            "item:yis-testium-product-mixed x1",
+            "item:yis-testium-scrap x2"
+          ],
+          "main_product": "yis-testium-product-mixed",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        },
+        {
+          "ingredient": "fluid:molten-yis-testium x5",
+          "recipe": "molten-yis-testium-barrel",
+          "results": [
+            "item:molten-yis-testium-barrel x1",
+            "item:yis-testium-scrap x1"
+          ],
+          "main_product": "molten-yis-testium-barrel",
+          "recipe_category": "barrelling",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        },
+        {
+          "ingredient": "fluid:molten-yis-testium x5",
+          "recipe": "yis-test-yis-testium-fluid",
+          "results": [
+            "item:yis-testium-product-fluid x1",
+            "item:yis-testium-scrap x1"
+          ],
+          "main_product": "yis-testium-product-fluid",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-testium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:yis-testium-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-testium-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:molten-yis-testium x10",
+          "result_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-aluminium",
+      "mode": "solid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "item:bob-aluminium-plate x2",
+          "recipe": "bob-air-pump-3",
+          "results": [
+            "item:bob-air-pump-3 x1",
+            "item:yis-bob-aluminium-scrap x1"
+          ],
+          "main_product": "bob-air-pump-3",
+          "recipe_category": null,
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/aluminium-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-aluminium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-aluminium-plate x1",
+          "result_icon": "__bobplates__/graphics/icons/plate/aluminium-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-amethyst",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-gem-ore",
+          "result": "item:bob-amethyst-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/amethyst-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-amethyst-ore x1",
+          "recipe": "bob-amethyst-3",
+          "results": [
+            "item:bob-amethyst-3 x4",
+            "item:yis-bob-amethyst-scrap x1"
+          ],
+          "main_product": "bob-amethyst-3",
+          "recipe_category": "advanced-crafting",
+          "ingredient_icon": "__bobores__/graphics/icons/amethyst-ore.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-amethyst-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-amethyst-ore x1",
+          "result_icon": "__bobores__/graphics/icons/amethyst-ore.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-bauxite",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-bauxite-ore",
+          "result": "item:bob-bauxite-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/bauxite-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-bauxite-ore x1",
+          "recipe": "bob-alumina",
+          "results": [
+            "item:bob-alumina x1",
+            "item:yis-bob-bauxite-scrap x1"
+          ],
+          "main_product": "bob-alumina",
+          "recipe_category": "bob-chemical-furnace",
+          "ingredient_icon": "__bobores__/graphics/icons/bauxite-ore.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-bauxite-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-bauxite-ore x1",
+          "result_icon": "__bobores__/graphics/icons/bauxite-ore.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-cobalt",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-cobalt-ore",
+          "result": "item:bob-cobalt-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/cobalt-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-cobalt-ore x2",
+          "recipe": "bob-cobalt-oxide",
+          "results": [
+            "item:bob-cobalt-oxide x2",
+            "item:yis-bob-cobalt-scrap x1"
+          ],
+          "main_product": "bob-cobalt-oxide",
+          "recipe_category": "bob-chemical-furnace",
+          "ingredient_icon": "__bobores__/graphics/icons/cobalt-ore.png"
+        },
+        {
+          "ingredient": "item:bob-cobalt-plate x1",
+          "recipe": "bob-cobalt-steel-alloy",
+          "results": [
+            "item:bob-cobalt-steel-alloy x10",
+            "item:yis-iron-scrap x1",
+            "item:yis-bob-cobalt-scrap x1"
+          ],
+          "main_product": "bob-cobalt-steel-alloy",
+          "recipe_category": "bob-mixing-furnace",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/cobalt-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-cobalt-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-cobalt-plate x1",
+          "result_icon": "__bobplates__/graphics/icons/plate/cobalt-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-diamond",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-gem-ore",
+          "result": "item:bob-diamond-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/diamond-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-diamond-ore x1",
+          "recipe": "bob-diamond-3",
+          "results": [
+            "item:bob-diamond-3 x4",
+            "item:yis-bob-diamond-scrap x1"
+          ],
+          "main_product": "bob-diamond-3",
+          "recipe_category": "advanced-crafting",
+          "ingredient_icon": "__bobores__/graphics/icons/diamond-ore.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-diamond-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-diamond-ore x1",
+          "result_icon": "__bobores__/graphics/icons/diamond-ore.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-emerald",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-gem-ore",
+          "result": "item:bob-emerald-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/emerald-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-emerald-ore x1",
+          "recipe": "bob-emerald-3",
+          "results": [
+            "item:bob-emerald-3 x4",
+            "item:yis-bob-emerald-scrap x1"
+          ],
+          "main_product": "bob-emerald-3",
+          "recipe_category": "advanced-crafting",
+          "ingredient_icon": "__bobores__/graphics/icons/emerald-ore.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-emerald-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-emerald-ore x1",
+          "result_icon": "__bobores__/graphics/icons/emerald-ore.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-gold",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-gold-ore",
+          "result": "item:bob-gold-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/gold-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-gold-ore x1",
+          "recipe": "bob-gold-plate",
+          "results": [
+            "item:bob-gold-plate x1",
+            "item:yis-bob-gold-scrap x1"
+          ],
+          "main_product": "bob-gold-plate",
+          "recipe_category": "bob-chemical-furnace",
+          "ingredient_icon": "__bobores__/graphics/icons/gold-ore.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-gold-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-gold-plate x1",
+          "result_icon": "__bobplates__/graphics/icons/plate/gold-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-lead",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-lead-ore",
+          "result": "item:bob-lead-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/lead-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-lead-ore x1",
+          "recipe": "bob-lead-oxide",
+          "results": [
+            "item:bob-lead-oxide x1",
+            "fluid:bob-sulfur-dioxide x10",
+            "item:yis-bob-lead-scrap x1"
+          ],
+          "main_product": "bob-lead-oxide",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__bobores__/graphics/icons/lead-ore.png"
+        },
+        {
+          "ingredient": "item:bob-lead-ore x1",
+          "recipe": "bob-lead-oxide-2",
+          "results": [
+            "item:bob-lead-oxide x1",
+            "fluid:bob-hydrogen-sulfide x10",
+            "item:yis-bob-lead-scrap x1"
+          ],
+          "main_product": "bob-lead-oxide",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__bobores__/graphics/icons/lead-ore.png"
+        },
+        {
+          "ingredient": "item:bob-lead-ore x1",
+          "recipe": "bob-lead-plate",
+          "results": [
+            "item:bob-lead-plate x1",
+            "item:yis-bob-lead-scrap x1"
+          ],
+          "main_product": "bob-lead-plate",
+          "recipe_category": "smelting",
+          "ingredient_icon": "__bobores__/graphics/icons/lead-ore.png"
+        },
+        {
+          "ingredient": "item:bob-lead-plate x2",
+          "recipe": "battery",
+          "results": [
+            "item:battery x1",
+            "item:yis-bob-lead-scrap x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "battery",
+          "recipe_category": "chemistry-or-cryogenics",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/lead-plate.png"
+        },
+        {
+          "ingredient": "item:bob-lead-plate x5",
+          "recipe": "bob-empty-nuclear-fuel-cell",
+          "results": [
+            "item:bob-empty-nuclear-fuel-cell x10",
+            "item:yis-steel-scrap x1",
+            "item:yis-bob-lead-scrap x1"
+          ],
+          "main_product": "bob-empty-nuclear-fuel-cell",
+          "recipe_category": null,
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/lead-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-lead-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-lead-plate x1",
+          "result_icon": "__bobplates__/graphics/icons/plate/lead-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-nickel",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-nickel-ore",
+          "result": "item:bob-nickel-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/nickel-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-nickel-ore x1",
+          "recipe": "bob-nickel-plate",
+          "results": [
+            "fluid:bob-sulfur-dioxide x10",
+            "item:bob-nickel-plate x1",
+            "item:yis-bob-nickel-scrap x1"
+          ],
+          "main_product": "bob-nickel-plate",
+          "recipe_category": "bob-electrolysis",
+          "ingredient_icon": "__bobores__/graphics/icons/nickel-ore.png"
+        },
+        {
+          "ingredient": "item:bob-nickel-plate x1",
+          "recipe": "bob-silver-from-lead",
+          "results": [
+            "item:bob-lead-plate x7",
+            "item:bob-silver-ore x1",
+            "item:yis-bob-nickel-scrap x1"
+          ],
+          "main_product": "bob-lead-plate",
+          "recipe_category": "bob-chemical-furnace",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/nickel-plate.png"
+        },
+        {
+          "ingredient": "item:bob-nickel-plate x2",
+          "recipe": "bob-invar-alloy",
+          "results": [
+            "item:bob-invar-alloy x5",
+            "item:yis-bob-nickel-scrap x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "bob-invar-alloy",
+          "recipe_category": "bob-mixing-furnace",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/nickel-plate.png"
+        },
+        {
+          "ingredient": "item:bob-nickel-plate x3",
+          "recipe": "bob-nitinol-alloy",
+          "results": [
+            "item:bob-nitinol-alloy x5",
+            "item:yis-bob-nickel-scrap x1",
+            "item:yis-bob-titanium-scrap x1"
+          ],
+          "main_product": "bob-nitinol-alloy",
+          "recipe_category": "bob-mixing-furnace",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/nickel-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-nickel-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-nickel-plate x1",
+          "result_icon": "__bobplates__/graphics/icons/plate/nickel-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-ruby",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-gem-ore",
+          "result": "item:bob-ruby-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/ruby-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-ruby-ore x1",
+          "recipe": "bob-ruby-3",
+          "results": [
+            "item:bob-ruby-3 x4",
+            "item:yis-bob-ruby-scrap x1"
+          ],
+          "main_product": "bob-ruby-3",
+          "recipe_category": "advanced-crafting",
+          "ingredient_icon": "__bobores__/graphics/icons/ruby-ore.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-ruby-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-ruby-ore x1",
+          "result_icon": "__bobores__/graphics/icons/ruby-ore.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-rutile",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-rutile-ore",
+          "result": "item:bob-rutile-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/rutile-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-rutile-ore x2",
+          "recipe": "bob-titanium-plate",
+          "results": [
+            "item:bob-titanium-plate x2",
+            "item:yis-bob-rutile-scrap x1"
+          ],
+          "main_product": "bob-titanium-plate",
+          "recipe_category": "bob-electrolysis",
+          "ingredient_icon": "__bobores__/graphics/icons/rutile-ore.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-rutile-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-rutile-ore x1",
+          "result_icon": "__bobores__/graphics/icons/rutile-ore.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-sapphire",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-gem-ore",
+          "result": "item:bob-sapphire-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/sapphire-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-sapphire-ore x1",
+          "recipe": "bob-sapphire-3",
+          "results": [
+            "item:bob-sapphire-3 x4",
+            "item:yis-bob-sapphire-scrap x1"
+          ],
+          "main_product": "bob-sapphire-3",
+          "recipe_category": "advanced-crafting",
+          "ingredient_icon": "__bobores__/graphics/icons/sapphire-ore.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-sapphire-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-sapphire-ore x1",
+          "result_icon": "__bobores__/graphics/icons/sapphire-ore.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-silicon",
+      "mode": "solid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "item:bob-silicon-plate x1",
+          "recipe": "bob-silicon-powder",
+          "results": [
+            "item:bob-silicon-powder x1",
+            "item:yis-bob-silicon-scrap x1"
+          ],
+          "main_product": "bob-silicon-powder",
+          "recipe_category": "advanced-crafting",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/silicon-plate.png"
+        },
+        {
+          "ingredient": "item:bob-silicon-plate x1",
+          "recipe": "bob-silicon-wafer",
+          "results": [
+            "item:bob-silicon-wafer x8",
+            "item:yis-bob-silicon-scrap x1"
+          ],
+          "main_product": "bob-silicon-wafer",
+          "recipe_category": "advanced-crafting",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/silicon-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-silicon-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-silicon-plate x1",
+          "result_icon": "__bobplates__/graphics/icons/plate/silicon-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-silver",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-silver-ore",
+          "result": "item:bob-silver-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/silver-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-silver-ore x1",
+          "recipe": "bob-silver-plate",
+          "results": [
+            "item:bob-silver-plate x1",
+            "item:yis-bob-silver-scrap x1"
+          ],
+          "main_product": "bob-silver-plate",
+          "recipe_category": "smelting",
+          "ingredient_icon": "__bobores__/graphics/icons/silver-ore.png"
+        },
+        {
+          "ingredient": "item:bob-silver-plate x1",
+          "recipe": "bob-silver-nitrate",
+          "results": [
+            "item:bob-silver-nitrate x1",
+            "item:yis-bob-silver-scrap x1"
+          ],
+          "main_product": "bob-silver-nitrate",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/silver-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-silver-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-silver-plate x1",
+          "result_icon": "__bobplates__/graphics/icons/plate/silver-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-thorium",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-thorium-ore",
+          "result": "item:bob-thorium-ore x1",
+          "category": "basic-solid",
+          "icon": "__boblibrary__/graphics/icons/ore-5.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-thorium-ore x10",
+          "recipe": "bob-thorium-processing",
+          "results": [
+            "item:bob-thorium-232 x1",
+            "item:yis-bob-thorium-scrap x1"
+          ],
+          "main_product": "bob-thorium-232",
+          "recipe_category": "centrifuging",
+          "ingredient_icon": "__boblibrary__/graphics/icons/ore-5.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-thorium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-thorium-ore x1",
+          "result_icon": "__boblibrary__/graphics/icons/ore-5.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-tin",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-tin-ore",
+          "result": "item:bob-tin-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/tin-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-tin-ore x1",
+          "recipe": "bob-tin-plate",
+          "results": [
+            "item:bob-tin-plate x1",
+            "item:yis-bob-tin-scrap x1"
+          ],
+          "main_product": "bob-tin-plate",
+          "recipe_category": "smelting",
+          "ingredient_icon": "__bobores__/graphics/icons/tin-ore.png"
+        },
+        {
+          "ingredient": "item:bob-tin-plate x1",
+          "recipe": "bob-gunmetal-alloy",
+          "results": [
+            "item:bob-gunmetal-alloy x10",
+            "item:yis-copper-scrap x1",
+            "item:yis-bob-tin-scrap x1",
+            "item:yis-bob-zinc-scrap x1"
+          ],
+          "main_product": "bob-gunmetal-alloy",
+          "recipe_category": "bob-mixing-furnace",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/tin-plate.png"
+        },
+        {
+          "ingredient": "item:bob-tin-plate x2",
+          "recipe": "bob-bronze-alloy",
+          "results": [
+            "item:bob-bronze-alloy x5",
+            "item:yis-copper-scrap x1",
+            "item:yis-bob-tin-scrap x1"
+          ],
+          "main_product": "bob-bronze-alloy",
+          "recipe_category": "bob-mixing-furnace",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/tin-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-tin-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-tin-plate x1",
+          "result_icon": "__bobplates__/graphics/icons/plate/tin-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-titanium",
+      "mode": "solid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "item:bob-titanium-plate x1",
+          "recipe": "bob-titanium-bearing",
+          "results": [
+            "item:bob-titanium-bearing x2",
+            "item:yis-bob-titanium-scrap x1"
+          ],
+          "main_product": "bob-titanium-bearing",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/titanium-plate.png"
+        },
+        {
+          "ingredient": "item:bob-titanium-plate x1",
+          "recipe": "bob-titanium-bearing-ball",
+          "results": [
+            "item:bob-titanium-bearing-ball x12",
+            "item:yis-bob-titanium-scrap x1"
+          ],
+          "main_product": "bob-titanium-bearing-ball",
+          "recipe_category": null,
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/titanium-plate.png"
+        },
+        {
+          "ingredient": "item:bob-titanium-plate x2",
+          "recipe": "bob-nitinol-alloy",
+          "results": [
+            "item:bob-nitinol-alloy x5",
+            "item:yis-bob-nickel-scrap x1",
+            "item:yis-bob-titanium-scrap x1"
+          ],
+          "main_product": "bob-nitinol-alloy",
+          "recipe_category": "bob-mixing-furnace",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/titanium-plate.png"
+        },
+        {
+          "ingredient": "item:bob-titanium-plate x2",
+          "recipe": "bob-titanium-gear-wheel",
+          "results": [
+            "item:bob-titanium-gear-wheel x1",
+            "item:yis-bob-titanium-scrap x1"
+          ],
+          "main_product": "bob-titanium-gear-wheel",
+          "recipe_category": null,
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/titanium-plate.png"
+        },
+        {
+          "ingredient": "item:bob-titanium-plate x2",
+          "recipe": "bob-water-pump-4",
+          "results": [
+            "item:bob-water-pump-4 x1",
+            "item:yis-bob-titanium-scrap x1"
+          ],
+          "main_product": "bob-water-pump-4",
+          "recipe_category": null,
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/titanium-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-titanium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-titanium-plate x1",
+          "result_icon": "__bobplates__/graphics/icons/plate/titanium-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-topaz",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-gem-ore",
+          "result": "item:bob-topaz-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/topaz-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-topaz-ore x1",
+          "recipe": "bob-topaz-3",
+          "results": [
+            "item:bob-topaz-3 x4",
+            "item:yis-bob-topaz-scrap x1"
+          ],
+          "main_product": "bob-topaz-3",
+          "recipe_category": "advanced-crafting",
+          "ingredient_icon": "__bobores__/graphics/icons/topaz-ore.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-topaz-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-topaz-ore x1",
+          "result_icon": "__bobores__/graphics/icons/topaz-ore.png"
+        }
+      ]
+    },
+    {
+      "material": "bob-zinc",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "bob-zinc-ore",
+          "result": "item:bob-zinc-ore x1",
+          "category": "basic-solid",
+          "icon": "__bobores__/graphics/icons/zinc-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:bob-zinc-ore x1",
+          "recipe": "bob-zinc-plate",
+          "results": [
+            "item:bob-zinc-plate x1",
+            "item:yis-bob-zinc-scrap x1"
+          ],
+          "main_product": "bob-zinc-plate",
+          "recipe_category": "bob-electrolysis",
+          "ingredient_icon": "__bobores__/graphics/icons/zinc-ore.png"
+        },
+        {
+          "ingredient": "item:bob-zinc-plate x1",
+          "recipe": "bob-battery-2",
+          "results": [
+            "item:bob-battery-2 x1",
+            "item:yis-bob-zinc-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "bob-battery-2",
+          "recipe_category": "chemistry-or-cryogenics",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/zinc-plate.png"
+        },
+        {
+          "ingredient": "item:bob-zinc-plate x1",
+          "recipe": "bob-gunmetal-alloy",
+          "results": [
+            "item:bob-gunmetal-alloy x10",
+            "item:yis-copper-scrap x1",
+            "item:yis-bob-tin-scrap x1",
+            "item:yis-bob-zinc-scrap x1"
+          ],
+          "main_product": "bob-gunmetal-alloy",
+          "recipe_category": "bob-mixing-furnace",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/zinc-plate.png"
+        },
+        {
+          "ingredient": "item:bob-zinc-plate x2",
+          "recipe": "bob-brass-alloy",
+          "results": [
+            "item:bob-brass-alloy x5",
+            "item:yis-copper-scrap x1",
+            "item:yis-bob-zinc-scrap x1"
+          ],
+          "main_product": "bob-brass-alloy",
+          "recipe_category": "bob-mixing-furnace",
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/zinc-plate.png"
+        },
+        {
+          "ingredient": "item:bob-zinc-plate x2",
+          "recipe": "bob-water-pump-3",
+          "results": [
+            "item:bob-water-pump-3 x1",
+            "item:yis-bob-zinc-scrap x1"
+          ],
+          "main_product": "bob-water-pump-3",
+          "recipe_category": null,
+          "ingredient_icon": "__bobplates__/graphics/icons/plate/zinc-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-bob-zinc-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:bob-zinc-plate x1",
+          "result_icon": "__bobplates__/graphics/icons/plate/zinc-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "copper",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "copper-ore",
+          "result": "item:copper-ore",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/copper-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:copper-ore x1",
+          "recipe": "copper-plate",
+          "results": [
+            "item:copper-plate x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "copper-plate",
+          "recipe_category": "smelting",
+          "ingredient_icon": "__base__/graphics/icons/copper-ore.png"
+        },
+        {
+          "ingredient": "item:copper-ore x50",
+          "recipe": "molten-copper",
+          "results": [
+            "fluid:molten-copper x500",
+            "item:yis-copper-scrap x2"
+          ],
+          "main_product": "molten-copper",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__base__/graphics/icons/copper-ore.png"
+        },
+        {
+          "ingredient": "item:copper-ore x7",
+          "recipe": "bob-cobalt-oxide-from-copper",
+          "results": [
+            "item:copper-plate x7",
+            "item:bob-cobalt-oxide x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "copper-plate",
+          "recipe_category": "bob-chemical-furnace",
+          "ingredient_icon": "__base__/graphics/icons/copper-ore.png"
+        },
+        {
+          "ingredient": "item:copper-plate x1",
+          "recipe": "copper-cable",
+          "results": [
+            "item:copper-cable x2",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "copper-cable",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x1",
+          "recipe": "superconductor",
+          "results": [
+            "item:superconductor x2",
+            "item:yis-holmium-scrap x1",
+            "item:yis-copper-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "superconductor",
+          "recipe_category": "electromagnetics",
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x10",
+          "recipe": "gun-turret",
+          "results": [
+            "item:gun-turret x1",
+            "item:yis-copper-scrap x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "gun-turret",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x100",
+          "recipe": "heat-exchanger",
+          "results": [
+            "item:heat-exchanger x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-copper-scrap x2"
+          ],
+          "main_product": "heat-exchanger",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x20",
+          "recipe": "heat-pipe",
+          "results": [
+            "item:heat-pipe x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "heat-pipe",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x20",
+          "recipe": "low-density-structure",
+          "results": [
+            "item:low-density-structure x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-copper-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "low-density-structure",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x3",
+          "recipe": "bob-brass-alloy",
+          "results": [
+            "item:bob-brass-alloy x5",
+            "item:yis-copper-scrap x1",
+            "item:yis-bob-zinc-scrap x1"
+          ],
+          "main_product": "bob-brass-alloy",
+          "recipe_category": "bob-mixing-furnace",
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x3",
+          "recipe": "bob-bronze-alloy",
+          "results": [
+            "item:bob-bronze-alloy x5",
+            "item:yis-copper-scrap x1",
+            "item:yis-bob-tin-scrap x1"
+          ],
+          "main_product": "bob-bronze-alloy",
+          "recipe_category": "bob-mixing-furnace",
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x3",
+          "recipe": "bob-distillery",
+          "results": [
+            "item:bob-distillery x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "bob-distillery",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x5",
+          "recipe": "solar-panel",
+          "results": [
+            "item:solar-panel x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "solar-panel",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x50",
+          "recipe": "steam-turbine",
+          "results": [
+            "item:steam-turbine x1",
+            "item:yis-copper-scrap x2"
+          ],
+          "main_product": "steam-turbine",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x500",
+          "recipe": "nuclear-reactor",
+          "results": [
+            "item:nuclear-reactor x1",
+            "item:yis-steel-scrap x4",
+            "item:yis-copper-scrap x4"
+          ],
+          "main_product": "nuclear-reactor",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "ingredient": "item:copper-plate x8",
+          "recipe": "bob-gunmetal-alloy",
+          "results": [
+            "item:bob-gunmetal-alloy x10",
+            "item:yis-copper-scrap x1",
+            "item:yis-bob-tin-scrap x1",
+            "item:yis-bob-zinc-scrap x1"
+          ],
+          "main_product": "bob-gunmetal-alloy",
+          "recipe_category": "bob-mixing-furnace",
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-copper-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:copper-plate x1",
+          "result_icon": "__base__/graphics/icons/copper-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-copper-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:molten-copper x10",
+          "result_icon": "__space-age__/graphics/icons/fluid/molten-copper.png"
+        }
+      ]
+    },
+    {
+      "material": "holmium",
+      "mode": "solid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "item:holmium-ore x2",
+          "recipe": "holmium-solution",
+          "results": [
+            "fluid:holmium-solution x100",
+            "item:yis-holmium-scrap x1"
+          ],
+          "main_product": "holmium-solution",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__space-age__/graphics/icons/holmium-ore.png"
+        },
+        {
+          "ingredient": "item:holmium-plate x1",
+          "recipe": "fusion-power-cell",
+          "results": [
+            "item:fusion-power-cell x1",
+            "item:yis-holmium-scrap x1"
+          ],
+          "main_product": "fusion-power-cell",
+          "recipe_category": "cryogenics",
+          "ingredient_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        },
+        {
+          "ingredient": "item:holmium-plate x1",
+          "recipe": "lithium",
+          "results": [
+            "item:lithium x5",
+            "item:yis-holmium-scrap x1"
+          ],
+          "main_product": "lithium",
+          "recipe_category": "chemistry-or-cryogenics",
+          "ingredient_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        },
+        {
+          "ingredient": "item:holmium-plate x1",
+          "recipe": "superconductor",
+          "results": [
+            "item:superconductor x2",
+            "item:yis-holmium-scrap x1",
+            "item:yis-copper-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "superconductor",
+          "recipe_category": "electromagnetics",
+          "ingredient_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        },
+        {
+          "ingredient": "item:holmium-plate x150",
+          "recipe": "electromagnetic-plant",
+          "results": [
+            "item:electromagnetic-plant x1",
+            "item:yis-holmium-scrap x3",
+            "item:yis-steel-scrap x2"
+          ],
+          "main_product": "electromagnetic-plant",
+          "recipe_category": "electronics-or-assembling",
+          "ingredient_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        },
+        {
+          "ingredient": "item:holmium-plate x2",
+          "recipe": "supercapacitor",
+          "results": [
+            "item:supercapacitor x1",
+            "item:yis-holmium-scrap x1"
+          ],
+          "main_product": "supercapacitor",
+          "recipe_category": "electromagnetics",
+          "ingredient_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-holmium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:holmium-plate x1",
+          "result_icon": "__space-age__/graphics/icons/holmium-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-holmium-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:holmium-solution x10",
+          "result_icon": "__space-age__/graphics/icons/fluid/holmium-solution.png"
+        }
+      ]
+    },
+    {
+      "material": "iron",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "iron-ore",
+          "result": "item:iron-ore",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/iron-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:iron-ore x1",
+          "recipe": "bob-ferric-chloride-solution",
+          "results": [
+            "fluid:bob-ferric-chloride-solution x50",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "bob-ferric-chloride-solution",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-ore x1",
+          "recipe": "concrete",
+          "results": [
+            "item:concrete x10",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "concrete",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-ore x1",
+          "recipe": "iron-plate",
+          "results": [
+            "item:iron-plate x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-plate",
+          "recipe_category": "smelting",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-ore x2",
+          "recipe": "advanced-thruster-oxidizer",
+          "results": [
+            "fluid:thruster-oxidizer x1500",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "thruster-oxidizer",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-ore x2",
+          "recipe": "thruster-oxidizer",
+          "results": [
+            "fluid:thruster-oxidizer x75",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "thruster-oxidizer",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-ore x50",
+          "recipe": "molten-iron",
+          "results": [
+            "fluid:molten-iron x500",
+            "item:yis-iron-scrap x2"
+          ],
+          "main_product": "molten-iron",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__base__/graphics/icons/iron-ore.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "bob-empty-canister",
+          "results": [
+            "item:bob-empty-canister x5",
+            "item:yis-iron-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "bob-empty-canister",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "burner-inserter",
+          "results": [
+            "item:burner-inserter x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "burner-inserter",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "display-panel",
+          "results": [
+            "item:display-panel x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "display-panel",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "electronic-circuit",
+          "results": [
+            "item:electronic-circuit x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "electronic-circuit",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "inserter",
+          "results": [
+            "item:inserter x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "inserter",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "iron-stick",
+          "results": [
+            "item:iron-stick x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-stick",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "long-handed-inserter",
+          "results": [
+            "item:long-handed-inserter x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "long-handed-inserter",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "pipe",
+          "results": [
+            "item:pipe x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "pipe",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "small-lamp",
+          "results": [
+            "item:small-lamp x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "small-lamp",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "sulfuric-acid",
+          "results": [
+            "fluid:sulfuric-acid x50",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "sulfuric-acid",
+          "recipe_category": "chemistry-or-cryogenics",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x1",
+          "recipe": "transport-belt",
+          "results": [
+            "item:transport-belt x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "transport-belt",
+          "recipe_category": "pressing",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x10",
+          "recipe": "electric-mining-drill",
+          "results": [
+            "item:electric-mining-drill x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "electric-mining-drill",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x10",
+          "recipe": "radar",
+          "results": [
+            "item:radar x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "radar",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x10",
+          "recipe": "steam-engine",
+          "results": [
+            "item:steam-engine x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "steam-engine",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x10",
+          "recipe": "underground-belt",
+          "results": [
+            "item:underground-belt x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "underground-belt",
+          "recipe_category": "pressing",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x14",
+          "recipe": "bob-cobalt-steel-alloy",
+          "results": [
+            "item:bob-cobalt-steel-alloy x10",
+            "item:yis-iron-scrap x1",
+            "item:yis-bob-cobalt-scrap x1"
+          ],
+          "main_product": "bob-cobalt-steel-alloy",
+          "recipe_category": "bob-mixing-furnace",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x2",
+          "recipe": "accumulator",
+          "results": [
+            "item:accumulator x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "accumulator",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x2",
+          "recipe": "bob-air-pump",
+          "results": [
+            "item:bob-air-pump x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "bob-air-pump",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x2",
+          "recipe": "bob-void-pump",
+          "results": [
+            "item:bob-void-pump x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "bob-void-pump",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x2",
+          "recipe": "bob-water-pump",
+          "results": [
+            "item:bob-water-pump x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "bob-water-pump",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x2",
+          "recipe": "fast-inserter",
+          "results": [
+            "item:fast-inserter x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "fast-inserter",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x2",
+          "recipe": "iron-gear-wheel",
+          "results": [
+            "item:iron-gear-wheel x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-gear-wheel",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x20",
+          "recipe": "biochamber",
+          "results": [
+            "item:biochamber x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "biochamber",
+          "recipe_category": "organic-or-assembling",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x20",
+          "recipe": "gun-turret",
+          "results": [
+            "item:gun-turret x1",
+            "item:yis-copper-scrap x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "gun-turret",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x20",
+          "recipe": "storage-tank",
+          "results": [
+            "item:storage-tank x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "storage-tank",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x3",
+          "recipe": "bob-distillery",
+          "results": [
+            "item:bob-distillery x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "bob-distillery",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x3",
+          "recipe": "bob-invar-alloy",
+          "results": [
+            "item:bob-invar-alloy x5",
+            "item:yis-bob-nickel-scrap x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "bob-invar-alloy",
+          "recipe_category": "bob-mixing-furnace",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x3",
+          "recipe": "bob-small-inline-storage-tank",
+          "results": [
+            "item:bob-small-inline-storage-tank x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "bob-small-inline-storage-tank",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x3",
+          "recipe": "burner-mining-drill",
+          "results": [
+            "item:burner-mining-drill x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "burner-mining-drill",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x3",
+          "recipe": "programmable-speaker",
+          "results": [
+            "item:programmable-speaker x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "programmable-speaker",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "bob-electrolyser",
+          "results": [
+            "item:bob-electrolyser x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "bob-electrolyser",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "loader",
+          "results": [
+            "item:loader x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "loader",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "pipe-to-ground",
+          "results": [
+            "item:pipe-to-ground x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "pipe-to-ground",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "power-switch",
+          "results": [
+            "item:power-switch x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "power-switch",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "rail-chain-signal",
+          "results": [
+            "item:rail-chain-signal x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "rail-chain-signal",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "rail-signal",
+          "results": [
+            "item:rail-signal x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "rail-signal",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "splitter",
+          "results": [
+            "item:splitter x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "splitter",
+          "recipe_category": "pressing",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x5",
+          "recipe": "steel-plate",
+          "results": [
+            "item:steel-plate x2",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "steel-plate",
+          "recipe_category": "bob-chemical-furnace",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x6",
+          "recipe": "train-stop",
+          "results": [
+            "item:train-stop x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "train-stop",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x8",
+          "recipe": "iron-chest",
+          "results": [
+            "item:iron-chest x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "iron-chest",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:iron-plate x9",
+          "recipe": "assembling-machine-1",
+          "results": [
+            "item:assembling-machine-1 x1",
+            "item:yis-iron-scrap x1"
+          ],
+          "main_product": "assembling-machine-1",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-iron-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:iron-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-iron-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:molten-iron x10",
+          "result_icon": "__space-age__/graphics/icons/fluid/molten-iron.png"
+        }
+      ]
+    },
+    {
+      "material": "plastic",
+      "mode": "solid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "item:plastic-bar x1",
+          "recipe": "bob-battery-2",
+          "results": [
+            "item:bob-battery-2 x1",
+            "item:yis-bob-zinc-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "bob-battery-2",
+          "recipe_category": "chemistry-or-cryogenics",
+          "ingredient_icon": "__base__/graphics/icons/plastic-bar.png"
+        },
+        {
+          "ingredient": "item:plastic-bar x1",
+          "recipe": "bob-battery-3",
+          "results": [
+            "item:bob-battery-3 x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "bob-battery-3",
+          "recipe_category": "chemistry-or-cryogenics",
+          "ingredient_icon": "__base__/graphics/icons/plastic-bar.png"
+        },
+        {
+          "ingredient": "item:plastic-bar x1",
+          "recipe": "bob-empty-canister",
+          "results": [
+            "item:bob-empty-canister x5",
+            "item:yis-iron-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "bob-empty-canister",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/plastic-bar.png"
+        },
+        {
+          "ingredient": "item:plastic-bar x1",
+          "recipe": "superconductor",
+          "results": [
+            "item:superconductor x2",
+            "item:yis-holmium-scrap x1",
+            "item:yis-copper-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "superconductor",
+          "recipe_category": "electromagnetics",
+          "ingredient_icon": "__base__/graphics/icons/plastic-bar.png"
+        },
+        {
+          "ingredient": "item:plastic-bar x2",
+          "recipe": "advanced-circuit",
+          "results": [
+            "item:advanced-circuit x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "advanced-circuit",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__base__/graphics/icons/plastic-bar.png"
+        },
+        {
+          "ingredient": "item:plastic-bar x5",
+          "recipe": "bob-polishing-wheel",
+          "results": [
+            "item:bob-polishing-wheel x2",
+            "item:yis-steel-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "bob-polishing-wheel",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/plastic-bar.png"
+        },
+        {
+          "ingredient": "item:plastic-bar x5",
+          "recipe": "casting-low-density-structure",
+          "results": [
+            "item:low-density-structure x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-copper-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "low-density-structure",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__base__/graphics/icons/plastic-bar.png"
+        },
+        {
+          "ingredient": "item:plastic-bar x5",
+          "recipe": "low-density-structure",
+          "results": [
+            "item:low-density-structure x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-copper-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "low-density-structure",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/plastic-bar.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-plastic-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:plastic-bar x1",
+          "result_icon": "__base__/graphics/icons/plastic-bar.png"
+        }
+      ]
+    },
+    {
+      "material": "steel",
+      "mode": "solid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "barrel",
+          "results": [
+            "item:barrel x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "barrel",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "battery",
+          "results": [
+            "item:battery x1",
+            "item:yis-bob-lead-scrap x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "battery",
+          "recipe_category": "chemistry-or-cryogenics",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "bob-gas-canister",
+          "results": [
+            "item:bob-gas-canister x5",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "bob-gas-canister",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "bob-grinding-wheel",
+          "results": [
+            "item:bob-grinding-wheel x2",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "bob-grinding-wheel",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "bob-polishing-wheel",
+          "results": [
+            "item:bob-polishing-wheel x2",
+            "item:yis-steel-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "bob-polishing-wheel",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "bob-steel-bearing",
+          "results": [
+            "item:bob-steel-bearing x2",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "bob-steel-bearing",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "bob-steel-bearing-ball",
+          "results": [
+            "item:bob-steel-bearing-ball x12",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "bob-steel-bearing-ball",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "engine-unit",
+          "results": [
+            "item:engine-unit x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "engine-unit",
+          "recipe_category": "advanced-crafting",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "flying-robot-frame",
+          "results": [
+            "item:flying-robot-frame x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "flying-robot-frame",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "land-mine",
+          "results": [
+            "item:land-mine x4",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "land-mine",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "pump",
+          "results": [
+            "item:pump x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "pump",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1",
+          "recipe": "refined-concrete",
+          "results": [
+            "item:refined-concrete x10",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "refined-concrete",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "agricultural-tower",
+          "results": [
+            "item:agricultural-tower x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "agricultural-tower",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "battery-equipment",
+          "results": [
+            "item:battery-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "battery-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "beacon",
+          "results": [
+            "item:beacon x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "beacon",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "belt-immunity-equipment",
+          "results": [
+            "item:belt-immunity-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "belt-immunity-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "bob-electric-chemical-furnace",
+          "results": [
+            "item:bob-electric-chemical-furnace x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "bob-electric-chemical-furnace",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "bob-electric-mixing-furnace",
+          "results": [
+            "item:bob-electric-mixing-furnace x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "bob-electric-mixing-furnace",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "crusher",
+          "results": [
+            "item:crusher x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "crusher",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "electric-furnace",
+          "results": [
+            "item:electric-furnace x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "electric-furnace",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "energy-shield-equipment",
+          "results": [
+            "item:energy-shield-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "energy-shield-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "heat-exchanger",
+          "results": [
+            "item:heat-exchanger x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-copper-scrap x2"
+          ],
+          "main_product": "heat-exchanger",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "heat-pipe",
+          "results": [
+            "item:heat-pipe x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "heat-pipe",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "night-vision-equipment",
+          "results": [
+            "item:night-vision-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "night-vision-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "rail-support",
+          "results": [
+            "item:rail-support x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "rail-support",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "substation",
+          "results": [
+            "item:substation x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "substation",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x10",
+          "recipe": "thruster",
+          "results": [
+            "item:thruster x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "thruster",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x1000",
+          "recipe": "rocket-silo",
+          "results": [
+            "item:rocket-silo x1",
+            "item:yis-steel-scrap x5"
+          ],
+          "main_product": "rocket-silo",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x15",
+          "recipe": "oil-refinery",
+          "results": [
+            "item:oil-refinery x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "oil-refinery",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "assembling-machine-2",
+          "results": [
+            "item:assembling-machine-2 x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "assembling-machine-2",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "bob-air-pump-2",
+          "results": [
+            "item:bob-air-pump-2 x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "bob-air-pump-2",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "bob-empty-nuclear-fuel-cell",
+          "results": [
+            "item:bob-empty-nuclear-fuel-cell x10",
+            "item:yis-steel-scrap x1",
+            "item:yis-bob-lead-scrap x1"
+          ],
+          "main_product": "bob-empty-nuclear-fuel-cell",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "bob-steel-gear-wheel",
+          "results": [
+            "item:bob-steel-gear-wheel x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "bob-steel-gear-wheel",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "bob-water-pump-2",
+          "results": [
+            "item:bob-water-pump-2 x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "bob-water-pump-2",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "gate",
+          "results": [
+            "item:gate x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "gate",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "low-density-structure",
+          "results": [
+            "item:low-density-structure x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-copper-scrap x1",
+            "item:yis-plastic-scrap x1"
+          ],
+          "main_product": "low-density-structure",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x2",
+          "recipe": "medium-electric-pole",
+          "results": [
+            "item:medium-electric-pole x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "medium-electric-pole",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "cargo-bay",
+          "results": [
+            "item:cargo-bay x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "cargo-bay",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "discharge-defense-equipment",
+          "results": [
+            "item:discharge-defense-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "discharge-defense-equipment",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "exoskeleton-equipment",
+          "results": [
+            "item:exoskeleton-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "exoskeleton-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "laser-turret",
+          "results": [
+            "item:laser-turret x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "laser-turret",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "personal-roboport-equipment",
+          "results": [
+            "item:personal-roboport-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "personal-roboport-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "recycler",
+          "results": [
+            "item:recycler x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "recycler",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "rocket-turret",
+          "results": [
+            "item:rocket-turret x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "rocket-turret",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x20",
+          "recipe": "space-platform-foundation",
+          "results": [
+            "item:space-platform-foundation x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "space-platform-foundation",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x25",
+          "recipe": "cargo-landing-pad",
+          "results": [
+            "item:cargo-landing-pad x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "cargo-landing-pad",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x3",
+          "recipe": "train-stop",
+          "results": [
+            "item:train-stop x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "train-stop",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x30",
+          "recipe": "flamethrower-turret",
+          "results": [
+            "item:flamethrower-turret x1",
+            "item:yis-steel-scrap x2"
+          ],
+          "main_product": "flamethrower-turret",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x45",
+          "recipe": "roboport",
+          "results": [
+            "item:roboport x1",
+            "item:yis-steel-scrap x2"
+          ],
+          "main_product": "roboport",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "big-electric-pole",
+          "results": [
+            "item:big-electric-pole x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "big-electric-pole",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "chemical-plant",
+          "results": [
+            "item:chemical-plant x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "chemical-plant",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "pumpjack",
+          "results": [
+            "item:pumpjack x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "pumpjack",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "solar-panel",
+          "results": [
+            "item:solar-panel x1",
+            "item:yis-steel-scrap x1",
+            "item:yis-copper-scrap x1"
+          ],
+          "main_product": "solar-panel",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "solar-panel-equipment",
+          "results": [
+            "item:solar-panel-equipment x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "solar-panel-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x5",
+          "recipe": "storage-tank",
+          "results": [
+            "item:storage-tank x1",
+            "item:yis-iron-scrap x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "storage-tank",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x50",
+          "recipe": "centrifuge",
+          "results": [
+            "item:centrifuge x1",
+            "item:yis-steel-scrap x2"
+          ],
+          "main_product": "centrifuge",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x50",
+          "recipe": "electromagnetic-plant",
+          "results": [
+            "item:electromagnetic-plant x1",
+            "item:yis-holmium-scrap x3",
+            "item:yis-steel-scrap x2"
+          ],
+          "main_product": "electromagnetic-plant",
+          "recipe_category": "electronics-or-assembling",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x50",
+          "recipe": "foundry",
+          "results": [
+            "item:foundry x1",
+            "item:yis-steel-scrap x2"
+          ],
+          "main_product": "foundry",
+          "recipe_category": "metallurgy-or-assembling",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x500",
+          "recipe": "nuclear-reactor",
+          "results": [
+            "item:nuclear-reactor x1",
+            "item:yis-steel-scrap x4",
+            "item:yis-copper-scrap x4"
+          ],
+          "main_product": "nuclear-reactor",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x6",
+          "recipe": "bob-steel-chemical-furnace",
+          "results": [
+            "item:bob-steel-chemical-furnace x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "bob-steel-chemical-furnace",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x6",
+          "recipe": "bob-steel-mixing-furnace",
+          "results": [
+            "item:bob-steel-mixing-furnace x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "bob-steel-mixing-furnace",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x6",
+          "recipe": "steel-furnace",
+          "results": [
+            "item:steel-furnace x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "steel-furnace",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x8",
+          "recipe": "lightning-rod",
+          "results": [
+            "item:lightning-rod x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "lightning-rod",
+          "recipe_category": "electronics",
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        },
+        {
+          "ingredient": "item:steel-plate x8",
+          "recipe": "steel-chest",
+          "results": [
+            "item:steel-chest x1",
+            "item:yis-steel-scrap x1"
+          ],
+          "main_product": "steel-chest",
+          "recipe_category": null,
+          "ingredient_icon": "__base__/graphics/icons/steel-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-steel-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:steel-plate x1",
+          "result_icon": "__base__/graphics/icons/steel-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "tungsten",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "tungsten-ore",
+          "result": "item:tungsten-ore",
+          "category": "hard-solid",
+          "icon": "__space-age__/graphics/icons/tungsten-ore.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:tungsten-ore x2",
+          "recipe": "bob-tungstic-acid",
+          "results": [
+            "fluid:bob-tungstic-acid x20",
+            "item:bob-calcium-chloride x1",
+            "item:yis-tungsten-scrap x1"
+          ],
+          "main_product": "bob-tungstic-acid",
+          "recipe_category": "chemistry",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-ore.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x100",
+          "recipe": "fusion-generator",
+          "results": [
+            "item:fusion-generator x1",
+            "item:yis-tungsten-scrap x2"
+          ],
+          "main_product": "fusion-generator",
+          "recipe_category": "cryogenics",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x15",
+          "recipe": "turbo-splitter",
+          "results": [
+            "item:turbo-splitter x1",
+            "item:yis-tungsten-scrap x1"
+          ],
+          "main_product": "turbo-splitter",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x2",
+          "recipe": "bob-tungsten-gear-wheel",
+          "results": [
+            "item:bob-tungsten-gear-wheel x1",
+            "item:yis-tungsten-scrap x1"
+          ],
+          "main_product": "bob-tungsten-gear-wheel",
+          "recipe_category": null,
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x200",
+          "recipe": "fusion-reactor",
+          "results": [
+            "item:fusion-reactor x1",
+            "item:yis-tungsten-scrap x3"
+          ],
+          "main_product": "fusion-reactor",
+          "recipe_category": "cryogenics",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x250",
+          "recipe": "fusion-reactor-equipment",
+          "results": [
+            "item:fusion-reactor-equipment x1",
+            "item:yis-tungsten-scrap x3"
+          ],
+          "main_product": "fusion-reactor-equipment",
+          "recipe_category": null,
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x30",
+          "recipe": "railgun-turret",
+          "results": [
+            "item:railgun-turret x1",
+            "item:yis-tungsten-scrap x2"
+          ],
+          "main_product": "railgun-turret",
+          "recipe_category": "cryogenics",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x4",
+          "recipe": "foundation",
+          "results": [
+            "item:foundation x1",
+            "item:yis-tungsten-scrap x1"
+          ],
+          "main_product": "foundation",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x40",
+          "recipe": "turbo-underground-belt",
+          "results": [
+            "item:turbo-underground-belt x2",
+            "item:yis-tungsten-scrap x2"
+          ],
+          "main_product": "turbo-underground-belt",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x5",
+          "recipe": "turbo-transport-belt",
+          "results": [
+            "item:turbo-transport-belt x1",
+            "item:yis-tungsten-scrap x1"
+          ],
+          "main_product": "turbo-transport-belt",
+          "recipe_category": "metallurgy",
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        },
+        {
+          "ingredient": "item:tungsten-plate x60",
+          "recipe": "artillery-turret",
+          "results": [
+            "item:artillery-turret x1",
+            "item:yis-tungsten-scrap x2"
+          ],
+          "main_product": "artillery-turret",
+          "recipe_category": null,
+          "ingredient_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-tungsten-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:tungsten-plate x1",
+          "result_icon": "__space-age__/graphics/icons/tungsten-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "yis-blockium",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "yis-test-yis-blockium-resource",
+          "result": "item:yis-blockium-ore x1",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:yis-blockium-ore x4",
+          "recipe": "yis-test-yis-blockium-disabled",
+          "results": [
+            "item:yis-blockium-plate x1",
+            "item:yis-blockium-scrap x1"
+          ],
+          "main_product": "yis-blockium-plate",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-blockium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:yis-blockium-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "yis-disabledium",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "yis-test-yis-disabledium-resource",
+          "result": "item:yis-disabledium-ore x1",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:yis-disabledium-ore x4",
+          "recipe": "yis-test-yis-disabledium-disabled",
+          "results": [
+            "item:yis-disabledium-plate x1",
+            "item:yis-disabledium-scrap x1"
+          ],
+          "main_product": "yis-disabledium-plate",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-disabledium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:yis-disabledium-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "yis-hiddenium",
+      "mode": "solid",
+      "resources": [
+        {
+          "resource": "yis-test-yis-hiddenium-resource",
+          "result": "item:yis-hiddenium-ore x1",
+          "category": "basic-solid",
+          "icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "sources": [
+        {
+          "ingredient": "item:yis-hiddenium-plate x4",
+          "recipe": "yis-test-yis-hiddenium-hidden",
+          "results": [
+            "item:yis-hiddenium-product x1",
+            "item:yis-hiddenium-scrap x1"
+          ],
+          "main_product": "yis-hiddenium-product",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-hiddenium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": true,
+          "result": "item:yis-hiddenium-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "yis-quietium",
+      "mode": "solid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "item:yis-quietium-plate x4",
+          "recipe": "yis-test-yis-quietium-neutral",
+          "results": [
+            "item:yis-neutral-product x1",
+            "item:yis-quietium-scrap x1"
+          ],
+          "main_product": "yis-neutral-product",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/copper-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-quietium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:yis-quietium-plate x1",
+          "result_icon": "__base__/graphics/icons/copper-plate.png"
+        }
+      ]
+    },
+    {
+      "material": "yis-testium",
+      "mode": "solid",
+      "resources": [],
+      "sources": [
+        {
+          "ingredient": "item:yis-testium-ore x3",
+          "recipe": "yis-test-yis-testium-no-tech",
+          "results": [
+            "item:yis-testium-product-no-tech x1",
+            "item:yis-testium-scrap x1"
+          ],
+          "main_product": "yis-testium-product-no-tech",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:yis-testium-plate x200",
+          "recipe": "yis-test-yis-testium-large",
+          "results": [
+            "item:yis-testium-product-large x1",
+            "item:yis-testium-scrap x3"
+          ],
+          "main_product": "yis-testium-product-large",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:yis-testium-plate x5",
+          "recipe": "yis-test-yis-testium-fluid-main-product",
+          "results": [
+            "fluid:steam x100",
+            "item:yis-testium-scrap x1"
+          ],
+          "main_product": "steam",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:yis-testium-plate x5",
+          "recipe": "yis-test-yis-testium-solid",
+          "results": [
+            "item:yis-testium-product-solid x1",
+            "item:yis-testium-scrap x1"
+          ],
+          "main_product": "yis-testium-product-solid",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:yis-testium-plate x5",
+          "recipe": "yis-test-yis-testium-with-tech",
+          "results": [
+            "item:yis-testium-product-tech x1",
+            "item:yis-testium-scrap x1"
+          ],
+          "main_product": "yis-testium-product-tech",
+          "recipe_category": "crafting",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "ingredient": "item:yis-testium-plate x6",
+          "recipe": "yis-test-yis-testium-mixed",
+          "results": [
+            "item:yis-testium-product-mixed x1",
+            "item:yis-testium-scrap x2"
+          ],
+          "main_product": "yis-testium-product-mixed",
+          "recipe_category": "crafting-with-fluid",
+          "ingredient_icon": "__base__/graphics/icons/iron-plate.png"
+        }
+      ],
+      "recycle_targets": [
+        {
+          "recipe": "yis-recycle-testium-scrap",
+          "category": "yis-recycle-to-item",
+          "hidden": false,
+          "result": "item:yis-testium-plate x1",
+          "result_icon": "__base__/graphics/icons/iron-plate.png"
+        },
+        {
+          "recipe": "yis-recycle-testium-scrap-to-fluid",
+          "category": "yis-recycle-to-fluid",
+          "hidden": false,
+          "result": "fluid:molten-yis-testium x10",
+          "result_icon": "__base__/graphics/icons/fluid/water.png"
+        }
+      ]
+    }
+  ]
+}

@@ -127,19 +127,27 @@ local function publish_recipe_chain_api()
   api.ignore.recipe_chain = api.ignore.recipe_chain or {}
 
   api.register.recipe_chain.target = overrides.register_target
-  api.register.recipe_chain.solid_target = function(material_name, result_name, options)
-    overrides.register_target(material_name, "solid", "item", result_name, options)
+  api.register.recipe_chain.solid = api.register.recipe_chain.solid or {}
+  api.register.recipe_chain.solid.to_item = function(material_name, result_name, options)
+    return overrides.register_target(material_name, "solid", "item", result_name, options)
   end
-  api.register.recipe_chain.fluid_target = function(material_name, result_name, options)
-    overrides.register_target(material_name, "fluid", "fluid", result_name, options)
+  api.register.recipe_chain.solid.to_fluid = function(material_name, result_name, options)
+    return overrides.register_target(material_name, "solid", "fluid", result_name, options)
+  end
+  api.register.recipe_chain.fluid = api.register.recipe_chain.fluid or {}
+  api.register.recipe_chain.fluid.to_item = function(material_name, result_name, options)
+    return overrides.register_target(material_name, "fluid", "item", result_name, options)
+  end
+  api.register.recipe_chain.fluid.to_fluid = function(material_name, result_name, options)
+    return overrides.register_target(material_name, "fluid", "fluid", result_name, options)
   end
 
   api.ignore.recipe_chain.target = overrides.block_target
-  api.ignore.recipe_chain.solid_target = function(material_name, reason)
-    overrides.block_target(material_name, "solid", reason)
+  api.ignore.recipe_chain.solid = function(material_name, reason)
+    return overrides.block_target(material_name, "solid", reason)
   end
-  api.ignore.recipe_chain.fluid_target = function(material_name, reason)
-    overrides.block_target(material_name, "fluid", reason)
+  api.ignore.recipe_chain.fluid = function(material_name, reason)
+    return overrides.block_target(material_name, "fluid", reason)
   end
 end
 

@@ -45,6 +45,44 @@
         "bobplates"
       ]
     },
+    "bobs_full_is": {
+      "label": "Bob's Full+IS",
+      "mods": [
+        "base",
+        "elevated-rails",
+        "quality",
+        "space-age",
+        "bobassembly",
+        "bobelectronics",
+        "bobgreenhouse",
+        "boblibrary",
+        "boblogistics",
+        "bobmining",
+        "bobores",
+        "bobplates",
+        "bobpower",
+        "Ingredient_Scrap"
+      ]
+    },
+    "angels_full_is": {
+      "label": "Angels Full+IS",
+      "mods": [
+        "base",
+        "elevated-rails",
+        "quality",
+        "space-age",
+        "angelsbioprocessing",
+        "angelsbioprocessinggraphics",
+        "angelsinfiniteores",
+        "angelspetrochem",
+        "angelspetrochemgraphics",
+        "angelsrefining",
+        "angelsrefininggraphics",
+        "angelssmelting",
+        "angelssmeltinggraphics",
+        "Ingredient_Scrap"
+      ]
+    },
     "bob_angels_is": {
       "label": "Bob+Angels+IS",
       "mods": [
@@ -62,6 +100,34 @@
         "Ingredient_Scrap",
         "quality",
         "space-age"
+      ]
+    },
+    "bob_angels_full_is": {
+      "label": "Bob+Angels Full+IS",
+      "mods": [
+        "base",
+        "elevated-rails",
+        "quality",
+        "space-age",
+        "angelsbioprocessing",
+        "angelsbioprocessinggraphics",
+        "angelsinfiniteores",
+        "angelspetrochem",
+        "angelspetrochemgraphics",
+        "angelsrefining",
+        "angelsrefininggraphics",
+        "angelssmelting",
+        "angelssmeltinggraphics",
+        "bobassembly",
+        "bobelectronics",
+        "bobgreenhouse",
+        "boblibrary",
+        "boblogistics",
+        "bobmining",
+        "bobores",
+        "bobplates",
+        "bobpower",
+        "Ingredient_Scrap"
       ]
     },
     "is_sa": {

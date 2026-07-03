@@ -1,4 +1,10 @@
+--#region debug
 require("code.lib.definitions")
+--#endregion
+--#region debug
+local timing = require("code.lib.timing")
+timing.mark("data", "start")
+--#endregion
 data:extend({
   {
     type = "sprite",
@@ -98,24 +104,13 @@ local recycle_fluid_category = "yis-recycle-to-fluid"
 local category_overrides = require("code.lib.category-overrides")
 require("code.compat.vanilla-categories")
 
----Applies registered category rules to one prototype type.
-local function apply_category_rules(prototype_type, rules)
-  for _, machine in pairs(data.raw[prototype_type] or {}) do
-    for _, rule in ipairs(rules or {}) do
-      if category_overrides.has_category(machine, rule.source_categories) then
-        if rule.add_item_recycling then
-          category_overrides.add_category_once(machine, recycle_item_category)
-        end
-        if rule.add_fluid_recycling_if_fluid_boxes and machine.fluid_boxes then
-          category_overrides.add_category_once(machine, recycle_fluid_category)
-        end
-      end
-    end
-  end
-end
-
-apply_category_rules("furnace", category_overrides.rules.furnace)
-apply_category_rules("assembling-machine", category_overrides.rules.assembling_machine)
+category_overrides.apply_registered_rules({
+  solid = recycle_item_category,
+  fluid = recycle_fluid_category,
+})
+--#region debug
+timing.mark("data", "patch-crafting-categories")
+--#endregion
 
 
 
@@ -123,7 +118,11 @@ apply_category_rules("assembling-machine", category_overrides.rules.assembling_m
 -- IS_DEBUG = true  (global, damit data-updates.lua es auch sieht)
 IS_DEBUG = settings.startup["yis-IS_DEBUG"].value
 
+--#region debug
 if IS_DEBUG then
   require("tools.test.test-data")
   log("[IS-TEST] Debug-Modus aktiv")
+  timing.mark("data", "load-test-data")
 end
+timing.mark("data", "complete")
+--#endregion

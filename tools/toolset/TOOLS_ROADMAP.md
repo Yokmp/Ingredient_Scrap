@@ -56,6 +56,7 @@ Example shape:
 - In the Settings tab, avoid showing `Apply Settings` twice.
 - Prefer one clear primary apply action per tab, with secondary actions grouped near the profile list only when they have a distinct meaning.
 - Revisit button labels so `Load`, `Preview`, `Apply`, and `Save` describe exactly what changes immediately and what only changes the visible selection.
+- Settings Tab: Apply -> Apply and Launch Factorio like in Mod List
 
 ## Dependency Check
 

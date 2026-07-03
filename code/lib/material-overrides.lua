@@ -9,6 +9,7 @@ overrides.default_modes = {}
 overrides.localized_setting_names = {}
 overrides.sources = {}
 overrides.tints = {}
+overrides.exact_scrap = {}
 overrides.prototype_aliases = {
   item = {},
   fluid = {},
@@ -96,7 +97,7 @@ end
 
 ---Registers or updates a material override definition.
 ---See API examples: https://github.com/Yokmp/Ingredient_Scrap
----@param definition {name: string, default?: string, prototype_affixes?: table, prototype_aliases?: table, localized_setting_name?: boolean, source?: string|table, tint?: table|string}
+---@param definition {name: string, default?: string, prototype_affixes?: table, prototype_aliases?: table, localized_setting_name?: boolean, source?: string|table, tint?: table|string, exact_scrap?: boolean}
 function overrides.register_material_override(definition)
   if type(definition) ~= "table" or type(definition.name) ~= "string" or definition.name == "" then
     error("Ingredient Scrap material override requires a non-empty name")
@@ -143,6 +144,12 @@ function overrides.register_material_override(definition)
   if definition.tint ~= nil then
     overrides.tints[definition.name] = definition.tint
   end
+
+  if definition.exact_scrap == true then
+    overrides.exact_scrap[definition.name] = true
+  elseif definition.exact_scrap == false then
+    overrides.exact_scrap[definition.name] = nil
+  end
 end
 
 ---Builds a material override definition from a wrapper call.
@@ -160,6 +167,7 @@ local function material_definition(name, mode, options)
     prototype_aliases = options.prototype_aliases,
     source = options.source,
     tint = options.tint,
+    exact_scrap = options.exact_scrap,
   }
 end
 
@@ -244,6 +252,12 @@ end
 ---@return {item: table<string, string>, fluid: table<string, string>}
 function overrides.resolver_aliases()
   return overrides.prototype_aliases
+end
+
+---Returns the material families that should generate scrap per exact matched prototype.
+---@return table<string, boolean>
+function overrides.exact_scrap_materials()
+  return overrides.exact_scrap
 end
 
 ---Returns all non-empty affixes registered for resolver use.

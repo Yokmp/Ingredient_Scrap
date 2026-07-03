@@ -1,5 +1,7 @@
 local material_overrides = require("code.lib.material-overrides")
+local ancestry_settings = require("code.lib.ancestry-settings")
 require("code.lib.recipe-chain-overrides")
+require("code.lib.source-overrides")
 require("code.compat.vanilla-materials")
 require("code.compat.mod-materials")
 
@@ -73,6 +75,38 @@ data:extend({
         setting_type = "startup",
         default_value = true,
         order = "g",
+    },
+    {
+        hidden = false,
+        type = "string-setting",
+        name = ancestry_settings.setting_name,
+        localised_name = { "", "[img=recipe-symbol]", " - ", { "mod-setting-name.yis-ancestry-mode" } },
+        setting_type = "startup",
+        default_value = ancestry_settings.default_value,
+        allowed_values = ancestry_settings.allowed_values,
+        order = "h",
+    },
+    {
+        hidden = false,
+        type = "int-setting",
+        name = ancestry_settings.max_depth_setting_name,
+        localised_name = { "", "[img=recipe-symbol]", " - ", { "mod-setting-name.yis-ancestry-max-depth" } },
+        setting_type = "startup",
+        minimum_value = 1,
+        maximum_value = 20,
+        default_value = 8,
+        order = "h-a",
+    },
+    {
+        hidden = false,
+        type = "int-setting",
+        name = ancestry_settings.mixed_limit_setting_name,
+        localised_name = { "", "[img=recipe-symbol]", " - ", { "mod-setting-name.yis-ancestry-mixed-limit" } },
+        setting_type = "startup",
+        minimum_value = 1,
+        maximum_value = 12,
+        default_value = 3,
+        order = "h-b",
     },
     {
         hidden = true,

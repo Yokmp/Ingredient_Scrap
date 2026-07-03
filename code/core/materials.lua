@@ -1,6 +1,7 @@
 local resolver = require("code.core.materials.resolver")
 local material_overrides = require("code.lib.material-overrides")
 
+local materials_collector = {}
 
 
 --------------------------------
@@ -10,10 +11,11 @@ local material_overrides = require("code.lib.material-overrides")
 
 
 ---Fills data_table.materials.solid and data_table.materials.fluid from resources, items, fluids, and whitelists.
-function yokmods.ingredient_scrap.collect_materials()
-  local materials = yokmods.ingredient_scrap.data_table.materials
-  local solid = yokmods.ingredient_scrap.data_table.materials.solid
-  local fluid = yokmods.ingredient_scrap.data_table.materials.fluid
+---@param data_table ISdata_table
+function materials_collector.collect(data_table)
+  local materials = data_table.materials
+  local solid = data_table.materials.solid
+  local fluid = data_table.materials.fluid
   local seen_solid = {}
   local seen_fluid = {}
 
@@ -128,3 +130,5 @@ function yokmods.ingredient_scrap.collect_materials()
     end
   end
 end
+
+return materials_collector

@@ -24,10 +24,53 @@ import getopt
 # region ----------------------------------- Boring Settings
 deploy_mod = False      # create a zip file or not
 verbose = False     # print processed files
-# # Blacklist
-exclude = ["_release_", "_lib", "_testing.lua", "vscode", "workspace", "orig", "new", "old",
-  "_working", ".git", ".py", ".xcf", ".7z", "single", "multi", "shot_",
-  ".vs", "lua-format", "shot-", "test", "tools", ".luarc.json"]
+strip_debug_regions = True
+
+# Release filtering. Keep this explicit so local tooling and generated debug
+# artifacts do not accidentally ship with the production mod.
+exclude_dirs = {
+    "_release_",
+    "_lib",
+    "_working",
+    ".agents",
+    ".codex",
+    ".git",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".vs",
+    ".vscode",
+    "__pycache__",
+    "lua-format",
+    "orig",
+    "new",
+    "old",
+    "single",
+    "multi",
+    "test",
+    "tools",
+    "workspace",
+}
+exclude_files = {
+    ".gitattributes",
+    ".gitignore",
+    ".luarc.json",
+    "DESIGN_NOTES.md",
+    "locale/en/test.cfg",
+}
+exclude_extensions = {
+    ".7z",
+    ".py",
+    ".pyc",
+    ".pyo",
+    ".xcf",
+}
+exclude_name_prefixes = (
+    "shot_",
+    "shot-",
+)
+exclude_name_contains = (
+    "_testing.lua",
+)
 
 # # Get information from filesystem
 workspace = "."
@@ -99,6 +142,7 @@ zip_name = mod_name_full + '.zip'
 zip_file_path = os.path.join(workspace, release_dir)
 zip_file = os.path.join(zip_file_path, mod_name + "_" + version+".zip")
 zip_temp_dir = os.path.join(workspace, mod_name_full)
+public_source_dir = os.path.join(workspace, release_dir, "public", mod_name)
 # # -----------------------------------
 
 file_count = sum(len(files) for _, _, files in os.walk(workspace))
@@ -109,10 +153,39 @@ f_size = 0
 print("\n"+text.center(len(text)+22, "-"))
 
 
-def match_pattern(string):
-    for e in exclude:
-        if string.find(e) != -1:
-            return True
+def release_relpath(path):
+    return os.path.relpath(path, workspace).replace("\\", "/")
+
+
+def remove_workspace_tree(path):
+    workspace_abs = os.path.abspath(workspace)
+    path_abs = os.path.abspath(path)
+    if path_abs == workspace_abs or not path_abs.startswith(workspace_abs + os.sep):
+        raise RuntimeError("Refusing to remove path outside workspace: %s" % path)
+    if os.path.exists(path):
+        shutil.rmtree(path)
+
+
+def should_exclude_path(path, is_dir=False):
+    relpath = release_relpath(path)
+    if relpath == ".":
+        return False
+
+    parts = relpath.split("/")
+    name = parts[-1]
+
+    if any(part in exclude_dirs for part in parts):
+        return True
+    if relpath in exclude_files:
+        return True
+    if name.startswith(exclude_name_prefixes):
+        return True
+    if any(fragment in name for fragment in exclude_name_contains):
+        return True
+    if os.path.splitext(name)[1] in exclude_extensions:
+        return True
+    if is_dir and name == mod_name_full:
+        return True
     return False
 
 
@@ -125,32 +198,90 @@ def file_size(_size):
     return round(_size, 2), power_labels[n]+'B'
 
 
+def strip_lua_debug_regions(text, source_path):
+    lines = text.splitlines(keepends=True)
+    output = []
+    depth = 0
+    removed = 0
+    for line in lines:
+        if line.strip() == "--#region debug":
+            depth += 1
+            removed += 1
+            continue
+        if line.strip() == "--#endregion":
+            if depth == 0:
+                raise RuntimeError("Unmatched debug region end in %s" % source_path)
+            depth -= 1
+            continue
+        if depth == 0:
+            output.append(line)
+    if depth != 0:
+        raise RuntimeError("Unclosed debug region in %s" % source_path)
+    return "".join(output), removed
+
+
+def copy_release_file(source_path, target_dir):
+    if strip_debug_regions and source_path.endswith(".lua"):
+        try:
+            with open(source_path, "r", encoding="utf-8") as handle:
+                text = handle.read()
+            stripped, removed = strip_lua_debug_regions(text, source_path)
+            if removed > 0 and stripped.strip() == "":
+                if verbose:
+                    print("Skipped empty stripped file: %s" % source_path)
+                return False
+            os.makedirs(target_dir, exist_ok=True)
+            with open(os.path.join(target_dir, os.path.basename(source_path)), "w", encoding="utf-8", newline="") as handle:
+                handle.write(stripped)
+            return True
+        except UnicodeDecodeError:
+            pass
+    os.makedirs(target_dir, exist_ok=True)
+    shutil.copy(source_path, target_dir)
+    return True
+
+
 # # ----------------------------------- COLLECTING
+if os.path.exists(zip_temp_dir):
+    remove_workspace_tree(zip_temp_dir)
+
+if os.path.exists(public_source_dir):
+    remove_workspace_tree(public_source_dir)
+
 i = 0
+collected_count = 0
 for root, subdirs, files in os.walk(workspace):
-    if match_pattern(root):
+    subdirs[:] = [subdir for subdir in subdirs if not should_exclude_path(os.path.join(root, subdir), True)]
+    if should_exclude_path(root, True):
         continue
     for filename in files:
-        if match_pattern(filename):
+        if should_exclude_path(os.path.join(root, filename)):
             continue
 
         file_path = os.path.join(root, filename)
 
         if os.path.isfile(file_path):
             fp = os.path.join(root, filename)
-            f_size += os.path.getsize(fp)
             if verbose:
                 print('File: %s \t %s' % (mod_name_full, filename))
             else:
                 print("\rCollecting: [{0}/{1}]".format(i, file_count), end='')
-                i += 1
-            os.makedirs(os.path.join(
-                zip_temp_dir, os.path.dirname(file_path[2:])), exist_ok=True)
-            shutil.copy(file_path, os.path.join(
-                zip_temp_dir, os.path.dirname(file_path[2:])))
+            copied = copy_release_file(
+                file_path,
+                os.path.join(public_source_dir, os.path.dirname(file_path[2:]))
+            )
+            if copied:
+                f_size += os.path.getsize(os.path.join(
+                    public_source_dir,
+                    os.path.dirname(file_path[2:]),
+                    os.path.basename(file_path)
+                ))
+                collected_count += 1
+            i += 1
 
 f_size = file_size(f_size)
-print("\rCollected: [{0}] ({1} {2})".format(file_count, f_size[0], f_size[1]))
+print("\rCollected: [{0}] ({1} {2})".format(collected_count, f_size[0], f_size[1]))
+print("Public source:\t %s" % public_source_dir)
 
 # # ----------------------------------- ZIPING
 if os.path.exists(zip_file):
@@ -159,12 +290,13 @@ if os.path.exists(zip_file):
     if quest == "r" or quest == "R":
         os.remove(zip_file)
     else:
-        shutil.rmtree(zip_temp_dir)
+        remove_workspace_tree(zip_temp_dir)
         sys.exit("\n\tScript aborted with '"+quest +
                  "'\n\tNo changes where made.\n")
 
 
 print('\nCreating\t %s' % (zip_name), end='')
+shutil.copytree(public_source_dir, zip_temp_dir)
 zipf = zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED)
 
 for root, subdirs, files in os.walk(zip_temp_dir):
@@ -177,7 +309,7 @@ z_size = os.path.getsize(zip_name)
 z_size = file_size(z_size)
 print(" ({0} {1})".format(z_size[0], z_size[1]))
 
-shutil.rmtree(zip_temp_dir)
+remove_workspace_tree(zip_temp_dir)
 os.makedirs(zip_file_path, exist_ok=True)
 shutil.move(zip_name, zip_file_path)
 

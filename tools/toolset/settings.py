@@ -26,7 +26,7 @@ DEFAULT_HEADER = bytes([2, 0, 0, 0, 77, 0, 0, 0, 0])
 TOOL_DIR = Path(__file__).resolve().parent
 DEFAULT_SETTINGS_FILE = Path("mod-settings.dat")
 DEFAULT_SETTINGS_LUA = TOOL_DIR / "settings.lua"
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.0.1"
 TOOLSET_URL = "https://github.com/Yokmp/factorio_toolset"
 
 

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import queue
+import re
 import subprocess
 import threading
 import tkinter as tk
@@ -65,7 +66,9 @@ ENTRY = "#34322c"
 LINE = "#111111"
 SETTING_NAME_CHARS = 28
 SETTING_NAME_COLUMN = 230
-APP_VERSION = "1.0.0"
+SETTING_NAME_MIN_COLUMN = 140
+SETTING_NAME_MAX_COLUMN = 520
+APP_VERSION = "1.0.1"
 GITHUB_URL = "https://github.com/Yokmp/factorio_toolset"
 
 TOOL_DIR = Path(__file__).resolve().parent
@@ -432,6 +435,7 @@ class ToolApp(tk.Tk):
         self.tools = available_tools()
         self.current_tool: ToolFrame | None = None
         self.status_var = tk.StringVar(value="Ready")
+        self.script_output_var = tk.StringVar(value="script-output: n/a")
         self.tab_buttons: dict[str, tk.Button] = {}
         self.logo_image: tk.PhotoImage | None = None
 
@@ -523,8 +527,16 @@ class ToolApp(tk.Tk):
 
         status_bar = tk.Frame(self, bg=PANEL_DARK, relief=tk.SUNKEN, bd=2, highlightthickness=1, highlightbackground=LINE)
         status_bar.grid(row=2, column=0, sticky="ew", padx=0, pady=(0, 1))
-        tk.Label(status_bar, textvariable=self.status_var, bg=PANEL_DARK, fg=MUTED, anchor="w", padx=12, pady=4).pack(side=tk.LEFT, fill="x", expand=True)
-        tk.Label(status_bar, text=f"v{APP_VERSION}  {GITHUB_URL}", bg=PANEL_DARK, fg=MUTED, anchor="e", padx=12, pady=4).pack(side=tk.RIGHT)
+        tk.Label(status_bar, textvariable=self.script_output_var, bg=PANEL_DARK, fg=MUTED, anchor="w", padx=12, pady=4, width=26).pack(side=tk.LEFT)
+        tk.Label(status_bar, textvariable=self.status_var, bg=PANEL_DARK, fg=MUTED, anchor="center", padx=12, pady=4).pack(side=tk.LEFT, fill="x", expand=True)
+        version_label = tk.Label(status_bar, text=f"v{APP_VERSION}", bg=PANEL_DARK, fg=MUTED, anchor="e", padx=4, pady=4)
+        github_label = tk.Label(status_bar, text="GitHub", bg=PANEL_DARK, fg=TEXT, cursor="hand2", anchor="e", padx=12, pady=4, font=("Segoe UI", 9, "underline"))
+        github_label.pack(side=tk.RIGHT)
+        version_label.pack(side=tk.RIGHT)
+        github_label.bind("<Button-1>", lambda _event: webbrowser.open(GITHUB_URL))
+        github_label.bind("<Enter>", lambda _event: github_label.configure(fg=ORANGE_HOVER))
+        github_label.bind("<Leave>", lambda _event: github_label.configure(fg=TEXT))
+        self.refresh_script_output_size()
 
     def show_tool(self, tool_name: str) -> None:
         """Destroy the current tab frame and mount the selected registered tool."""
@@ -581,6 +593,43 @@ class ToolApp(tk.Tk):
     def status(self, text: str) -> None:
         self.status_var.set(text)
 
+    def script_output_path(self) -> Path:
+        """Return the Factorio script-output folder for the configured executable."""
+        return modlist.factorio_root(self.factorio_exe or modlist.DEFAULT_FACTORIO) / "script-output"
+
+    def format_bytes(self, size: int) -> str:
+        """Format a byte count for the status bar."""
+        units = ["B", "KB", "MB", "GB"]
+        value = float(size)
+        for unit in units:
+            if value < 1024 or unit == units[-1]:
+                if unit == "B":
+                    return f"{int(value)} {unit}"
+                return f"{value:.1f} {unit}"
+            value /= 1024
+        return f"{size} B"
+
+    def folder_size(self, path: Path) -> int:
+        """Calculate recursive folder size while ignoring unreadable files."""
+        total = 0
+        if not path.exists():
+            return 0
+        for item in path.rglob("*"):
+            try:
+                if item.is_file():
+                    total += item.stat().st_size
+            except OSError:
+                continue
+        return total
+
+    def refresh_script_output_size(self) -> None:
+        """Update the left status-bar segment with script-output folder size."""
+        try:
+            size = self.folder_size(self.script_output_path())
+            self.script_output_var.set(f"script-output: {self.format_bytes(size)}")
+        except OSError:
+            self.script_output_var.set("script-output: n/a")
+
     def save_tool_config(
         self,
         *,
@@ -594,6 +643,7 @@ class ToolApp(tk.Tk):
         updates: dict[str, Any] = {"window": window}
         if factorio is not None:
             updates["factorio"] = str(factorio)
+            self.factorio_exe = Path(factorio)
         if profiles_json is not None:
             updates["profiles_json"] = str(profiles_json)
         if settings_file is not None:
@@ -602,6 +652,7 @@ class ToolApp(tk.Tk):
             updates["last_profile"] = last_profile
             self.last_profile = last_profile
         self.tool_config = modlist.update_tool_config(**updates)
+        self.refresh_script_output_size()
 
     def on_close(self) -> None:
         factorio: Path | str | None = self.factorio_exe
@@ -666,6 +717,7 @@ class ToolApp(tk.Tk):
                 return
             if ok:
                 on_success(value)
+                self.refresh_script_output_size()
             else:
                 self.status("Error")
                 messagebox.showerror(fail_title, str(value), parent=self)
@@ -1122,6 +1174,12 @@ class SettingsTool(ToolFrame):
         self.profile_label_var = tk.StringVar()
         self.definitions: list[dict[str, Any]] = []
         self.setting_vars: dict[str, tk.Variable] = {}
+        self.current_setting_values: dict[str, Any] = {}
+        self.setting_name_column = SETTING_NAME_COLUMN
+        self.setting_drag_start_x: int | None = None
+        self.setting_drag_start_width = SETTING_NAME_COLUMN
+        self.setting_column_widgets: list[tk.Misc] = []
+        self.setting_label_widgets: list[tuple[tk.Label, str]] = []
         self.profile_rows: dict[str, str] = {}
         self.profiles: dict[str, dict[str, object]] = {}
         self.hover_profile_index: int | None = None
@@ -1272,6 +1330,9 @@ class SettingsTool(ToolFrame):
         for child in self.settings_frame.winfo_children():
             child.destroy()
         self.setting_vars = {}
+        self.current_setting_values = {}
+        self.setting_column_widgets = []
+        self.setting_label_widgets = []
         placeholder = tk.Frame(self.settings_frame, bg=LIST_BG)
         placeholder.grid(row=0, column=0, sticky="nsew")
         placeholder.columnconfigure(0, weight=1)
@@ -1287,49 +1348,132 @@ class SettingsTool(ToolFrame):
         ).grid(row=0, column=0, sticky="nsew")
         self.settings_frame.columnconfigure(0, weight=1)
 
+    def setting_name_chars(self) -> int:
+        """Approximate text-column width from the draggable pixel width."""
+        return max(12, min(64, int(self.setting_name_column / 8)))
+
+    def apply_setting_column_width(self) -> None:
+        """Apply the current setting-name column width to existing table rows."""
+        name_chars = self.setting_name_chars()
+        for widget in self.setting_column_widgets:
+            try:
+                widget.columnconfigure(0, minsize=self.setting_name_column)
+            except tk.TclError:
+                continue
+        for label, text in self.setting_label_widgets:
+            try:
+                label.configure(text=compact_text(text, name_chars), width=name_chars)
+            except tk.TclError:
+                continue
+
+    def begin_setting_column_drag(self, event: tk.Event) -> None:
+        """Start dragging the Settings/Value column divider."""
+        self.setting_drag_start_x = event.x_root
+        self.setting_drag_start_width = self.setting_name_column
+
+    def drag_setting_column(self, event: tk.Event) -> str:
+        """Resize the setting-name column without recreating the table widgets."""
+        if self.setting_drag_start_x is None:
+            return "break"
+        delta = event.x_root - self.setting_drag_start_x
+        width = max(SETTING_NAME_MIN_COLUMN, min(SETTING_NAME_MAX_COLUMN, self.setting_drag_start_width + delta))
+        if width != self.setting_name_column:
+            self.setting_name_column = width
+            self.apply_setting_column_width()
+        return "break"
+
+    def end_setting_column_drag(self, _event: tk.Event) -> None:
+        """Finish dragging the Settings/Value column divider."""
+        self.setting_drag_start_x = None
+
+    def make_setting_separator(self, master: tk.Misc, *, active: bool = False) -> tk.Frame:
+        """Create the visible column divider used by the settings table."""
+        separator = tk.Frame(master, bg=ORANGE_DARK if active else LINE, width=6, cursor="sb_h_double_arrow")
+        separator.bind("<Button-1>", self.begin_setting_column_drag)
+        separator.bind("<B1-Motion>", self.drag_setting_column)
+        separator.bind("<ButtonRelease-1>", self.end_setting_column_drag)
+        return separator
+
     def render_settings(self, values: dict[str, Any]) -> None:
         """Render settings as a two-column editor with type-specific value widgets."""
         for child in self.settings_frame.winfo_children():
             child.destroy()
         self.setting_vars = {}
+        self.current_setting_values = dict(values)
+        self.setting_column_widgets = []
+        self.setting_label_widgets = []
+        name_chars = self.setting_name_chars()
 
         header = tk.Frame(self.settings_frame, bg=PANEL_DARK, highlightthickness=1, highlightbackground=LINE)
         header.grid(row=0, column=0, sticky="ew")
-        header.columnconfigure(0, weight=0, minsize=SETTING_NAME_COLUMN)
-        header.columnconfigure(1, weight=1, minsize=280)
-        tk.Label(header, text="Setting", bg=PANEL_DARK, fg=TEXT, anchor="w", padx=10, pady=5, width=SETTING_NAME_CHARS, font=("Segoe UI", 9, "bold")).grid(row=0, column=0, sticky="ew")
-        tk.Label(header, text="Value", bg=PANEL_DARK, fg=TEXT, anchor="w", padx=10, pady=5, font=("Segoe UI", 9, "bold")).grid(row=0, column=1, sticky="ew")
+        self.setting_column_widgets.append(header)
+        header.columnconfigure(0, weight=0, minsize=self.setting_name_column)
+        header.columnconfigure(1, weight=0, minsize=6)
+        header.columnconfigure(2, weight=1, minsize=280)
+        tk.Label(header, text="Setting", bg=PANEL_DARK, fg=TEXT, anchor="w", padx=10, pady=5, width=name_chars, font=("Segoe UI", 9, "bold")).grid(row=0, column=0, sticky="ew")
+        header_separator = self.make_setting_separator(header, active=True)
+        header_separator.grid(row=0, column=1, sticky="ns")
+        tk.Label(header, text="Value", bg=PANEL_DARK, fg=TEXT, anchor="w", padx=10, pady=5, font=("Segoe UI", 9, "bold")).grid(row=0, column=2, sticky="ew")
         self.bind_settings_scroll(header)
+        self.bind_settings_scroll(header_separator)
 
         shown_mods = {definition.get("mod") for definition in self.definitions if definition.get("mod")}
         show_mod_prefix = len(shown_mods) > 1
+        previous_mod_name: str | None = None
+        grid_row = 1
         for row, definition in enumerate(self.definitions, start=1):
             name = definition["name"]
             display_name = str(definition.get("display_name") or name)
             mod_name = str(definition.get("mod") or "")
-            label_text = f"{mod_name}: {display_name}" if show_mod_prefix and mod_name else display_name
+            if show_mod_prefix and mod_name and mod_name != previous_mod_name:
+                group_frame = tk.Frame(self.settings_frame, bg=LIST_BG)
+                group_frame.grid(row=grid_row, column=0, sticky="ew")
+                group_frame.columnconfigure(0, weight=1)
+                group_label = tk.Label(
+                    group_frame,
+                    text=f"{mod_name}:",
+                    bg=LIST_BG,
+                    fg=BODY_TEXT,
+                    anchor="w",
+                    padx=10,
+                    pady=2,
+                    font=("Segoe UI", 9),
+                )
+                group_label.grid(row=0, column=0, sticky="ew", pady=(5, 0))
+                self.bind_settings_scroll(group_frame)
+                self.bind_settings_scroll(group_label)
+                grid_row += 1
+                previous_mod_name = mod_name
+
+            label_text = display_name
             row_frame = tk.Frame(self.settings_frame, bg=LIST_ROW, highlightthickness=1, highlightbackground=LIST_LINE)
-            row_frame.grid(row=row, column=0, sticky="ew")
-            row_frame.columnconfigure(0, weight=0, minsize=SETTING_NAME_COLUMN)
-            row_frame.columnconfigure(1, weight=1, minsize=280)
+            row_frame.grid(row=grid_row, column=0, sticky="ew")
+            grid_row += 1
+            self.setting_column_widgets.append(row_frame)
+            row_frame.columnconfigure(0, weight=0, minsize=self.setting_name_column)
+            row_frame.columnconfigure(1, weight=0, minsize=6)
+            row_frame.columnconfigure(2, weight=1, minsize=280)
             label = tk.Label(
                 row_frame,
-                text=compact_text(label_text, SETTING_NAME_CHARS),
+                text=compact_text(label_text, name_chars),
                 bg=LIST_ROW,
                 fg=BODY_TEXT,
                 anchor="w",
-                padx=10,
+                padx=(28 if show_mod_prefix and mod_name else 10),
                 pady=5,
-                width=SETTING_NAME_CHARS,
+                width=name_chars,
             )
             label.grid(row=0, column=0, sticky="ew")
+            self.setting_label_widgets.append((label, label_text))
             label.bind("<Enter>", lambda _event, setting=f"{label_text} ({name})": self.app.status(setting))
             label.bind("<Leave>", lambda _event: self.app.status("Settings"))
             value = values.get(name, definition.get("default"))
             setting_type = definition.get("type")
             allowed_values = definition.get("allowed_values")
+            separator = self.make_setting_separator(row_frame)
+            separator.grid(row=0, column=1, sticky="ns")
             value_cell = tk.Frame(row_frame, bg=LIST_ROW)
-            value_cell.grid(row=0, column=1, sticky="ew", padx=(4, 10), pady=3)
+            value_cell.grid(row=0, column=2, sticky="ew", padx=(4, 10), pady=3)
             value_cell.columnconfigure(0, weight=1)
             if setting_type == "bool-setting":
                 var = tk.BooleanVar(value=bool(value))
@@ -1355,6 +1499,7 @@ class SettingsTool(ToolFrame):
             self.setting_vars[name] = var
             self.bind_settings_scroll(row_frame)
             self.bind_settings_scroll(label)
+            self.bind_settings_scroll(separator)
             self.bind_settings_scroll(value_cell)
             self.bind_settings_scroll(widget)
         self.settings_frame.columnconfigure(0, weight=1)
@@ -1755,7 +1900,8 @@ class MaterialFlowTool(ToolFrame):
             lines.extend([
                 "",
                 "Output:",
-                f"  {self.material_flow_path()}",
+                f"  selected: {self.selected_material_flow_path()}",
+                f"  latest:   {self.material_flow_path()}",
                 f"  {self.viewer_path()}",
             ])
         self.details_text.configure(state=tk.NORMAL)
@@ -1799,7 +1945,7 @@ class MaterialFlowTool(ToolFrame):
                 messagebox.showerror("Dump failed", (result.stdout + "\n" + result.stderr).strip()[-4000:], parent=self)
                 self.app.status("Material Flow dump failed")
                 return
-            self.output_var.set(f"Dump ready: {self.material_flow_path()}")
+            self.output_var.set(f"Dump ready: {self.selected_material_flow_path()}")
             self.app.status("Material Flow dump generated")
             self.open_viewer()
 
@@ -1815,12 +1961,43 @@ class MaterialFlowTool(ToolFrame):
             + "?factorioRoot="
             + self.url_quote(str(modlist.factorio_root(self.factorio_path())))
             + "&file="
-            + self.url_quote(str(self.material_flow_path()))
+            + self.url_quote(str(self.preferred_material_flow_path()))
             + "&state="
-            + self.url_quote(str(self.material_flow_state_path()))
+            + self.url_quote(str(self.preferred_material_flow_state_path()))
         )
         webbrowser.open(url)
         self.app.status("Material Flow viewer opened in browser")
+
+    def profile_suffix(self) -> str | None:
+        profile_name = self.profile_name_var.get().strip()
+        if not profile_name:
+            return None
+        suffix = re.sub(r"[^A-Za-z0-9_.-]+", "_", profile_name)
+        return suffix or None
+
+    def profiled_path(self, path: Path) -> Path:
+        suffix = self.profile_suffix()
+        if not suffix:
+            return path
+        return path.with_name(f"{path.stem}-{suffix}{path.suffix}")
+
+    def selected_material_flow_path(self) -> Path:
+        return self.profiled_path(self.material_flow_path())
+
+    def selected_material_flow_state_path(self) -> Path:
+        return self.profiled_path(self.material_flow_state_path())
+
+    def preferred_material_flow_path(self) -> Path:
+        selected_path = self.selected_material_flow_path()
+        if selected_path.exists():
+            return selected_path
+        return self.material_flow_path()
+
+    def preferred_material_flow_state_path(self) -> Path:
+        selected_path = self.selected_material_flow_state_path()
+        if selected_path.exists():
+            return selected_path
+        return self.material_flow_state_path()
 
     def material_flow_path(self) -> Path:
         return modlist.factorio_root(self.factorio_path()) / "script-output" / "Ingredient_Scrap" / "material-flow.json"

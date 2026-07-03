@@ -1,0 +1,4403 @@
+{
+  "comparisons": [
+    {
+      "ancestry": {
+        "rare-metal": 8.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-beam",
+      "ingredient_amount": 4,
+      "reasons": [],
+      "recipe": "kr-advanced-assembling-machine",
+      "resolve_recipe": "kr-imersium-beam",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 8.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-beam",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-advanced-chemical-plant",
+      "resolve_recipe": "kr-imersium-beam",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 8.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-beam",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-advanced-furnace",
+      "resolve_recipe": "kr-imersium-beam",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 8.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-beam",
+      "ingredient_amount": 100,
+      "reasons": [],
+      "recipe": "kr-antimatter-reactor",
+      "resolve_recipe": "kr-imersium-beam",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 8.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-beam",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-big-roboport",
+      "resolve_recipe": "kr-imersium-beam",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 8.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-beam",
+      "ingredient_amount": 500,
+      "reasons": [],
+      "recipe": "kr-intergalactic-transceiver",
+      "resolve_recipe": "kr-imersium-beam",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 8.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-beam",
+      "ingredient_amount": 4,
+      "reasons": [],
+      "recipe": "kr-matter-associator",
+      "resolve_recipe": "kr-imersium-beam",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 8.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-beam",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "kr-matter-plant",
+      "resolve_recipe": "kr-imersium-beam",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 8.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-beam",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "kr-planetary-teleporter",
+      "resolve_recipe": "kr-imersium-beam",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 8.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-beam",
+      "ingredient_amount": 3,
+      "reasons": [],
+      "recipe": "kr-small-roboport",
+      "resolve_recipe": "kr-imersium-beam",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 8.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-beam",
+      "ingredient_amount": 4,
+      "reasons": [],
+      "recipe": "kr-stabilizer-charging-station",
+      "resolve_recipe": "kr-imersium-beam",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 8.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-beam",
+      "ingredient_amount": 3,
+      "reasons": [],
+      "recipe": "kr-superior-substation",
+      "resolve_recipe": "kr-imersium-beam",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-gear-wheel",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-advanced-chemical-plant",
+      "resolve_recipe": "kr-imersium-gear-wheel",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-gear-wheel",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-big-roboport",
+      "resolve_recipe": "kr-imersium-gear-wheel",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-gear-wheel",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "kr-electric-mining-drill-mk3",
+      "resolve_recipe": "kr-imersium-gear-wheel",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-gear-wheel",
+      "ingredient_amount": 4,
+      "reasons": [],
+      "recipe": "kr-superior-inserter",
+      "resolve_recipe": "kr-imersium-gear-wheel",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-gear-wheel",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "kr-superior-loader",
+      "resolve_recipe": "kr-imersium-gear-wheel",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-gear-wheel",
+      "ingredient_amount": 4,
+      "reasons": [],
+      "recipe": "kr-superior-long-inserter",
+      "resolve_recipe": "kr-imersium-gear-wheel",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-gear-wheel",
+      "ingredient_amount": 4,
+      "reasons": [],
+      "recipe": "kr-superior-splitter",
+      "resolve_recipe": "kr-imersium-gear-wheel",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-gear-wheel",
+      "ingredient_amount": 4,
+      "reasons": [],
+      "recipe": "kr-superior-transport-belt",
+      "resolve_recipe": "kr-imersium-gear-wheel",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-plate",
+      "ingredient_amount": 350,
+      "reasons": [
+        "unresolved:kr-imersite-powder"
+      ],
+      "recipe": "kr-antimatter-reactor",
+      "resolve_recipe": "kr-imersium-plate",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-plate",
+      "ingredient_amount": 100,
+      "reasons": [
+        "unresolved:kr-imersite-powder"
+      ],
+      "recipe": "kr-antimatter-reactor-equipment",
+      "resolve_recipe": "kr-imersium-plate",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-plate",
+      "ingredient_amount": 8,
+      "reasons": [
+        "unresolved:kr-imersite-powder"
+      ],
+      "recipe": "kr-empty-antimatter-fuel-cell",
+      "resolve_recipe": "kr-imersium-plate",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-plate",
+      "ingredient_amount": 10,
+      "reasons": [
+        "unresolved:kr-imersite-powder"
+      ],
+      "recipe": "kr-energy-shield-mk4-equipment",
+      "resolve_recipe": "kr-imersium-plate",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-plate",
+      "ingredient_amount": 2,
+      "reasons": [
+        "unresolved:kr-imersite-powder"
+      ],
+      "recipe": "kr-imersium-beam",
+      "resolve_recipe": "kr-imersium-plate",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-plate",
+      "ingredient_amount": 1,
+      "reasons": [
+        "unresolved:kr-imersite-powder"
+      ],
+      "recipe": "kr-imersium-gear-wheel",
+      "resolve_recipe": "kr-imersium-plate",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-plate",
+      "ingredient_amount": 500,
+      "reasons": [
+        "unresolved:kr-imersite-powder"
+      ],
+      "recipe": "kr-intergalactic-transceiver",
+      "resolve_recipe": "kr-imersium-plate",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-plate",
+      "ingredient_amount": 6,
+      "reasons": [
+        "unresolved:kr-imersite-powder"
+      ],
+      "recipe": "kr-matter-stabilizer",
+      "resolve_recipe": "kr-imersium-plate",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-plate",
+      "ingredient_amount": 5,
+      "reasons": [
+        "unresolved:kr-imersite-powder"
+      ],
+      "recipe": "kr-personal-laser-defense-mk3-equipment",
+      "resolve_recipe": "kr-imersium-plate",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-plate",
+      "ingredient_amount": 10,
+      "reasons": [
+        "unresolved:kr-imersite-powder"
+      ],
+      "recipe": "kr-superior-exoskeleton-equipment",
+      "resolve_recipe": "kr-imersium-plate",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-plate",
+      "ingredient_amount": 1,
+      "reasons": [
+        "unresolved:kr-imersite-powder"
+      ],
+      "recipe": "kr-superior-inserter",
+      "resolve_recipe": "kr-imersium-plate",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 4.0
+      },
+      "current": {
+        "imersium": 1.0
+      },
+      "ingredient": "kr-imersium-plate",
+      "ingredient_amount": 2,
+      "reasons": [
+        "unresolved:kr-imersite-powder"
+      ],
+      "recipe": "kr-superior-long-inserter",
+      "resolve_recipe": "kr-imersium-plate",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 3.06,
+        "copper": 33.75,
+        "iron": 28.35,
+        "rare-metal": 3.3
+      },
+      "current": {
+        "plastic": 1.0
+      },
+      "ingredient": "plastic-bar",
+      "ingredient_amount": 5,
+      "reasons": [
+        "deferred-fluid:kr-matter"
+      ],
+      "recipe": "casting-low-density-structure",
+      "resolve_recipe": "kr-matter-to-plastic-bar",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 3.06,
+        "copper": 33.75,
+        "iron": 28.35,
+        "rare-metal": 3.3
+      },
+      "current": {
+        "plastic": 1.0
+      },
+      "ingredient": "plastic-bar",
+      "ingredient_amount": 20,
+      "reasons": [
+        "deferred-fluid:kr-matter"
+      ],
+      "recipe": "kr-air-purifier",
+      "resolve_recipe": "kr-matter-to-plastic-bar",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 3.06,
+        "copper": 33.75,
+        "iron": 28.35,
+        "rare-metal": 3.3
+      },
+      "current": {
+        "plastic": 1.0
+      },
+      "ingredient": "plastic-bar",
+      "ingredient_amount": 5,
+      "reasons": [
+        "deferred-fluid:kr-matter"
+      ],
+      "recipe": "kr-easy-electronic-components",
+      "resolve_recipe": "kr-matter-to-plastic-bar",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 3.06,
+        "copper": 33.75,
+        "iron": 28.35,
+        "rare-metal": 3.3
+      },
+      "current": {
+        "plastic": 1.0
+      },
+      "ingredient": "plastic-bar",
+      "ingredient_amount": 2,
+      "reasons": [
+        "deferred-fluid:kr-matter"
+      ],
+      "recipe": "kr-electronic-components",
+      "resolve_recipe": "kr-matter-to-plastic-bar",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 3.06,
+        "copper": 33.75,
+        "iron": 28.35,
+        "rare-metal": 3.3
+      },
+      "current": {
+        "plastic": 1.0
+      },
+      "ingredient": "plastic-bar",
+      "ingredient_amount": 3,
+      "reasons": [
+        "deferred-fluid:kr-matter"
+      ],
+      "recipe": "kr-electronic-components-with-lithium",
+      "resolve_recipe": "kr-matter-to-plastic-bar",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 3.06,
+        "copper": 33.75,
+        "iron": 28.35,
+        "rare-metal": 3.3
+      },
+      "current": {
+        "plastic": 1.0
+      },
+      "ingredient": "plastic-bar",
+      "ingredient_amount": 5,
+      "reasons": [
+        "deferred-fluid:kr-matter"
+      ],
+      "recipe": "kr-matter-research-data",
+      "resolve_recipe": "kr-matter-to-plastic-bar",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 3.06,
+        "copper": 33.75,
+        "iron": 28.35,
+        "rare-metal": 3.3
+      },
+      "current": {
+        "plastic": 1.0
+      },
+      "ingredient": "plastic-bar",
+      "ingredient_amount": 2,
+      "reasons": [
+        "deferred-fluid:kr-matter"
+      ],
+      "recipe": "kr-pollution-filter",
+      "resolve_recipe": "kr-matter-to-plastic-bar",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 3.06,
+        "copper": 33.75,
+        "iron": 28.35,
+        "rare-metal": 3.3
+      },
+      "current": {
+        "plastic": 1.0
+      },
+      "ingredient": "plastic-bar",
+      "ingredient_amount": 5,
+      "reasons": [
+        "deferred-fluid:kr-matter"
+      ],
+      "recipe": "low-density-structure",
+      "resolve_recipe": "kr-matter-to-plastic-bar",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 3.06,
+        "copper": 33.75,
+        "iron": 28.35,
+        "rare-metal": 3.3
+      },
+      "current": {
+        "plastic": 1.0
+      },
+      "ingredient": "plastic-bar",
+      "ingredient_amount": 1,
+      "reasons": [
+        "deferred-fluid:kr-matter"
+      ],
+      "recipe": "night-vision-equipment",
+      "resolve_recipe": "kr-matter-to-plastic-bar",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 3.06,
+        "copper": 33.75,
+        "iron": 28.35,
+        "rare-metal": 3.3
+      },
+      "current": {
+        "plastic": 1.0
+      },
+      "ingredient": "plastic-bar",
+      "ingredient_amount": 1,
+      "reasons": [
+        "deferred-fluid:kr-matter"
+      ],
+      "recipe": "superconductor",
+      "resolve_recipe": "kr-matter-to-plastic-bar",
+      "resolve_status": "composed",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "agricultural-tower",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 2,
+      "reasons": [],
+      "recipe": "assembling-machine-2",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "barrel",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 2,
+      "reasons": [],
+      "recipe": "battery-mk2-equipment",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "beacon",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "belt-immunity-equipment",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "bulk-inserter",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "cargo-bay",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 25,
+      "reasons": [],
+      "recipe": "cargo-landing-pad",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 50,
+      "reasons": [],
+      "recipe": "centrifuge",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "chemical-plant",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "crusher",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "discharge-defense-equipment",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "electric-furnace",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 50,
+      "reasons": [],
+      "recipe": "electromagnetic-plant",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "energy-shield-equipment",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "exoskeleton-equipment",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "fast-inserter",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 50,
+      "reasons": [],
+      "recipe": "fission-reactor-equipment",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "flamethrower-turret",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "flying-robot-frame",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 50,
+      "reasons": [],
+      "recipe": "foundry",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 2,
+      "reasons": [],
+      "recipe": "gate",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "heat-exchanger",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "kr-additional-engine-equipment",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "kr-advanced-additional-engine-equipment",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 350,
+      "reasons": [],
+      "recipe": "kr-antimatter-reactor",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 4,
+      "reasons": [],
+      "recipe": "kr-big-battery-mk2-equipment",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-big-roboport",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-big-storage-tank",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "kr-biter-research-data",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-flare-stack",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "kr-fuel-refinery",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 500,
+      "reasons": [],
+      "recipe": "kr-fusion-reactor",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 60,
+      "reasons": [],
+      "recipe": "kr-huge-storage-tank",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 2,
+      "reasons": [],
+      "recipe": "kr-pollution-filter",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 50,
+      "reasons": [],
+      "recipe": "kr-quarry-drill",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 40,
+      "reasons": [],
+      "recipe": "kr-singularity-lab",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "kr-small-roboport",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 2,
+      "reasons": [],
+      "recipe": "kr-steel-beam",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "kr-steel-gear-wheel",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "kr-steel-pipe",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "kr-steel-pipe-to-ground",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 4,
+      "reasons": [],
+      "recipe": "kr-vehicle-roboport-equipment",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "land-mine",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 15,
+      "reasons": [],
+      "recipe": "laser-turret",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 8,
+      "reasons": [],
+      "recipe": "lightning-rod",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 2,
+      "reasons": [],
+      "recipe": "low-density-structure",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 200,
+      "reasons": [],
+      "recipe": "nuclear-reactor",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "pump",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "rail-support",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 1000,
+      "reasons": [],
+      "recipe": "rocket-silo",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "rocket-turret",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "solar-panel",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "solar-panel-equipment",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "space-platform-foundation",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 8,
+      "reasons": [],
+      "recipe": "steel-chest",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 6,
+      "reasons": [],
+      "recipe": "steel-furnace",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "thruster",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 3,
+      "reasons": [],
+      "recipe": "train-stop",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "current": {
+        "steel": 1.0
+      },
+      "ingredient": "steel-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "uranium-fuel-cell",
+      "resolve_recipe": "steel-plate",
+      "resolve_status": "resolved",
+      "status": "different"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "battery",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "copper-cable",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 50,
+      "reasons": [],
+      "recipe": "fission-reactor-equipment",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 100,
+      "reasons": [],
+      "recipe": "heat-exchanger",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "heat-pipe",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 60,
+      "reasons": [],
+      "recipe": "kr-advanced-furnace",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 6,
+      "reasons": [],
+      "recipe": "kr-automation-core",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "kr-big-battery-equipment",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "kr-electrolysis-plant",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 6,
+      "reasons": [],
+      "recipe": "kr-energy-absorber-equipment",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 500,
+      "reasons": [],
+      "recipe": "kr-fusion-reactor",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "kr-lithium-sulfur-battery",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-quantum-computer",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "lab",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "low-density-structure",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 50,
+      "reasons": [],
+      "recipe": "steam-turbine",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "copper": 1.5
+      },
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "copper-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "superconductor",
+      "resolve_recipe": "kr-copper-plate-from-enriched-copper",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 2,
+      "reasons": [],
+      "recipe": "accumulator",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "battery",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 2,
+      "reasons": [],
+      "recipe": "battery-equipment",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "biochamber",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "burner-inserter",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 3,
+      "reasons": [],
+      "recipe": "burner-mining-drill",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "display-panel",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "electronic-circuit",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "engine-unit",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 8,
+      "reasons": [],
+      "recipe": "iron-chest",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "iron-gear-wheel",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "iron-stick",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 4,
+      "reasons": [],
+      "recipe": "kr-big-battery-equipment",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 2,
+      "reasons": [],
+      "recipe": "kr-blank-tech-card",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-easy-steel-beam",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "kr-easy-steel-gear-wheel",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 2,
+      "reasons": [],
+      "recipe": "kr-iron-beam",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "kr-rocket-fuel-with-ammonia",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "kr-rocket-fuel-with-hydrogen-chloride",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 2,
+      "reasons": [],
+      "recipe": "kr-sentinel",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 25,
+      "reasons": [],
+      "recipe": "kr-shelter",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 6,
+      "reasons": [],
+      "recipe": "kr-wind-turbine",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "loader",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "night-vision-equipment",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "pipe",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "pipe-to-ground",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "pipe-to-ground-2",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "pipe-to-ground-3",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "power-switch",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 3,
+      "reasons": [],
+      "recipe": "programmable-speaker",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "radar",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "rail-chain-signal",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "rail-signal",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "rocket-fuel",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "small-lamp",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "steam-engine",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "steel-plate",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "storage-tank",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "sulfuric-acid",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 6,
+      "reasons": [],
+      "recipe": "train-stop",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "iron": 1.5
+      },
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "iron-plate",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "transport-belt",
+      "resolve_recipe": "kr-iron-plate-from-enriched-iron",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 80,
+      "reasons": [],
+      "recipe": "kr-advanced-chemical-plant",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 80,
+      "reasons": [],
+      "recipe": "kr-advanced-furnace",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 10,
+      "reasons": [],
+      "recipe": "kr-advanced-loader",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "kr-advanced-radar",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 60,
+      "reasons": [],
+      "recipe": "kr-advanced-steam-turbine",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "kr-advanced-transport-belt",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 350,
+      "reasons": [],
+      "recipe": "kr-antimatter-reactor",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 80,
+      "reasons": [],
+      "recipe": "kr-big-roboport",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 4,
+      "reasons": [],
+      "recipe": "kr-easy-imersium-beam",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 2,
+      "reasons": [],
+      "recipe": "kr-easy-imersium-gear-wheel",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 4,
+      "reasons": [],
+      "recipe": "kr-electric-mining-drill-mk2",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "kr-empty-dt-fuel-cell",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 50,
+      "reasons": [],
+      "recipe": "kr-energy-storage",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 350,
+      "reasons": [],
+      "recipe": "kr-fusion-reactor",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 6,
+      "reasons": [],
+      "recipe": "kr-imersium-plate",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 1000,
+      "reasons": [],
+      "recipe": "kr-intergalactic-transceiver",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-laser-artillery-turret",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "kr-matter-research-data",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 1,
+      "reasons": [],
+      "recipe": "kr-nitric-acid",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 50,
+      "reasons": [],
+      "recipe": "kr-quantum-computer",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 50,
+      "reasons": [],
+      "recipe": "kr-quarry-drill",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-railgun-turret",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-rocket-turret",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 60,
+      "reasons": [],
+      "recipe": "kr-singularity-lab",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "kr-small-roboport",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 6,
+      "reasons": [],
+      "recipe": "kr-superior-substation",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 5,
+      "reasons": [],
+      "recipe": "kr-tritium",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 200,
+      "reasons": [],
+      "recipe": "nuclear-reactor",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 3,
+      "reasons": [],
+      "recipe": "processing-unit",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "rare-metal": 2.0
+      },
+      "current": {
+        "rare-metal": 1.0
+      },
+      "ingredient": "kr-rare-metals",
+      "ingredient_amount": 20,
+      "reasons": [],
+      "recipe": "recycler",
+      "resolve_recipe": "kr-rare-metals",
+      "resolve_status": "resolved",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "tungsten": 4.0
+      },
+      "current": {
+        "tungsten": 1.0
+      },
+      "ingredient": "tungsten-plate",
+      "ingredient_amount": 60,
+      "reasons": [
+        "deferred-fluid:molten-iron"
+      ],
+      "recipe": "artillery-turret",
+      "resolve_recipe": "tungsten-plate",
+      "resolve_status": "composed",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "tungsten": 4.0
+      },
+      "current": {
+        "tungsten": 1.0
+      },
+      "ingredient": "tungsten-plate",
+      "ingredient_amount": 4,
+      "reasons": [
+        "deferred-fluid:molten-iron"
+      ],
+      "recipe": "foundation",
+      "resolve_recipe": "tungsten-plate",
+      "resolve_status": "composed",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "tungsten": 4.0
+      },
+      "current": {
+        "tungsten": 1.0
+      },
+      "ingredient": "tungsten-plate",
+      "ingredient_amount": 100,
+      "reasons": [
+        "deferred-fluid:molten-iron"
+      ],
+      "recipe": "fusion-generator",
+      "resolve_recipe": "tungsten-plate",
+      "resolve_status": "composed",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "tungsten": 4.0
+      },
+      "current": {
+        "tungsten": 1.0
+      },
+      "ingredient": "tungsten-plate",
+      "ingredient_amount": 200,
+      "reasons": [
+        "deferred-fluid:molten-iron"
+      ],
+      "recipe": "fusion-reactor",
+      "resolve_recipe": "tungsten-plate",
+      "resolve_status": "composed",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "tungsten": 4.0
+      },
+      "current": {
+        "tungsten": 1.0
+      },
+      "ingredient": "tungsten-plate",
+      "ingredient_amount": 250,
+      "reasons": [
+        "deferred-fluid:molten-iron"
+      ],
+      "recipe": "fusion-reactor-equipment",
+      "resolve_recipe": "tungsten-plate",
+      "resolve_status": "composed",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "tungsten": 4.0
+      },
+      "current": {
+        "tungsten": 1.0
+      },
+      "ingredient": "tungsten-plate",
+      "ingredient_amount": 30,
+      "reasons": [
+        "deferred-fluid:molten-iron"
+      ],
+      "recipe": "railgun-turret",
+      "resolve_recipe": "tungsten-plate",
+      "resolve_status": "composed",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "tungsten": 4.0
+      },
+      "current": {
+        "tungsten": 1.0
+      },
+      "ingredient": "tungsten-plate",
+      "ingredient_amount": 15,
+      "reasons": [
+        "deferred-fluid:molten-iron"
+      ],
+      "recipe": "turbo-splitter",
+      "resolve_recipe": "tungsten-plate",
+      "resolve_status": "composed",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "tungsten": 4.0
+      },
+      "current": {
+        "tungsten": 1.0
+      },
+      "ingredient": "tungsten-plate",
+      "ingredient_amount": 5,
+      "reasons": [
+        "deferred-fluid:molten-iron"
+      ],
+      "recipe": "turbo-transport-belt",
+      "resolve_recipe": "tungsten-plate",
+      "resolve_status": "composed",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "tungsten": 4.0
+      },
+      "current": {
+        "tungsten": 1.0
+      },
+      "ingredient": "tungsten-plate",
+      "ingredient_amount": 40,
+      "reasons": [
+        "deferred-fluid:molten-iron"
+      ],
+      "recipe": "turbo-underground-belt",
+      "resolve_recipe": "tungsten-plate",
+      "resolve_status": "composed",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "yis-blockium": 1.0
+      },
+      "current": {
+        "yis-blockium": 1.0
+      },
+      "ingredient": "yis-blockium-ore",
+      "ingredient_amount": 4,
+      "reasons": [
+        "root-alias"
+      ],
+      "recipe": "yis-test-yis-blockium-disabled",
+      "resolve_recipe": null,
+      "resolve_status": "root",
+      "status": "same"
+    },
+    {
+      "ancestry": {
+        "yis-disabledium": 1.0
+      },
+      "current": {
+        "yis-disabledium": 1.0
+      },
+      "ingredient": "yis-disabledium-ore",
+      "ingredient_amount": 4,
+      "reasons": [
+        "root-alias"
+      ],
+      "recipe": "yis-test-yis-disabledium-disabled",
+      "resolve_recipe": null,
+      "resolve_status": "root",
+      "status": "same"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "holmium": 1.0
+      },
+      "ingredient": "holmium-plate",
+      "ingredient_amount": 150,
+      "reasons": [
+        "deferred-fluid:holmium-solution"
+      ],
+      "recipe": "electromagnetic-plant",
+      "resolve_recipe": "holmium-plate",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "holmium": 1.0
+      },
+      "ingredient": "holmium-plate",
+      "ingredient_amount": 1,
+      "reasons": [
+        "deferred-fluid:holmium-solution"
+      ],
+      "recipe": "fusion-power-cell",
+      "resolve_recipe": "holmium-plate",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "holmium": 1.0
+      },
+      "ingredient": "holmium-plate",
+      "ingredient_amount": 1,
+      "reasons": [
+        "deferred-fluid:holmium-solution"
+      ],
+      "recipe": "lithium",
+      "resolve_recipe": "holmium-plate",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "holmium": 1.0
+      },
+      "ingredient": "holmium-plate",
+      "ingredient_amount": 2,
+      "reasons": [
+        "deferred-fluid:holmium-solution"
+      ],
+      "recipe": "supercapacitor",
+      "resolve_recipe": "holmium-plate",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "holmium": 1.0
+      },
+      "ingredient": "holmium-plate",
+      "ingredient_amount": 1,
+      "reasons": [
+        "deferred-fluid:holmium-solution"
+      ],
+      "recipe": "superconductor",
+      "resolve_recipe": "holmium-plate",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "holmium": 1.0
+      },
+      "ingredient": "holmium-solution",
+      "ingredient_amount": 1,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "electrolyte",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "holmium": 1.0
+      },
+      "ingredient": "holmium-solution",
+      "ingredient_amount": 2,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "holmium-plate",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "glass": 1.0
+      },
+      "ingredient": "kr-glass",
+      "ingredient_amount": 20,
+      "reasons": [
+        "unresolved:kr-sand"
+      ],
+      "recipe": "kr-bio-lab",
+      "resolve_recipe": "kr-glass",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "glass": 1.0
+      },
+      "ingredient": "kr-glass",
+      "ingredient_amount": 10,
+      "reasons": [
+        "unresolved:kr-sand"
+      ],
+      "recipe": "kr-electrolysis-plant",
+      "resolve_recipe": "kr-glass",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "glass": 1.0
+      },
+      "ingredient": "kr-glass",
+      "ingredient_amount": 2,
+      "reasons": [
+        "unresolved:kr-sand"
+      ],
+      "recipe": "kr-electronic-components",
+      "resolve_recipe": "kr-glass",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "glass": 1.0
+      },
+      "ingredient": "kr-glass",
+      "ingredient_amount": 3,
+      "reasons": [
+        "unresolved:kr-sand"
+      ],
+      "recipe": "kr-electronic-components-with-lithium",
+      "resolve_recipe": "kr-glass",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "glass": 1.0
+      },
+      "ingredient": "kr-glass",
+      "ingredient_amount": 10,
+      "reasons": [
+        "unresolved:kr-sand"
+      ],
+      "recipe": "kr-filtration-plant",
+      "resolve_recipe": "kr-glass",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "glass": 1.0
+      },
+      "ingredient": "kr-glass",
+      "ingredient_amount": 20,
+      "reasons": [
+        "unresolved:kr-sand"
+      ],
+      "recipe": "kr-greenhouse",
+      "resolve_recipe": "kr-glass",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "glass": 1.0
+      },
+      "ingredient": "kr-glass",
+      "ingredient_amount": 1,
+      "reasons": [
+        "unresolved:kr-sand"
+      ],
+      "recipe": "kr-sentinel",
+      "resolve_recipe": "kr-glass",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "glass": 1.0
+      },
+      "ingredient": "kr-glass",
+      "ingredient_amount": 1,
+      "reasons": [
+        "unresolved:kr-sand"
+      ],
+      "recipe": "night-vision-equipment",
+      "resolve_recipe": "kr-glass",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "glass": 1.0
+      },
+      "ingredient": "kr-glass",
+      "ingredient_amount": 1,
+      "reasons": [
+        "unresolved:kr-sand"
+      ],
+      "recipe": "small-lamp",
+      "resolve_recipe": "kr-glass",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "glass": 1.0
+      },
+      "ingredient": "kr-glass",
+      "ingredient_amount": 10,
+      "reasons": [
+        "unresolved:kr-sand"
+      ],
+      "recipe": "solar-panel",
+      "resolve_recipe": "kr-glass",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "glass": 1.0
+      },
+      "ingredient": "kr-glass",
+      "ingredient_amount": 5,
+      "reasons": [
+        "unresolved:kr-sand"
+      ],
+      "recipe": "solar-panel-equipment",
+      "resolve_recipe": "kr-glass",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "silicon": 1.0
+      },
+      "ingredient": "kr-silicon",
+      "ingredient_amount": 2,
+      "reasons": [
+        "unresolved:kr-quartz"
+      ],
+      "recipe": "kr-electronic-components",
+      "resolve_recipe": "kr-silicon",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "silicon": 1.0
+      },
+      "ingredient": "kr-silicon",
+      "ingredient_amount": 3,
+      "reasons": [
+        "unresolved:kr-quartz"
+      ],
+      "recipe": "kr-electronic-components-with-lithium",
+      "resolve_recipe": "kr-silicon",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "silicon": 1.0
+      },
+      "ingredient": "kr-silicon",
+      "ingredient_amount": 5,
+      "reasons": [
+        "unresolved:kr-quartz"
+      ],
+      "recipe": "solar-panel",
+      "resolve_recipe": "kr-silicon",
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "molten-copper",
+      "ingredient_amount": 2,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "casting-copper",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "molten-copper",
+      "ingredient_amount": 1,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "casting-copper-cable",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "copper": 1.0
+      },
+      "ingredient": "molten-copper",
+      "ingredient_amount": 25,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "casting-low-density-structure",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "molten-iron",
+      "ingredient_amount": 20,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "big-mining-drill",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "molten-iron",
+      "ingredient_amount": 2,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "casting-iron",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "molten-iron",
+      "ingredient_amount": 1,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "casting-iron-gear-wheel",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "molten-iron",
+      "ingredient_amount": 2,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "casting-iron-stick",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "molten-iron",
+      "ingredient_amount": 8,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "casting-low-density-structure",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "molten-iron",
+      "ingredient_amount": 1,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "casting-pipe",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "molten-iron",
+      "ingredient_amount": 5,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "casting-pipe-to-ground",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "molten-iron",
+      "ingredient_amount": 3,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "casting-steel",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "molten-iron",
+      "ingredient_amount": 2,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "concrete-from-molten-iron",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "iron": 1.0
+      },
+      "ingredient": "molten-iron",
+      "ingredient_amount": 1,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "tungsten-plate",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-rare-metal": 1.0
+      },
+      "ingredient": "molten-yis-rare-metal",
+      "ingredient_amount": 5,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "molten-yis-rare-metal-barrel",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-testium": 1.0
+      },
+      "ingredient": "molten-yis-testium",
+      "ingredient_amount": 5,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "molten-yis-testium-barrel",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-testium": 1.0
+      },
+      "ingredient": "molten-yis-testium",
+      "ingredient_amount": 5,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-test-yis-testium-fluid",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-testium": 1.0
+      },
+      "ingredient": "molten-yis-testium",
+      "ingredient_amount": 4,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-test-yis-testium-mixed",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-hiddenfluidium": 1.0
+      },
+      "ingredient": "yis-hiddenfluidium-solution",
+      "ingredient_amount": 5,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-hiddenfluidium-solution-barrel",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-hiddenfluidium": 1.0
+      },
+      "ingredient": "yis-hiddenfluidium-solution",
+      "ingredient_amount": 7,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-test-yis-hiddenfluidium-fluid",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-hiddenium": 1.0
+      },
+      "ingredient": "yis-hiddenium-plate",
+      "ingredient_amount": 4,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-test-yis-hiddenium-hidden",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-quietium": 1.0
+      },
+      "ingredient": "yis-quietium-plate",
+      "ingredient_amount": 4,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-test-yis-quietium-neutral",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-rare-metal": 1.0
+      },
+      "ingredient": "yis-rare-metal-solution",
+      "ingredient_amount": 5,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-rare-metal-solution-barrel",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-solvium": 1.0
+      },
+      "ingredient": "yis-solvium-solution",
+      "ingredient_amount": 5,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-solvium-solution-barrel",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-solvium": 1.0
+      },
+      "ingredient": "yis-solvium-solution",
+      "ingredient_amount": 6,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-test-yis-solvium-solution",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-testium": 1.0
+      },
+      "ingredient": "yis-testium-ore",
+      "ingredient_amount": 3,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-test-yis-testium-no-tech",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-testium": 1.0
+      },
+      "ingredient": "yis-testium-plate",
+      "ingredient_amount": 5,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-test-yis-testium-fluid-main-product",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-testium": 1.0
+      },
+      "ingredient": "yis-testium-plate",
+      "ingredient_amount": 200,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-test-yis-testium-large",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-testium": 1.0
+      },
+      "ingredient": "yis-testium-plate",
+      "ingredient_amount": 6,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-test-yis-testium-mixed",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-testium": 1.0
+      },
+      "ingredient": "yis-testium-plate",
+      "ingredient_amount": 5,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-test-yis-testium-solid",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    },
+    {
+      "ancestry": {},
+      "current": {
+        "yis-testium": 1.0
+      },
+      "ingredient": "yis-testium-plate",
+      "ingredient_amount": 5,
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": "yis-test-yis-testium-with-tech",
+      "resolve_recipe": null,
+      "resolve_status": "unresolved",
+      "status": "unresolved"
+    }
+  ],
+  "exact_components": [],
+  "items": {
+    "copper-plate": {
+      "composition": {
+        "copper": 1.5
+      },
+      "ingredients": [
+        {
+          "amount": 5.0,
+          "composition": {
+            "copper": 1.5
+          },
+          "factor": 1.0,
+          "name": "kr-enriched-copper",
+          "status": "composed",
+          "type": "item"
+        }
+      ],
+      "reasons": [],
+      "recipe": "kr-copper-plate-from-enriched-copper",
+      "status": "resolved"
+    },
+    "holmium-plate": {
+      "composition": {},
+      "ingredients": [
+        {
+          "amount": 20.0,
+          "name": "holmium-solution",
+          "status": "deferred",
+          "type": "fluid"
+        }
+      ],
+      "reasons": [
+        "deferred-fluid:holmium-solution"
+      ],
+      "recipe": "holmium-plate",
+      "status": "unresolved"
+    },
+    "holmium-solution": {
+      "composition": {},
+      "ingredients": [],
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": null,
+      "status": "unresolved"
+    },
+    "iron-plate": {
+      "composition": {
+        "iron": 1.5
+      },
+      "ingredients": [
+        {
+          "amount": 5.0,
+          "composition": {
+            "iron": 1.5
+          },
+          "factor": 1.0,
+          "name": "kr-enriched-iron",
+          "status": "composed",
+          "type": "item"
+        }
+      ],
+      "reasons": [],
+      "recipe": "kr-iron-plate-from-enriched-iron",
+      "status": "resolved"
+    },
+    "kr-glass": {
+      "composition": {},
+      "ingredients": [
+        {
+          "amount": 16.0,
+          "composition": {},
+          "factor": 2.0,
+          "name": "kr-sand",
+          "status": "unresolved",
+          "type": "item"
+        }
+      ],
+      "reasons": [
+        "unresolved:kr-sand"
+      ],
+      "recipe": "kr-glass",
+      "status": "unresolved"
+    },
+    "kr-imersium-beam": {
+      "composition": {
+        "rare-metal": 8.0
+      },
+      "ingredients": [
+        {
+          "amount": 2.0,
+          "composition": {
+            "rare-metal": 4.0
+          },
+          "factor": 2.0,
+          "name": "kr-imersium-plate",
+          "status": "composed",
+          "type": "item"
+        }
+      ],
+      "reasons": [],
+      "recipe": "kr-imersium-beam",
+      "status": "resolved"
+    },
+    "kr-imersium-gear-wheel": {
+      "composition": {
+        "rare-metal": 4.0
+      },
+      "ingredients": [
+        {
+          "amount": 1.0,
+          "composition": {
+            "rare-metal": 4.0
+          },
+          "factor": 1.0,
+          "name": "kr-imersium-plate",
+          "status": "composed",
+          "type": "item"
+        }
+      ],
+      "reasons": [],
+      "recipe": "kr-imersium-gear-wheel",
+      "status": "resolved"
+    },
+    "kr-imersium-plate": {
+      "composition": {
+        "rare-metal": 4.0
+      },
+      "ingredients": [
+        {
+          "amount": 9.0,
+          "composition": {},
+          "factor": 3.0,
+          "name": "kr-imersite-powder",
+          "status": "unresolved",
+          "type": "item"
+        },
+        {
+          "amount": 6.0,
+          "composition": {
+            "rare-metal": 2.0
+          },
+          "factor": 2.0,
+          "name": "kr-rare-metals",
+          "status": "resolved",
+          "type": "item"
+        }
+      ],
+      "reasons": [
+        "unresolved:kr-imersite-powder"
+      ],
+      "recipe": "kr-imersium-plate",
+      "status": "composed"
+    },
+    "kr-rare-metals": {
+      "composition": {
+        "rare-metal": 2.0
+      },
+      "ingredients": [
+        {
+          "amount": 10.0,
+          "composition": {
+            "rare-metal": 1.0
+          },
+          "factor": 2.0,
+          "name": "kr-rare-metal-ore",
+          "status": "root",
+          "type": "item"
+        }
+      ],
+      "reasons": [],
+      "recipe": "kr-rare-metals",
+      "status": "resolved"
+    },
+    "kr-silicon": {
+      "composition": {},
+      "ingredients": [
+        {
+          "amount": 18.0,
+          "composition": {},
+          "factor": 2.0,
+          "name": "kr-quartz",
+          "status": "unresolved",
+          "type": "item"
+        }
+      ],
+      "reasons": [
+        "unresolved:kr-quartz"
+      ],
+      "recipe": "kr-silicon",
+      "status": "unresolved"
+    },
+    "molten-copper": {
+      "composition": {},
+      "ingredients": [],
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": null,
+      "status": "unresolved"
+    },
+    "molten-iron": {
+      "composition": {},
+      "ingredients": [],
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": null,
+      "status": "unresolved"
+    },
+    "molten-yis-rare-metal": {
+      "composition": {},
+      "ingredients": [],
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": null,
+      "status": "unresolved"
+    },
+    "molten-yis-testium": {
+      "composition": {},
+      "ingredients": [],
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": null,
+      "status": "unresolved"
+    },
+    "plastic-bar": {
+      "composition": {
+        "coal": 3.06,
+        "copper": 33.75,
+        "iron": 28.35,
+        "rare-metal": 3.3
+      },
+      "ingredients": [
+        {
+          "amount": 6.6,
+          "name": "kr-matter",
+          "status": "deferred",
+          "type": "fluid"
+        },
+        {
+          "amount": 1.0,
+          "composition": {
+            "coal": 30.6,
+            "copper": 337.5,
+            "iron": 283.5,
+            "rare-metal": 33.0
+          },
+          "factor": 0.1,
+          "name": "kr-charged-matter-stabilizer",
+          "status": "resolved",
+          "type": "item"
+        }
+      ],
+      "reasons": [
+        "deferred-fluid:kr-matter"
+      ],
+      "recipe": "kr-matter-to-plastic-bar",
+      "status": "composed"
+    },
+    "steel-plate": {
+      "composition": {
+        "coal": 0.4,
+        "iron": 3.0
+      },
+      "ingredients": [
+        {
+          "amount": 10.0,
+          "composition": {
+            "iron": 1.5
+          },
+          "factor": 2.0,
+          "name": "iron-plate",
+          "status": "resolved",
+          "type": "item"
+        },
+        {
+          "amount": 2.0,
+          "composition": {
+            "coal": 1.0
+          },
+          "factor": 0.4,
+          "name": "kr-coke",
+          "status": "composed",
+          "type": "item"
+        }
+      ],
+      "reasons": [],
+      "recipe": "steel-plate",
+      "status": "resolved"
+    },
+    "tungsten-plate": {
+      "composition": {
+        "tungsten": 4.0
+      },
+      "ingredients": [
+        {
+          "amount": 4.0,
+          "composition": {
+            "tungsten": 1.0
+          },
+          "factor": 4.0,
+          "name": "tungsten-ore",
+          "status": "root",
+          "type": "item"
+        },
+        {
+          "amount": 10.0,
+          "name": "molten-iron",
+          "status": "deferred",
+          "type": "fluid"
+        }
+      ],
+      "reasons": [
+        "deferred-fluid:molten-iron"
+      ],
+      "recipe": "tungsten-plate",
+      "status": "composed"
+    },
+    "yis-blockium-ore": {
+      "composition": {
+        "yis-blockium": 1.0
+      },
+      "ingredients": [],
+      "reasons": [
+        "root-alias"
+      ],
+      "recipe": null,
+      "status": "root"
+    },
+    "yis-disabledium-ore": {
+      "composition": {
+        "yis-disabledium": 1.0
+      },
+      "ingredients": [],
+      "reasons": [
+        "root-alias"
+      ],
+      "recipe": null,
+      "status": "root"
+    },
+    "yis-hiddenfluidium-solution": {
+      "composition": {},
+      "ingredients": [],
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": null,
+      "status": "unresolved"
+    },
+    "yis-hiddenium-plate": {
+      "composition": {},
+      "ingredients": [],
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": null,
+      "status": "unresolved"
+    },
+    "yis-quietium-plate": {
+      "composition": {},
+      "ingredients": [],
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": null,
+      "status": "unresolved"
+    },
+    "yis-rare-metal-solution": {
+      "composition": {},
+      "ingredients": [],
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": null,
+      "status": "unresolved"
+    },
+    "yis-solvium-solution": {
+      "composition": {},
+      "ingredients": [],
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": null,
+      "status": "unresolved"
+    },
+    "yis-testium-ore": {
+      "composition": {},
+      "ingredients": [],
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": null,
+      "status": "unresolved"
+    },
+    "yis-testium-plate": {
+      "composition": {},
+      "ingredients": [],
+      "reasons": [
+        "no-producer"
+      ],
+      "recipe": null,
+      "status": "unresolved"
+    }
+  },
+  "material_flow": "tools\\toolset\\dumps\\krastorio_is\\material-flow.json",
+  "production_flow": "tools\\toolset\\dumps\\krastorio_is\\production-flow.json",
+  "profile": "krastorio_is",
+  "root_aliases": {
+    "calcite": "calcite",
+    "coal": "coal",
+    "copper-ore": "copper",
+    "iron-ore": "iron",
+    "kr-rare-metal-ore": "rare-metal",
+    "scrap": "scrap",
+    "stone": "stone",
+    "tungsten-ore": "tungsten",
+    "uranium-ore": "uranium",
+    "yis-blockium-ore": "yis-blockium",
+    "yis-disabledium-ore": "yis-disabledium",
+    "yis-hiddenium-ore": "yis-hiddenium",
+    "yis-rare-metal-ore": "yis-rare-metal"
+  },
+  "root_policy": "resources",
+  "schema": "ingredient-scrap-ancestry-flow/v1",
+  "summary": {
+    "ancestry_widths": {
+      "1": 131,
+      "2": 61,
+      "4": 10
+    },
+    "comparisons": {
+      "different": 103,
+      "same": 99,
+      "unresolved": 51
+    },
+    "max_ancestry_width": 4,
+    "resolved_items": {
+      "composed": 13,
+      "resolved": 11,
+      "root": 7,
+      "unresolved": 24
+    }
+  }
+}

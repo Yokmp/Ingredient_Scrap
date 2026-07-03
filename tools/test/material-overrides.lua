@@ -48,17 +48,17 @@ api.register.material.both("yis-rare-metal", {
   },
 })
 
-api.register.recipe_chain.fluid_target("yis-solvium", "yis-solvium-solution", {
+api.register.recipe_chain.fluid.to_fluid("yis-solvium", "yis-solvium-solution", {
   source = test_source,
   reason = "synthetic forced recipe-chain fluid target",
 })
 
-api.register.recipe_chain.solid_target("yis-quietium", "yis-quietium-ingot", {
+api.register.recipe_chain.solid.to_item("yis-quietium", "yis-quietium-ingot", {
   source = test_source,
   reason = "synthetic forced recipe-chain solid target without analysis candidate",
 })
 
-api.ignore.recipe_chain.solid_target("yis-blockium", "synthetic blocked recipe-chain solid target")
+api.ignore.recipe_chain.solid("yis-blockium", "synthetic blocked recipe-chain solid target")
 
 api.ignore.material("yis-alienite", {
   source = test_source,

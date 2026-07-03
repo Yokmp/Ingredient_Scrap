@@ -72,4 +72,41 @@ function category_overrides.add_category_once(machine, category)
   end
 end
 
+---Applies registered category rules to one prototype type.
+---@param prototype_type string
+---@param rules table[]
+---@param recycle_item_category string
+---@param recycle_fluid_category string
+function category_overrides.apply_category_rules(prototype_type, rules, recycle_item_category, recycle_fluid_category)
+  for _, machine in pairs(data.raw[prototype_type] or {}) do
+    for _, rule in ipairs(rules or {}) do
+      if category_overrides.has_category(machine, rule.source_categories) then
+        if rule.add_item_recycling then
+          category_overrides.add_category_once(machine, recycle_item_category)
+        end
+        if rule.add_fluid_recycling_if_fluid_boxes and machine.fluid_boxes then
+          category_overrides.add_category_once(machine, recycle_fluid_category)
+        end
+      end
+    end
+  end
+end
+
+---Applies all registered category rules to Factorio crafting-machine prototypes.
+---@param recycle_categories {solid: string, fluid: string}
+function category_overrides.apply_registered_rules(recycle_categories)
+  category_overrides.apply_category_rules(
+    "furnace",
+    category_overrides.rules.furnace,
+    recycle_categories.solid,
+    recycle_categories.fluid
+  )
+  category_overrides.apply_category_rules(
+    "assembling-machine",
+    category_overrides.rules.assembling_machine,
+    recycle_categories.solid,
+    recycle_categories.fluid
+  )
+end
+
 return category_overrides

@@ -19,9 +19,18 @@ Useful options:
 - `--dump-profile NAME`: Ingredient Scrap settings profile, for example `default` or `recipe_chain_targets`.
 - `--debug-setting NAME`: startup setting forced to `true`; defaults to `yis-IS_DEBUG`.
 - `--no-debug-setting`: do not edit `mod-settings.dat`.
-- `--keep-mod-list`: leave the selected mod profile enabled after the run.
+- `--keep-mod-list`: leave the selected mod profile enabled after the run. Without
+  this option, the previous `mod-list.json` content is restored exactly after
+  the dump.
 - `--keep-saves`: keep temporary saves under `tools/test/tmp`.
 - `--open-viewer`: open `json-tree-viewer.html` after a successful dump.
+
+After a run, summarize Ingredient Scrap data-stage timing markers from
+`factorio-current.log`:
+
+```powershell
+python tools\toolset\is_timing.py
+```
 
 The generated files are:
 
@@ -53,6 +62,32 @@ window.__INGREDIENT_SCRAP_MATERIAL_FLOW__ = { ... };
 ```
 
 This exists because some browsers block direct `file://` JSON reads. The viewer first tries `?file=...material-flow.json` and can fall back to `?state=...material-flow-data.js`.
+
+`production-flow.json` is a neutral graph of recipes plus item/fluid prototype
+nodes. It intentionally excludes generated Ingredient Scrap recycling recipes
+and removes generated scrap byproducts from displayed recipe results, so it is
+useful for reviewing the original mod ecosystem.
+
+It also contains a passive classification catalog:
+
+```json
+{
+  "classification": {
+    "summary": { "production": 120, "smelting_process": 40 },
+    "by_class": { "production": ["item/iron-plate"] },
+    "nodes": {
+      "item/iron-plate": {
+        "class": "production",
+        "scores": { "production": 12 },
+        "reasons": ["consumer:normal-production-use"]
+      }
+    }
+  }
+}
+```
+
+The same `classification` object is also attached to each prototype node. These
+labels are review evidence only; they do not change generated recipes.
 
 ## Project Contract
 

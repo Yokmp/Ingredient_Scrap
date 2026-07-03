@@ -1,3 +1,5 @@
+local naming = require("code.lib.naming")
+
 local analysis = {}
 
 local MAX_EXAMPLES = 8
@@ -563,7 +565,7 @@ end
 ---@param score number
 ---@param candidate_filters table
 local function add_target_candidate(candidates, material_name, result, recipe, reason, score, candidate_filters)
-  if result.name == yokmods.ingredient_scrap.get_scrap_name(material_name) then return end
+  if result.name == naming.get_scrap_name(material_name) then return end
   if (result.type or "item") == "item" and candidate_filters.patterns[result.name] then return end
 
   local key = (result.type or "item") .. "/" .. result.name

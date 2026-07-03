@@ -200,6 +200,8 @@ def main() -> int:
     configure_run_tests_paths(factorio_exe)
 
     mod_profiles_json = mod_profiles_json_from_config(args.mod_profiles_json)
+    mod_list_file = modlist.default_mod_list_file(factorio_exe)
+    original_mod_list = mod_list_file.read_text(encoding="utf-8") if mod_list_file.exists() else None
     original_mod_settings = None
     extra_args: list[str] = []
     if args.factorio_verbose:
@@ -222,7 +224,10 @@ def main() -> int:
         if not args.no_debug_setting:
             run_tests.restore_mod_settings(original_mod_settings)
         if not args.keep_mod_list:
-            modlist.apply_profile(factorio_exe, run_tests.DEFAULT_TEST_MOD_PROFILE, mod_profiles_json)
+            if original_mod_list is not None:
+                mod_list_file.write_text(original_mod_list, encoding="utf-8")
+            elif mod_list_file.exists():
+                mod_list_file.unlink()
         run_tests.remove_profile()
         run_tests.remove_settings_cache()
         if not args.keep_saves:

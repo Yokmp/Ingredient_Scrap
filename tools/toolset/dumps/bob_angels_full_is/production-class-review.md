@@ -1,0 +1,516 @@
+# Bob+Angels Full Production-Class Review
+
+Generated from `production-flow.json` after passive node classification.
+This is review evidence only; no override rule should be inferred from one bucket without manual confirmation.
+
+## Summary
+
+- Production-class nodes: 1571
+- `barreling_recycling`: 337
+- `chemical`: 263
+- `hidden_disabled`: 1
+- `placeable`: 241
+- `production`: 322
+- `smelting_process`: 407
+
+## Current Material-Flow Materials
+
+- `advanced-circuit`: 77 flow entries
+- `aluminium`: 68 flow entries
+- `battery`: 11 flow entries
+- `bob-advanced-processing-unit`: 39 flow entries
+- `bob-basic-circuit-board`: 35 flow entries
+- `bob-battery-2`: 5 flow entries
+- `bob-battery-3`: 5 flow entries
+- `bob-brass-bearing`: 12 flow entries
+- `bob-brass-bearing-ball`: 1 flow entries
+- `bob-brass-gear-wheel`: 33 flow entries
+- `bob-brass-pipe`: 44 flow entries
+- `bob-bronze-pipe`: 25 flow entries
+- `bob-ceramic-pipe`: 1 flow entries
+- `bob-copper-tungsten-pipe`: 10 flow entries
+- `bob-gilded-copper-cable`: 9 flow entries
+- `bob-insulated-cable`: 5 flow entries
+- `bob-nitinol-bearing`: 10 flow entries
+- `bob-nitinol-gear-wheel`: 13 flow entries
+- `bob-plastic-pipe`: 2 flow entries
+- `bob-steel-bearing`: 4 flow entries
+- `bob-steel-bearing-ball`: 1 flow entries
+- `bob-steel-gear-wheel`: 35 flow entries
+- `bob-steel-pipe`: 28 flow entries
+- `bob-tinned-copper-cable`: 13 flow entries
+- `bob-titanium-bearing`: 13 flow entries
+- `bob-titanium-gear-wheel`: 28 flow entries
+- `bob-titanium-pipe`: 35 flow entries
+- `bob-tungsten-gear-wheel`: 11 flow entries
+- `bob-tungsten-pipe`: 16 flow entries
+- `brass`: 13 flow entries
+- `bronze`: 33 flow entries
+- `cobalt`: 1 flow entries
+- `cobalt-steel`: 13 flow entries
+- `copper`: 22 flow entries
+- `copper-cable`: 23 flow entries
+- `copper-tungsten`: 8 flow entries
+- `electronic-circuit`: 86 flow entries
+- `glass`: 8 flow entries
+- `gold`: 8 flow entries
+- `holmium`: 7 flow entries
+- `invar`: 1 flow entries
+- `iron`: 81 flow entries
+- `iron-gear-wheel`: 34 flow entries
+- `lead`: 7 flow entries
+- `nickel`: 12 flow entries
+- `nitinol`: 28 flow entries
+- `pipe`: 43 flow entries
+- `plastic`: 11 flow entries
+- `processing-unit`: 84 flow entries
+- `silicon`: 12 flow entries
+- `silver`: 8 flow entries
+- `steel`: 106 flow entries
+- `tin`: 10 flow entries
+- `titanium`: 72 flow entries
+- `tungsten`: 30 flow entries
+- `yis-blockium`: 1 flow entries
+- `yis-disabledium`: 1 flow entries
+- `yis-hiddenfluidium`: 2 flow entries
+- `yis-hiddenium`: 1 flow entries
+- `yis-quietium`: 1 flow entries
+- `yis-rare-metal`: 2 flow entries
+- `yis-solvium`: 2 flow entries
+- `yis-testium`: 9 flow entries
+- `zinc`: 6 flow entries
+
+## Review Notes
+
+- `place_result`, `place_as_tile`, and `place_as_equipment_result` remain important hard exclusions for material inference. Many machines, chests, belts, and tiles have real production consumers because they are used in upgrades.
+- Pipes are a deliberate exact-alias exception to the placeable exclusion because they are player-visible components and should produce scrap.
+- Quality recycling creates broad side-chain evidence on many nodes. It should stay visible in the dump, but should not decide material candidacy.
+- `enabled=false` is not low-signal by itself. In Factorio it often means tech-locked. Hidden recipes, `auto_recycle=false`, and `allow_decomposition=false` are better weak-evidence flags.
+- `likely_material_or_component` still mixes true material families with finished components. It is useful as a review queue, not as an automatic whitelist.
+- Bob prefixed base metals and supported alloys are normalized to stable material names. The current material-flow still contains `bob-*` names for exact component scrap, which is intentional.
+- Component families use exact source-prototype scrap for `battery`, `bearing`, `bearing-ball`, `board`, `cable`, `circuit`, `gear`, and `pipe`. Battery chemistry and preserve-shape handling remain deferred.
+
+## Barreling Recycling
+
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- ... 257 more entries omitted from this review snapshot
+
+## Chemical
+
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- ... 183 more entries omitted from this review snapshot
+
+## Hidden Disabled
+
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+
+## Placeable
+
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- ... 161 more entries omitted from this review snapshot
+
+## Production
+
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- ... 242 more entries omitted from this review snapshot
+
+## Smelting Process
+
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- `unknown/<unknown>` (prod=0, proc=0, chem=0, side=0, place=0; consumers=0)
+- ... 327 more entries omitted from this review snapshot
+

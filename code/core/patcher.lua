@@ -2,6 +2,119 @@
 ---*PATCHER*                  --
 --------------------------------
 
+local data_table_writer = require("code.core.data-table.writer")
+local is_log = require("code.lib.is-log")
+local naming = require("code.lib.naming")
+
+local patcher = {}
+
+---Returns a Factorio-safe copy of an internal staged result.
+local function final_result_copy(result, final_name)
+  local copy = {}
+  for key, value in pairs(result) do
+    if type(key) ~= "string" or not key:match("^yis_") then
+      copy[key] = value
+    end
+  end
+  copy.name = final_name
+  return copy
+end
+
+---Returns the number of distinct item results in a recipe after internal names are finalized.
+local function item_result_width(recipe)
+  local names = {}
+  local count = 0
+  for _, result in ipairs((recipe and recipe.results) or {}) do
+    if (result.type or "item") == "item" and result.name then
+      local final_name = data_table_writer.final_result_name(result.name)
+      if final_name and not names[final_name] then
+        names[final_name] = true
+        count = count + 1
+      end
+    end
+  end
+  return count
+end
+
+---Returns true when a recipe contains an Ingredient Scrap item result.
+local function has_ingredient_scrap_item_result(recipe)
+  for _, result in ipairs((recipe and recipe.results) or {}) do
+    local final_name = data_table_writer.final_result_name(result.name)
+    if (result.type or "item") == "item" and final_name and final_name:match("^yis%-.*%-scrap$") then
+      return true
+    end
+  end
+  return false
+end
+
+---Returns true when a machine supports the requested crafting category.
+local function machine_has_category(machine, category)
+  for _, crafting_category in ipairs((machine and machine.crafting_categories) or {}) do
+    if crafting_category == category then return true end
+  end
+  return false
+end
+
+---Raises furnace output inventories so every supported recipe can fit its item results.
+local function update_furnace_result_inventory_sizes(data_table)
+  local max_width_by_category = {}
+  local max_recipe_by_category = {}
+
+  for recipe_name, recipe in pairs(data.raw.recipe or {}) do
+    local category = recipe.category
+    if category and has_ingredient_scrap_item_result(recipe) then
+      local width = item_result_width(recipe)
+      if width > (max_width_by_category[category] or 0) then
+        max_width_by_category[category] = width
+        max_recipe_by_category[category] = recipe_name
+      end
+    end
+  end
+
+  local changes = {}
+  for furnace_name, furnace in pairs(data.raw.furnace or {}) do
+    local required_width = 0
+    local required_category = nil
+    local required_recipe = nil
+    for category, width in pairs(max_width_by_category) do
+      if width > required_width and machine_has_category(furnace, category) then
+        required_width = width
+        required_category = category
+        required_recipe = max_recipe_by_category[category]
+      end
+    end
+
+    local current_width = furnace.result_inventory_size or 0
+    if required_width > current_width then
+      furnace.result_inventory_size = required_width
+      table.insert(changes, {
+        furnace = furnace_name,
+        from = current_width,
+        to = required_width,
+        category = required_category,
+        recipe = required_recipe,
+      })
+    end
+  end
+
+  data_table.debug = data_table.debug or {}
+  data_table.debug.furnace_result_inventory = {
+    max_width_by_category = max_width_by_category,
+    max_recipe_by_category = max_recipe_by_category,
+    changes = changes,
+  }
+
+  if #changes > 0 then
+    is_log.write(
+      "patcher",
+      "warn",
+      "furnace-result-inventory",
+      "Raised furnace result inventories to fit generated scrap outputs.",
+      { changes = changes }
+    )
+  end
+end
+
 ---Appends a normalized validation error to the provided error list.
 local function add_error(errors, id, name, message, details)
   table.insert(errors, {
@@ -15,17 +128,13 @@ end
 ---Logs a disabled generated prototype as a warning without failing validation.
 local function warn_disabled_prototype(prototype_type, name, prototype, source)
   if prototype.enabled ~= false then return end
-  if yokmods.ingredient_scrap.is_log then
-    yokmods.ingredient_scrap.is_log(
-      "patcher",
-      "warn",
-      "validate-generated-prototypes",
-      "Generated " .. prototype_type .. " is disabled; keeping it because API or compat mods may do this intentionally.",
-      { prototype_type = prototype_type, name = name, source = source }
-    )
-  elseif log then
-    log("[IS][warn][patcher][validate-generated-prototypes] Generated " .. prototype_type .. " is disabled: " .. name)
-  end
+  is_log.write(
+    "patcher",
+    "warn",
+    "validate-generated-prototypes",
+    "Generated " .. prototype_type .. " is disabled; keeping it because API or compat mods may do this intentionally.",
+    { prototype_type = prototype_type, name = name, source = source }
+  )
 end
 
 ---Returns true when a value is a valid RGB or RGBA Factorio color table.
@@ -43,8 +152,9 @@ local function is_color(value)
 end
 
 ---Validates generated items, recipes, and technologies before they are registered with Factorio.
-function yokmods.ingredient_scrap.validate_generated_prototypes()
-  local data_table = yokmods.ingredient_scrap.data_table
+---@param data_table ISdata_table
+---@return table
+function patcher.validate_generated_prototypes(data_table)
   local errors = {}
 
   for name, item in pairs(data_table.prototypes.items or {}) do
@@ -108,14 +218,14 @@ function yokmods.ingredient_scrap.validate_generated_prototypes()
 end
 
 ---Derives recycle recipe input amounts from the expected scrap output of all patched recipes.
-function yokmods.ingredient_scrap.patch_recycle_amounts()
-  local data_table = yokmods.ingredient_scrap.data_table
+---@param data_table ISdata_table
+function patcher.patch_recycle_amounts(data_table)
   local totals = {}
 
   for _, insert in pairs(data_table.inserts.recipes) do
     if insert.results then
       for _, result in ipairs(insert.results) do
-        local scrap_name = result.name
+        local scrap_name = data_table_writer.final_result_name(result.name)
         totals[scrap_name] = totals[scrap_name] or { sum = 0, count = 0 }
         local expected
         if ISsettings.fixed_amount then
@@ -137,7 +247,7 @@ function yokmods.ingredient_scrap.patch_recycle_amounts()
       needed = math.max(math.floor(ISsettings.needed / avg), 1)
     end
     local scrap_type = scrap_name:gsub("^yis%-", ""):gsub("%-scrap$", "")
-    local base_recipe_name = yokmods.ingredient_scrap.get_recycle_recipe_name(scrap_type)
+    local base_recipe_name = naming.get_recycle_recipe_name(scrap_type)
     local recipe_names = {
       base_recipe_name,
       base_recipe_name .. "-to-fluid",
@@ -147,7 +257,7 @@ function yokmods.ingredient_scrap.patch_recycle_amounts()
       local recipe = data_table.prototypes.recipes[recipe_name]
       if recipe and recipe.ingredients and recipe.ingredients[1] then
         recipe.ingredients[1].amount = needed
-        log("[IS-REECIPE] " .. recipe_name .. " needs " .. needed .. "x " .. scrap_name
+        log("[IS-RECIPE] " .. recipe_name .. " needs " .. needed .. "x " .. scrap_name
           .. " (avg expected: " .. string.format("%.2f", avg) .. ")")
       end
     end
@@ -155,8 +265,8 @@ function yokmods.ingredient_scrap.patch_recycle_amounts()
 end
 
 ---Registers generated prototypes and applies queued scrap result inserts to existing recipes.
-function yokmods.ingredient_scrap.patch()
-  local data_table = yokmods.ingredient_scrap.data_table
+---@param data_table ISdata_table
+function patcher.patch(data_table)
 
   local items_to_extend = {}
   for _, item_proto in pairs(data_table.prototypes.items) do
@@ -194,19 +304,30 @@ function yokmods.ingredient_scrap.patch()
       recipe.main_product = insert_data.main_product
       recipe.results = recipe.results or {}
       for _, result in ipairs(insert_data.results) do
+        local final_name = data_table_writer.final_result_name(result.name)
         local already_exists = false
         for _, existing in ipairs(recipe.results) do
-          if existing.name == result.name then
+          if existing.name == final_name then
             already_exists = true
+            if ISsettings.fixed_amount then
+              existing.amount = (existing.amount or 0) + (result.amount or 0)
+            else
+              existing.amount_min = (existing.amount_min or 0) + (result.amount_min or 0)
+              existing.amount_max = (existing.amount_max or 0) + (result.amount_max or 0)
+            end
             break
           end
         end
         if not already_exists then
-          table.insert(recipe.results, result)
+          local final_result = final_result_copy(result, final_name)
+          table.insert(recipe.results, final_result)
         end
       end
       inserts = inserts + 1
     end
   end
   log("Patched " .. inserts .. " recipe(s) with scrap results.")
+  update_furnace_result_inventory_sizes(data_table)
 end
+
+return patcher

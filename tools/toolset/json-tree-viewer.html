@@ -275,10 +275,6 @@
     overflow-y:auto;
     min-height:0;
   }
-  .filter-section .inset-box{
-    border-top:1px solid #000;
-  }
-
   .load-controls{
     display:flex;
     flex-direction:column;
@@ -301,26 +297,54 @@
     color:var(--text);
     background:var(--accent-soft);
   }
-  .expand-controls{
+  .viewer-actions{
     display:flex;
+    align-items:center;
     gap:6px;
+    margin-left:auto;
   }
-  .expand-controls button{ flex:1; }
-  .view-controls{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:6px;
-    margin-top:6px;
+  .view-menu{
+    position:relative;
   }
-  .view-controls.three{
-    grid-template-columns:1fr 1fr 1fr;
+  .view-menu-button,
+  .history-button{
+    min-height:28px;
+    padding:4px 10px;
+    white-space:nowrap;
   }
-  .view-controls button.active{
+  .view-menu-panel{
+    position:absolute;
+    right:0;
+    top:calc(100% + 4px);
+    min-width:150px;
+    z-index:20;
+    display:none;
+    padding:4px;
+    background:var(--bg-panel);
+    border:1px solid #000;
+    box-shadow:0 8px 18px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.04);
+  }
+  .view-menu.open .view-menu-panel{
+    display:block;
+  }
+  .view-menu-panel button{
+    display:block;
+    width:100%;
+    margin:0;
+    text-align:left;
+    border-color:transparent;
+    background:transparent;
+    box-shadow:none;
+  }
+  .view-menu-panel button:hover,
+  .view-menu-panel button.active{
     background:var(--accent);
     color:#231704;
   }
-  .view-controls button.hidden{
-    display:none !important;
+  .view-menu-separator{
+    height:1px;
+    margin:4px 2px;
+    background:var(--border);
   }
 
   /* quicklinks / material list */
@@ -360,6 +384,29 @@
     padding:10px 12px;
     color:var(--text-dim);
     font-size:12px;
+  }
+  .inline-search{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:4px;
+    min-width:150px;
+    max-width:240px;
+    flex:0 1 220px;
+  }
+  .inline-search input{
+    min-width:0;
+    width:100%;
+    height:24px;
+    padding:3px 7px;
+    font-size:11.5px;
+  }
+  .inline-search button{
+    width:24px;
+    height:24px;
+    padding:0;
+    line-height:1;
+    flex:0 0 auto;
   }
   .material-title{
     min-width:0;
@@ -404,6 +451,13 @@
     color:var(--text-dim);
     font-size:11.5px;
     margin:0;
+  }
+  .content-panel .ribbon .doc-copy{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    min-width:0;
+    flex:1;
   }
   .content-panel .inset-box{
     flex:1;
@@ -573,7 +627,8 @@
     border-radius:2px;
   }
   li.tree-node.filtered-hidden,
-  ul.quicklinks li.filtered-hidden{
+  ul.quicklinks li.filtered-hidden,
+  .flow-card.filtered-hidden{
     display:none;
   }
 
@@ -816,28 +871,6 @@
       </div>
     </div>
 
-    <div class="sidebar-section filter-section">
-      <div class="inset-box">
-        <input type="text" id="filterInput" placeholder="Filter key or value...">
-      </div>
-    </div>
-
-    <div class="sidebar-section accordion active" data-accordion-section>
-      <button class="ribbon panel-title" type="button" data-accordion-title>Tree Controls</button>
-      <div class="inset-box">
-        <div class="expand-controls">
-          <button id="btnExpandAll">Expand all</button>
-          <button id="btnCollapseAll">Collapse all</button>
-        </div>
-        <div class="view-controls" id="viewControls">
-          <button id="btnTreeView" class="active">Tree</button>
-          <button id="btnProductionView">Production</button>
-          <button id="btnProductChain" class="hidden">Product</button>
-          <button id="btnRecipeChain" class="hidden">Recipe</button>
-        </div>
-      </div>
-    </div>
-
     <div class="sidebar-section grow">
       <p class="ribbon panel-title" id="quicklinksTitle">Materials</p>
       <div class="inset-box flush">
@@ -852,8 +885,31 @@
   <main class="content">
     <div class="content-panel">
       <div class="ribbon" id="docHeader">
-        <h1 class="doc-title" id="docTitle">JSON Flow Viewer Manual</h1>
-        <p class="doc-sub" id="docSub">Load a JSON file on the right to inspect it as a tree or as an Ingredient Scrap production flow.</p>
+        <div class="doc-copy">
+          <h1 class="doc-title" id="docTitle">JSON Flow Viewer Manual</h1>
+          <p class="doc-sub" id="docSub">Load a JSON file on the right to inspect it as a tree or as an Ingredient Scrap production flow.</p>
+        </div>
+        <span class="inline-search">
+          <input type="text" id="filterInput" placeholder="Search view...">
+          <button type="button" id="filterClear" title="Clear view search">x</button>
+        </span>
+        <div class="viewer-actions">
+          <div class="view-menu" id="viewMenu">
+            <button type="button" class="view-menu-button" id="btnViewMenu">View</button>
+            <div class="view-menu-panel" id="viewMenuPanel">
+              <button type="button" data-view-action="tree">Tree</button>
+              <button type="button" data-view-action="product">Product</button>
+              <button type="button" data-view-action="recipe">Recipe</button>
+              <button type="button" data-view-action="skipped">Skipped</button>
+              <button type="button" data-view-action="technology">Technology</button>
+              <div class="view-menu-separator" data-tree-actions></div>
+              <button type="button" data-view-action="expand" data-tree-actions>Expand all</button>
+              <button type="button" data-view-action="collapse" data-tree-actions>Collapse all</button>
+            </div>
+          </div>
+          <button type="button" class="history-button" id="btnHistoryBack" title="Previous viewed entry" disabled>&lt;&lt;</button>
+          <button type="button" class="history-button" id="btnHistoryForward" title="Next viewed entry" disabled>&gt;&gt;</button>
+        </div>
       </div>
 
       <div class="inset-box">
@@ -1012,18 +1068,25 @@ entry.result.prototype.icon</pre>
   var docTitle    = document.getElementById('docTitle');
   var docSub      = document.getElementById('docSub');
   var filterInput = document.getElementById('filterInput');
+  var filterClear = document.getElementById('filterClear');
   var quicklinksTitle = document.getElementById('quicklinksTitle');
-  var viewControls = document.getElementById('viewControls');
-  var btnTreeView = document.getElementById('btnTreeView');
-  var btnProductionView = document.getElementById('btnProductionView');
-  var btnProductChain = document.getElementById('btnProductChain');
-  var btnRecipeChain = document.getElementById('btnRecipeChain');
+  var viewMenu = document.getElementById('viewMenu');
+  var btnViewMenu = document.getElementById('btnViewMenu');
+  var viewMenuPanel = document.getElementById('viewMenuPanel');
+  var btnHistoryBack = document.getElementById('btnHistoryBack');
+  var btnHistoryForward = document.getElementById('btnHistoryForward');
   var currentData = null;
   var currentFileName = null;
   var viewMode = 'tree';
   var materialIndex = null;
   var selectedMaterial = null;
+  var technologyIndex = null;
+  var selectedTechnology = null;
+  var selectedTreeKey = null;
   var materialViewMode = 'product';
+  var historyStack = [];
+  var historyIndex = -1;
+  var applyingHistory = false;
   var iconAssets = {
     exact: {},
     byInnerPath: {},
@@ -1055,24 +1118,26 @@ entry.result.prototype.icon</pre>
     }
   });
 
-  function setActiveSidebarSection(section){
-    if (!section) return;
-    section.classList.toggle('active');
-  }
-
-  document.querySelectorAll('[data-accordion-title]').forEach(function(title){
-    title.addEventListener('click', function(){
-      setActiveSidebarSection(title.closest('[data-accordion-section]'));
-    });
-  });
-
   document.getElementById('btnOpenTop').addEventListener('click', function(){ fileInput.click(); });
   document.getElementById('btnOpenEmpty').addEventListener('click', function(){ fileInput.click(); });
   dropArea.addEventListener('click', function(){ fileInput.click(); });
-  btnTreeView.addEventListener('click', function(){ setViewMode('tree'); });
-  btnProductionView.addEventListener('click', function(){ setViewMode('production'); });
-  btnProductChain.addEventListener('click', function(){ setMaterialViewMode('product'); });
-  btnRecipeChain.addEventListener('click', function(){ setMaterialViewMode('recipe'); });
+  btnViewMenu.addEventListener('click', function(ev){
+    ev.stopPropagation();
+    viewMenu.classList.toggle('open');
+  });
+  document.addEventListener('click', function(){
+    viewMenu.classList.remove('open');
+  });
+  viewMenuPanel.addEventListener('click', function(ev){
+    var action = ev.target && ev.target.dataset && ev.target.dataset.viewAction;
+    if (!action) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    viewMenu.classList.remove('open');
+    handleViewAction(action);
+  });
+  btnHistoryBack.addEventListener('click', function(){ navigateHistory(-1); });
+  btnHistoryForward.addEventListener('click', function(){ navigateHistory(1); });
 
   var initialFilePath = normalizeFileParam(queryParam('file'));
   var initialStatePath = queryParam('state');
@@ -1171,7 +1236,7 @@ entry.result.prototype.icon</pre>
       applyDataFactorioRoot(data);
       resolveIconsInData(data);
       loadStatus.textContent = 'Loaded: ' + file.name + assetStatusSuffix(loadedArchives, loadedImages);
-      showLoadedData(data, file.name, isProductionViewData(data) ? 'production' : 'tree');
+      showLoadedData(data, file.name, preferredViewMode(data));
     };
     reader.onerror = function(){
       loadStatus.textContent = 'File could not be read.';
@@ -1192,7 +1257,7 @@ entry.result.prototype.icon</pre>
       resolveIconsInData(data);
       var fileName = normalized.split('/').pop() || 'material-flow.json';
       loadStatus.textContent = 'Loaded: ' + fileName;
-      showLoadedData(data, fileName, isProductionViewData(data) ? 'production' : 'tree');
+      showLoadedData(data, fileName, preferredViewMode(data));
     }catch(err){
       if (initialStatePath && normalized === String(initialFilePath || '').replace(/\\/g, '/')){
         loadStateScript(initialStatePath);
@@ -1313,16 +1378,18 @@ entry.result.prototype.icon</pre>
     loadStatus.classList.remove('error');
     var script = document.createElement('script');
     script.onload = function(){
-      var data = window.__INGREDIENT_SCRAP_MATERIAL_FLOW__;
+      var data = window.__INGREDIENT_SCRAP_VIEWER_DATA__ || window.__INGREDIENT_SCRAP_MATERIAL_FLOW__;
       if (!data){
-        loadStatus.textContent = 'Auto-load failed: state script did not contain material flow data.';
+        loadStatus.textContent = 'Auto-load failed: state script did not contain viewer data.';
         loadStatus.classList.add('error');
         return;
       }
       applyDataFactorioRoot(data);
       resolveIconsInData(data);
-      loadStatus.textContent = 'Loaded: material-flow.json';
-      showLoadedData(data, 'material-flow.json', 'production');
+      var fileName = normalized.split('/').pop() || 'flow-data.js';
+      fileName = fileName.replace(/-data\.js$/i, '.json');
+      loadStatus.textContent = 'Loaded: ' + fileName;
+      showLoadedData(data, fileName, preferredViewMode(data));
     };
     script.onerror = function(){
       if (initialFilePath && initialFilePath !== path && /\.json$/i.test(initialFilePath)){
@@ -1348,7 +1415,13 @@ entry.result.prototype.icon</pre>
     currentData = data;
     currentFileName = fileName;
     viewMode = preferredMode || 'tree';
+    selectedMaterial = null;
+    selectedTechnology = null;
+    selectedTreeKey = null;
+    historyStack = [];
+    historyIndex = -1;
     renderRoot(data);
+    recordHistory(currentHistoryState());
   }
 
   function isJsonFile(file){
@@ -1697,6 +1770,14 @@ entry.result.prototype.icon</pre>
 
   function pathToFileUrl(path){
     var normalized = String(path || '').replace(/\\/g, '/');
+    if (/^https?:$/i.test(window.location.protocol)){
+      if (normalized.indexOf('/') === 0){
+        return encodeURI(normalized);
+      }
+      if (!/^[A-Za-z]:\//.test(normalized)){
+        return encodeURI(normalized);
+      }
+    }
     if (/^[A-Za-z]:\//.test(normalized)){
       return 'file:///' + encodeURI(normalized);
     }
@@ -1840,7 +1921,7 @@ entry.result.prototype.icon</pre>
   }
 
   function renderRoot(data){
-    updateViewButtons(data);
+    updateViewMenu(data);
     if (viewMode === 'production' && isMaterialFlowData(data)){
       renderMaterialFlowRoot(data);
       return;
@@ -1849,22 +1930,26 @@ entry.result.prototype.icon</pre>
       renderProductionFlowRoot(data);
       return;
     }
+    if (viewMode === 'technology' && isTechnologyFlowData(data)){
+      renderTechnologyFlowRoot(data);
+      return;
+    }
     renderGenericRoot(data);
   }
 
   function renderGenericRoot(data){
     materialIndex = null;
     selectedMaterial = null;
+    technologyIndex = null;
+    selectedTechnology = null;
     quicklinksTitle.textContent = 'Quicklinks';
-    btnTreeView.classList.add('active');
-    btnProductionView.classList.remove('active');
-    btnProductChain.classList.add('hidden');
-    btnRecipeChain.classList.add('hidden');
-    viewControls.classList.remove('three');
     treeRoot.innerHTML = '';
     quicklinks.innerHTML = '';
     treeRoot.style.display = '';
     emptyState.style.display = 'none';
+    var rootCount = (typeof data === 'object' && data !== null) ? Object.keys(data).length : 0;
+    docTitle.textContent = currentFileName || 'JSON';
+    docSub.textContent = 'Root node with ' + rootCount + ' top-level key' + (rootCount === 1 ? '' : 's') + '. Click entries to expand or collapse.';
 
     var type = valueType(data);
     var entries;
@@ -1911,22 +1996,90 @@ entry.result.prototype.icon</pre>
         quicklinks.appendChild(li);
       }
     });
-  }
-
-  function updateViewButtons(data){
-    var hasProduction = isProductionViewData(data);
-    btnProductionView.disabled = !hasProduction;
-    btnProductionView.title = hasProduction ? 'Show production chain view' : 'Production view requires material-flow or production-flow JSON';
-    btnProductChain.classList.toggle('hidden', !(hasProduction && viewMode === 'production'));
-    btnRecipeChain.classList.toggle('hidden', !(hasProduction && viewMode === 'production'));
-    viewControls.classList.toggle('three', hasProduction && viewMode === 'production');
+    applyCurrentFilters();
   }
 
   function setViewMode(mode){
     if (!currentData) return;
     if (mode === 'production' && !isProductionViewData(currentData)) return;
+    if (mode === 'technology' && !isTechnologyFlowData(currentData)) return;
     viewMode = mode;
     renderRoot(currentData);
+    recordHistory(currentHistoryState());
+  }
+
+  function viewLabel(){
+    if (viewMode === 'tree') return 'Tree';
+    if (viewMode === 'technology') return 'Technology';
+    if (materialViewMode === 'recipe') return 'Recipe';
+    if (materialViewMode === 'skipped') return 'Skipped';
+    return 'Product';
+  }
+
+  function availableViewActions(data){
+    var actions = { tree: true, product: false, recipe: false, skipped: false, technology: false };
+    if (isProductionViewData(data)){
+      actions.product = true;
+      actions.recipe = true;
+    }
+    if (isMaterialFlowData(data)){
+      actions.skipped = true;
+    }
+    if (isTechnologyFlowData(data)){
+      actions.technology = true;
+    }
+    return actions;
+  }
+
+  function updateViewMenu(data){
+    var actions = availableViewActions(data);
+    btnViewMenu.textContent = 'View: ' + viewLabel();
+    viewMenuPanel.querySelectorAll('[data-view-action]').forEach(function(button){
+      var action = button.dataset.viewAction;
+      var visible = true;
+      if (action === 'product' || action === 'recipe' || action === 'skipped' || action === 'technology'){
+        visible = !!actions[action];
+      }
+      if (action === 'expand' || action === 'collapse'){
+        visible = viewMode === 'tree';
+      }
+      button.style.display = visible ? '' : 'none';
+      button.classList.toggle('active',
+        (action === 'tree' && viewMode === 'tree') ||
+        (action === 'technology' && viewMode === 'technology') ||
+        (action === materialViewMode && viewMode === 'production')
+      );
+    });
+    viewMenuPanel.querySelectorAll('[data-tree-actions]').forEach(function(item){
+      item.style.display = viewMode === 'tree' ? '' : 'none';
+    });
+    updateHistoryButtons();
+  }
+
+  function handleViewAction(action){
+    if (action === 'expand'){
+      expandAllTreeNodes();
+      return;
+    }
+    if (action === 'collapse'){
+      collapseAllTreeNodes();
+      return;
+    }
+    if (action === 'tree'){
+      setViewMode('tree');
+      return;
+    }
+    if (action === 'technology'){
+      setViewMode('technology');
+      return;
+    }
+    setMaterialViewMode(action);
+  }
+
+  function preferredViewMode(data){
+    if (isTechnologyFlowData(data)) return 'technology';
+    if (isProductionViewData(data)) return 'production';
+    return 'tree';
   }
 
   function isProductionViewData(data){
@@ -1944,6 +2097,13 @@ entry.result.prototype.icon</pre>
       && typeof data.recipes === 'object';
   }
 
+  function isTechnologyFlowData(data){
+    return data
+      && data.schema === 'ingredient-scrap-technology-flow/v1'
+      && data.technologies
+      && typeof data.technologies === 'object';
+  }
+
   function buildMaterialIndex(data){
     var index = {};
     (data.flows || []).forEach(function(flow){
@@ -1953,6 +2113,7 @@ entry.result.prototype.icon</pre>
           material: flow.material,
           modes: {},
           flows: [],
+          skipped: [],
           resources: data.resources_by_material && data.resources_by_material[flow.material],
           recycle: data.recycle_by_material && data.recycle_by_material[flow.material]
         };
@@ -1960,22 +2121,37 @@ entry.result.prototype.icon</pre>
       index[flow.material].flows.push(flow);
       index[flow.material].modes[flow.mode || 'unknown'] = true;
     });
+    (data.skipped_sources || []).forEach(function(skip){
+      if (!skip || !skip.material) return;
+      if (!index[skip.material]){
+        index[skip.material] = {
+          material: skip.material,
+          modes: {},
+          flows: [],
+          skipped: [],
+          resources: data.resources_by_material && data.resources_by_material[skip.material],
+          recycle: data.recycle_by_material && data.recycle_by_material[skip.material]
+        };
+      }
+      index[skip.material].skipped.push(skip);
+      index[skip.material].modes[skip.mode || 'skipped'] = true;
+    });
     return index;
   }
 
   function renderMaterialFlowRoot(data){
     materialIndex = buildMaterialIndex(data);
+    technologyIndex = null;
+    selectedTechnology = null;
     quicklinksTitle.textContent = 'Materials';
-    btnTreeView.classList.remove('active');
-    btnProductionView.classList.add('active');
-    btnProductChain.classList.toggle('active', materialViewMode === 'product');
-    btnRecipeChain.classList.toggle('active', materialViewMode === 'recipe');
     treeRoot.innerHTML = '';
     quicklinks.innerHTML = '';
     treeRoot.style.display = '';
     emptyState.style.display = 'none';
     docTitle.textContent = currentFileName || 'Ingredient Scrap Material Flow';
-    docSub.textContent = Object.keys(materialIndex).length + ' materials, ' + data.flows.length + ' flow entries. Select a material on the right.';
+    docSub.textContent = Object.keys(materialIndex).length + ' materials, '
+      + data.flows.length + ' flow entries, '
+      + (data.skipped_sources || []).length + ' skipped source entries. Select a material on the right.';
 
     var names = Object.keys(materialIndex).sort(function(a, b){ return a.localeCompare(b); });
     if (names.length === 0){
@@ -1997,7 +2173,8 @@ entry.result.prototype.icon</pre>
 
       var mode = document.createElement('span');
       mode.className = 'qtype material-mode';
-      mode.textContent = Object.keys(materialIndex[name].modes).sort().join('+');
+      var skipCount = (materialIndex[name].skipped || []).length;
+      mode.textContent = Object.keys(materialIndex[name].modes).sort().join('+') + (skipCount ? ' | skipped ' + skipCount : '');
       a.appendChild(mode);
 
       a.addEventListener('click', function(ev){
@@ -2008,7 +2185,11 @@ entry.result.prototype.icon</pre>
       quicklinks.appendChild(li);
     });
 
-    selectMaterial(firstNameWithFlows(names, materialIndex) || names[0]);
+    selectMaterial((selectedMaterial && materialIndex[selectedMaterial])
+      ? selectedMaterial
+      : (firstNameWithFlows(names, materialIndex) || names[0]), { skipHistory: true });
+    applyCurrentFilters();
+    updateViewMenu(data);
   }
 
   function firstNameWithFlows(names, index){
@@ -2022,12 +2203,13 @@ entry.result.prototype.icon</pre>
   }
 
   function renderProductionFlowRoot(data){
+    if (materialViewMode === 'skipped'){
+      materialViewMode = 'product';
+    }
     materialIndex = buildProductionNodeIndex(data);
+    technologyIndex = null;
+    selectedTechnology = null;
     quicklinksTitle.textContent = 'Items / Fluids';
-    btnTreeView.classList.remove('active');
-    btnProductionView.classList.add('active');
-    btnProductChain.classList.toggle('active', materialViewMode === 'product');
-    btnRecipeChain.classList.toggle('active', materialViewMode === 'recipe');
     treeRoot.innerHTML = '';
     quicklinks.innerHTML = '';
     treeRoot.style.display = '';
@@ -2067,7 +2249,212 @@ entry.result.prototype.icon</pre>
       quicklinks.appendChild(li);
     });
 
-    selectMaterial(firstNameWithFlows(names, materialIndex) || names[0]);
+    selectMaterial((selectedMaterial && materialIndex[selectedMaterial])
+      ? selectedMaterial
+      : (firstNameWithFlows(names, materialIndex) || names[0]), { skipHistory: true });
+    applyCurrentFilters();
+    updateViewMenu(data);
+  }
+
+  function buildTechnologyIndex(data){
+    var index = {};
+    var list = Array.isArray(data.technology_list)
+      ? data.technology_list
+      : Object.keys(data.technologies || {}).map(function(name){ return data.technologies[name]; });
+    list.forEach(function(technology){
+      if (!technology || !technology.name) return;
+      index[technology.name] = technology;
+    });
+    return index;
+  }
+
+  function renderTechnologyFlowRoot(data){
+    materialIndex = null;
+    selectedMaterial = null;
+    technologyIndex = buildTechnologyIndex(data);
+    quicklinksTitle.textContent = 'Technologies';
+    treeRoot.innerHTML = '';
+    quicklinks.innerHTML = '';
+    treeRoot.style.display = '';
+    emptyState.style.display = 'none';
+
+    var names = Object.keys(technologyIndex).sort(function(a, b){ return a.localeCompare(b); });
+    var summary = data.summary || {};
+    docTitle.textContent = currentFileName || 'Technology Flow';
+    docSub.textContent = names.length + ' technologies, '
+      + (summary.unlocks || 0) + ' recipe unlocks, '
+      + (summary.research_triggers || 0) + ' research triggers. Select a technology on the right.';
+
+    if (names.length === 0){
+      quicklinks.innerHTML = '<li class="quicklinks-empty">No technologies found.</li>';
+      treeRoot.appendChild(buildNode('technology_flow', data, true));
+      return;
+    }
+
+    names.forEach(function(name){
+      var technology = technologyIndex[name];
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.href = '#technology-' + slug(name);
+      a.dataset.technology = name;
+
+      var label = document.createElement('span');
+      label.className = 'material-title';
+      label.textContent = name;
+      a.appendChild(label);
+
+      var mode = document.createElement('span');
+      mode.className = 'qtype material-mode';
+      var flags = [];
+      if (technology.hidden === true) flags.push('hidden');
+      if (technology.enabled === false) flags.push('disabled');
+      flags.push((technology.unlocks || []).length + ' unlocks');
+      mode.textContent = flags.join(' | ');
+      a.appendChild(mode);
+
+      a.addEventListener('click', function(ev){
+        ev.preventDefault();
+        selectTechnology(name);
+      });
+      li.appendChild(a);
+      quicklinks.appendChild(li);
+    });
+
+    selectTechnology((selectedTechnology && technologyIndex[selectedTechnology])
+      ? selectedTechnology
+      : names[0], { skipHistory: true });
+    applyCurrentFilters();
+    updateViewMenu(data);
+  }
+
+  function selectTechnology(name, options){
+    if (!technologyIndex || !technologyIndex[name]) return;
+    selectedTechnology = name;
+    selectedMaterial = null;
+    quicklinks.querySelectorAll('a').forEach(function(a){
+      a.classList.toggle('active', a.dataset.technology === name);
+    });
+    renderSelectedTechnology();
+    if (!options || !options.skipHistory){
+      recordHistory(currentHistoryState());
+    }
+  }
+
+  function renderSelectedTechnology(){
+    var technology = technologyIndex && technologyIndex[selectedTechnology];
+    if (!technology) return;
+
+    treeRoot.innerHTML = '';
+    var graph = document.createElement('div');
+    graph.className = 'flow-graph';
+    graph.appendChild(buildTechnologyCard(technology));
+    treeRoot.appendChild(graph);
+
+    docTitle.textContent = technology.name;
+    docSub.textContent = 'Technology with '
+      + arrayFromMaybeTable(technology.origins).length + ' origin entries and '
+      + arrayFromMaybeTable(technology.unlocks).length + ' recipe unlocks.';
+    applyCurrentFilters();
+  }
+
+  function buildTechnologyCard(technology){
+    var card = document.createElement('div');
+    card.className = 'flow-card';
+    card.appendChild(buildFlowColumn('Origin', technologyOriginEntries(technology), 'technology-origin'));
+
+    var node = document.createElement('div');
+    node.className = 'flow-node';
+
+    var heading = document.createElement('h3');
+    heading.className = 'flow-heading';
+    heading.textContent = 'Technology';
+    node.appendChild(heading);
+
+    var title = document.createElement('div');
+    title.className = 'flow-chip';
+    title.appendChild(buildFlowIcon(technology));
+    var titleLabel = document.createElement('span');
+    titleLabel.className = 'flow-label';
+    titleLabel.textContent = technology.name;
+    title.appendChild(titleLabel);
+    node.appendChild(title);
+
+    var meta = document.createElement('div');
+    meta.className = 'flow-sub';
+    meta.textContent = technologyMetaText(technology);
+    node.appendChild(meta);
+
+    if (technology.research_trigger){
+      var trigger = document.createElement('div');
+      trigger.className = 'flow-sub';
+      trigger.textContent = 'trigger: ' + technologyTriggerText(technology.research_trigger);
+      node.appendChild(trigger);
+    }
+
+    var unitIngredients = arrayFromMaybeTable(technology.unit && technology.unit.ingredients);
+    if (unitIngredients.length){
+      var packs = document.createElement('div');
+      packs.className = 'flow-sub';
+      packs.textContent = 'science: ' + unitIngredients.map(function(ingredient){
+        return ingredient.name + ' x' + (ingredient.amount || 1);
+      }).join(', ');
+      node.appendChild(packs);
+    }
+    card.appendChild(node);
+
+    card.appendChild(buildFlowColumn('Unlocks', technologyUnlockEntries(technology), 'technology-unlock'));
+    return card;
+  }
+
+  function technologyOriginEntries(technology){
+    var entries = [];
+    arrayFromMaybeTable(technology.origins).forEach(function(origin){
+      if (!origin) return;
+      if (origin.type === 'research-trigger' && origin.trigger){
+        entries.push({
+          type: 'trigger',
+          name: technologyTriggerText(origin.trigger),
+          amount: origin.amount,
+          prototype: origin.prototype || origin.trigger.prototype
+        });
+      } else {
+        entries.push(origin);
+      }
+    });
+    return entries;
+  }
+
+  function technologyUnlockEntries(technology){
+    return arrayFromMaybeTable(technology.unlocks).map(function(unlock){
+      return {
+        type: 'recipe',
+        name: unlock.name,
+        prototype: unlock.prototype
+      };
+    });
+  }
+
+  function technologyTriggerText(trigger){
+    if (!trigger) return '';
+    var subject = trigger.subject || trigger.item || trigger.fluid || trigger.entity || trigger.name || '';
+    var count = trigger.count || trigger.amount;
+    return (trigger.type || 'trigger') + (subject ? ': ' + subject : '') + (count ? ' x' + count : '');
+  }
+
+  function technologyMetaText(technology){
+    var parts = [];
+    parts.push('enabled: ' + (technology.enabled === false ? 'false' : 'true/default'));
+    parts.push('hidden: ' + (technology.hidden === true ? 'true' : 'false/default'));
+    if (technology.visible_when_disabled !== undefined){
+      parts.push('visible_when_disabled: ' + String(technology.visible_when_disabled));
+    }
+    if (technology.unit && technology.unit.count){
+      parts.push('count: ' + technology.unit.count);
+    }
+    if (technology.unit && technology.unit.count_formula){
+      parts.push('count_formula: ' + technology.unit.count_formula);
+    }
+    return parts.join(' | ');
   }
 
   function buildProductionNodeIndex(data){
@@ -2160,20 +2547,27 @@ entry.result.prototype.icon</pre>
   }
 
   function setMaterialViewMode(mode){
+    if (!currentData) return;
+    if (mode === 'skipped' && !isMaterialFlowData(currentData)) return;
+    if ((mode === 'product' || mode === 'recipe' || mode === 'skipped') && !isProductionViewData(currentData)) return;
+    viewMode = 'production';
     materialViewMode = mode;
-    btnProductChain.classList.toggle('active', mode === 'product');
-    btnRecipeChain.classList.toggle('active', mode === 'recipe');
-    if (materialIndex && selectedMaterial){
-      renderSelectedMaterial();
-    }
+    renderRoot(currentData);
+    if (materialIndex && selectedMaterial) renderSelectedMaterial();
+    updateViewMenu(currentData);
+    recordHistory(currentHistoryState());
   }
 
-  function selectMaterial(name){
+  function selectMaterial(name, options){
+    options = options || {};
     selectedMaterial = name;
+    selectedTechnology = null;
+    selectedTreeKey = null;
     quicklinks.querySelectorAll('a').forEach(function(a){
       a.classList.toggle('active', a.dataset.material === name);
     });
     renderSelectedMaterial();
+    if (!options.skipHistory) recordHistory(currentHistoryState());
   }
 
   function renderSelectedMaterial(){
@@ -2183,13 +2577,38 @@ entry.result.prototype.icon</pre>
       entry.flows = productionFlowsForNode(currentData, entry.node);
     }
     treeRoot.innerHTML = '';
-    treeRoot.appendChild(
-      materialViewMode === 'recipe'
-        ? buildRecipeGraphView(entry)
-        : buildProductGraphView(entry)
-    );
+    if (materialViewMode === 'skipped' && isMaterialFlowData(currentData)){
+      treeRoot.appendChild(buildSkippedGraphView(entry));
+    } else {
+      treeRoot.appendChild(
+        materialViewMode === 'recipe'
+          ? buildRecipeGraphView(entry)
+          : buildProductGraphView(entry)
+      );
+    }
     docTitle.textContent = entry && entry.name || selectedMaterial;
-    docSub.textContent = (materialViewMode === 'recipe' ? 'Consumed-in graph' : 'Produced-by graph') + ' with ' + entry.flows.length + ' flow entries.';
+    if (materialViewMode === 'skipped' && isMaterialFlowData(currentData)){
+      docSub.textContent = 'Skipped-source audit with ' + ((entry && entry.skipped || []).length) + ' suppressed source entries.';
+    } else {
+      docSub.textContent = (materialViewMode === 'recipe' ? 'Consumed-in graph' : 'Produced-by graph') + ' with ' + entry.flows.length + ' flow entries.';
+    }
+  }
+
+  function buildSkippedGraphView(entry){
+    var graph = document.createElement('div');
+    graph.className = 'flow-graph';
+    if (!entry || !entry.skipped || entry.skipped.length === 0){
+      graph.appendChild(buildEmptyFlowNotice('No source-filter skips recorded for this material.'));
+      return graph;
+    }
+    entry.skipped.slice().sort(function(a, b){
+      var ra = recipeForFlow(a);
+      var rb = recipeForFlow(b);
+      return String((ra && ra.name) || '').localeCompare(String((rb && rb.name) || ''));
+    }).forEach(function(skip){
+      graph.appendChild(buildSkippedCard(skip));
+    });
+    return graph;
   }
 
   function buildProductGraphView(entry){
@@ -2270,6 +2689,27 @@ entry.result.prototype.icon</pre>
     );
   }
 
+  function buildSkippedCard(skip){
+    var reason = skip && skip.reason || 'source-filter';
+    var markerSource = {
+      custom: {
+        markers: [
+          { key: 'skip:' + reason, label: reason }
+        ]
+      }
+    };
+    return buildThreeColumnCard(
+      'Skipped input',
+      skip && skip.input ? [skip.input] : ingredientEntriesForFlow(skip),
+      recipeForFlow(skip) && recipeForFlow(skip).name || '<unknown recipe>',
+      reason,
+      'Original results',
+      resultEntriesForFlow(skip),
+      markerSource,
+      'reason'
+    );
+  }
+
   function buildRecipeCard(recipeName, flows){
     var first = flows[0] || {};
     var product = flowProductName(first);
@@ -2291,7 +2731,7 @@ entry.result.prototype.icon</pre>
     );
   }
 
-  function buildThreeColumnCard(leftTitle, leftEntries, recipeName, productName, rightTitle, rightEntries, markerSource){
+  function buildThreeColumnCard(leftTitle, leftEntries, recipeName, productName, rightTitle, rightEntries, markerSource, centerSubPrefix){
     var card = document.createElement('div');
     card.className = 'flow-card';
     card.appendChild(buildFlowColumn(leftTitle, leftEntries, 'ingredient'));
@@ -2311,7 +2751,7 @@ entry.result.prototype.icon</pre>
     if (productName){
       var sub = document.createElement('div');
       sub.className = 'flow-sub';
-      sub.textContent = 'main product: ' + productName;
+      sub.textContent = (centerSubPrefix || 'main product') + ': ' + productName;
       node.appendChild(sub);
     }
     var markers = customMarkersFor(markerSource);
@@ -2470,6 +2910,9 @@ entry.result.prototype.icon</pre>
   function customMarkersFor(source){
     var markers = [];
     if (!source) return markers;
+    if (source.reason){
+      markers.push({ key: 'skip:' + source.reason, label: source.reason });
+    }
     if (source.custom && Array.isArray(source.custom.markers)){
       markers = markers.concat(source.custom.markers);
     }
@@ -2556,21 +2999,34 @@ entry.result.prototype.icon</pre>
     if (!materialIndex || !markerKey) return;
     var graph = document.createElement('div');
     graph.className = 'flow-graph';
-    var matches = [];
+    var flowMatches = [];
+    var skippedMatches = [];
     Object.keys(materialIndex).sort(function(a, b){ return a.localeCompare(b); }).forEach(function(material){
-      materialIndex[material].flows.forEach(function(flow){
+      var entry = materialIndex[material];
+      (entry.flows || []).forEach(function(flow){
         if (customMarkersFor(flow).some(function(marker){ return (marker.key || markerLabel(marker)) === markerKey; })){
-          matches.push(flow);
+          flowMatches.push(flow);
+        }
+      });
+      (entry.skipped || []).forEach(function(skip){
+        if (customMarkersFor(skip).some(function(marker){ return (marker.key || markerLabel(marker)) === markerKey; })){
+          skippedMatches.push(skip);
         }
       });
     });
     treeRoot.innerHTML = '';
-    matches.forEach(function(flow){
+    flowMatches.forEach(function(flow){
       graph.appendChild(buildFlowCard(flow, flowProductName(flow)));
+    });
+    skippedMatches.forEach(function(skip){
+      graph.appendChild(buildSkippedCard(skip));
     });
     treeRoot.appendChild(graph);
     docTitle.textContent = markerKey;
-    docSub.textContent = 'Marker overview with ' + matches.length + ' flow entries.';
+    docSub.textContent = 'Marker overview with '
+      + flowMatches.length + ' flow entries and '
+      + skippedMatches.length + ' skipped source entries.';
+    applyCurrentFilters();
   }
 
   function findFlowByIngredient(name){
@@ -2620,9 +3076,9 @@ entry.result.prototype.icon</pre>
       })){
         selectedMaterial = entry.material;
         materialViewMode = 'recipe';
-        btnProductChain.classList.remove('active');
-        btnRecipeChain.classList.add('active');
         renderSelectedMaterial();
+        updateViewMenu(currentData);
+        recordHistory(currentHistoryState());
         return;
       }
     }
@@ -2632,57 +3088,148 @@ entry.result.prototype.icon</pre>
     var target = document.getElementById('section-' + slug(key));
     if (!target) return;
 
+    selectedTreeKey = key;
     target.classList.add('expanded');
 
     var qlLinks = quicklinks.querySelectorAll('a');
     qlLinks.forEach(function(l){ l.classList.remove('active'); });
-    aEl.classList.add('active');
+    if (aEl) aEl.classList.add('active');
 
     target.scrollIntoView({ behavior:'smooth', block:'start' });
 
     target.classList.add('flash');
     setTimeout(function(){ target.classList.remove('flash'); }, 900);
+    recordHistory(currentHistoryState());
   }
 
-  document.getElementById('btnExpandAll').addEventListener('click', function(){
+  function expandAllTreeNodes(){
     treeRoot.querySelectorAll('li.tree-node').forEach(function(li){
       if (li.querySelector(':scope > ul.tree-children')){
         li.classList.add('expanded');
       }
     });
-  });
+  }
 
-  document.getElementById('btnCollapseAll').addEventListener('click', function(){
+  function collapseAllTreeNodes(){
     treeRoot.querySelectorAll('li.tree-node').forEach(function(li){
       li.classList.remove('expanded');
     });
-  });
+  }
+
+  function currentHistoryState(){
+    if (!currentData) return null;
+    if (viewMode === 'tree'){
+      return {
+        viewMode: 'tree',
+        selectedTreeKey: selectedTreeKey
+      };
+    }
+    if (viewMode === 'technology'){
+      return {
+        viewMode: 'technology',
+        selectedTechnology: selectedTechnology
+      };
+    }
+    return {
+      viewMode: 'production',
+      materialViewMode: materialViewMode,
+      selectedMaterial: selectedMaterial
+    };
+  }
+
+  function sameHistoryState(a, b){
+    return JSON.stringify(a || null) === JSON.stringify(b || null);
+  }
+
+  function recordHistory(state){
+    if (applyingHistory || !state) return;
+    if (historyIndex >= 0 && sameHistoryState(historyStack[historyIndex], state)){
+      updateHistoryButtons();
+      return;
+    }
+    historyStack = historyStack.slice(0, historyIndex + 1);
+    historyStack.push(state);
+    historyIndex = historyStack.length - 1;
+    updateHistoryButtons();
+  }
+
+  function updateHistoryButtons(){
+    btnHistoryBack.disabled = historyIndex <= 0;
+    btnHistoryForward.disabled = historyIndex < 0 || historyIndex >= historyStack.length - 1;
+  }
+
+  function navigateHistory(direction){
+    var nextIndex = historyIndex + direction;
+    if (nextIndex < 0 || nextIndex >= historyStack.length) return;
+    historyIndex = nextIndex;
+    applyHistoryState(historyStack[historyIndex]);
+    updateHistoryButtons();
+  }
+
+  function applyHistoryState(state){
+    if (!state || !currentData) return;
+    applyingHistory = true;
+    if (state.viewMode === 'tree'){
+      viewMode = 'tree';
+      selectedTreeKey = state.selectedTreeKey || null;
+      renderRoot(currentData);
+      if (selectedTreeKey){
+        var link = quicklinks.querySelector('a[data-target="section-' + slug(selectedTreeKey) + '"]');
+        var li = link && link.closest('li');
+        scrollToSection(selectedTreeKey, li, link);
+      }
+    } else if (state.viewMode === 'technology'){
+      viewMode = 'technology';
+      selectedTechnology = state.selectedTechnology || null;
+      renderRoot(currentData);
+      if (selectedTechnology && technologyIndex && technologyIndex[selectedTechnology]){
+        selectTechnology(selectedTechnology, { skipHistory: true });
+      }
+    } else {
+      viewMode = 'production';
+      materialViewMode = state.materialViewMode || 'product';
+      selectedMaterial = state.selectedMaterial || null;
+      renderRoot(currentData);
+      if (selectedMaterial && materialIndex && materialIndex[selectedMaterial]){
+        selectMaterial(selectedMaterial, { skipHistory: true });
+      }
+    }
+    applyingHistory = false;
+    updateViewMenu(currentData);
+  }
 
   // -------------------------------------------------------------
-  // filter: matches keys/values, expands matching branches
+  // filter: titlebar search filters the current view and quicklink list
   // -------------------------------------------------------------
   var filterTimer = null;
+
   filterInput.addEventListener('input', function(){
     clearTimeout(filterTimer);
-    filterTimer = setTimeout(applyFilter, 120);
+    filterTimer = setTimeout(applyCurrentFilters, 120);
   });
 
-  function applyFilter(){
+  filterClear.addEventListener('click', function(){
+    filterInput.value = '';
+    applyCurrentFilters();
+    filterInput.focus();
+  });
+
+  function applyCurrentFilters(){
     var q = filterInput.value.trim().toLowerCase();
+    filterTreeNodes(q);
+    filterFlowCards(q);
+    filterQuicklinks(q);
+  }
+
+  function filterTreeNodes(q){
     var allNodes = treeRoot.querySelectorAll('li.tree-node');
-    var quicklinkItems = quicklinks.querySelectorAll('li');
 
     if (!q){
       allNodes.forEach(function(li){
         li.classList.remove('filtered-hidden', 'match-hit');
       });
-      quicklinkItems.forEach(function(li){
-        li.classList.remove('filtered-hidden');
-      });
       return;
     }
-
-    filterQuicklinks(q);
 
     allNodes.forEach(function(li){
       li.classList.remove('match-hit');
@@ -2708,8 +3255,17 @@ entry.result.prototype.icon</pre>
     });
   }
 
+  function filterFlowCards(q){
+    var cards = treeRoot.querySelectorAll('.flow-card');
+    cards.forEach(function(card){
+      var matched = !q || card.textContent.toLowerCase().indexOf(q) !== -1;
+      card.classList.toggle('filtered-hidden', !matched);
+      card.classList.toggle('match-hit', !!q && matched);
+    });
+  }
+
   function filterQuicklinks(q){
-    var firstVisibleMaterial = null;
+    var firstVisibleKey = null;
     var selectedStillVisible = false;
 
     quicklinks.querySelectorAll('li').forEach(function(li){
@@ -2720,21 +3276,33 @@ entry.result.prototype.icon</pre>
       }
 
       var material = link.dataset.material || '';
+      var technology = link.dataset.technology || '';
+      var entryKey = material || technology;
       var text = link.textContent || '';
-      var haystack = (material + ' ' + text).toLowerCase();
-      var matched = haystack.indexOf(q) !== -1;
+      var haystack = (entryKey + ' ' + text).toLowerCase();
+      var matched = !q || haystack.indexOf(q) !== -1;
       li.classList.toggle('filtered-hidden', !matched);
 
-      if (matched && !firstVisibleMaterial){
-        firstVisibleMaterial = material;
+      if (matched && !firstVisibleKey){
+        firstVisibleKey = entryKey;
       }
-      if (matched && material === selectedMaterial){
+      if (matched && material && material === selectedMaterial){
+        selectedStillVisible = true;
+      }
+      if (matched && technology && technology === selectedTechnology){
         selectedStillVisible = true;
       }
     });
 
-    if (materialIndex && firstVisibleMaterial && !selectedStillVisible){
-      selectMaterial(firstVisibleMaterial);
+    if (materialIndex && firstVisibleKey && !selectedStillVisible){
+      selectMaterial(firstVisibleKey);
+      filterTreeNodes(q);
+      filterFlowCards(q);
+    }
+    if (technologyIndex && firstVisibleKey && !selectedStillVisible){
+      selectTechnology(firstVisibleKey);
+      filterTreeNodes(q);
+      filterFlowCards(q);
     }
   }
 

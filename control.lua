@@ -6,6 +6,100 @@ local material_flow_name = "ingredient-scrap-material-flow"
 local material_flow_path = "Ingredient_Scrap/material-flow.json"
 local production_flow_name = "ingredient-scrap-production-flow"
 local production_flow_path = "Ingredient_Scrap/production-flow.json"
+local technology_flow_name = "ingredient-scrap-technology-flow"
+local technology_flow_path = "Ingredient_Scrap/technology-flow.json"
+local ancestry_runtime_name = "ingredient-scrap-ancestry-runtime"
+local ancestry_runtime_path = "Ingredient_Scrap/ancestry-runtime.json"
+local recipe_forms_name = "ingredient-scrap-recipe-forms"
+local recipe_forms_path = "Ingredient_Scrap/recipe-forms.json"
+
+--#region debug
+---Returns the stack size for an item, falling back to 1 for unknown prototypes.
+---@param item_name string
+---@return integer
+local function item_stack_size(item_name)
+  local item = prototypes and prototypes.item and prototypes.item[item_name]
+  return item and item.stack_size or 1
+end
+
+---Adds an item stack request, merging duplicate item names.
+---@param requests table<string, integer>
+---@param item_name string
+---@param count integer?
+local function add_inventory_request(requests, item_name, count)
+  if not (prototypes and prototypes.item and prototypes.item[item_name]) then return end
+  requests[item_name] = (requests[item_name] or 0) + (count or item_stack_size(item_name))
+end
+
+---Adds one stack of every item whose name matches the pattern.
+---@param requests table<string, integer>
+---@param pattern string
+local function add_matching_item_stacks(requests, pattern)
+  if not (prototypes and prototypes.item) then return end
+  for item_name, _ in pairs(prototypes.item) do
+    if item_name:match(pattern) then
+      add_inventory_request(requests, item_name)
+    end
+  end
+end
+
+---Adds one stack of every item that places an assembling machine or furnace.
+---@param requests table<string, integer>
+local function add_machine_item_stacks(requests)
+  if not (prototypes and prototypes.item) then return end
+  for item_name, item in pairs(prototypes.item) do
+    local place_result = item.place_result
+    if place_result and (place_result.type == "assembling-machine" or place_result.type == "furnace") then
+      add_inventory_request(requests, item_name)
+    end
+  end
+end
+
+---Inserts the requested debug items into the player's inventory.
+---@param player LuaPlayer
+---@param requests table<string, integer>
+local function insert_debug_inventory(player, requests)
+  local inserted_total = 0
+  local missed = {}
+
+  for item_name, count in pairs(requests) do
+    local inserted = player.insert({ name = item_name, count = count })
+    inserted_total = inserted_total + inserted
+    if inserted < count then
+      table.insert(missed, item_name .. " (" .. inserted .. "/" .. count .. ")")
+    end
+  end
+
+  player.print("[IS-DEBUG] Inserted " .. inserted_total .. " items.")
+  if #missed > 0 then
+    player.print("[IS-DEBUG] Inventory full or blocked for: " .. table.concat(missed, ", "))
+  end
+end
+
+---Registers the debug inventory command for manual prototype testing.
+local function register_debug_inventory_command()
+  commands.add_command("is-debug-inventory", "Insert Ingredient Scrap debug stacks for manual testing.", function(command)
+    local player = command.player_index and game.get_player(command.player_index)
+    if not player then return end
+
+    local requests = {}
+    add_matching_item_stacks(requests, "^yis%-.+%-scrap$")
+    add_matching_item_stacks(requests, "%-ore$")
+    add_machine_item_stacks(requests)
+    add_inventory_request(requests, "coal")
+    add_inventory_request(requests, "personal-roboport-mk2-equipment")
+    add_inventory_request(requests, "battery-mk2-equipment")
+    add_inventory_request(requests, "fission-reactor-equipment")
+    add_inventory_request(requests, "power-armor-mk2")
+    add_inventory_request(requests, "infinity-chest")
+    add_inventory_request(requests, "construction-robot", 50)
+
+    insert_debug_inventory(player, requests)
+  end)
+end
+
+register_debug_inventory_command()
+--#endregion
 
 ---Returns true for Ingredient Scrap recycling recipe categories.
 ---@param category string?
@@ -112,6 +206,24 @@ local function write_debug_files()
   if production_flow and production_flow.data then
     helpers.write_file(production_flow_path, helpers.table_to_json(production_flow.data), false)
     log("[IS-TEST] Wrote " .. production_flow_path)
+  end
+
+  local technology_flow = prototypes.mod_data[technology_flow_name]
+  if technology_flow and technology_flow.data then
+    helpers.write_file(technology_flow_path, helpers.table_to_json(technology_flow.data), false)
+    log("[IS-TEST] Wrote " .. technology_flow_path)
+  end
+
+  local ancestry_runtime = prototypes.mod_data[ancestry_runtime_name]
+  if ancestry_runtime and ancestry_runtime.data then
+    helpers.write_file(ancestry_runtime_path, helpers.table_to_json(ancestry_runtime.data), false)
+    log("[IS-TEST] Wrote " .. ancestry_runtime_path)
+  end
+
+  local recipe_forms = prototypes.mod_data[recipe_forms_name]
+  if recipe_forms and recipe_forms.data then
+    helpers.write_file(recipe_forms_path, helpers.table_to_json(recipe_forms.data), false)
+    log("[IS-TEST] Wrote " .. recipe_forms_path)
   end
 end
 

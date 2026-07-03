@@ -3,6 +3,11 @@
   "workspace.library": [
     ".vscode/factorio-types"
   ],
+  "workspace.ignoreDir": [
+    "_release_",
+    "_legacy",
+    ".git"
+  ],
   "diagnostics.globals": [
     "data",
     "settings",

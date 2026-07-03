@@ -18,6 +18,8 @@ GitHub: https://github.com/Yokmp/factorio_toolset
 - Mod List: enable/disable installed mods, save mod selections as profiles, apply a profile, and optionally launch Factorio.
 - Settings: inspect and edit startup settings from `mod-settings.dat`, then save them into the same profile file.
 - Material Flow: run the Ingredient Scrap test harness for a selected mod profile, generate `material-flow.json`, and open it in the browser viewer.
+- Ancestry Flow: read existing Ingredient Scrap dumps and build a passive
+  ancestry-vs-current comparison without launching Factorio.
 - JSON Tree Viewer: inspect any JSON file as a collapsible tree, or inspect Ingredient Scrap material-flow data as a production/recipe graph.
 
 Future ideas are tracked in [`TOOLS_ROADMAP.md`](TOOLS_ROADMAP.md).
@@ -39,6 +41,7 @@ Required:
 - `modlist.py`
 - `settings.py`
 - `material_flow.py`
+- `ancestry_flow.py`
 - `json-tree-viewer.html`
 - `treeview-example.json`
 
@@ -49,10 +52,8 @@ Optional but recommended:
 - `TOOLS_ROADMAP.md`
 - `screenshots/`
 
-Legacy/local-only:
-
-- `material_flow_list.py`: creates old text/JSON target lists. The JSON viewer
-  is the preferred review tool now.
+Legacy/local-only tools and generated review lists were moved to
+`../../_legacy/`. The JSON viewer is the preferred review surface now.
 
 Ingredient Scrap local integration:
 
@@ -105,6 +106,13 @@ The Material Flow tab creates an Ingredient Scrap debug dump by running the test
   production-chain review.
 - `production-flow-data.js`: same production graph wrapped as a state script.
 - `icon-assets/`: extracted ZIP icons used by the viewer when a mod is packaged as a zip.
+
+The unprofiled `material-flow.json` and `production-flow.json` files are always
+the latest run. Profile-specific copies such as
+`material-flow-angels_full_is.json` are written next to them and are better for
+comparisons between mod sets. If the latest run used `angels_full_is`,
+`material-flow.json` and `material-flow-angels_full_is.json` will be identical
+by design.
 
 The UI opens the viewer with:
 
@@ -188,6 +196,46 @@ To generate only `material-flow.json` without printing the test assertion report
 ```powershell
 python tools\toolset\material_flow.py --mod-profile vanilla_dlc --dump-profile default
 ```
+
+To build an offline ancestry comparison from archived dumps:
+
+```powershell
+python tools\toolset\ancestry_flow.py --profile bob_angels_full_is
+```
+
+This reads `tools/toolset/dumps/<profile>/material-flow.json` and
+`production-flow.json`, then writes `ancestry-flow.json` next to them. It does
+not launch Factorio and does not change mod behavior. The output compares the
+current generated scrap material for each flow with the ancestry-derived base
+material composition.
+
+Use `--root-policy resources` to build an alias-free baseline that only stops at
+mined resource results:
+
+```powershell
+python tools\toolset\ancestry_flow.py --profile krastorio_is --root-policy resources
+```
+
+This writes `ancestry-flow-resources.json`. The default `current` policy uses
+the current Material Flow roots and aliases as stop markers. Use
+`--root-policy hybrid` for the intended long-term comparison shape: stable
+materials stop, while exact component aliases keep resolving through producer
+recipes. It writes `ancestry-flow-hybrid.json`.
+
+`--mixed-limit` controls the simulated effective output width. The default is
+`3`: ancestry with more than three material families becomes `yis-mixed-scrap`
+in the `effective_output` field, while narrower ancestry stays direct. This is
+still a passive simulation and does not generate prototypes.
+
+Add `--write-reviews` to write Markdown review helpers next to the ancestry
+JSON:
+
+```powershell
+python tools\toolset\ancestry_flow.py --profile bob_angels_full_is --root-policy hybrid --mixed-limit 3 --write-reviews
+```
+
+This regenerates the hybrid comparison review, decision groups, mixed-limit
+simulation, and effective-output preview from the same input JSON files.
 
 For mod profile testing:
 

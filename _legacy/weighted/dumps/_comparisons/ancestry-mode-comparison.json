@@ -1,0 +1,449 @@
+[
+  {
+    "ancestry_widths": {
+      "1": 146
+    },
+    "comparisons": {
+      "same": 146
+    },
+    "component_fallback": true,
+    "effective_outputs": {
+      "direct": 146
+    },
+    "effective_reasons": {
+      "within-limit": 146
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 1,
+    "max_depth": 8,
+    "mixed_limit": 3,
+    "mod_profile": "is_sa",
+    "mode": "balanced",
+    "resolved_items": {
+      "root": 20
+    },
+    "root_policy": "hybrid",
+    "settings_profile": "default"
+  },
+  {
+    "ancestry_widths": {
+      "1": 146
+    },
+    "comparisons": {
+      "same": 146
+    },
+    "component_fallback": true,
+    "effective_outputs": {
+      "direct": 146
+    },
+    "effective_reasons": {
+      "within-limit": 146
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 1,
+    "max_depth": 1,
+    "mixed_limit": 999,
+    "mod_profile": "is_sa",
+    "mode": "component-heavy",
+    "resolved_items": {
+      "root": 20
+    },
+    "root_policy": "stable",
+    "settings_profile": "ancestry_component_heavy"
+  },
+  {
+    "ancestry_widths": {
+      "1": 11
+    },
+    "comparisons": {
+      "same": 11,
+      "unresolved": 135
+    },
+    "component_fallback": false,
+    "effective_outputs": {
+      "direct": 11,
+      "mixed": 135
+    },
+    "effective_reasons": {
+      "unresolved": 135,
+      "within-limit": 11
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 1,
+    "max_depth": 8,
+    "mixed_limit": 3,
+    "mod_profile": "is_sa",
+    "mode": "material-heavy",
+    "resolved_items": {
+      "composed": 1,
+      "root": 3,
+      "unresolved": 22
+    },
+    "root_policy": "resources",
+    "settings_profile": "ancestry_material_heavy"
+  },
+  {
+    "ancestry_widths": {
+      "1": 253
+    },
+    "comparisons": {
+      "same": 253
+    },
+    "component_fallback": true,
+    "effective_outputs": {
+      "direct": 253
+    },
+    "effective_reasons": {
+      "within-limit": 253
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 1,
+    "max_depth": 8,
+    "mixed_limit": 3,
+    "mod_profile": "krastorio_is",
+    "mode": "balanced",
+    "resolved_items": {
+      "root": 26
+    },
+    "root_policy": "hybrid",
+    "settings_profile": "default"
+  },
+  {
+    "ancestry_widths": {
+      "1": 253
+    },
+    "comparisons": {
+      "same": 253
+    },
+    "component_fallback": true,
+    "effective_outputs": {
+      "direct": 253
+    },
+    "effective_reasons": {
+      "within-limit": 253
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 1,
+    "max_depth": 1,
+    "mixed_limit": 999,
+    "mod_profile": "krastorio_is",
+    "mode": "component-heavy",
+    "resolved_items": {
+      "root": 26
+    },
+    "root_policy": "stable",
+    "settings_profile": "ancestry_component_heavy"
+  },
+  {
+    "ancestry_widths": {
+      "1": 131,
+      "2": 61,
+      "4": 10
+    },
+    "comparisons": {
+      "different": 103,
+      "same": 99,
+      "unresolved": 51
+    },
+    "component_fallback": false,
+    "effective_outputs": {
+      "direct": 192,
+      "mixed": 61
+    },
+    "effective_reasons": {
+      "unresolved": 51,
+      "width-limit": 10,
+      "within-limit": 192
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 4,
+    "max_depth": 8,
+    "mixed_limit": 3,
+    "mod_profile": "krastorio_is",
+    "mode": "material-heavy",
+    "resolved_items": {
+      "composed": 13,
+      "resolved": 11,
+      "root": 7,
+      "unresolved": 24
+    },
+    "root_policy": "resources",
+    "settings_profile": "ancestry_material_heavy"
+  },
+  {
+    "ancestry_widths": {
+      "1": 601,
+      "2": 21,
+      "3": 60,
+      "5": 118,
+      "6": 2
+    },
+    "comparisons": {
+      "different": 393,
+      "same": 409
+    },
+    "component_fallback": true,
+    "effective_outputs": {
+      "direct": 682,
+      "mixed": 120
+    },
+    "effective_reasons": {
+      "width-limit": 120,
+      "within-limit": 682
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 6,
+    "max_depth": 8,
+    "mixed_limit": 3,
+    "mod_profile": "bobs_full_is",
+    "mode": "balanced",
+    "resolved_items": {
+      "composed": 13,
+      "resolved": 24,
+      "root": 35,
+      "unresolved": 12
+    },
+    "root_policy": "hybrid",
+    "settings_profile": "default"
+  },
+  {
+    "ancestry_widths": {
+      "1": 802
+    },
+    "comparisons": {
+      "same": 802
+    },
+    "component_fallback": true,
+    "effective_outputs": {
+      "direct": 802
+    },
+    "effective_reasons": {
+      "within-limit": 802
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 1,
+    "max_depth": 1,
+    "mixed_limit": 999,
+    "mod_profile": "bobs_full_is",
+    "mode": "component-heavy",
+    "resolved_items": {
+      "root": 56
+    },
+    "root_policy": "stable",
+    "settings_profile": "ancestry_component_heavy"
+  },
+  {
+    "ancestry_widths": {
+      "1": 58,
+      "2": 76,
+      "3": 121,
+      "4": 2
+    },
+    "comparisons": {
+      "different": 237,
+      "same": 20,
+      "unresolved": 545
+    },
+    "component_fallback": false,
+    "effective_outputs": {
+      "direct": 255,
+      "mixed": 547
+    },
+    "effective_reasons": {
+      "unresolved": 545,
+      "width-limit": 2,
+      "within-limit": 255
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 4,
+    "max_depth": 8,
+    "mixed_limit": 3,
+    "mod_profile": "bobs_full_is",
+    "mode": "material-heavy",
+    "resolved_items": {
+      "composed": 28,
+      "resolved": 15,
+      "root": 13,
+      "unresolved": 49
+    },
+    "root_policy": "resources",
+    "settings_profile": "ancestry_material_heavy"
+  },
+  {
+    "ancestry_widths": {
+      "1": 239
+    },
+    "comparisons": {
+      "same": 239
+    },
+    "component_fallback": true,
+    "effective_outputs": {
+      "direct": 239
+    },
+    "effective_reasons": {
+      "within-limit": 239
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 1,
+    "max_depth": 8,
+    "mixed_limit": 3,
+    "mod_profile": "angels_full_is",
+    "mode": "balanced",
+    "resolved_items": {
+      "root": 20
+    },
+    "root_policy": "hybrid",
+    "settings_profile": "default"
+  },
+  {
+    "ancestry_widths": {
+      "1": 239
+    },
+    "comparisons": {
+      "same": 239
+    },
+    "component_fallback": true,
+    "effective_outputs": {
+      "direct": 239
+    },
+    "effective_reasons": {
+      "within-limit": 239
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 1,
+    "max_depth": 1,
+    "mixed_limit": 999,
+    "mod_profile": "angels_full_is",
+    "mode": "component-heavy",
+    "resolved_items": {
+      "root": 20
+    },
+    "root_policy": "stable",
+    "settings_profile": "ancestry_component_heavy"
+  },
+  {
+    "ancestry_widths": {
+      "1": 28
+    },
+    "comparisons": {
+      "same": 28,
+      "unresolved": 211
+    },
+    "component_fallback": false,
+    "effective_outputs": {
+      "direct": 28,
+      "mixed": 211
+    },
+    "effective_reasons": {
+      "unresolved": 211,
+      "within-limit": 28
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 1,
+    "max_depth": 8,
+    "mixed_limit": 3,
+    "mod_profile": "angels_full_is",
+    "mode": "material-heavy",
+    "resolved_items": {
+      "composed": 1,
+      "root": 3,
+      "unresolved": 21
+    },
+    "root_policy": "resources",
+    "settings_profile": "ancestry_material_heavy"
+  },
+  {
+    "ancestry_widths": {
+      "1": 1005,
+      "2": 83,
+      "3": 86,
+      "5": 77,
+      "6": 123
+    },
+    "comparisons": {
+      "different": 790,
+      "same": 584,
+      "unresolved": 1
+    },
+    "component_fallback": true,
+    "effective_outputs": {
+      "direct": 1174,
+      "mixed": 201
+    },
+    "effective_reasons": {
+      "unresolved": 1,
+      "width-limit": 200,
+      "within-limit": 1174
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 6,
+    "max_depth": 8,
+    "mixed_limit": 3,
+    "mod_profile": "bob_angels_full_is",
+    "mode": "balanced",
+    "resolved_items": {
+      "composed": 20,
+      "resolved": 29,
+      "root": 37,
+      "unresolved": 51
+    },
+    "root_policy": "hybrid",
+    "settings_profile": "default"
+  },
+  {
+    "ancestry_widths": {
+      "1": 1375
+    },
+    "comparisons": {
+      "same": 1375
+    },
+    "component_fallback": true,
+    "effective_outputs": {
+      "direct": 1375
+    },
+    "effective_reasons": {
+      "within-limit": 1375
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 1,
+    "max_depth": 1,
+    "mixed_limit": 999,
+    "mod_profile": "bob_angels_full_is",
+    "mode": "component-heavy",
+    "resolved_items": {
+      "root": 70
+    },
+    "root_policy": "stable",
+    "settings_profile": "ancestry_component_heavy"
+  },
+  {
+    "ancestry_widths": {
+      "1": 2
+    },
+    "comparisons": {
+      "same": 2,
+      "unresolved": 1373
+    },
+    "component_fallback": false,
+    "effective_outputs": {
+      "direct": 2,
+      "mixed": 1373
+    },
+    "effective_reasons": {
+      "unresolved": 1373,
+      "within-limit": 2
+    },
+    "exit_code": 0,
+    "max_ancestry_width": 1,
+    "max_depth": 8,
+    "mixed_limit": 3,
+    "mod_profile": "bob_angels_full_is",
+    "mode": "material-heavy",
+    "resolved_items": {
+      "root": 2,
+      "unresolved": 147
+    },
+    "root_policy": "resources",
+    "settings_profile": "ancestry_material_heavy"
+  }
+]

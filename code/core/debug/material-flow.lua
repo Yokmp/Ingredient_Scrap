@@ -1,4 +1,5 @@
 local resolver = require("code.core.materials.resolver")
+local naming = require("code.lib.naming")
 
 local material_flow = {}
 
@@ -376,6 +377,39 @@ local function build_recycle_index(data_table)
   return by_material
 end
 
+---Builds a sorted list of source-filter skips for audit/debug views.
+---@param data_table ISdata_table
+---@return table[]
+local function build_skipped_sources(data_table)
+  local skipped = {}
+  local source_skips = data_table.debug and data_table.debug.sources and data_table.debug.sources.skipped or {}
+
+  for _, source in ipairs(source_skips) do
+    local source_recipe = data.raw.recipe and data.raw.recipe[source.recipe]
+    push(skipped, {
+      material = source.scrap_type,
+      mode = source.mode,
+      reason = source.reason,
+      source_recipe = {
+        name = source.recipe,
+        icon = icon_signature(source_recipe),
+        category = source.category,
+        custom = recipe_custom_metadata(source_recipe),
+        ingredients = recipe_ingredients(source_recipe, source),
+        results = recipe_results(source_recipe),
+      },
+      input = {
+        type = source.ingredient_type,
+        name = source.ingredient,
+        amount = source.amount,
+        prototype = item_or_fluid_ref(source.ingredient_type, source.ingredient),
+      },
+    })
+  end
+
+  return sorted(skipped)
+end
+
 ---Finds the generated scrap result for a material in a patched source recipe.
 ---@param insert table|nil
 ---@param scrap_name string
@@ -395,6 +429,7 @@ end
 function material_flow.build(data_table)
   local resources_by_material = build_resource_index(data_table)
   local recycle_by_material = build_recycle_index(data_table)
+  local skipped_sources = build_skipped_sources(data_table)
   local insert_sources = data_table.debug and data_table.debug.sources and data_table.debug.sources.inserts or {}
   local flows = {}
 
@@ -403,7 +438,7 @@ function material_flow.build(data_table)
     local source_recipe = data.raw.recipe and data.raw.recipe[recipe_name]
     for _, source in ipairs(sources or {}) do
       local material = source.scrap_type
-      local scrap_name = material and yokmods.ingredient_scrap.get_scrap_name(material) or nil
+      local scrap_name = material and naming.get_scrap_name(material) or nil
       if material and scrap_name then
         push(flows, {
           material = material,
@@ -442,6 +477,7 @@ function material_flow.build(data_table)
     mod = "Ingredient_Scrap",
     active_mods = active_mod_versions(),
     flows = flows,
+    skipped_sources = skipped_sources,
     resources_by_material = resources_by_material,
     recycle_by_material = recycle_by_material,
   }
@@ -540,6 +576,191 @@ local function sorted_node_list(nodes)
   return list
 end
 
+---Returns true when a string contains one of the listed plain substrings.
+---@param value string|nil
+---@param terms string[]
+---@return boolean
+local function contains_any_term(value, terms)
+  if type(value) ~= "string" then return false end
+  local lowered = string.lower(value)
+  for _, term in ipairs(terms) do
+    if lowered:find(term, 1, true) then return true end
+  end
+  return false
+end
+
+---Returns true when a recipe is a package/unpackage or recycling side chain.
+---@param recipe table|nil
+---@return boolean
+local function is_side_chain_recipe(recipe)
+  if not recipe then return false end
+  return recipe.category == "recycling"
+    or contains_any_term(recipe.name, { "barrel", "barreling", "-recycling" })
+end
+
+---Returns true when a recipe name or category looks like chemistry or fluid processing.
+---@param recipe table|nil
+---@return boolean
+local function is_chemical_recipe(recipe)
+  if not recipe then return false end
+  local terms = {
+    "chem", "petrochem", "fluid", "oil", "acid", "gas", "liquid", "slurry",
+    "solution", "electrolysis", "hydro", "water", "chlor", "sulfur",
+    "nitric", "ammonia", "fluoric",
+  }
+  return contains_any_term(recipe.category, terms) or contains_any_term(recipe.name, terms)
+end
+
+---Returns true when a recipe name or category looks like ore or smelting process work.
+---@param recipe table|nil
+---@return boolean
+local function is_smelting_process_recipe(recipe)
+  if not recipe then return false end
+  local terms = {
+    "smelt", "metallurgy", "casting", "ore", "crush", "sort", "sinter",
+    "blast", "powder", "pellet", "ingot", "slag", "oxide", "crystal",
+    "chunk", "geode", "purif", "leach", "liquif",
+  }
+  return contains_any_term(recipe.category, terms) or contains_any_term(recipe.name, terms)
+end
+
+---Returns true when a recipe is hidden or explicitly excluded from raw decomposition.
+---@param recipe table|nil
+---@return boolean
+local function is_low_signal_recipe(recipe)
+  if not recipe then return false end
+  return recipe.hidden == true
+    or recipe.auto_recycle == false
+    or recipe.allow_decomposition == false
+end
+
+---Adds a reason string once to a classification reason list.
+---@param reasons string[]
+---@param reason string
+local function add_reason_once(reasons, reason)
+  for _, existing in ipairs(reasons) do
+    if existing == reason then return end
+  end
+  table.insert(reasons, reason)
+end
+
+---Scores one recipe relation for production node classification.
+---@param classification table
+---@param recipe table|nil
+---@param relation string
+local function score_recipe_relation(classification, recipe, relation)
+  if not recipe then return end
+  if is_low_signal_recipe(recipe) then
+    classification.scores.hidden_disabled = classification.scores.hidden_disabled + 1
+    add_reason_once(classification.reasons, relation .. ":low-signal")
+  end
+  if is_side_chain_recipe(recipe) then
+    classification.scores.barreling_recycling = classification.scores.barreling_recycling + 1
+    add_reason_once(classification.reasons, relation .. ":side-chain")
+    return
+  end
+  if is_chemical_recipe(recipe) then
+    classification.scores.chemical = classification.scores.chemical + 1
+    add_reason_once(classification.reasons, relation .. ":chemical")
+  end
+  if is_smelting_process_recipe(recipe) then
+    classification.scores.smelting_process = classification.scores.smelting_process + 1
+    add_reason_once(classification.reasons, relation .. ":smelting-process")
+  end
+  if relation == "consumer" and not is_low_signal_recipe(recipe) then
+    classification.scores.production = classification.scores.production + 1
+    add_reason_once(classification.reasons, relation .. ":normal-production-use")
+  end
+end
+
+---Returns the final classification label from accumulated evidence scores.
+---@param node table
+---@param classification table
+---@return string
+local function production_class_label(node, classification)
+  local scores = classification.scores
+  if node.type == "fluid" and scores.chemical >= scores.production and scores.chemical >= scores.smelting_process then
+    return "chemical"
+  end
+  if scores.placeable > 0 and scores.production == 0 then return "placeable" end
+  if scores.smelting_process >= scores.production and scores.smelting_process >= scores.chemical and
+      scores.smelting_process > 0 then
+    return "smelting_process"
+  end
+  if scores.chemical >= scores.production and scores.chemical > 0 then return "chemical" end
+  if scores.production > 0 then return "production" end
+  if scores.barreling_recycling > 0 and scores.smelting_process == 0 and scores.chemical == 0 then
+    return "barreling_recycling"
+  end
+  if scores.chemical > scores.smelting_process then
+    return "chemical"
+  end
+  if scores.smelting_process > 0 then return "smelting_process" end
+  if scores.hidden_disabled > 0 then return "hidden_disabled" end
+  return "unknown"
+end
+
+---Builds passive production node classifications without changing generated prototypes.
+---@param nodes table
+---@param recipes table
+---@return table
+local function classify_production_nodes(nodes, recipes)
+  local by_class = {}
+  local node_classifications = {}
+  local summary = {}
+
+  for key, node in pairs(nodes) do
+    local classification = {
+      class = "unknown",
+      scores = {
+        production = 0,
+        smelting_process = 0,
+        chemical = 0,
+        barreling_recycling = 0,
+        placeable = 0,
+        hidden_disabled = 0,
+      },
+      reasons = {},
+    }
+
+    if node.hidden then
+      classification.scores.hidden_disabled = classification.scores.hidden_disabled + 1
+      add_reason_once(classification.reasons, "prototype:hidden")
+    end
+    if node.place_result or node.place_as_tile or node.place_as_equipment_result then
+      classification.scores.placeable = classification.scores.placeable + 1
+      add_reason_once(classification.reasons, "prototype:placeable")
+    end
+
+    for _, recipe_name in ipairs(node.consumed_by or {}) do
+      score_recipe_relation(classification, recipes[recipe_name], "consumer")
+    end
+    for _, recipe_name in ipairs(node.produced_by or {}) do
+      score_recipe_relation(classification, recipes[recipe_name], "producer")
+    end
+
+    classification.class = production_class_label(node, classification)
+    classification.confidence = #classification.reasons > 0 and "review" or "none"
+    table.sort(classification.reasons)
+
+    node.classification = classification
+    node_classifications[key] = classification
+    by_class[classification.class] = by_class[classification.class] or {}
+    table.insert(by_class[classification.class], key)
+    summary[classification.class] = (summary[classification.class] or 0) + 1
+  end
+
+  for _, keys in pairs(by_class) do
+    table.sort(keys)
+  end
+
+  return {
+    summary = summary,
+    by_class = by_class,
+    nodes = node_classifications,
+  }
+end
+
 ---Builds a neutral recipe/item/fluid production graph for external flow viewers.
 ---@return table
 function material_flow.build_production_flow()
@@ -570,10 +791,13 @@ function material_flow.build_production_flow()
     table.sort(names)
   end
 
+  local classification = classify_production_nodes(nodes, recipes)
+
   return {
     schema = "ingredient-scrap-production-flow/v1",
     mod = "Ingredient_Scrap",
     active_mods = active_mod_versions(),
+    classification = classification,
     recipes = recipes,
     prototypes = {
       nodes = sorted_node_list(nodes),
