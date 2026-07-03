@@ -2060,6 +2060,169 @@ class MaterialFlowTool(ToolFrame):
         return "break"
 
 
+class DeployTool(ToolFrame):
+    """Tab for building and publishing filtered mod release archives."""
+
+    title = "Deploy"
+
+    def __init__(self, master: tk.Misc, app: ToolApp):
+        super().__init__(master, app)
+        self.branch_var = tk.StringVar(value="main")
+        self.build_no_public_var = tk.BooleanVar(value=False)
+        self.build_no_strip_var = tk.BooleanVar(value=False)
+        self.build_first_var = tk.BooleanVar(value=False)
+        self.publish_dry_run_var = tk.BooleanVar(value=True)
+        self.status_var = tk.StringVar(value="Ready.")
+        self.deploy_script = TOOL_DIR / "deploy.py"
+        self._build()
+
+    def _build(self) -> None:
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(2, weight=1)
+
+        header = tk.Frame(self, bg=BG)
+        header.grid(row=0, column=0, sticky="ew", padx=16, pady=(14, 8))
+        header.columnconfigure(1, weight=1)
+        tk.Label(header, text="DEPLOY", bg=BG, fg=TEXT, font=("Segoe UI", 14, "bold")).grid(row=0, column=0, sticky="w")
+        striped_header(header, "", BG).grid(row=0, column=1, sticky="ew", padx=12)
+
+        info = "Builds filtered release archives from the detected mod root. It does not copy files into Factorio/mods."
+        tk.Label(self, text=info, bg=BG, fg=BODY_TEXT, anchor="w", justify=tk.LEFT).grid(row=1, column=0, sticky="ew", padx=16, pady=(0, 12))
+
+        body = tk.Frame(self, bg=BG)
+        body.grid(row=2, column=0, sticky="nsew", padx=16, pady=(0, 8))
+        body.columnconfigure(0, weight=1)
+        body.columnconfigure(1, weight=0, minsize=330)
+        body.rowconfigure(0, weight=1)
+
+        log_frame = tk.Frame(body, bg=BG)
+        log_frame.grid(row=0, column=0, sticky="nsew", padx=(0, 12))
+        log_frame.columnconfigure(0, weight=1)
+        log_frame.rowconfigure(0, weight=1)
+        self.output_text = tk.Text(log_frame, bg=LIST_BG, fg=BODY_TEXT, insertbackground=BODY_TEXT, relief=tk.SUNKEN, bd=2, wrap=tk.WORD)
+        self.output_text.grid(row=0, column=0, sticky="nsew")
+        scrollbar = ttk.Scrollbar(log_frame, orient=tk.VERTICAL, command=self.output_text.yview)
+        scrollbar.grid(row=0, column=1, sticky="ns")
+        self.output_text.configure(yscrollcommand=scrollbar.set)
+        self.append_output("Deploy output will appear here.")
+
+        controls = tk.Frame(body, bg=PANEL, highlightthickness=1, highlightbackground=LINE)
+        controls.grid(row=0, column=1, sticky="nsew")
+        controls.columnconfigure(0, weight=1)
+        tk.Label(controls, text="COMMANDS", bg=PANEL, fg=TEXT, font=("Segoe UI", 11, "bold"), anchor="w").grid(row=0, column=0, sticky="ew", padx=12, pady=(12, 6))
+
+        self.command_row(controls, 1, "Check", ["check"])
+        self.command_row(
+            controls,
+            2,
+            "Build",
+            ["build"],
+            options=[
+                ("no public", self.build_no_public_var),
+                ("keep debug", self.build_no_strip_var),
+            ],
+        )
+        self.command_row(controls, 3, "Gitignore", ["ensure-gitignore"])
+        self.command_row(controls, 4, "Clean", ["clean"])
+
+        publish_frame = self.command_row(
+            controls,
+            5,
+            "Publish",
+            [],
+            publish=True,
+            options=[
+                ("build first", self.build_first_var),
+                ("dry run", self.publish_dry_run_var),
+            ],
+        )
+        branch_row = tk.Frame(publish_frame, bg=PANEL)
+        branch_row.grid(row=1, column=0, columnspan=2, sticky="ew", pady=(6, 0))
+        branch_row.columnconfigure(1, weight=1)
+        tk.Label(branch_row, text="Branch", bg=PANEL, fg=BODY_TEXT, width=10, anchor="w").pack(side=tk.LEFT)
+        ttk.Entry(branch_row, textvariable=self.branch_var, width=20).pack(side=tk.LEFT, fill="x", expand=True)
+
+        tk.Label(self, textvariable=self.status_var, bg=BG, fg=MUTED, anchor="w").grid(row=3, column=0, sticky="ew", padx=16, pady=(0, 12))
+
+    def command_row(
+        self,
+        master: tk.Misc,
+        row: int,
+        text: str,
+        args: list[str],
+        publish: bool = False,
+        options: list[tuple[str, tk.BooleanVar]] | None = None,
+    ) -> tk.Frame:
+        frame = tk.Frame(master, bg=PANEL)
+        frame.grid(row=row, column=0, sticky="ew", padx=12, pady=6)
+        frame.columnconfigure(1, weight=1)
+        self.command_button(frame, text, args, publish=publish).grid(row=0, column=0, sticky="ew")
+        option_frame = tk.Frame(frame, bg=PANEL)
+        option_frame.grid(row=0, column=1, sticky="w", padx=(8, 0))
+        for label, variable in options or []:
+            ttk.Checkbutton(option_frame, text=label, variable=variable).pack(side=tk.LEFT, padx=(0, 8))
+        return frame
+
+    def command_button(self, master: tk.Misc, text: str, args: list[str], publish: bool = False) -> tk.Button:
+        return tk.Button(
+            master,
+            text=text,
+            bg=ORANGE,
+            fg=BUTTON_TEXT,
+            activebackground=ORANGE_HOVER,
+            activeforeground=BUTTON_TEXT,
+            relief=tk.RAISED,
+            bd=3,
+            padx=12,
+            pady=5,
+            font=("Segoe UI", 9, "bold"),
+            command=lambda: self.run_publish() if publish else self.run_deploy(args),
+        )
+
+    def append_output(self, text: str) -> None:
+        self.output_text.configure(state=tk.NORMAL)
+        self.output_text.delete("1.0", tk.END)
+        self.output_text.insert("1.0", text.strip() + "\n")
+        self.output_text.configure(state=tk.DISABLED)
+        self.output_text.see(tk.END)
+
+    def deploy_command(self, args: list[str]) -> list[str]:
+        return [sys.executable, str(self.deploy_script), *args]
+
+    def run_deploy(self, args: list[str]) -> None:
+        args = list(args)
+        if args and args[0] in {"build", "check"} and self.build_no_strip_var.get():
+            args.append("--no-strip-debug")
+        if args and args[0] == "build" and self.build_no_public_var.get():
+            args.append("--no-public")
+        cmd = self.deploy_command(args)
+
+        def work() -> subprocess.CompletedProcess[str]:
+            return subprocess.run(cmd, cwd=str(TOOL_DIR), text=True, capture_output=True, check=False)  # noqa: S603 - local tool command.
+
+        def done(result: subprocess.CompletedProcess[str]) -> None:
+            output = (result.stdout + "\n" + result.stderr).strip()
+            self.append_output(output or "<no output>")
+            if result.returncode == 0:
+                self.status_var.set("Command completed.")
+                self.app.status("Deploy command completed")
+            else:
+                self.status_var.set(f"Command failed with exit code {result.returncode}.")
+                self.app.status("Deploy command failed")
+
+        self.status_var.set("Running: " + " ".join(args))
+        self.app.run_worker(work, done, "Running deploy command...", "Deploy command failed")
+
+    def run_publish(self) -> None:
+        branch = self.branch_var.get().strip() or "main"
+        args = ["publish-public", "--branch", branch]
+        if self.build_first_var.get():
+            args.append("--build-first")
+        if self.publish_dry_run_var.get():
+            args.append("--dry-run")
+        self.run_deploy(args)
+
+
 TOOL_MAP: dict[str, dict[str, Any]] = {
     "modlist": {
         "title": "Mod List",
@@ -2088,7 +2251,8 @@ TOOL_MAP: dict[str, dict[str, Any]] = {
     "deploy": {
         "title": "Deploy",
         "version": "1.0.0",
-        "filename": "../../deploy.py",
+        "filename": "deploy.py",
+        "frame_type": DeployTool,
         "min_version": "1.0.0",
         "max_version": "2.0.0",
     },

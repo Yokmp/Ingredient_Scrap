@@ -20,6 +20,8 @@ GitHub: https://github.com/Yokmp/factorio_toolset
 - Material Flow: run the Ingredient Scrap test harness for a selected mod profile, generate `material-flow.json`, and open it in the browser viewer.
 - Ancestry Flow: read existing Ingredient Scrap dumps and build a passive
   ancestry-vs-current comparison without launching Factorio.
+- Deploy: build filtered Factorio mod release archives and optionally publish
+  `public.zip` to a Git branch.
 - JSON Tree Viewer: inspect any JSON file as a collapsible tree, or inspect Ingredient Scrap material-flow data as a production/recipe graph.
 
 Future ideas are tracked in [`TOOLS_ROADMAP.md`](TOOLS_ROADMAP.md).
@@ -42,6 +44,7 @@ Required:
 - `settings.py`
 - `material_flow.py`
 - `ancestry_flow.py`
+- `deploy.py`
 - `json-tree-viewer.html`
 - `treeview-example.json`
 
@@ -236,6 +239,45 @@ python tools\toolset\ancestry_flow.py --profile bob_angels_full_is --root-policy
 
 This regenerates the hybrid comparison review, decision groups, mixed-limit
 simulation, and effective-output preview from the same input JSON files.
+
+## Deploy
+
+The deploy tool is path independent as long as it can find a Factorio mod root.
+It must either live somewhere below `mods/<modname>/`, such as
+`mods/<modname>/tools/toolset/deploy.py`, or receive the mod root explicitly:
+
+```powershell
+python tools\toolset\deploy.py check --mod-root F:\Games\Factorio_ModTest\mods\Ingredient_Scrap
+```
+
+Build release archives:
+
+```powershell
+python tools\toolset\deploy.py build
+```
+
+This writes both release files under `<mod-root>/_release_/`:
+
+- `Ingredient_Scrap_<version>.zip` for the Mod Portal.
+- `public.zip` for a clean public source branch.
+
+The tool does not copy anything into Factorio/mods. Use `ensure-gitignore` to
+make sure `_release_` stays local:
+
+```powershell
+python tools\toolset\deploy.py ensure-gitignore
+```
+
+To publish the public source ZIP to Git without switching the current branch:
+
+```powershell
+python tools\toolset\deploy.py publish-public --dry-run
+python tools\toolset\deploy.py publish-public --build-first
+python tools\toolset\deploy.py publish-public --branch public
+```
+
+The default publish target is `main`; `--branch` can publish to another branch.
+Publishing uses a temporary Git worktree under `_release_` and removes it again.
 
 For mod profile testing:
 

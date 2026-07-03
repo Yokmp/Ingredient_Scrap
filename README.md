@@ -14,11 +14,14 @@ with additional scrap results.
 
 ## Current behavior
 
-- Detects solid materials from resources, known item suffixes, and explicit whitelists.
-- Detects fluid material families such as `molten-*` and `liquid-*`.
+- Detects solid materials from resources, known item suffixes, exact aliases,
+  and explicit material registrations.
+- Detects fluid material families such as `molten-*`, `liquid-*`,
+  `*-solution`, and `*-brine` when they can be mapped to a known material.
 - Generates scrap items like `yis-iron-scrap` or `yis-testium-scrap`.
 - Generates recycle recipes like `yis-recycle-iron-scrap`.
-- Generates fluid recycle recipes like `yis-recycle-testium-scrap-to-fluid` when applicable.
+- Generates fluid recycle recipes like `yis-recycle-testium-scrap-to-fluid`
+  when a fluid ingredient maps back to a material.
 - Keeps generated recycle recipes present and does not disable them with
   `enabled = false`; recipes that should not be visible yet are hidden with
   `hidden = true` instead.
@@ -26,8 +29,60 @@ with additional scrap results.
 - Accumulates mixed solid/fluid inputs into one scrap result per scrap type.
 - Can trace component ingredients back to material families and collapse broad
   or unresolved chains into `yis-mixed-scrap`.
+- Uses a weighted `yis-recycle-mixed-scrap` recipe when mixed scrap exists.
+  The total output chance stays close to Space Age scrap at 60%, with common
+  material scraps weighted higher than rare ones.
 - Copies the source recipe `main_product` into the patch table before applying result inserts.
 - Validates generated prototypes before calling `data:extend`, so invalid generated objects can be reported before Factorio rejects them.
+
+## Ancestry and Mixed Scrap
+
+Ingredient Scrap first creates a baseline from direct recipe ingredients. The
+active ancestry resolver can then follow component recipes backwards, so a gear,
+pipe, cable, bearing, or circuit can produce scrap for the material families it
+is made from instead of always becoming its own component scrap.
+
+The ancestry mode changes what the player tends to see:
+
+| Mode | Gameplay result |
+| --- | --- |
+| `component-heavy` | Keeps more component scrap. This is closest to the direct ingredient scan and creates fewer broad material rewrites. |
+| `balanced` | Default. Resolves common components back to materials, but keeps complex or too-wide chains as mixed scrap. |
+| `material-heavy` | Tries harder to reduce components into base materials. This can create more material scrap and less component scrap. |
+
+`yis-mixed-scrap` is the fallback for chains that become too wide, unresolved, or
+unsafe to reduce into one clear material family. Mixed amounts use conservative
+`floor` rounding with a minimum of 1, so the fallback does not inflate large
+recipes as aggressively as a rounded-up estimate would.
+
+Recycling `yis-mixed-scrap` behaves like a sorting process. The generated
+`yis-recycle-mixed-scrap` recipe contains the scrap families that are actually
+present in the current mod set. Their probabilities are weighted by expected
+scrap frequency from patched source recipes:
+
+- total output chance is about 60%;
+- the most common target is about 20%;
+- rarer targets stay in the pool with lower probabilities.
+
+## Fluid Handling
+
+Fluid support is intentionally narrower than solid material support. Ingredient
+Scrap does not create fluid scrap prototypes. A matched fluid ingredient still
+creates normal item scrap, such as `yis-iron-scrap`, and may also create a
+`-to-fluid` recycle recipe that turns that scrap back into the matched fluid.
+
+For example, a recipe that consumes `molten-iron` can produce `yis-iron-scrap`,
+and Ingredient Scrap can stage `yis-recycle-iron-scrap-to-fluid` with
+`molten-iron` as the result. The scrap item itself uses a matching solid item,
+such as `iron-plate`, `iron-bar`, or `iron-ingot`, as its visual and stack-size
+source.
+
+Fluid matching currently uses registered prefixes, suffixes, and exact aliases.
+It covers common names like `molten-*`, `liquid-*`, `*-solution`, and
+`*-brine`, plus compat-specific registrations. It does not try to solve full
+chemistry chains, preserve chemical byproducts, or balance acids, gases, and
+slurries as a separate system. Those cases are intentionally left for future
+compat work or a dedicated extension mod.
 
 ## Recycler Scrap Sink
 
@@ -62,9 +117,21 @@ Fluid handling is currently always enabled. The old `yis-fluid-recipes` startup
 setting remains hidden as an internal compatibility switch while solid/fluid
 separation is revisited.
 
-`yis-mixed-scrap` is generated when a traced component chain is too wide or
-cannot be resolved cleanly. Its recycling recipe sorts mixed scrap back into the
-specific scrap families that are actually present in the current mod set.
+## Compatibility Status
+
+| Mod set | Status | Notes |
+| --- | --- | --- |
+| Base game | Supported | Main reference target for normal material scrap and recycling. |
+| Space Age | Supported | Adds fluid and advanced material cases such as molten metals, holmium, lithium, and tungsten chains. |
+| Quality | Supported | The recycler can act as a scrap sink; this is intentional. |
+| Krastorio 2 | Tested | Uses explicit compat rules where the automatic resolver cannot infer the intended target safely. |
+| Bob's Mods | Tested | Large component and alloy chains are supported through compat aliases and mixed-scrap fallback. |
+| Angel's Mods | Tested | Complex refining, chemistry, and metallurgy can create mixed scrap or require explicit compat rules. |
+| Bob + Angels together | Tested | This is the broad stress profile. Some very complex chains intentionally fall back to mixed scrap. |
+
+Chemistry-specific balancing and Preserve Recipe Shape are not part of the
+current release behavior. The current goal is stable ingredient scrap generation
+with explicit compat hooks for known exceptions.
 
 ## Public API
 

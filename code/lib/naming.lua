@@ -12,7 +12,8 @@ end
 ---@param scrap_type string
 ---@return string
 function naming.without_yis_prefix(scrap_type)
-  return scrap_type:gsub("^yis%-", "")
+  local name = scrap_type:gsub("^yis%-", "")
+  return name
 end
 
 ---Returns the generated recycle recipe name for a scrap material type.

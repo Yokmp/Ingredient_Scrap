@@ -177,8 +177,9 @@ end
 ---@param recipe_name string
 ---@param rows table[]
 ---@param details table[]
+---@param rounding_stats table|nil
 ---@return integer, integer
-local function rewrite_recipe(data_table, recipe_name, rows, details)
+local function rewrite_recipe(data_table, recipe_name, rows, details, rounding_stats)
   local recipe = data.raw.recipe[recipe_name]
   if not recipe then return 0, 0 end
 
@@ -239,7 +240,7 @@ local function rewrite_recipe(data_table, recipe_name, rows, details)
       end
     end
   end
-  local normalized_mixed_results = mixed.normalize_pseudo_result_amounts(insert)
+  local normalized_mixed_results = mixed.normalize_pseudo_result_amounts(insert, rounding_stats)
 
   return applied, skipped, mixed_rows, normalized_mixed_results
 end
@@ -293,6 +294,9 @@ end
 function active.apply(data_table, material_flow, production_flow, policy)
   policy = policy or {}
   local ancestry = comparison.build(material_flow, production_flow, policy)
+  if IS_DEBUG and yokmods and yokmods.ingredient_scrap then
+    yokmods.ingredient_scrap.debug_pre_active_ancestry = ancestry
+  end
   local by_recipe, rewrite_recipes = group_rows_by_recipe(ancestry.comparisons)
   local details = {}
   local applied_rows = 0
@@ -300,9 +304,17 @@ function active.apply(data_table, material_flow, production_flow, policy)
   local mixed_rows = 0
   local normalized_mixed_results = 0
   local rewritten_recipes = 0
+  local mixed_rounding_stats = mixed.new_rounding_stats()
+  local mixed_recycle_distribution = nil
 
   for _, recipe_name in ipairs(sorted_keys(rewrite_recipes)) do
-    local applied, skipped, mixed_applied, normalized_mixed = rewrite_recipe(data_table, recipe_name, by_recipe[recipe_name], details)
+    local applied, skipped, mixed_applied, normalized_mixed = rewrite_recipe(
+      data_table,
+      recipe_name,
+      by_recipe[recipe_name],
+      details,
+      mixed_rounding_stats
+    )
     if applied > 0 then
       rewritten_recipes = rewritten_recipes + 1
       applied_rows = applied_rows + applied
@@ -311,6 +323,7 @@ function active.apply(data_table, material_flow, production_flow, policy)
       normalized_mixed_results = normalized_mixed_results + normalized_mixed
     end
   end
+  mixed_rounding_stats = mixed.finalize_rounding_stats(mixed_rounding_stats)
   local removed_orphans = applied_rows > 0 and remove_orphan_generated_scrap(data_table) or 0
   local used_scrap = used_scrap_names(data_table)
   if used_scrap[mixed.scrap_name()] then
@@ -320,7 +333,7 @@ function active.apply(data_table, material_flow, production_flow, policy)
         mixed_recipe_sources[detail.recipe] = true
       end
     end
-    mixed.ensure_recycle_recipe(data_table, used_scrap)
+    mixed_recycle_distribution = mixed.ensure_recycle_recipe(data_table)
     mixed.ensure_technologies(data_table, mixed_recipe_sources)
   end
 
@@ -338,6 +351,8 @@ function active.apply(data_table, material_flow, production_flow, policy)
       normalized_mixed_results = normalized_mixed_results,
       removed_orphans = removed_orphans,
     },
+    mixed_rounding = mixed_rounding_stats,
+    mixed_recycle_distribution = mixed_recycle_distribution,
     comparison_summary = ancestry.summary,
     details = details,
   }

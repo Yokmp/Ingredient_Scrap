@@ -419,6 +419,70 @@ def print_report_logs(logs: object, color: bool = True, show_passes: bool = Fals
             print(colored(f"       details: {compact_json(details)}", "gray", color))
 
 
+def print_mixed_rounding(report: dict, color: bool = True) -> None:
+    active = report.get("active_ancestry")
+    rounding = active.get("mixed_rounding") if isinstance(active, dict) else None
+    if not isinstance(rounding, dict):
+        return
+
+    floor = rounding.get("floor") if isinstance(rounding.get("floor"), dict) else {}
+    ceil = rounding.get("ceil") if isinstance(rounding.get("ceil"), dict) else {}
+    count = int(floor.get("count", ceil.get("count", 0)) or 0)
+    if count <= 0:
+        return
+
+    def value(bucket: dict, key: str) -> float:
+        return float(bucket.get(key, 0) or 0)
+
+    rows = (
+        ("min", value(floor, "min"), value(ceil, "min")),
+        ("avg", value(floor, "avg"), value(ceil, "avg")),
+        ("max", value(floor, "max"), value(ceil, "max")),
+        ("total", value(floor, "total"), value(ceil, "total")),
+        ("count", value(floor, "count"), value(ceil, "count")),
+    )
+
+    print()
+    print(colored("[mixed scrap rounding]", "blue", color))
+    print(f"{'':>8} {'floor':>8} {'ceil':>8}")
+    for label, floor_value, ceil_value in rows:
+        if label == "avg":
+            print(f"{label:>8} {floor_value:>8.2f} {ceil_value:>8.2f}")
+        else:
+            print(f"{label:>8} {floor_value:>8.0f} {ceil_value:>8.0f}")
+
+
+def print_mixed_recycle_distribution(report: dict, color: bool = True) -> None:
+    active = report.get("active_ancestry")
+    distribution = active.get("mixed_recycle_distribution") if isinstance(active, dict) else None
+    if not isinstance(distribution, dict):
+        return
+
+    target_count = int(distribution.get("target_count", 0) or 0)
+    if target_count <= 0:
+        return
+
+    total_probability = float(distribution.get("total_probability", 0) or 0)
+    max_probability = float(distribution.get("max_probability", 0) or 0)
+    min_probability = float(distribution.get("min_probability", 0) or 0)
+    print()
+    print(colored("[mixed recycle distribution]", "blue", color))
+    print(
+        f"targets={target_count} "
+        f"total={total_probability:.2%} "
+        f"top={max_probability:.2%} "
+        f"min={min_probability:.2%}"
+    )
+    print(f"{'rank':>4} {'prob':>8} {'weight':>10}  target")
+    for entry in distribution.get("top_targets", [])[:10]:
+        if not isinstance(entry, dict):
+            continue
+        rank = int(entry.get("rank", 0) or 0)
+        probability = float(entry.get("probability", 0) or 0)
+        weight = float(entry.get("expected_weight", 0) or 0)
+        print(f"{rank:>4} {probability:>7.2%} {weight:>10.2f}  {entry.get('name', '<unknown>')}")
+
+
 def print_pretty_report(report: dict, color: bool = True, show_passes: bool = False) -> None:
     summary = report.get("summary", {})
     total = int(summary.get("total", 0) or 0)
@@ -444,6 +508,8 @@ def print_pretty_report(report: dict, color: bool = True, show_passes: bool = Fa
     logs = report.get("logs", [])
     if failed == 0 and not show_passes:
         print(colored("All assertions passed. Use --show-passes to print every case.", "green", color))
+        print_mixed_rounding(report, color=color)
+        print_mixed_recycle_distribution(report, color=color)
         print_report_logs(logs, color=color, show_passes=show_passes)
         return
 
@@ -463,6 +529,8 @@ def print_pretty_report(report: dict, color: bool = True, show_passes: bool = Fa
             details = case.get("details")
             if details is not None and (show_passes or case_status != "pass"):
                 print(colored(f"       details: {compact_json(details)}", "gray", color))
+    print_mixed_rounding(report, color=color)
+    print_mixed_recycle_distribution(report, color=color)
     print_report_logs(logs, color=color, show_passes=show_passes)
 
 

@@ -548,6 +548,51 @@ function runner.run(production_flow_dump)
         root_policy = active_ancestry.root_policy,
         summary = active_ancestry.summary,
       })
+    local mixed_rounding = active_ancestry and active_ancestry.mixed_rounding
+    local floor_rounding = mixed_rounding and mixed_rounding.floor
+    local ceil_rounding = mixed_rounding and mixed_rounding.ceil
+    local mixed_rows = active_ancestry and active_ancestry.summary and active_ancestry.summary.mixed_rows or 0
+    add_case("analysis.active-ancestry.mixed-rounding", "active ancestry exposes floor/ceil mixed-scrap rounding calibration",
+      mixed_rounding and
+        floor_rounding and
+        ceil_rounding and
+        floor_rounding.count == ceil_rounding.count and
+        floor_rounding.total ~= nil and
+        ceil_rounding.total ~= nil and
+        floor_rounding.avg ~= nil and
+        ceil_rounding.avg ~= nil and
+        (
+          (mixed_rows == 0 and floor_rounding.count == 0) or
+          (mixed_rows > 0 and floor_rounding.count > 0)
+        ),
+      nil,
+      mixed_rounding)
+    local mixed_distribution = active_ancestry and active_ancestry.mixed_recycle_distribution
+    local top_targets = mixed_distribution and mixed_distribution.top_targets or {}
+    local top_target = top_targets[1]
+    local sorted_top_targets = true
+    for index = 2, #top_targets do
+      local previous = top_targets[index - 1]
+      local current = top_targets[index]
+      if previous.expected_weight < current.expected_weight then
+        sorted_top_targets = false
+        break
+      end
+    end
+    add_case("analysis.active-ancestry.mixed-recycle-distribution", "mixed scrap recycling uses a weighted 60 percent rank distribution",
+      (
+        mixed_rows == 0 and mixed_distribution == nil
+      ) or (
+        mixed_rows > 0 and
+        mixed_distribution and
+        mixed_distribution.target_count > 0 and
+        math.abs((mixed_distribution.total_probability or 0) - 0.60) < 0.000001 and
+        top_target and
+        math.abs((top_target.probability or 0) - 0.20) < 0.000001 and
+        sorted_top_targets
+      ),
+      nil,
+      mixed_distribution)
   end
   local recipe_forms = passive_runtime and passive_runtime.recipe_forms
   add_case("analysis.recipe-forms.exists", "passive recipe-form classification is available without patching prototypes",
@@ -1120,6 +1165,8 @@ function runner.run(production_flow_dump)
       local active_ancestry = data_table.debug and data_table.debug.active_ancestry
       local mixed_pseudo_results = 0
       local normalized_mixed_pseudo_results = 0
+      local mixed_floor_amount_matches = 0
+      local mixed_floor_range_matches = 0
       for _, insert in pairs(data_table.inserts.recipes or {}) do
         for _, result in ipairs((insert and insert.results) or {}) do
           if result.name and result.name:sub(1, #mixed_scrap + 1) == mixed_scrap .. "_" and
@@ -1128,6 +1175,15 @@ function runner.run(production_flow_dump)
             if result.yis_normalized_after_results == true and
                 (result.amount ~= nil or (result.amount_min ~= nil and result.amount_max ~= nil)) then
               normalized_mixed_pseudo_results = normalized_mixed_pseudo_results + 1
+            end
+            if result.yis_source_amount then
+              local floor_variants = yokmods.ingredient_scrap.scrap_amount_rounding_variants(result.yis_source_amount).floor
+              if result.amount == floor_variants.avg then
+                mixed_floor_amount_matches = mixed_floor_amount_matches + 1
+              end
+              if result.amount_min == floor_variants.min and result.amount_max == floor_variants.max then
+                mixed_floor_range_matches = mixed_floor_range_matches + 1
+              end
             end
           end
         end
@@ -1157,6 +1213,10 @@ function runner.run(production_flow_dump)
           mixed_recycle and mixed_recycle.results and mixed_recycle.results[1] and
           mixed_pseudo_results > 0 and
           normalized_mixed_pseudo_results == mixed_pseudo_results and
+          (
+            (ISsettings.fixed_amount and mixed_floor_amount_matches == mixed_pseudo_results) or
+            (not ISsettings.fixed_amount and mixed_floor_range_matches == mixed_pseudo_results)
+          ) and
           raw_mixed_pseudo_results == 0 and
           active_ancestry and active_ancestry.summary and active_ancestry.summary.mixed_rows > 0,
         nil,
@@ -1177,6 +1237,8 @@ function runner.run(production_flow_dump)
             mixed_recycle = mixed_recycle,
             mixed_pseudo_results = mixed_pseudo_results,
             normalized_mixed_pseudo_results = normalized_mixed_pseudo_results,
+            mixed_floor_amount_matches = mixed_floor_amount_matches,
+            mixed_floor_range_matches = mixed_floor_range_matches,
             raw_mixed_pseudo_results = raw_mixed_pseudo_results,
             active_summary = active_ancestry and active_ancestry.summary,
           },

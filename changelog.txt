@@ -4,14 +4,23 @@ Date: 2026-06-28
   Changes:
     - updated the mod for Factorio 2.0
     - rewrote scrap generation to collect materials, stage generated prototypes, validate them, and patch recipes from a shared data table
-    - added support for fluid-based scrap and fluid recycle recipes
+    - added active ancestry resolving so component ingredients can be traced back to material families before scrap is generated
+    - added mixed scrap as a fallback for broad or unresolved recipe chains
+    - added weighted mixed scrap recycling with a 60% total output chance based on expected scrap frequency
+    - added support for fluid-based scrap matching and fluid recycle recipes
+    - added a public data-stage API for material overrides, source filters, recipe-chain targets, category rules, generated prototypes, tints, and helper functions
+    - added built-in compatibility rules for Space Age, Quality, Krastorio 2, Bob's Mods, and Angel's Mods
+    - added support for Quality recycler scrap sinking as intentional late-game behavior
     - added debug test fixtures and an in-game JSON test report written to script-output
-    - added a Lua data table dump for easier manual inspection while debugging
+    - added JSON and Lua dumps for material flow, technology flow, production flow, ancestry analysis, and the generated data table
     - added local LuaLS annotation generation from Factorio's offline API documentation
+    - added release tooling for Mod Portal zips and public source zips
   Bugfixes:
     - fixed recipes with fluid main products being ignored when fluid support is enabled
     - fixed generated recycle recipes using invalid category data
     - fixed generated tint tables so Factorio accepts generated scrap icons
+    - fixed generated recycle recipes disappearing from machines by keeping recipes present and hiding them instead of disabling them
+    - fixed generated prototype names to consistently use the yis- prefix for items, recipes, and technologies
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.11
 Date: 2024-11-15

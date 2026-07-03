@@ -426,7 +426,15 @@ local function build_staged_recipe(decision, mode, data_table)
   local recipe = existing and copy_value(existing) or {
     type = "recipe",
     name = recipe_name,
-    localised_name = { "", { "item-name.recycle" }, " ", { "item-name." .. decision.material } },
+    localised_name = {
+      "recipe-name.yis-recycle-name",
+      { "item-name.recycle" },
+      {
+        "item-name.yis-scrap-name",
+        { "item-name." .. decision.material },
+        { "item-name.scrap" },
+      },
+    },
     subgroup = "raw-material",
     order = "is-[" .. recipe_name .. "]",
     always_show_products = true,

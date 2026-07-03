@@ -35,8 +35,8 @@ Example shape:
   "path": "../deploy.py",
   "version": "1.0.0",
   "commands": {
-    "check": ["python", "../deploy.py", "--check"],
-    "run": ["python", "../deploy.py", "--deploy"]
+    "check": ["python", "deploy.py", "check"],
+    "run": ["python", "deploy.py", "build"]
   }
 }
 ```
@@ -71,9 +71,11 @@ Example shape:
 
 ## Deploy Tool
 
-- Adapt the existing root-level `deploy.py`.
-- Add `--version`.
-- Add dry-run/check mode.
+- Done: adapt the old root-level deploy script into `tools/toolset/deploy.py`.
+- Done: add `--version`.
+- Done: add dry-run/check mode through `check` and `publish-public --dry-run`.
+- Done: add `ensure-gitignore`.
+- Done: add `publish-public` with default `main` and optional `--branch`.
 - Add a UI frame once the CLI contract is stable.
 - Keep it in the top bar as a visible but unavailable tab until then.
 

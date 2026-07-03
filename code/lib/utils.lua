@@ -25,6 +25,7 @@ end
 
 utils.is_log = is_log.write
 utils.scrap_amount_range = scrap_amount.range
+utils.scrap_amount_rounding_variants = scrap_amount.rounding_variants
 utils.get_recycle_recipe_name = naming.get_recycle_recipe_name
 utils.get_scrap_name = naming.get_scrap_name
 utils.get_import_location = naming.get_import_location
@@ -51,6 +52,7 @@ function utils.publish()
   yokmods.ingredient_scrap.get_main_product = utils.get_main_product
   yokmods.ingredient_scrap.is_log = utils.is_log
   yokmods.ingredient_scrap.scrap_amount_range = utils.scrap_amount_range
+  yokmods.ingredient_scrap.scrap_amount_rounding_variants = utils.scrap_amount_rounding_variants
   yokmods.ingredient_scrap.get_recycle_recipe_name = utils.get_recycle_recipe_name
   yokmods.ingredient_scrap.get_scrap_name = utils.get_scrap_name
   yokmods.ingredient_scrap.get_import_location = utils.get_import_location

@@ -125,6 +125,13 @@ local function add_error(errors, id, name, message, details)
   })
 end
 
+---Returns true when a generated prototype uses Ingredient Scrap's owned prefix.
+---@param name string|nil
+---@return boolean
+local function has_yis_prefix(name)
+  return type(name) == "string" and name:match("^yis%-") ~= nil
+end
+
 ---Logs a disabled generated prototype as a warning without failing validation.
 local function warn_disabled_prototype(prototype_type, name, prototype, source)
   if prototype.enabled ~= false then return end
@@ -165,6 +172,9 @@ function patcher.validate_generated_prototypes(data_table)
     if item.name ~= name then
       add_error(errors, "item.name", name, "Generated item name does not match table key", { prototype_name = item.name, source = source })
     end
+    if not has_yis_prefix(name) or not has_yis_prefix(item.name) then
+      add_error(errors, "item.prefix", name, "Generated item must use the yis- prototype prefix", { prototype_name = item.name, source = source })
+    end
     if not item.icon and not item.icons then
       add_error(errors, "item.icons", name, "Generated item has neither icon nor icons", { source = source })
     end
@@ -187,6 +197,9 @@ function patcher.validate_generated_prototypes(data_table)
     if recipe.name ~= name then
       add_error(errors, "recipe.name", name, "Generated recipe name does not match table key", { prototype_name = recipe.name, source = source })
     end
+    if not has_yis_prefix(name) or not has_yis_prefix(recipe.name) then
+      add_error(errors, "recipe.prefix", name, "Generated recipe must use the yis- prototype prefix", { prototype_name = recipe.name, source = source })
+    end
     if not recipe.ingredients or not recipe.ingredients[1] then
       add_error(errors, "recipe.ingredients", name, "Generated recipe has no ingredients", { source = source })
     end
@@ -205,6 +218,9 @@ function patcher.validate_generated_prototypes(data_table)
     end
     if tech.name ~= name then
       add_error(errors, "technology.name", name, "Generated technology name does not match table key", { prototype_name = tech.name })
+    end
+    if not has_yis_prefix(name) or not has_yis_prefix(tech.name) then
+      add_error(errors, "technology.prefix", name, "Generated technology must use the yis- prototype prefix", { prototype_name = tech.name })
     end
     if not tech.effects or not tech.effects[1] then
       add_error(errors, "technology.effects", name, "Generated technology has no effects")

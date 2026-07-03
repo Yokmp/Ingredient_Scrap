@@ -56,7 +56,11 @@ function prototype_builder.ensure_scrap_item(data_table, scrap_defines)
   local scrap_item = {
     type = "item",
     name = scrap_name,
-    localised_name = { "", {"item-name." .. scrap_defines.scrap_type}, " ", {"item-name.scrap"}},
+    localised_name = {
+      "item-name.yis-scrap-name",
+      {"item-name." .. scrap_defines.scrap_type},
+      {"item-name.scrap"}
+    },
     icons = { {
       icon_size = 64,
       icon = icon_path .. scrap_icons[1] .. ".png",
@@ -181,7 +185,15 @@ function prototype_builder.ensure_recycle_recipe(data_table, recipe_defines)
   local recycle_recipe = {
     type = "recipe",
     name = recipe_name,
-    localised_name = { "", {"item-name.recycle"}, " ", {"item-name." .. recipe_defines.scrap_type}},
+    localised_name = {
+      "recipe-name.yis-recycle-name",
+      { "item-name.recycle" },
+      {
+        "item-name.yis-scrap-name",
+        { "item-name." .. recipe_defines.scrap_type },
+        { "item-name.scrap" },
+      },
+    },
     icons = recipe_icon_layers,
     hidden = recipe_defines.hidden or nil,
     subgroup = "raw-material",
@@ -240,7 +252,15 @@ function prototype_builder.ensure_technology(tech_defines)
   local scrap_technology = {
     type = "technology",
     name = recycle_recipe_name,
-    localised_name = { "", {"item-name." .. tech_defines.scrap_type}, " ",{"item-name.scrap"}, " ", {"item-name.recycling"} },
+    localised_name = {
+      "technology-name.yis-recycling-name",
+      { "item-name.recycling" },
+      {
+        "item-name.yis-scrap-name",
+        { "item-name." .. tech_defines.scrap_type },
+        { "item-name.scrap" },
+      },
+    },
     icons = technology_icon_layers,
     enabled = true,
     hidden = ISsettings.hide_tech == true and ISsettings.shallow_log == false,

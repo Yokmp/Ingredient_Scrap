@@ -46,8 +46,8 @@ current-vs-ancestry comparison is complete.
      technologies.
    - 4.2. Done: update `deploy.py` ignore/strip rules for local tools, dumps,
      caches, local planning files, and debug regions.
-   - 4.3. Done: produce `_release_/public/Ingredient_Scrap/` for public source
-     and `_release_/Ingredient_Scrap_<version>.zip` for the Mod Portal.
+   - 4.3. Done: produce `_release_/public.zip` for public source and
+      `_release_/Ingredient_Scrap_<version>.zip` for the Mod Portal.
    - 4.4. Done: keep public GitHub `main` separate from local
      development/source backup.
 5. Before public release:
@@ -137,15 +137,24 @@ Measured on 2026-07-03 with `python tools/test/run_tests.py --profile default`.
   mixed ranges such as `amount_min = 3`, `amount_max = 8`, which is useful
   evidence before deciding whether mixed-share rounding should use `floor` or
   `ceil`.
-- Important debug caveat: `active_ancestry.comparison_summary` is built before
-  rewrites in `data-updates.lua`, while `ancestry-runtime.json` is rebuilt after
-  rewrites in `data-final-fixes.lua`. The post-rewrite runtime graph can see
-  generated recycling results and produce misleading root aliases such as
-  `electronic-circuit -> tin`, `battery -> steel`, or
-  `bob-basic-circuit-board -> iron`. Use the active report and archived
-  pre-active dumps for release decisions until the post-active debug comparison
-  either reuses the pre-active graph or explicitly filters generated recycling
-  recipes.
+- Done: mixed-scrap rounding calibration is reported without changing active
+  recipe output. Bob+Angels Full with `yis-ancestry-mixed-limit = 1` produced:
+  `floor { min = 1, avg = 3.60, max = 54, total = 1331, count = 370 }` and
+  `ceil { min = 1, avg = 4.48, max = 55, total = 1658, count = 370 }`.
+- Done: mixed-scrap active amounts now use `floor`, minimum 1. The floor/ceil
+  calibration table remains debug-only so later profiles can still compare the
+  conservative release behavior against the more generous ceil variant.
+- Done: `yis-recycle-mixed-scrap` now uses expected source scrap frequency
+  instead of equal probabilities. The same Bob+Angels Full strict-width run
+  produced 31 mixed recycle targets with 60% total output chance, 20% top output
+  chance, and the highest weighted targets starting with steel, titanium, iron,
+  brass, tungsten, aluminium, bronze, nitinol, copper, and silicon scrap.
+- Done: the post-active debug caveat is fixed for active ancestry modes.
+  `ancestry-runtime.json` now reuses the pre-active ancestry comparison captured
+  in `data-updates.lua` when active ancestry is enabled. If active ancestry is
+  skipped, the dump still falls back to the `data-final-fixes.lua` graph builder.
+  The dump includes `debug_source` so review tools can tell which path produced
+  it.
 
 ### Mixed-Scrap Fallback Direction
 
@@ -965,7 +974,7 @@ files after stripping are skipped.
 
 Verification:
 
-- `python deploy.py` created `_release_/Ingredient_Scrap_2.0.0.zip`.
+- `python tools/toolset/deploy.py build` created `_release_/Ingredient_Scrap_2.0.0.zip`.
 - ZIP audit found 123 entries, 0 suspicious tool/cache/test/planning files, and
   0 remaining debug-region markers.
 
@@ -974,19 +983,20 @@ Verification:
 Status: done. `deploy.py` now writes both release artifacts from the same
 filtered and debug-stripped file set:
 
-- `_release_/public/Ingredient_Scrap/`: clean public source folder intended for
-  the public GitHub branch.
+- `_release_/public.zip`: clean public source ZIP intended for the public GitHub
+  branch. It contains `Ingredient_Scrap/` at the archive root.
 - `_release_/Ingredient_Scrap_<version>.zip`: versionspaced Mod Portal ZIP.
 
-The public source folder is rebuilt on each deploy run. The ZIP is created by
-copying that public source folder into a temporary versionspaced directory, so
-both outputs use the same release filters and debug-region stripping.
+The public source folder is rebuilt only as a temporary staging directory. After
+`public.zip` and the Mod Portal ZIP are created, the temporary
+`_release_/public/` folder is deleted so editor tooling does not scan stale
+release copies.
 
 Verification:
 
-- `python deploy.py` created `_release_/public/Ingredient_Scrap/`.
-- `python deploy.py` created `_release_/Ingredient_Scrap_2.0.0.zip`.
-- Public source and ZIP contain the same 123 release files.
+- `python tools/toolset/deploy.py build` created `_release_/public.zip`.
+- `python tools/toolset/deploy.py build` created `_release_/Ingredient_Scrap_2.0.0.zip`.
+- Public source ZIP and Mod Portal ZIP contain the same filtered release files.
 - ZIP audit found 0 suspicious tool/cache/test/planning files and 0 remaining
   debug-region markers.
 
@@ -1003,20 +1013,19 @@ Intended branch split:
   debug helpers, and local release tooling.
 - `main`: public production mod source only.
 - Mod Portal ZIP: `_release_/Ingredient_Scrap_<version>.zip`.
-- Public source candidate:
-  `_release_/public/Ingredient_Scrap/`.
+- Public source candidate: `_release_/public.zip`.
 
 Recommended publication workflow:
 
 1. Work and test on `dev`.
-2. Run `python deploy.py`.
-3. Review `_release_/public/Ingredient_Scrap/`.
-4. Copy the contents of `_release_/public/Ingredient_Scrap/` into a separate
-   `main` checkout or worktree.
+2. Run `python tools/toolset/deploy.py build`.
+3. Review or extract `_release_/public.zip`.
+4. Copy the extracted `Ingredient_Scrap/` contents into a separate `main`
+   checkout or worktree.
 5. Commit that clean production source on `main`.
 6. Upload `_release_/Ingredient_Scrap_<version>.zip` to the Mod Portal.
 
-Do not merge the whole local `dev` tree into `main`. The public source folder is
+Do not merge the whole local `dev` tree into `main`. The public source ZIP is
 the boundary between local development/backups and the published mod source.
 
 #### 5.1 Generated Prototype Names And Prefixes
@@ -1033,6 +1042,12 @@ The name helpers strip an existing `yis-` material prefix before composing a
 prototype name, then add the mod-owned prefix only once. This protects API and
 test materials such as `yis-testium` from becoming `yis-yis-testium-scrap` or
 `yis-recycle-yis-testium-scrap`.
+
+Design rule: every prototype stored in `data_table.prototypes.items`,
+`data_table.prototypes.recipes`, or `data_table.prototypes.technology` is owned
+by Ingredient Scrap and must use the `yis-` prototype prefix. The preflight
+validator treats missing prefixes as errors. Source recipe inserts keep foreign
+recipe names because those recipes are patched, not generated.
 
 Harness coverage:
 
@@ -1295,6 +1310,31 @@ The goal is a single local maintenance app with consistent Factorio-inspired
 styling, not separate one-off windows for each script. New tools should register
 their own frame with the shell and keep long-running work off the Tkinter event
 loop, following the current mod-list UI pattern.
+
+## Future: Public Release Publisher Tool
+
+`deploy.py` should stay responsible for building release artifacts only. A
+separate local tool can later publish `_release_/public.zip` into the public
+`main` source tree without mixing that Git workflow into the deploy step.
+
+Proposed workflow for a tool such as `tools/release_public.py`:
+
+1. Run or require a fresh `python tools/toolset/deploy.py build`.
+2. Extract `_release_/public.zip` into a temporary directory.
+3. Copy the extracted `Ingredient_Scrap/` contents into a separate `main`
+   checkout or worktree.
+4. Show `git status` for the target tree and require explicit review.
+5. Create an optional commit using the version from `info.json`.
+6. Push only when explicitly requested.
+7. Delete the temporary extraction directory.
+
+Safety rules:
+
+- never push by default;
+- refuse a dirty target worktree unless an explicit force option is used;
+- never use the local `dev` workspace as the publish target;
+- keep temporary extraction data out of `_release_`, or remove it immediately
+  after the run.
 
 ## Future: Debug Report Viewer
 

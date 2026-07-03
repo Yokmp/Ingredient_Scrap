@@ -210,10 +210,11 @@ local function without_generated_scrap_results(results)
 end
 
 ---Returns nil for empty array-like tables so Factorio JSON does not encode them as objects.
----@param values table|nil
----@return table|nil
+---@generic T
+---@param values T[]|nil
+---@return T[]|nil
 local function nil_if_empty(values)
-  if not values or #values == 0 then return nil end
+  if not values or next(values) == nil then return nil end
   return values
 end
 
@@ -318,6 +319,7 @@ end
 ---@return table
 local function build_resource_index(data_table)
   local by_material = {}
+  ---@type ISdata_table_materials
   local materials = data_table.materials
 
   for resource_name, resource in pairs(data.raw.resource or {}) do

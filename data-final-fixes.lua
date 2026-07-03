@@ -59,10 +59,15 @@ if IS_DEBUG then
     mixed_limit = 3,
     max_depth = 8,
   }
-  yokmods.ingredient_scrap.data_table.debug.passive_runtime.ancestry =
-    ancestry_comparison.build(material_flow_dump, production_flow_dump, ancestry_policy)
+  local ancestry_runtime_dump = yokmods.ingredient_scrap.debug_pre_active_ancestry
+    or ancestry_comparison.build(material_flow_dump, production_flow_dump, ancestry_policy)
+  ancestry_runtime_dump.debug_source = yokmods.ingredient_scrap.debug_pre_active_ancestry
+    and "data-updates-pre-active"
+    or "data-final-fixes-post-active"
+  yokmods.ingredient_scrap.data_table.debug.passive_runtime.ancestry = ancestry_runtime_dump
   timing.mark("data-final-fixes", "build-passive-ancestry", {
-    count = #(yokmods.ingredient_scrap.data_table.debug.passive_runtime.ancestry.comparisons or {}),
+    count = #(ancestry_runtime_dump.comparisons or {}),
+    source = ancestry_runtime_dump.debug_source,
   })
   yokmods.ingredient_scrap.data_table.debug.passive_runtime.recipe_forms =
     recipe_forms.build(material_flow_dump, production_flow_dump, yokmods.ingredient_scrap.data_table)
@@ -93,6 +98,8 @@ if IS_DEBUG then
     mixed_limit = yokmods.ingredient_scrap.data_table.debug.active_ancestry.mixed_limit,
     max_depth = yokmods.ingredient_scrap.data_table.debug.active_ancestry.max_depth,
     summary = yokmods.ingredient_scrap.data_table.debug.active_ancestry.summary,
+    mixed_rounding = yokmods.ingredient_scrap.data_table.debug.active_ancestry.mixed_rounding,
+    mixed_recycle_distribution = yokmods.ingredient_scrap.data_table.debug.active_ancestry.mixed_recycle_distribution,
     comparison_summary = yokmods.ingredient_scrap.data_table.debug.active_ancestry.comparison_summary,
   } or nil
   timing.mark("data-final-fixes", "build-test-report")
