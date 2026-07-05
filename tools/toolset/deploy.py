@@ -21,8 +21,11 @@ from pathlib import Path
 from typing import Iterable
 
 APP_VERSION = "2.0.0"
+ARTIFACT_PUBLIC = "public"
+ARTIFACT_PORTAL = "portal"
 
 EXCLUDE_DIRS = {
+    "_legacy",
     "_release_",
     "_lib",
     "_working",
@@ -49,8 +52,6 @@ EXCLUDE_FILES = {
     ".gitattributes",
     ".gitignore",
     ".luarc.json",
-    "DESIGN_NOTES.md",
-    "pre_release_steps.md",
     "locale/en/test.cfg",
 }
 
@@ -63,12 +64,19 @@ EXCLUDE_EXTENSIONS = {
 }
 
 EXCLUDE_NAME_PREFIXES = (
-    "shot_",
-    "shot-",
 )
 
 EXCLUDE_NAME_CONTAINS = (
     "_testing.lua",
+)
+
+PORTAL_EXCLUDE_EXTENSIONS = {
+    ".md",
+}
+
+PORTAL_EXCLUDE_NAME_PREFIXES = (
+    "shot_",
+    "shot-",
 )
 
 
@@ -180,7 +188,7 @@ def safe_empty_directory(path: Path, allowed_root: Path) -> None:
             child.unlink()
 
 
-def should_exclude(path: Path, mod_root: Path, is_dir: bool = False) -> bool:
+def should_exclude(path: Path, mod_root: Path, is_dir: bool = False, artifact: str = ARTIFACT_PUBLIC) -> bool:
     """Return true when a path must not be included in release archives."""
     if path.resolve() == mod_root.resolve():
         return False
@@ -195,9 +203,13 @@ def should_exclude(path: Path, mod_root: Path, is_dir: bool = False) -> bool:
         return True
     if name.startswith(EXCLUDE_NAME_PREFIXES):
         return True
+    if artifact == ARTIFACT_PORTAL and name.startswith(PORTAL_EXCLUDE_NAME_PREFIXES):
+        return True
     if any(fragment in name for fragment in EXCLUDE_NAME_CONTAINS):
         return True
     if path.suffix in EXCLUDE_EXTENSIONS:
+        return True
+    if artifact == ARTIFACT_PORTAL and path.suffix.lower() in PORTAL_EXCLUDE_EXTENSIONS:
         return True
     if is_dir and name.endswith("_" + load_info(mod_root).version):
         return True
@@ -265,28 +277,28 @@ def copy_release_file(source: Path, target: Path, config: DeployConfig, stats: C
     return True
 
 
-def iter_release_files(config: DeployConfig) -> Iterable[Path]:
+def iter_release_files(config: DeployConfig, artifact: str = ARTIFACT_PUBLIC) -> Iterable[Path]:
     """Yield files that belong in release archives."""
     for root, subdirs, files in os.walk(config.mod_root):
         root_path = Path(root)
         subdirs[:] = [
             subdir
             for subdir in sorted(subdirs)
-            if not should_exclude(root_path / subdir, config.mod_root, is_dir=True)
+            if not should_exclude(root_path / subdir, config.mod_root, is_dir=True, artifact=artifact)
         ]
-        if should_exclude(root_path, config.mod_root, is_dir=True):
+        if should_exclude(root_path, config.mod_root, is_dir=True, artifact=artifact):
             continue
         for filename in sorted(files):
             path = root_path / filename
-            if not should_exclude(path, config.mod_root):
+            if not should_exclude(path, config.mod_root, artifact=artifact):
                 yield path
 
 
-def collect_release_tree(config: DeployConfig, target_root: Path) -> CollectStats:
+def collect_release_tree(config: DeployConfig, target_root: Path, artifact: str = ARTIFACT_PUBLIC) -> CollectStats:
     """Copy filtered release files into target_root."""
     stats = CollectStats()
     target_root.mkdir(parents=True, exist_ok=True)
-    for source in iter_release_files(config):
+    for source in iter_release_files(config, artifact):
         relative = source.relative_to(config.mod_root)
         target = target_root / relative
         copied = copy_release_file(source, target, config, stats)
@@ -297,11 +309,11 @@ def collect_release_tree(config: DeployConfig, target_root: Path) -> CollectStat
     return stats
 
 
-def scan_release(config: DeployConfig) -> CollectStats:
+def scan_release(config: DeployConfig, artifact: str = ARTIFACT_PUBLIC) -> CollectStats:
     """Validate release files and debug regions without copying them."""
     stats = CollectStats()
     all_files = {path for path in config.mod_root.rglob("*") if path.is_file()}
-    included = set(iter_release_files(config))
+    included = set(iter_release_files(config, artifact))
     stats.excluded = len(all_files - included)
     for source in sorted(included):
         if config.strip_debug and source.suffix == ".lua":
@@ -342,17 +354,18 @@ def build_release(config: DeployConfig) -> None:
     safe_remove_tree(config.work_dir, config.release_dir)
     config.release_dir.mkdir(parents=True, exist_ok=True)
     try:
-        stats = collect_release_tree(config, config.public_work_dir / info.name)
+        public_stats = collect_release_tree(config, config.public_work_dir / info.name, ARTIFACT_PUBLIC)
         if config.public:
             create_zip_from_tree(config.public_work_dir / info.name, public_zip, info.name)
-        shutil.copytree(config.public_work_dir / info.name, config.portal_work_dir / full_name)
+        portal_stats = collect_release_tree(config, config.portal_work_dir / full_name, ARTIFACT_PORTAL)
         create_zip_from_tree(config.portal_work_dir / full_name, portal_zip, full_name)
     finally:
         safe_remove_tree(config.work_dir, config.release_dir)
 
     print(f"Release: {info.title} {info.version}")
-    print(f"Files: {stats.copied} ({format_size(stats.bytes_written)})")
-    print(f"Debug regions stripped: {stats.stripped_regions} in {stats.stripped_files} file(s)")
+    print(f"Public files: {public_stats.copied} ({format_size(public_stats.bytes_written)})")
+    print(f"Mod Portal files: {portal_stats.copied} ({format_size(portal_stats.bytes_written)})")
+    print(f"Debug regions stripped: {portal_stats.stripped_regions} in {portal_stats.stripped_files} file(s)")
     if config.public:
         print(f"Public zip: {public_zip} ({format_size(public_zip.stat().st_size)})")
     print(f"Mod Portal zip: {portal_zip} ({format_size(portal_zip.stat().st_size)})")
@@ -361,13 +374,16 @@ def build_release(config: DeployConfig) -> None:
 def check_release(config: DeployConfig) -> None:
     """Validate release inputs without creating final archives."""
     info = load_info(config.mod_root)
-    stats = scan_release(config)
+    public_stats = scan_release(config, ARTIFACT_PUBLIC)
+    portal_stats = scan_release(config, ARTIFACT_PORTAL)
     print(f"Mod root: {config.mod_root}")
     print(f"Release dir: {config.release_dir}")
     print(f"Mod: {info.name} {info.version}")
-    print(f"Included files: {stats.copied}")
-    print(f"Excluded files: {stats.excluded}")
-    print(f"Debug regions: {stats.stripped_regions} in {stats.stripped_files} file(s)")
+    print(f"Public files: {public_stats.copied}")
+    print(f"Public excluded files: {public_stats.excluded}")
+    print(f"Mod Portal files: {portal_stats.copied}")
+    print(f"Mod Portal excluded files: {portal_stats.excluded}")
+    print(f"Debug regions: {portal_stats.stripped_regions} in {portal_stats.stripped_files} file(s)")
     print(f"Expected public zip: {config.release_dir / 'public.zip'}")
     print(f"Expected Mod Portal zip: {config.release_dir / (info.name + '_' + info.version + '.zip')}")
 

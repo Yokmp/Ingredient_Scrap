@@ -16,6 +16,13 @@
         "space-age"
       ]
     },
+    "is_base": {
+      "label": "IS Base",
+      "mods": [
+        "base",
+        "Ingredient_Scrap"
+      ]
+    },
     "angels_is": {
       "label": "Angels+IS",
       "mods": [

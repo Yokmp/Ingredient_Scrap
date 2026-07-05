@@ -2223,6 +2223,166 @@ class DeployTool(ToolFrame):
         self.run_deploy(args)
 
 
+class DebugTool(ToolFrame):
+    """Tab for launching common Factorio test-harness commands."""
+
+    title = "Debug"
+
+    def __init__(self, master: tk.Misc, app: ToolApp):
+        super().__init__(master, app)
+        self.no_color_var = tk.BooleanVar(value=True)
+        self.show_passes_var = tk.BooleanVar(value=False)
+        self.keep_mod_list_var = tk.BooleanVar(value=False)
+        self.keep_saves_var = tk.BooleanVar(value=False)
+        self.factorio_verbose_var = tk.BooleanVar(value=False)
+        self.check_unused_var = tk.BooleanVar(value=False)
+        self.strict_warnings_var = tk.BooleanVar(value=False)
+        self.custom_args_var = tk.StringVar(value="--profile default")
+        self.status_var = tk.StringVar(value="Ready.")
+        self.run_tests_script = TOOL_DIR.parent / "test" / "run_tests.py"
+        self.test_commands: list[tuple[str, list[str]]] = [
+            ("Default", ["--profile", "default"]),
+            ("All profiles", ["--all"]),
+            ("Material heavy", ["--profile", "ancestry_material_heavy"]),
+            ("Base IS", ["--mod-profile", "is_base", "--profile", "default"]),
+            ("K2 default", ["--mod-profile", "krastorio_is", "--profile", "default"]),
+            ("Bob+Angels", ["--mod-profile", "bob_angels_full_is", "--profile", "default"]),
+            ("Bob+Angels width 1", ["--mod-profile", "bob_angels_full_is", "--profile", "ancestry_width_1"]),
+        ]
+        self._build()
+
+    def _build(self) -> None:
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(2, weight=1)
+
+        header = tk.Frame(self, bg=BG)
+        header.grid(row=0, column=0, sticky="ew", padx=16, pady=(14, 8))
+        header.columnconfigure(1, weight=1)
+        tk.Label(header, text="DEBUG", bg=BG, fg=TEXT, font=("Segoe UI", 14, "bold")).grid(row=0, column=0, sticky="w")
+        striped_header(header, "", BG).grid(row=0, column=1, sticky="ew", padx=12)
+
+        info = "Runs the real Factorio test harness from this workspace. Use these buttons when Codex asks for a local test run."
+        tk.Label(self, text=info, bg=BG, fg=BODY_TEXT, anchor="w", justify=tk.LEFT).grid(row=1, column=0, sticky="ew", padx=16, pady=(0, 12))
+
+        body = tk.Frame(self, bg=BG)
+        body.grid(row=2, column=0, sticky="nsew", padx=16, pady=(0, 8))
+        body.columnconfigure(0, weight=1)
+        body.columnconfigure(1, weight=0, minsize=360)
+        body.rowconfigure(0, weight=1)
+
+        log_frame = tk.Frame(body, bg=BG)
+        log_frame.grid(row=0, column=0, sticky="nsew", padx=(0, 12))
+        log_frame.columnconfigure(0, weight=1)
+        log_frame.rowconfigure(0, weight=1)
+        self.output_text = tk.Text(log_frame, bg=LIST_BG, fg=BODY_TEXT, insertbackground=BODY_TEXT, relief=tk.SUNKEN, bd=2, wrap=tk.WORD)
+        self.output_text.grid(row=0, column=0, sticky="nsew")
+        scrollbar = ttk.Scrollbar(log_frame, orient=tk.VERTICAL, command=self.output_text.yview)
+        scrollbar.grid(row=0, column=1, sticky="ns")
+        self.output_text.configure(yscrollcommand=scrollbar.set)
+        self.append_output("Debug output will appear here.")
+
+        controls = tk.Frame(body, bg=PANEL, highlightthickness=1, highlightbackground=LINE)
+        controls.grid(row=0, column=1, sticky="nsew")
+        controls.columnconfigure(0, weight=1)
+        tk.Label(controls, text="TEST COMMANDS", bg=PANEL, fg=TEXT, font=("Segoe UI", 11, "bold"), anchor="w").grid(row=0, column=0, sticky="ew", padx=12, pady=(12, 6))
+
+        for row, (label, args) in enumerate(self.test_commands, start=1):
+            self.command_row(controls, row, label, args)
+
+        option_row = len(self.test_commands) + 1
+        tk.Label(controls, text="OPTIONS", bg=PANEL, fg=TEXT, font=("Segoe UI", 11, "bold"), anchor="w").grid(row=option_row, column=0, sticky="ew", padx=12, pady=(14, 4))
+        options = tk.Frame(controls, bg=PANEL)
+        options.grid(row=option_row + 1, column=0, sticky="ew", padx=12)
+        for index, (label, variable) in enumerate([
+            ("no color", self.no_color_var),
+            ("show passes", self.show_passes_var),
+            ("keep mod list", self.keep_mod_list_var),
+            ("keep saves", self.keep_saves_var),
+            ("verbose Factorio", self.factorio_verbose_var),
+            ("unused prototype check", self.check_unused_var),
+            ("strict warnings", self.strict_warnings_var),
+        ]):
+            ttk.Checkbutton(options, text=label, variable=variable).grid(row=index // 2, column=index % 2, sticky="w", padx=(0, 12), pady=2)
+
+        custom_row = option_row + 2
+        tk.Label(controls, text="CUSTOM ARGS", bg=PANEL, fg=TEXT, font=("Segoe UI", 11, "bold"), anchor="w").grid(row=custom_row, column=0, sticky="ew", padx=12, pady=(14, 4))
+        custom = tk.Frame(controls, bg=PANEL)
+        custom.grid(row=custom_row + 1, column=0, sticky="ew", padx=12, pady=(0, 8))
+        custom.columnconfigure(0, weight=1)
+        ttk.Entry(custom, textvariable=self.custom_args_var).grid(row=0, column=0, sticky="ew", padx=(0, 8))
+        factorio_button(custom, "Run", self.run_custom, kind="orange").grid(row=0, column=1, sticky="e")
+
+        tk.Label(self, textvariable=self.status_var, bg=BG, fg=MUTED, anchor="w").grid(row=3, column=0, sticky="ew", padx=16, pady=(0, 12))
+
+    def command_row(self, master: tk.Misc, row: int, text: str, args: list[str]) -> None:
+        frame = tk.Frame(master, bg=PANEL)
+        frame.grid(row=row, column=0, sticky="ew", padx=12, pady=4)
+        frame.columnconfigure(0, weight=1)
+        factorio_button(frame, text, lambda command_args=args: self.run_tests(command_args), kind="orange").grid(row=0, column=0, sticky="ew")
+
+    def append_output(self, text: str) -> None:
+        self.output_text.configure(state=tk.NORMAL)
+        self.output_text.delete("1.0", tk.END)
+        self.output_text.insert("1.0", text.strip() + "\n")
+        self.output_text.configure(state=tk.DISABLED)
+        self.output_text.see(tk.END)
+
+    def option_args(self) -> list[str]:
+        args: list[str] = []
+        if self.no_color_var.get():
+            args.append("--no-color")
+        if self.show_passes_var.get():
+            args.append("--show-passes")
+        if self.keep_mod_list_var.get():
+            args.append("--keep-mod-list")
+        if self.keep_saves_var.get():
+            args.append("--keep-saves")
+        if self.factorio_verbose_var.get():
+            args.append("--factorio-verbose")
+        if self.check_unused_var.get():
+            args.append("--check-unused-prototype-data")
+        if self.strict_warnings_var.get():
+            args.append("--strict-prototype-warnings")
+        return args
+
+    def run_custom(self) -> None:
+        try:
+            import shlex
+
+            args = shlex.split(self.custom_args_var.get())
+        except ValueError as exc:
+            messagebox.showerror("Invalid custom args", str(exc), parent=self)
+            return
+        self.run_tests(args)
+
+    def run_tests(self, args: list[str]) -> None:
+        if not self.run_tests_script.exists():
+            messagebox.showerror("Test harness missing", f"run_tests.py not found:\n{self.run_tests_script}", parent=self)
+            return
+        final_args = list(args) + self.option_args()
+        cmd = [sys.executable, str(self.run_tests_script), *final_args]
+        display_command = " ".join(["python", "tools\\test\\run_tests.py", *final_args])
+
+        def work() -> subprocess.CompletedProcess[str]:
+            return subprocess.run(cmd, cwd=str(TOOL_DIR.parent.parent), text=True, capture_output=True, check=False)  # noqa: S603 - local tool command.
+
+        def done(result: subprocess.CompletedProcess[str]) -> None:
+            parts = [f"> {display_command}", ""]
+            output = (result.stdout + "\n" + result.stderr).strip()
+            parts.append(output or "<no output>")
+            parts.extend(["", f"Exit code: {result.returncode}"])
+            self.append_output("\n".join(parts))
+            if result.returncode == 0:
+                self.status_var.set("Test command completed.")
+                self.app.status("Debug test command completed")
+            else:
+                self.status_var.set(f"Test command failed with exit code {result.returncode}.")
+                self.app.status("Debug test command failed")
+
+        self.status_var.set("Running: " + display_command)
+        self.app.run_worker(work, done, "Running test harness...", "Test command failed")
+
+
 TOOL_MAP: dict[str, dict[str, Any]] = {
     "modlist": {
         "title": "Mod List",
@@ -2253,6 +2413,14 @@ TOOL_MAP: dict[str, dict[str, Any]] = {
         "version": "1.0.0",
         "filename": "deploy.py",
         "frame_type": DeployTool,
+        "min_version": "1.0.0",
+        "max_version": "2.0.0",
+    },
+    "debug": {
+        "title": "Debug",
+        "version": "1.0.0",
+        "filename": "../test/run_tests.py",
+        "frame_type": DebugTool,
         "min_version": "1.0.0",
         "max_version": "2.0.0",
     },

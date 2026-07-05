@@ -1,4 +1,4 @@
-require("code.lib.material-overrides")
+require("code.override.materials")
 
 local api = yokmods.ingredient_scrap.api
 local test_source = { name = "Ingredient Scrap Test", color = "#66CCFF" }

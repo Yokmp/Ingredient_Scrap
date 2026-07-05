@@ -1,4 +1,4 @@
-require("code.lib.category-overrides")
+require("code.override.categories")
 
 local api = yokmods.ingredient_scrap.api
 

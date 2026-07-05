@@ -1,5 +1,6 @@
-require("code.lib.material-overrides")
-require("code.lib.source-overrides")
+require("code.override.materials")
+require("code.override.sources")
+require("code.override.categories")
 
 local api = yokmods.ingredient_scrap.api
 local angel_source = { name = "Angel's Mods", color = "#C97A40" }
@@ -38,20 +39,20 @@ local bob_material_aliases = {
   aluminium = { "bob-aluminium-plate" },
   brass = { "bob-brass-alloy" },
   bronze = { "bob-bronze-alloy" },
-  cobalt = { "bob-cobalt-ore", "bob-cobalt-plate" },
+  cobalt = { "bob-cobalt-plate", "bob-cobalt-ore" },
   ["cobalt-steel"] = { "bob-cobalt-steel-alloy" },
   ["copper-tungsten"] = { "bob-copper-tungsten-alloy" },
-  gold = { "bob-gold-ore", "bob-gold-plate" },
+  gold = { "bob-gold-plate", "bob-gold-ore" },
   gunmetal = { "bob-gunmetal-alloy" },
   invar = { "bob-invar-alloy" },
-  lead = { "bob-lead-ore", "bob-lead-plate" },
-  nickel = { "bob-nickel-ore", "bob-nickel-plate" },
+  lead = { "bob-lead-plate", "bob-lead-ore" },
+  nickel = { "bob-nickel-plate", "bob-nickel-ore" },
   nitinol = { "bob-nitinol-alloy" },
   silicon = { "bob-silicon-plate", "bob-silicon-wafer" },
-  silver = { "bob-silver-ore", "bob-silver-plate" },
-  tin = { "bob-tin-ore", "bob-tin-plate" },
+  silver = { "bob-silver-plate", "bob-silver-ore" },
+  tin = { "bob-tin-plate", "bob-tin-ore" },
   titanium = { "bob-titanium-plate" },
-  zinc = { "bob-zinc-ore", "bob-zinc-plate" },
+  zinc = { "bob-zinc-plate", "bob-zinc-ore" },
 }
 
 local component_source = { name = "Component Families", color = "#D6A34D" }
@@ -78,7 +79,6 @@ local component_aliases = {
     "bob-steel-bearing-ball",
   },
   cable = {
-    "copper-cable",
     "bob-tinned-copper-cable",
     "bob-gilded-copper-cable",
     "bob-insulated-cable",
@@ -143,6 +143,21 @@ ignore_ore_source_categories({
 --------------------------------
 
 if has_any_mod({ "angelsrefining", "angelssmelting", "angelspetrochem", "SeaBlock" }) then
+  for _, register_category in ipairs({
+    api.register.category.furnace,
+    api.register.category.assembling_machine,
+  }) do
+    register_category({
+      fast_replaceable_groups = { "angels-casting-machine" },
+      add_item_recycling = true,
+    })
+    register_category({
+      fast_replaceable_groups = { "angels-induction-furnace" },
+      add_item_recycling = false,
+      add_fluid_recycling_if_fluid_boxes = true,
+    })
+  end
+
   ignore_ore_source_categories({
     "angels-ore-processing",
     "angels-ore-processing-2",
@@ -193,6 +208,7 @@ if has_any_mod({ "angelsrefining", "angelssmelting", "angelspetrochem", "SeaBloc
     api.ignore.material(material_name, {
       localized_setting_name = true,
       source = angel_source,
+      setting_icon = material_name .. "-ore",
     })
   end
 end
@@ -255,6 +271,7 @@ if has_any_mod({ "bobplates", "bobores", "bobrevamp", "bobmetals" }) then
     api.ignore.material(material_name, {
       localized_setting_name = true,
       source = bob_source,
+      setting_icon = material_name .. "-ore",
     })
   end
 end
@@ -312,6 +329,7 @@ if has_any_mod({ "Krastorio2" }) then
   api.register.recipe_chain.solid.to_item("rare-metal", "kr-rare-metals", {
     source = krastorio_source,
     reason = "K2 rare metal scrap should recycle to processed rare metals, not the raw ore.",
+    active = true,
   })
   api.register.material.solid("imersium", {
     localized_setting_name = true,
@@ -324,6 +342,7 @@ if has_any_mod({ "Krastorio2" }) then
   api.register.recipe_chain.solid.to_item("imersium", "kr-imersium-plate", {
     source = krastorio_source,
     reason = "K2 imersium scrap should recycle to the base plate, not the beam intermediate.",
+    active = true,
   })
   api.register.material.solid("black-reinforced", {
     localized_setting_name = true,

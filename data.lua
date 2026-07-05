@@ -1,8 +1,8 @@
 --#region debug
-require("code.lib.definitions")
+require("code.functions.definitions")
 --#endregion
 --#region debug
-local timing = require("code.lib.timing")
+local timing = require("code.functions.timing")
 timing.mark("data", "start")
 --#endregion
 data:extend({
@@ -99,26 +99,39 @@ data:extend({
   },
 })
 
-local recycle_item_category = "yis-recycle-to-item"
-local recycle_fluid_category = "yis-recycle-to-fluid"
-local category_overrides = require("code.lib.category-overrides")
+local public_api = require("code.api.public")
+local api_modules = public_api.load()
+local material_overrides = api_modules.materials
+local ancestry_settings = require("code.functions.ancestry-settings")
+local startup_settings = require("code.functions.startup-settings")
+
 require("code.compat.vanilla-categories")
+require("code.compat.vanilla-materials")
+require("code.compat.mod-materials")
+require("code.compat.recycler.ensure").recycler()
+require("code.compat.recycler.tips-and-tricks")
 
-category_overrides.apply_registered_rules({
-  solid = recycle_item_category,
-  fluid = recycle_fluid_category,
-})
---#region debug
-timing.mark("data", "patch-crafting-categories")
---#endregion
-
-
-
--- Debug-Flag: in data-updates.lua auf true setzen zum Testen
--- IS_DEBUG = true  (global, damit data-updates.lua es auch sieht)
 IS_DEBUG = settings.startup["yis-IS_DEBUG"].value
+--#region debug
+if IS_DEBUG then
+  require("tools.test.material-overrides")
+end
+--#endregion
+startup_settings.load(material_overrides, ancestry_settings)
+
+local internal_api = require("code.api.internal")
+local context = internal_api.create(material_overrides)
+yokmods = yokmods or {}
+yokmods.ingredient_scrap = yokmods.ingredient_scrap or {}
+yokmods.ingredient_scrap.internal = context
+public_api.publish_generated(context)
+public_api.publish_queue(context)
+require("code.functions.utils")
 
 --#region debug
+yokmods.ingredient_scrap.data_table = context:debug_data_table()
+yokmods.ingredient_scrap.data_table.debug.performance = yokmods.ingredient_scrap.performance
+timing.mark("data", "init-api-context")
 if IS_DEBUG then
   require("tools.test.test-data")
   log("[IS-TEST] Debug-Modus aktiv")

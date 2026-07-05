@@ -20,6 +20,8 @@ GitHub: https://github.com/Yokmp/factorio_toolset
 - Material Flow: run the Ingredient Scrap test harness for a selected mod profile, generate `material-flow.json`, and open it in the browser viewer.
 - Ancestry Flow: read existing Ingredient Scrap dumps and build a passive
   ancestry-vs-current comparison without launching Factorio.
+- Debug: run common Ingredient Scrap test-harness commands from the UI and
+  capture their output in the tool window.
 - Deploy: build filtered Factorio mod release archives and optionally publish
   `public.zip` to a Git branch.
 - JSON Tree Viewer: inspect any JSON file as a collapsible tree, or inspect Ingredient Scrap material-flow data as a production/recipe graph.
@@ -193,6 +195,10 @@ The Ingredient Scrap test harness can be run directly from the repository root:
 ```powershell
 python tools\test\run_tests.py --profile default --no-color
 ```
+
+The same common commands are available in the UI under the Debug tab. It includes
+buttons for default, all profiles, selected mod profiles, and a custom argument
+field for ad-hoc `run_tests.py` arguments.
 
 To generate only `material-flow.json` without printing the test assertion report:
 

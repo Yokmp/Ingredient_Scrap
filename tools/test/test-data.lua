@@ -134,6 +134,10 @@ data:extend({
 })
 
 data:extend({
+  dummy_solid_resource("yis-test-yis-testium-plate-resource", "yis-testium-plate"),
+  dummy_solid_resource("yis-test-yis-testium-ore-resource", "yis-testium-ore"),
+  dummy_solid_resource("yis-test-yis-hiddenium-plate-resource", "yis-hiddenium-plate"),
+  dummy_solid_resource("yis-test-yis-quietium-plate-resource", "yis-quietium-plate"),
   dummy_solid_resource("yis-test-rare-metal-resource", "yis-rare-metal-ore"),
   dummy_solid_resource("yis-test-yis-hiddenium-resource", "yis-hiddenium-ore"),
   dummy_solid_resource("yis-test-yis-disabledium-resource", "yis-disabledium-ore"),

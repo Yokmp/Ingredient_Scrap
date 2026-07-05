@@ -2,7 +2,7 @@ local expected = {}
 
 ---Builds the expected scrap result for a single normalized ingredient amount.
 local function result_for_amount(scrap_name, amount)
-  local fixed, min, max = yokmods.ingredient_scrap.scrap_amount_range(amount)
+  local fixed, min, max = yokmods.ingredient_scrap.api.functions.scrap_amount_range(amount)
   local result = { type = "item", name = scrap_name }
   if ISsettings.fixed_amount then
     result.amount = fixed
@@ -42,16 +42,16 @@ function expected.build()
   local fluids = ISsettings.fluids
   local needed = ISsettings.needed
   local testium_stack = util.clamp(100 * needed, 10, 200)
-  local testium_scrap = yokmods.ingredient_scrap.get_scrap_name("yis-testium")
-  local hiddenium_scrap = yokmods.ingredient_scrap.get_scrap_name("yis-hiddenium")
-  local disabledium_scrap = yokmods.ingredient_scrap.get_scrap_name("yis-disabledium")
-  local hiddenfluidium_scrap = yokmods.ingredient_scrap.get_scrap_name("yis-hiddenfluidium")
-  local solvium_scrap = yokmods.ingredient_scrap.get_scrap_name("yis-solvium")
-  local testium_recycle = yokmods.ingredient_scrap.get_recycle_recipe_name("yis-testium")
-  local hiddenium_recycle = yokmods.ingredient_scrap.get_recycle_recipe_name("yis-hiddenium")
-  local disabledium_recycle = yokmods.ingredient_scrap.get_recycle_recipe_name("yis-disabledium")
-  local hiddenfluidium_recycle = yokmods.ingredient_scrap.get_recycle_recipe_name("yis-hiddenfluidium")
-  local solvium_recycle = yokmods.ingredient_scrap.get_recycle_recipe_name("yis-solvium")
+  local testium_scrap = yokmods.ingredient_scrap.api.functions.get_scrap_name("yis-testium")
+  local hiddenium_scrap = yokmods.ingredient_scrap.api.functions.get_scrap_name("yis-hiddenium")
+  local disabledium_scrap = yokmods.ingredient_scrap.api.functions.get_scrap_name("yis-disabledium")
+  local hiddenfluidium_scrap = yokmods.ingredient_scrap.api.functions.get_scrap_name("yis-hiddenfluidium")
+  local solvium_scrap = yokmods.ingredient_scrap.api.functions.get_scrap_name("yis-solvium")
+  local testium_recycle = yokmods.ingredient_scrap.api.functions.get_recycle_recipe_name("yis-testium")
+  local hiddenium_recycle = yokmods.ingredient_scrap.api.functions.get_recycle_recipe_name("yis-hiddenium")
+  local disabledium_recycle = yokmods.ingredient_scrap.api.functions.get_recycle_recipe_name("yis-disabledium")
+  local hiddenfluidium_recycle = yokmods.ingredient_scrap.api.functions.get_recycle_recipe_name("yis-hiddenfluidium")
+  local solvium_recycle = yokmods.ingredient_scrap.api.functions.get_recycle_recipe_name("yis-solvium")
 
   local inserts = {
     ["yis-test-yis-testium-solid"] = combined_result(testium_scrap, { 5 }),
@@ -118,66 +118,73 @@ function expected.build()
         type = "recipe",
         name = testium_recycle,
         hidden = false,
+        enabled = false,
         subgroup = "raw-material",
         category = "yis-recycle-to-item",
         allow_as_intermediate = false,
-        hide_from_player_crafting = false,
+        hide_from_player_crafting = true,
         result = { type = "item", name = "yis-testium-plate", amount = 1 },
       },
       fluid = fluids and {
         type = "recipe",
         name = testium_recycle .. "-to-fluid",
         hidden = false,
+        enabled = false,
         subgroup = "raw-material",
         category = "yis-recycle-to-fluid",
         allow_as_intermediate = false,
-        hide_from_player_crafting = false,
+        hide_from_player_crafting = true,
         result = { type = "fluid", name = "molten-yis-testium", amount = math.max(50 / needed, 10) },
       } or nil,
       solution_fluid = fluids and {
         type = "recipe",
         name = solvium_recycle .. "-to-fluid",
         hidden = false,
+        enabled = false,
         subgroup = "raw-material",
         category = "yis-recycle-to-fluid",
         allow_as_intermediate = false,
-        hide_from_player_crafting = false,
+        hide_from_player_crafting = true,
         result = { type = "fluid", name = "yis-solvium-solution", amount = math.max(60 / needed, 10) },
       } or nil,
       hidden_solid = {
         type = "recipe",
         name = hiddenium_recycle,
         hidden = true,
+        enabled = false,
         subgroup = "raw-material",
         category = "yis-recycle-to-item",
         allow_as_intermediate = false,
-        hide_from_player_crafting = false,
+        hide_from_player_crafting = true,
         result = { type = "item", name = "yis-hiddenium-plate", amount = 1 },
       },
       disabled_solid = {
         type = "recipe",
         name = disabledium_recycle,
         hidden = false,
+        enabled = false,
         subgroup = "raw-material",
         category = "yis-recycle-to-item",
         allow_as_intermediate = false,
-        hide_from_player_crafting = false,
+        hide_from_player_crafting = true,
         result = { type = "item", name = "yis-disabledium-plate", amount = 1 },
       },
       hidden_fluid = fluids and {
         type = "recipe",
         name = hiddenfluidium_recycle .. "-to-fluid",
         hidden = true,
+        enabled = false,
         subgroup = "raw-material",
         category = "yis-recycle-to-fluid",
         allow_as_intermediate = false,
-        hide_from_player_crafting = false,
+        hide_from_player_crafting = true,
         result = { type = "fluid", name = "yis-hiddenfluidium-solution", amount = math.max(70 / needed, 10) },
       } or nil,
     },
     technology = {
       type = "technology",
       name = testium_recycle,
+      enabled = true,
       effect = { type = "unlock-recipe", recipe = testium_recycle },
       research_trigger = { type = "craft-item", item = testium_scrap, count = 1 },
     },

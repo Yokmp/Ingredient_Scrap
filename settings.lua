@@ -1,7 +1,7 @@
-local material_overrides = require("code.lib.material-overrides")
-local ancestry_settings = require("code.lib.ancestry-settings")
-require("code.lib.recipe-chain-overrides")
-require("code.lib.source-overrides")
+local public_api = require("code.api.public")
+local api_modules = public_api.load()
+local material_overrides = api_modules.materials
+local ancestry_settings = require("code.functions.ancestry-settings")
 require("code.compat.vanilla-materials")
 require("code.compat.mod-materials")
 
@@ -54,7 +54,7 @@ data:extend({
         name = "yis-shallow-log",
         localised_name = { "", "[img=gears-symbol]", " - ", { "mod-setting-name.yis-shallow-log" } },
         setting_type = "startup",
-        default_value = true,
+        default_value = false,
         order = "e",
     },
     {
