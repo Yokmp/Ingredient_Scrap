@@ -3,7 +3,7 @@ require("code.override.categories")
 local api = yokmods.ingredient_scrap.api
 
 --------------------------------
----*FURNACES*                --
+---*FURNACES*                 --
 --------------------------------
 
 api.register.category.furnace({
@@ -23,7 +23,7 @@ api.register.category.furnace({
 })
 
 --------------------------------
----*ASSEMBLING MACHINES*     --
+---*ASSEMBLING MACHINES*      --
 --------------------------------
 
 api.register.category.assembling_machine({

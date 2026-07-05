@@ -5,6 +5,7 @@ local icon_layers = require("code.functions.icon-layers")
 local naming = require("code.functions.naming")
 local prototype_builder = require("code.patcher.prototype-builder")
 local scrap_amount = require("code.functions.scrap-amount")
+local recycle_order = require("code.functions.recycle-order")
 
 local mixed = {}
 
@@ -261,7 +262,7 @@ function mixed.ensure_recycle_recipe(data_table)
     icons = icon_layers.get(data_table, mixed.material, false),
     subgroup = "raw-material",
     category = "recycling",
-    order = "is-a[" .. recipe_name .. "]",
+    order = recycle_order.recipe(data_table, mixed.material, recipe_name),
     enabled = false,
     always_show_products = true,
     allow_as_intermediate = false,

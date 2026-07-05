@@ -6,7 +6,7 @@ local base_source = { name = "Base", color = "#8DA0AA" }
 local space_age_source = { name = "Space Age", color = "#E6A23C" }
 
 --------------------------------
----*BASE*                    --
+---*BASE*                     --
 --------------------------------
 
 api.ignore.material("coal", { localized_setting_name = true, source = base_source, setting_icon = "coal" })
@@ -52,7 +52,7 @@ api.register.material.auto("iron", { localized_setting_name = true, source = bas
 api.register.material.solid("steel", { localized_setting_name = true, source = base_source, setting_icon = "steel-plate", tint = "#888b8d" })
 
 --------------------------------
----*SPACE AGE*               --
+---*SPACE AGE*                --
 --------------------------------
 
 if has_space_age then

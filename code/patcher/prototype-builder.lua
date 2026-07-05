@@ -11,6 +11,7 @@ local icon_layers = require("code.functions.icon-layers")
 local is_log = require("code.functions.is-log")
 local naming = require("code.functions.naming")
 local item_prototypes = require("code.functions.item-prototypes")
+local recycle_order = require("code.functions.recycle-order")
 
 local prototype_builder = {}
 
@@ -207,11 +208,15 @@ function prototype_builder.ensure_recycle_recipe(data_table, recipe_defines)
     enabled = false,
     subgroup = "raw-material",
     category = recipe_defines.categories[1],
-    order = "is-[" .. recipe_name .. "]",
+    order = recycle_order.recipe(data_table, recipe_defines.scrap_type, recipe_name, recipe_defines.recipe_suffix),
+    allow_productivity = true,
     always_show_products = true,
     allow_as_intermediate = false,
     allow_intermediates = false,
     hide_from_player_crafting = true,
+    sort_item_ingredients = true,
+    can_set_quality = true,
+    -- crafting_machine_tint = ,
     ingredients =
     {
       { type = "item", name = naming.get_scrap_name(recipe_defines.scrap_type), amount = 0 },

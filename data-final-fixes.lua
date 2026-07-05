@@ -101,13 +101,28 @@ run_active_pipeline()
 ---Removes generated scrap byproducts from Quality-style recycling recipes.
 ---Quality can build recycling recipes after Ingredient Scrap patched the source
 ---recipe, which would otherwise copy scrap byproducts into the recycling recipe.
+---@param recipe_name string
+---@return boolean
+local function is_ingredient_scrap_recycle_recipe(recipe_name)
+  return type(recipe_name) == "string" and recipe_name:match("^yis%-recycle%-") ~= nil
+end
+
+---Returns true when the result is a generated Ingredient Scrap scrap item.
+---@param result table
+---@return boolean
+local function is_scrap_result(result)
+  return result.name and result.name:match("^yis%-.*%-scrap$") ~= nil
+end
+
+---Removes copied scrap byproducts from non-Ingredient-Scrap recycling recipes.
 local function remove_scrap_from_recycling_recipes()
   for recipe_name, recipe in pairs(data.raw.recipe or {}) do
-    if recipe.results and (recipe.category == "recycling" or recipe_name:match("%-recycling$") ~= nil) then
+    if recipe.results and not is_ingredient_scrap_recycle_recipe(recipe_name) and
+        (recipe.category == "recycling" or recipe_name:match("%-recycling$") ~= nil) then
       local filtered_results = {}
       local removed = false
       for _, result in ipairs(recipe.results) do
-        if result.name and result.name:match("^yis%-.*%-scrap$") then
+        if is_scrap_result(result) then
           removed = true
         else
           table.insert(filtered_results, result)

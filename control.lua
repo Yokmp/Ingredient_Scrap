@@ -108,17 +108,43 @@ local function is_recycle_category(category)
   return category == "yis-recycle-to-item" or category == "yis-recycle-to-fluid"
 end
 
----Keeps generated recycling recipes and technologies usable in existing saves after prototype changes.
+---Returns true for Ingredient Scrap generated recycling recipe names.
+---@param recipe_name string
+---@return boolean
+local function is_ingredient_scrap_recycle_recipe(recipe_name)
+  return type(recipe_name) == "string" and recipe_name:match("^yis%-recycle%-") ~= nil
+end
+
+---Returns true if a researched technology unlocks the recipe for this force.
+---@param force LuaForce
+---@param recipe_name string
+---@return boolean
+local function is_recipe_unlocked_by_researched_technology(force, recipe_name)
+  for _, technology in pairs(force.technologies or {}) do
+    if technology.valid and technology.researched then
+      for _, effect in pairs(technology.prototype.effects or {}) do
+        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then
+          return true
+        end
+      end
+    end
+  end
+  return false
+end
+
+---Keeps generated recycling technologies enabled and syncs recipe state in existing saves.
 local function sync_recycle_runtime_state()
   if not game or not game.forces then return end
 
   for _, force in pairs(game.forces) do
     for recipe_name, recipe in pairs(force.recipes or {}) do
-      if recipe.valid and is_recycle_category(recipe.category) and not recipe.hidden then
-        if not recipe.enabled then
-          log("[IS] Enabled recycle recipe for existing save: " .. recipe_name)
+      if recipe.valid and is_ingredient_scrap_recycle_recipe(recipe_name) and is_recycle_category(recipe.category) then
+        local should_be_enabled = is_recipe_unlocked_by_researched_technology(force, recipe_name)
+        if recipe.enabled ~= should_be_enabled then
+          log("[IS] Synced recycle recipe state for existing save: " .. recipe_name .. " -> " ..
+            tostring(should_be_enabled))
         end
-        recipe.enabled = true
+        recipe.enabled = should_be_enabled
       end
     end
 

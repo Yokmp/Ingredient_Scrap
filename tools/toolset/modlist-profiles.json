@@ -146,6 +146,17 @@
         "quality",
         "space-age"
       ]
+    },
+    "pipe_plus_is_sa": {
+      "label": "pipe-plus+IS+SA",
+      "mods": [
+        "base",
+        "elevated-rails",
+        "Ingredient_Scrap",
+        "pipe_plus",
+        "quality",
+        "space-age"
+      ]
     }
   }
 }

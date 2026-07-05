@@ -2,6 +2,7 @@ local expected = require("tools.test.expected")
 local material_resolver = require("code.resolver.materials.resolver")
 local material_flow = require("code.resolver.debug.material-flow")
 local data_table_writer = require("code.data_table.writer")
+local recycle_order = require("code.functions.recycle-order")
 require("code.override.categories")
 local source_overrides = require("code.override.sources")
 require("code.compat.vanilla-materials")
@@ -150,7 +151,7 @@ end
 ---Returns the first recycling recipe that received a generated scrap result.
 local function recycling_recipe_with_scrap_result()
   for recipe_name, recipe in pairs(data.raw.recipe or {}) do
-    if recipe.category == "recycling" and scrap_results(recipe)[1] then
+    if recipe.category == "recycling" and recipe_name:match("^yis%-recycle%-") == nil and scrap_results(recipe)[1] then
       return recipe_name
     end
   end
@@ -530,6 +531,20 @@ function runner.run(production_flow_dump)
       nil,
       mixed_distribution)
     local mixed_recycle_recipe = data.raw.recipe["yis-recycle-mixed-scrap"]
+    local mixed_recycle_results = mixed_recycle_recipe and mixed_recycle_recipe.results or {}
+    local mixed_recycle_total_probability = 0
+    local mixed_recycle_results_sorted = true
+    for index, result in ipairs(mixed_recycle_results) do
+      mixed_recycle_total_probability = mixed_recycle_total_probability + (result.probability or 1)
+      local previous = mixed_recycle_results[index - 1]
+      if previous then
+        local previous_probability = previous.probability or 1
+        local current_probability = result.probability or 1
+        if previous_probability < current_probability then
+          mixed_recycle_results_sorted = false
+        end
+      end
+    end
     add_case("analysis.active-ancestry.mixed-recycle-recycler-only", "mixed scrap sorting uses the recycler category only",
       (
         mixed_rows == 0 and mixed_recycle_recipe == nil
@@ -547,6 +562,95 @@ function runner.run(production_flow_dump)
         enabled = mixed_recycle_recipe and mixed_recycle_recipe.enabled,
         hide_from_player_crafting = mixed_recycle_recipe and mixed_recycle_recipe.hide_from_player_crafting,
       })
+    add_case("analysis.active-ancestry.mixed-recycle-results", "mixed scrap sorting keeps weighted scrap outputs after cleanup",
+      (
+        mixed_rows == 0 and mixed_recycle_recipe == nil
+      ) or (
+        mixed_rows > 0 and
+        mixed_distribution and
+        mixed_recycle_recipe and
+        mixed_recycle_recipe.results and
+        #mixed_recycle_recipe.results == mixed_distribution.target_count and
+        #mixed_recycle_recipe.results > 0 and
+        math.abs(mixed_recycle_total_probability - 0.60) < 0.000001 and
+        mixed_recycle_results_sorted
+      ),
+      nil,
+      {
+        mixed_rows = mixed_rows,
+        distribution = mixed_distribution,
+        result_count = #mixed_recycle_results,
+        total_probability = mixed_recycle_total_probability,
+        results = mixed_recycle_results,
+      })
+  end
+  do
+    local generated_recycle_orders = {}
+    local duplicate_orders = {}
+    local mixed_recipe_name = "yis-recycle-mixed-scrap"
+    local mixed_order = data.raw.recipe[mixed_recipe_name] and data.raw.recipe[mixed_recipe_name].order
+    local mixed_last = mixed_order ~= nil
+    for recipe_name, recipe in pairs(data.raw.recipe or {}) do
+      if recipe_name:match("^yis%-recycle%-") then
+        if generated_recycle_orders[recipe.order] then
+          table.insert(duplicate_orders, {
+            order = recipe.order,
+            first = generated_recycle_orders[recipe.order],
+            second = recipe_name,
+          })
+        else
+          generated_recycle_orders[recipe.order] = recipe_name
+        end
+        if recipe_name ~= mixed_recipe_name and mixed_order and recipe.order and recipe.order >= mixed_order then
+          mixed_last = false
+        end
+      end
+    end
+
+    local iron_recipe = data.raw.recipe["yis-recycle-iron-scrap"]
+    local copper_recipe = data.raw.recipe["yis-recycle-copper-scrap"]
+    local steel_recipe = data.raw.recipe["yis-recycle-steel-scrap"]
+    local tungsten_recipe = data.raw.recipe["yis-recycle-tungsten-scrap"]
+    local holmium_recipe = data.raw.recipe["yis-recycle-holmium-scrap"]
+    local iron_fluid_recipe = data.raw.recipe["yis-recycle-iron-scrap-to-fluid"]
+    local has_late_material_order_fixture = iron_recipe and copper_recipe and steel_recipe and tungsten_recipe and holmium_recipe
+
+    add_case("raw.recipe.recycle-order.early-before-late", "common early recycle recipes sort before later rare materials",
+      not has_late_material_order_fixture or (
+        iron_recipe.order < steel_recipe.order and
+        copper_recipe.order < steel_recipe.order and
+        steel_recipe.order < tungsten_recipe.order and
+        tungsten_recipe.order < holmium_recipe.order
+      ),
+      nil,
+      {
+        iron = iron_recipe and iron_recipe.order,
+        copper = copper_recipe and copper_recipe.order,
+        steel = steel_recipe and steel_recipe.order,
+        tungsten = tungsten_recipe and tungsten_recipe.order,
+        holmium = holmium_recipe and holmium_recipe.order,
+      })
+    add_case("raw.recipe.recycle-order.fluid-after-item", "fluid recycle recipe sorts directly after the matching item recipe",
+      (
+        not iron_fluid_recipe or not iron_recipe or not steel_recipe
+      ) or (
+        iron_recipe.order < iron_fluid_recipe.order and
+        iron_fluid_recipe.order < steel_recipe.order
+      ),
+      nil,
+      {
+        item = iron_recipe and iron_recipe.order,
+        fluid = iron_fluid_recipe and iron_fluid_recipe.order,
+        next_material = steel_recipe and steel_recipe.order,
+      })
+    add_case("raw.recipe.recycle-order.mixed-last", "mixed scrap recycle recipe is always the last generated recycle recipe",
+      mixed_last and recycle_order.is_mixed_recycle_recipe(mixed_recipe_name),
+      nil,
+      { mixed = mixed_order })
+    add_case("raw.recipe.recycle-order.unique", "generated recycle recipe order keys are unique",
+      #duplicate_orders == 0,
+      nil,
+      duplicate_orders)
   end
   local recipe_forms = passive_runtime and passive_runtime.recipe_forms
   add_case("analysis.recipe-forms.exists", "passive recipe-form classification is available without patching prototypes",

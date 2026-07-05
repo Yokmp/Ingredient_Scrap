@@ -7,6 +7,7 @@ local data_table_writer = require("code.data_table.writer")
 local category_overrides = require("code.override.categories")
 local is_log = require("code.functions.is-log")
 local naming = require("code.functions.naming")
+local recycle_order = require("code.functions.recycle-order")
 
 local patcher = {}
 
@@ -260,6 +261,7 @@ function patcher.patch_recycle_amounts(data_table)
     if insert.results then
       for _, result in ipairs(insert.results) do
         local scrap_name = data_table_reader.final_result_name(result.name)
+---@diagnostic disable-next-line: need-check-nil
         totals[scrap_name] = totals[scrap_name] or { sum = 0, count = 0 }
         local expected
         if ISsettings.fixed_amount then
@@ -310,6 +312,7 @@ end
 ---@param data_table ISdata_table
 function patcher.patch(data_table)
   patch_machine_categories(data_table)
+  recycle_order.refresh_generated_recipes(data_table)
 
   local items_to_extend = {}
   for _, item_proto in pairs(data_table_reader.generated_items(data_table)) do
