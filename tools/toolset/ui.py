@@ -9,6 +9,7 @@ Run with:
 from __future__ import annotations
 
 import argparse
+import json
 import queue
 import re
 import subprocess
@@ -72,6 +73,24 @@ APP_VERSION = "1.0.1"
 GITHUB_URL = "https://github.com/Yokmp/factorio_toolset"
 
 TOOL_DIR = Path(__file__).resolve().parent
+
+
+def find_mod_root(start: Path) -> Path | None:
+    """Return the nearest parent directory containing a Factorio mod info.json."""
+    current = start.resolve()
+    for candidate in [current, *current.parents]:
+        if (candidate / "info.json").is_file():
+            return candidate
+    return None
+
+
+def default_mod_root() -> Path | None:
+    """Return the configured or discoverable target mod root."""
+    config = modlist.load_tool_config()
+    configured = modlist.config_path_value(config, "mod_root")
+    if configured is not None:
+        return configured
+    return find_mod_root(Path.cwd()) or find_mod_root(TOOL_DIR)
 
 
 @dataclass(frozen=True)
@@ -430,6 +449,7 @@ class ToolApp(tk.Tk):
 
         self.factorio_exe = factorio_exe
         self.profiles_json = profiles_json
+        self.mod_root = modlist.config_path_value(self.tool_config, "mod_root", default_mod_root())
         self.last_profile = self.tool_config.get("last_profile") if isinstance(self.tool_config.get("last_profile"), str) else ""
         self.all_tools = dict(TOOL_REGISTRY)
         self.tools = available_tools()
@@ -636,6 +656,7 @@ class ToolApp(tk.Tk):
         factorio: Path | str | None = None,
         profiles_json: Path | str | None = None,
         settings_file: Path | str | None = None,
+        mod_root: Path | str | None = None,
         last_profile: str | None = None,
     ) -> None:
         """Persist shared UI config without each tab touching JSON details."""
@@ -648,6 +669,9 @@ class ToolApp(tk.Tk):
             updates["profiles_json"] = str(profiles_json)
         if settings_file is not None:
             updates["settings_file"] = str(settings_file)
+        if mod_root is not None:
+            updates["mod_root"] = str(mod_root)
+            self.mod_root = Path(mod_root)
         if last_profile is not None:
             updates["last_profile"] = last_profile
             self.last_profile = last_profile
@@ -1671,17 +1695,19 @@ class SettingsTool(ToolFrame):
 
 
 class MaterialFlowTool(ToolFrame):
-    """Tab for generating Ingredient Scrap material-flow.json and opening the browser viewer."""
+    """Tab for generating configured Factorio JSON dumps and opening the browser viewer."""
 
     title = "Material Flow"
 
     def __init__(self, master: tk.Misc, app: ToolApp):
         super().__init__(master, app)
         self.factorio_var = tk.StringVar(value=str(app.factorio_exe or modlist.DEFAULT_FACTORIO))
-        self.profiles_json_var = tk.StringVar(value=str(app.profiles_json or modlist.DEFAULT_PROFILES_JSON))
+        self.mod_root_var = tk.StringVar(value=str(app.mod_root or ""))
+        self.profiles_json_var = tk.StringVar(value=str(self.default_profiles_json_path()))
         default_settings = settings.default_settings_file(app.factorio_exe or modlist.DEFAULT_FACTORIO)
         settings_file = modlist.config_path_value(app.tool_config, "settings_file", default_settings)
         self.settings_file_var = tk.StringVar(value=str(settings_file or default_settings))
+        self.viewer_artifact_var = tk.StringVar(value=self.default_viewer_artifact())
         self.profile_name_var = tk.StringVar(value=app.last_profile)
         self.profile_label_var = tk.StringVar(value="")
         self.output_var = tk.StringVar(value="No dump generated in this UI session.")
@@ -1714,13 +1740,20 @@ class MaterialFlowTool(ToolFrame):
         ttk.Entry(paths, textvariable=self.factorio_var).grid(row=0, column=1, sticky="ew", pady=(10, 4))
         factorio_button(paths, "Browse", self.choose_factorio).grid(row=0, column=2, padx=12, pady=(10, 4))
 
-        self._label(paths, "Profiles JSON", bold=True).grid(row=1, column=0, sticky="w", padx=(12, 8), pady=4)
-        ttk.Entry(paths, textvariable=self.profiles_json_var).grid(row=1, column=1, sticky="ew", pady=4)
-        factorio_button(paths, "Browse", self.choose_profiles_json).grid(row=1, column=2, padx=12, pady=4)
+        self._label(paths, "Mod Root", bold=True).grid(row=1, column=0, sticky="w", padx=(12, 8), pady=4)
+        ttk.Entry(paths, textvariable=self.mod_root_var).grid(row=1, column=1, sticky="ew", pady=4)
+        factorio_button(paths, "Browse", self.choose_mod_root).grid(row=1, column=2, padx=12, pady=4)
 
-        self._label(paths, "Settings", bold=True).grid(row=2, column=0, sticky="w", padx=(12, 8), pady=(4, 10))
-        ttk.Entry(paths, textvariable=self.settings_file_var).grid(row=2, column=1, sticky="ew", pady=(4, 10))
-        factorio_button(paths, "Browse", self.choose_settings_file).grid(row=2, column=2, padx=12, pady=(4, 10))
+        self._label(paths, "Profiles JSON", bold=True).grid(row=2, column=0, sticky="w", padx=(12, 8), pady=4)
+        ttk.Entry(paths, textvariable=self.profiles_json_var).grid(row=2, column=1, sticky="ew", pady=4)
+        factorio_button(paths, "Browse", self.choose_profiles_json).grid(row=2, column=2, padx=12, pady=4)
+
+        self._label(paths, "Viewer Artifact", bold=True).grid(row=3, column=0, sticky="w", padx=(12, 8), pady=4)
+        ttk.Entry(paths, textvariable=self.viewer_artifact_var).grid(row=3, column=1, sticky="ew", pady=4)
+
+        self._label(paths, "Settings", bold=True).grid(row=4, column=0, sticky="w", padx=(12, 8), pady=(4, 10))
+        ttk.Entry(paths, textvariable=self.settings_file_var).grid(row=4, column=1, sticky="ew", pady=(4, 10))
+        factorio_button(paths, "Browse", self.choose_settings_file).grid(row=4, column=2, padx=12, pady=(4, 10))
 
     def _build_main(self) -> None:
         main = tk.Frame(self, bg=BG)
@@ -1795,6 +1828,75 @@ class MaterialFlowTool(ToolFrame):
     def profiles_json_path(self) -> Path:
         return Path(self.profiles_json_var.get().strip() or modlist.DEFAULT_PROFILES_JSON)
 
+    def mod_root_path(self) -> Path | None:
+        value = self.mod_root_var.get().strip()
+        return Path(value) if value else None
+
+    def harness_config(self) -> dict[str, object]:
+        mod_root = self.mod_root_path()
+        if mod_root is None:
+            return {}
+        config_path = mod_root / "tools" / "test" / "harness.json"
+        if not config_path.exists():
+            return {}
+        try:
+            data = json.loads(config_path.read_text(encoding="utf-8-sig"))
+        except (OSError, json.JSONDecodeError, UnicodeDecodeError):
+            return {}
+        return data if isinstance(data, dict) else {}
+
+    def harness_mod_name(self) -> str:
+        mod_root = self.mod_root_path()
+        config = self.harness_config()
+        if isinstance(config.get("mod_name"), str) and config["mod_name"].strip():
+            return str(config["mod_name"]).strip()
+        if mod_root is not None:
+            try:
+                info = json.loads((mod_root / "info.json").read_text(encoding="utf-8-sig"))
+                if isinstance(info, dict) and isinstance(info.get("name"), str):
+                    return info["name"]
+            except (OSError, json.JSONDecodeError, UnicodeDecodeError):
+                pass
+        return "Ingredient_Scrap"
+
+    def harness_report_relative(self) -> Path:
+        config = self.harness_config()
+        mod_name = self.harness_mod_name()
+        if isinstance(config.get("report_path"), str) and config["report_path"].strip():
+            return Path(str(config["report_path"]).replace("\\", "/"))
+        return Path(mod_name) / "test-report.json"
+
+    def harness_artifacts(self) -> list[str]:
+        config = self.harness_config()
+        artifacts = config.get("artifacts")
+        if isinstance(artifacts, list):
+            values = [entry.strip() for entry in artifacts if isinstance(entry, str) and entry.strip()]
+            if values:
+                return values
+        return ["test-report.json", "material-flow.json"]
+
+    def default_viewer_artifact(self) -> str:
+        for artifact in self.harness_artifacts():
+            if Path(artifact).name == "material-flow.json":
+                return artifact
+        for artifact in self.harness_artifacts():
+            if artifact.endswith(".json"):
+                return artifact
+        return "test-report.json"
+
+    def default_profiles_json_path(self) -> Path:
+        mod_root = self.mod_root_path()
+        config = self.harness_config()
+        configured = config.get("mod_profiles_json")
+        if isinstance(configured, str) and configured.strip():
+            path = Path(configured.replace("\\", "/"))
+            return path if path.is_absolute() or mod_root is None else mod_root / path
+        if mod_root is not None:
+            local_profiles = mod_root / "tools" / "test" / "modlist-profiles.json"
+            if local_profiles.exists():
+                return local_profiles
+        return self.app.profiles_json or modlist.DEFAULT_PROFILES_JSON
+
     def settings_file_path(self) -> Path:
         return Path(self.settings_file_var.get().strip() or settings.default_settings_file(self.factorio_path()))
 
@@ -1805,6 +1907,20 @@ class MaterialFlowTool(ToolFrame):
             self.app.factorio_exe = Path(selected)
             self.app.save_tool_config(factorio=selected, profiles_json=self.profiles_json_path(), settings_file=self.settings_file_path())
             self.refresh()
+
+    def choose_mod_root(self) -> None:
+        selected = filedialog.askdirectory(
+            title="Choose Factorio mod root",
+            initialdir=str(Path(self.mod_root_var.get()).parent if self.mod_root_var.get() else TOOL_DIR.parent),
+            parent=self,
+        )
+        if not selected:
+            return
+        self.mod_root_var.set(selected)
+        self.profiles_json_var.set(str(self.default_profiles_json_path()))
+        self.viewer_artifact_var.set(self.default_viewer_artifact())
+        self.app.save_tool_config(mod_root=selected, profiles_json=self.profiles_json_path(), settings_file=self.settings_file_path())
+        self.refresh()
 
     def choose_profiles_json(self) -> None:
         selected = filedialog.askopenfilename(parent=self, title="Select profiles JSON", filetypes=[("JSON files", "*.json"), ("All files", "*.*")])
@@ -1900,6 +2016,7 @@ class MaterialFlowTool(ToolFrame):
             lines.extend([
                 "",
                 "Output:",
+                f"  artifact: {self.viewer_artifact()}",
                 f"  selected: {self.selected_material_flow_path()}",
                 f"  latest:   {self.material_flow_path()}",
                 f"  {self.viewer_path()}",
@@ -1930,12 +2047,17 @@ class MaterialFlowTool(ToolFrame):
             str(self.factorio_path()),
             "--dump-profile",
             "default",
-            "--mod-profile",
-            profile_name,
             "--mod-profiles-json",
             str(self.profiles_json_path()),
+            "--viewer-artifact",
+            self.viewer_artifact(),
             "--keep-mod-list",
         ]
+        mod_root = self.mod_root_path()
+        if mod_root is not None:
+            cmd.extend(["--mod-root", str(mod_root)])
+        if profile_name:
+            cmd.extend(["--mod-profile", profile_name])
 
         def work() -> subprocess.CompletedProcess[str]:
             return subprocess.run(cmd, cwd=str(TOOL_DIR.parent.parent), text=True, capture_output=True, check=False)  # noqa: S603 - local tool command.
@@ -1946,10 +2068,10 @@ class MaterialFlowTool(ToolFrame):
                 self.app.status("Material Flow dump failed")
                 return
             self.output_var.set(f"Dump ready: {self.selected_material_flow_path()}")
-            self.app.status("Material Flow dump generated")
+            self.app.status("JSON dump generated")
             self.open_viewer()
 
-        self.app.run_worker(work, done, "Generating material-flow.json...", "Dump failed")
+        self.app.run_worker(work, done, "Generating JSON dump...", "Dump failed")
 
     def open_viewer(self) -> None:
         viewer = self.viewer_path()
@@ -1962,9 +2084,9 @@ class MaterialFlowTool(ToolFrame):
             + self.url_quote(str(modlist.factorio_root(self.factorio_path())))
             + "&file="
             + self.url_quote(str(self.preferred_material_flow_path()))
-            + "&state="
-            + self.url_quote(str(self.preferred_material_flow_state_path()))
         )
+        if self.material_flow_state_path() is not None:
+            url += "&state=" + self.url_quote(str(self.preferred_material_flow_state_path()))
         webbrowser.open(url)
         self.app.status("Material Flow viewer opened in browser")
 
@@ -1985,7 +2107,8 @@ class MaterialFlowTool(ToolFrame):
         return self.profiled_path(self.material_flow_path())
 
     def selected_material_flow_state_path(self) -> Path:
-        return self.profiled_path(self.material_flow_state_path())
+        state_path = self.material_flow_state_path()
+        return self.profiled_path(state_path) if state_path is not None else self.material_flow_path()
 
     def preferred_material_flow_path(self) -> Path:
         selected_path = self.selected_material_flow_path()
@@ -1994,16 +2117,41 @@ class MaterialFlowTool(ToolFrame):
         return self.material_flow_path()
 
     def preferred_material_flow_state_path(self) -> Path:
-        selected_path = self.selected_material_flow_state_path()
+        state_path = self.material_flow_state_path()
+        if state_path is None:
+            return self.material_flow_path()
+        selected_path = self.profiled_path(state_path)
         if selected_path.exists():
             return selected_path
-        return self.material_flow_state_path()
+        return state_path
+
+    def viewer_artifact(self) -> str:
+        return self.viewer_artifact_var.get().strip() or self.default_viewer_artifact()
+
+    def artifact_relative_path(self, artifact: str) -> Path:
+        normalized = artifact.replace("\\", "/").strip()
+        if "/" in normalized:
+            return Path(normalized)
+        report_relative = self.harness_report_relative()
+        if normalized == "test-report.json":
+            return report_relative
+        output_dir = report_relative.parent if str(report_relative.parent) != "." else Path(self.harness_mod_name())
+        return output_dir / normalized
 
     def material_flow_path(self) -> Path:
-        return modlist.factorio_root(self.factorio_path()) / "script-output" / "Ingredient_Scrap" / "material-flow.json"
+        return modlist.factorio_root(self.factorio_path()) / "script-output" / self.artifact_relative_path(self.viewer_artifact())
 
-    def material_flow_state_path(self) -> Path:
-        return modlist.factorio_root(self.factorio_path()) / "script-output" / "Ingredient_Scrap" / "material-flow-data.js"
+    def material_flow_state_path(self) -> Path | None:
+        artifact = self.viewer_artifact()
+        report_relative = self.harness_report_relative()
+        output_dir = report_relative.parent if str(report_relative.parent) != "." else Path(self.harness_mod_name())
+        if artifact.endswith("material-flow.json"):
+            return modlist.factorio_root(self.factorio_path()) / "script-output" / output_dir / "material-flow-data.js"
+        if artifact.endswith("production-flow.json"):
+            return modlist.factorio_root(self.factorio_path()) / "script-output" / output_dir / "production-flow-data.js"
+        if artifact.endswith("technology-flow.json"):
+            return modlist.factorio_root(self.factorio_path()) / "script-output" / output_dir / "technology-flow-data.js"
+        return None
 
     def viewer_path(self) -> Path:
         return TOOL_DIR / "json-tree-viewer.html"
@@ -2238,8 +2386,9 @@ class DebugTool(ToolFrame):
         self.check_unused_var = tk.BooleanVar(value=False)
         self.strict_warnings_var = tk.BooleanVar(value=False)
         self.custom_args_var = tk.StringVar(value="--profile default")
+        self.mod_root_var = tk.StringVar(value=str(app.mod_root or ""))
         self.status_var = tk.StringVar(value="Ready.")
-        self.run_tests_script = TOOL_DIR.parent / "test" / "run_tests.py"
+        self.run_tests_script = self.find_run_tests_script()
         self.test_commands: list[tuple[str, list[str]]] = [
             ("Default", ["--profile", "default"]),
             ("All profiles", ["--all"]),
@@ -2290,6 +2439,14 @@ class DebugTool(ToolFrame):
             self.command_row(controls, row, label, args)
 
         option_row = len(self.test_commands) + 1
+        tk.Label(controls, text="MOD ROOT", bg=PANEL, fg=TEXT, font=("Segoe UI", 11, "bold"), anchor="w").grid(row=option_row, column=0, sticky="ew", padx=12, pady=(14, 4))
+        mod_root_row = tk.Frame(controls, bg=PANEL)
+        mod_root_row.grid(row=option_row + 1, column=0, sticky="ew", padx=12)
+        mod_root_row.columnconfigure(0, weight=1)
+        ttk.Entry(mod_root_row, textvariable=self.mod_root_var).grid(row=0, column=0, sticky="ew", padx=(0, 8))
+        factorio_button(mod_root_row, "Browse", self.choose_mod_root).grid(row=0, column=1, sticky="e")
+
+        option_row = option_row + 2
         tk.Label(controls, text="OPTIONS", bg=PANEL, fg=TEXT, font=("Segoe UI", 11, "bold"), anchor="w").grid(row=option_row, column=0, sticky="ew", padx=12, pady=(14, 4))
         options = tk.Frame(controls, bg=PANEL)
         options.grid(row=option_row + 1, column=0, sticky="ew", padx=12)
@@ -2313,6 +2470,26 @@ class DebugTool(ToolFrame):
         factorio_button(custom, "Run", self.run_custom, kind="orange").grid(row=0, column=1, sticky="e")
 
         tk.Label(self, textvariable=self.status_var, bg=BG, fg=MUTED, anchor="w").grid(row=3, column=0, sticky="ew", padx=16, pady=(0, 12))
+
+    def find_run_tests_script(self) -> Path:
+        for candidate in (
+            TOOL_DIR.parent / "testharness" / "run_tests.py",
+            TOOL_DIR.parent / "test" / "run_tests.py",
+        ):
+            if candidate.exists():
+                return candidate
+        return TOOL_DIR.parent / "testharness" / "run_tests.py"
+
+    def choose_mod_root(self) -> None:
+        selected = filedialog.askdirectory(
+            title="Choose Factorio mod root",
+            initialdir=str(Path(self.mod_root_var.get()).parent if self.mod_root_var.get() else TOOL_DIR.parent),
+            parent=self,
+        )
+        if not selected:
+            return
+        self.mod_root_var.set(selected)
+        self.app.save_tool_config(mod_root=selected)
 
     def command_row(self, master: tk.Misc, row: int, text: str, args: list[str]) -> None:
         frame = tk.Frame(master, bg=PANEL)
@@ -2360,11 +2537,16 @@ class DebugTool(ToolFrame):
             messagebox.showerror("Test harness missing", f"run_tests.py not found:\n{self.run_tests_script}", parent=self)
             return
         final_args = list(args) + self.option_args()
+        mod_root = self.mod_root_var.get().strip()
+        if mod_root:
+            final_args = ["--mod-root", mod_root, *final_args]
+            self.app.save_tool_config(mod_root=mod_root)
         cmd = [sys.executable, str(self.run_tests_script), *final_args]
-        display_command = " ".join(["python", "tools\\test\\run_tests.py", *final_args])
+        display_command = " ".join(["python", str(self.run_tests_script), *final_args])
 
         def work() -> subprocess.CompletedProcess[str]:
-            return subprocess.run(cmd, cwd=str(TOOL_DIR.parent.parent), text=True, capture_output=True, check=False)  # noqa: S603 - local tool command.
+            cwd = mod_root or str(TOOL_DIR.parent)
+            return subprocess.run(cmd, cwd=cwd, text=True, capture_output=True, check=False)  # noqa: S603 - local tool command.
 
         def done(result: subprocess.CompletedProcess[str]) -> None:
             parts = [f"> {display_command}", ""]

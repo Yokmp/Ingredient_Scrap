@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "ingredient_scrap": {
+      "label": "Ingredient Scrap + DLCs",
+      "mods": [
+        "base",
+        "elevated-rails",
+        "Ingredient_Scrap",
+        "quality",
+        "space-age"
+      ]
+    }
+  },
+  "profile_groups": {
+    "all": [
+      "ingredient_scrap"
+    ]
+  }
+}

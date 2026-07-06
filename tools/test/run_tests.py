@@ -1,12 +1,13 @@
 """
-Run the Ingredient Scrap Factorio integration tests.
+Run Factorio integration tests for a target mod.
 
-The Factorio mod writes a JSON report from control.lua to:
-    script-output/Ingredient_Scrap/test-report.json
+The target mod writes a JSON report from control.lua to:
+    script-output/<mod-name>/test-report.json
 
 Usage:
     python tools/test/run_tests.py --profile default
     python tools/test/run_tests.py --all
+    python tools/test/run_tests.py --mod-root F:/Games/Factorio_ModTest/mods/Some_Mod --profile default
     python tools/test/run_tests.py --factorio F:/Games/Factorio_ModTest/bin/x64/factorio.exe --all
     python tools/test/run_tests.py --mod-profile angels_is --check-unused-prototype-data --keep-mod-list
 """
@@ -23,38 +24,83 @@ import zipfile
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-MOD_DIR = SCRIPT_DIR.parent.parent
+
+
+def find_mod_root(start: Path) -> Path | None:
+    """Return the nearest parent directory containing a Factorio mod info.json."""
+    current = start.resolve()
+    candidates = [current, *current.parents]
+    for candidate in candidates:
+        if (candidate / "info.json").is_file():
+            return candidate
+    return None
+
+
+def default_mod_root() -> Path:
+    """Return the target mod root for the classic in-mod or external Toolsets layout."""
+    return find_mod_root(Path.cwd()) or find_mod_root(SCRIPT_DIR) or SCRIPT_DIR.parent.parent
+
+
+def default_toolset_dir() -> Path:
+    """Return the sibling toolset folder for both supported layouts."""
+    candidates = [
+        SCRIPT_DIR.parent / "toolset",
+        SCRIPT_DIR.parent / "factorio-toolset",
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return candidates[0]
+
+
+MOD_DIR = default_mod_root()
 TOOLS_DIR = MOD_DIR / "tools"
-TOOLSET_DIR = TOOLS_DIR / "toolset"
+TOOLSET_DIR = default_toolset_dir()
 sys.path.insert(0, str(TOOLSET_DIR))
-sys.path.insert(0, str(TOOLS_DIR))
+sys.path.insert(0, str(SCRIPT_DIR.parent))
 
 import settings
 import modlist
 
 MODS_DIR = MOD_DIR.parent
 DEFAULT_FACTORIO = Path(r"F:/Games/Factorio_ModTest/bin/x64/factorio.exe")
-REPORT_RELATIVE = Path("Ingredient_Scrap") / "test-report.json"
-DATA_TABLE_RELATIVE = Path("Ingredient_Scrap") / "data-table.lua"
-MATERIAL_FLOW_RELATIVE = Path("Ingredient_Scrap") / "material-flow.json"
-MATERIAL_FLOW_STATE_RELATIVE = Path("Ingredient_Scrap") / "material-flow-data.js"
-PRODUCTION_FLOW_RELATIVE = Path("Ingredient_Scrap") / "production-flow.json"
-PRODUCTION_FLOW_STATE_RELATIVE = Path("Ingredient_Scrap") / "production-flow-data.js"
-TECHNOLOGY_FLOW_RELATIVE = Path("Ingredient_Scrap") / "technology-flow.json"
-TECHNOLOGY_FLOW_STATE_RELATIVE = Path("Ingredient_Scrap") / "technology-flow-data.js"
-ANCESTRY_RUNTIME_RELATIVE = Path("Ingredient_Scrap") / "ancestry-runtime.json"
-RECIPE_FORMS_RELATIVE = Path("Ingredient_Scrap") / "recipe-forms.json"
-ICON_ASSETS_RELATIVE = Path("Ingredient_Scrap") / "icon-assets"
+DEFAULT_IS_MOD_NAME = "Ingredient_Scrap"
+DEFAULT_IS_TEST_MOD_PROFILE = "ingredient_scrap"
+DEFAULT_IS_DEBUG_SETTING = "yis-IS_DEBUG"
+DEFAULT_IS_ARTIFACTS = [
+    "test-report.json",
+    "data-table.lua",
+    "material-flow.json",
+    "production-flow.json",
+    "technology-flow.json",
+    "ancestry-runtime.json",
+    "recipe-forms.json",
+]
+REPORT_RELATIVE = Path(DEFAULT_IS_MOD_NAME) / "test-report.json"
+DATA_TABLE_RELATIVE = Path(DEFAULT_IS_MOD_NAME) / "data-table.lua"
+MATERIAL_FLOW_RELATIVE = Path(DEFAULT_IS_MOD_NAME) / "material-flow.json"
+MATERIAL_FLOW_STATE_RELATIVE = Path(DEFAULT_IS_MOD_NAME) / "material-flow-data.js"
+PRODUCTION_FLOW_RELATIVE = Path(DEFAULT_IS_MOD_NAME) / "production-flow.json"
+PRODUCTION_FLOW_STATE_RELATIVE = Path(DEFAULT_IS_MOD_NAME) / "production-flow-data.js"
+TECHNOLOGY_FLOW_RELATIVE = Path(DEFAULT_IS_MOD_NAME) / "technology-flow.json"
+TECHNOLOGY_FLOW_STATE_RELATIVE = Path(DEFAULT_IS_MOD_NAME) / "technology-flow-data.js"
+ANCESTRY_RUNTIME_RELATIVE = Path(DEFAULT_IS_MOD_NAME) / "ancestry-runtime.json"
+RECIPE_FORMS_RELATIVE = Path(DEFAULT_IS_MOD_NAME) / "recipe-forms.json"
+ICON_ASSETS_RELATIVE = Path(DEFAULT_IS_MOD_NAME) / "icon-assets"
 PROFILE_FILE = SCRIPT_DIR / "profile.lua"
 TMP_DIR = SCRIPT_DIR / "tmp"
 MOD_SETTINGS_FILE = MODS_DIR / "mod-settings.dat"
 MOD_SETTINGS_BACKUP_FILE = MODS_DIR / "mod-settings.dat.codex-test-backup"
 TIMEOUT = 180
-DEFAULT_TEST_MOD_PROFILE = "ingredient_scrap"
-DEFAULT_DEBUG_SETTING = "yis-IS_DEBUG"
-DEFAULT_SETTINGS_MOD = "Ingredient_Scrap"
+DEFAULT_TEST_MOD_PROFILE = DEFAULT_IS_TEST_MOD_PROFILE
+DEFAULT_DEBUG_SETTING = DEFAULT_IS_DEBUG_SETTING
+DEFAULT_SETTINGS_MOD = DEFAULT_IS_MOD_NAME
+HARNESS_MOD_NAME = DEFAULT_IS_MOD_NAME
+HARNESS_ARTIFACTS = list(DEFAULT_IS_ARTIFACTS)
+HARNESS_CONFIG: dict[str, object] = {}
 
-PROFILES = {
+
+DEFAULT_IS_PROFILES = {
     "default": {},
     "fixed_amount": {"fixed_amount": True},
     "limit_off": {"limit": False},
@@ -74,6 +120,168 @@ PROFILES = {
     "ancestry_depth_3": {"ancestry_max_depth": 3},
     "toggles_off": {"limit": False, "fluids": False},
 }
+PROFILES = dict(DEFAULT_IS_PROFILES)
+
+
+def load_mod_info(mod_root: Path) -> dict[str, object]:
+    """Read the target mod's info.json when available."""
+    info_path = mod_root / "info.json"
+    if not info_path.exists():
+        return {}
+    try:
+        info = json.loads(info_path.read_text(encoding="utf-8-sig"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return info if isinstance(info, dict) else {}
+
+
+def load_harness_config(mod_root: Path) -> dict[str, object]:
+    """Read tools/test/harness.json from the target mod when present."""
+    config_path = mod_root / "tools" / "test" / "harness.json"
+    if not config_path.exists():
+        return {}
+    try:
+        config = json.loads(config_path.read_text(encoding="utf-8-sig"))
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Invalid harness config {config_path}: {exc}") from exc
+    return config if isinstance(config, dict) else {}
+
+
+def path_value(value: object, fallback: Path) -> Path:
+    """Convert a config path value into a normalized relative Path."""
+    if isinstance(value, str) and value.strip():
+        return Path(value.replace("\\", "/"))
+    return fallback
+
+
+def optional_config_path(value: object, base_dir: Path) -> Path | None:
+    """Return an absolute config path from a string value, or None."""
+    if not isinstance(value, str) or not value.strip():
+        return None
+    path = Path(value.replace("\\", "/"))
+    if not path.is_absolute():
+        path = base_dir / path
+    return path
+
+
+def normalize_profiles(value: object, fallback: dict[str, dict[str, object]]) -> dict[str, dict[str, object]]:
+    """Return a profile dictionary with only object-like profile settings."""
+    if not isinstance(value, dict):
+        return dict(fallback)
+    profiles: dict[str, dict[str, object]] = {}
+    for name, settings_value in value.items():
+        if not isinstance(name, str):
+            continue
+        if settings_value is None:
+            profiles[name] = {}
+        elif isinstance(settings_value, dict):
+            profiles[name] = dict(settings_value)
+    return profiles or dict(fallback)
+
+
+def normalize_artifacts(value: object, fallback: list[str]) -> list[str]:
+    """Return configured output artifact names or relative paths."""
+    if not isinstance(value, list):
+        return list(fallback)
+    artifacts: list[str] = []
+    for entry in value:
+        if isinstance(entry, str) and entry.strip():
+            artifacts.append(entry.strip())
+        elif isinstance(entry, dict) and isinstance(entry.get("path"), str):
+            artifacts.append(str(entry["path"]).strip())
+    return artifacts or list(fallback)
+
+
+def default_profiles_for_mod(mod_name: str) -> dict[str, dict[str, object]]:
+    """Keep the rich Ingredient Scrap defaults, but stay generic for other mods."""
+    if mod_name == DEFAULT_IS_MOD_NAME:
+        return dict(DEFAULT_IS_PROFILES)
+    return {"default": {}}
+
+
+def default_artifacts_for_mod(mod_name: str) -> list[str]:
+    """Only Ingredient Scrap expects extra debug artifacts by default."""
+    if mod_name == DEFAULT_IS_MOD_NAME:
+        return list(DEFAULT_IS_ARTIFACTS)
+    return ["test-report.json"]
+
+
+def artifact_relative_path(artifact: str) -> Path:
+    """Map a configured artifact name to its script-output relative path."""
+    normalized = artifact.replace("\\", "/").strip()
+    path = Path(normalized)
+    if "/" in normalized:
+        return path
+    if normalized == "test-report.json":
+        return REPORT_RELATIVE
+    return REPORT_RELATIVE.parent / normalized
+
+
+def set_output_relative_paths(report_relative: Path, mod_name: str) -> None:
+    """Set the report path and all standard sibling artifact paths."""
+    global REPORT_RELATIVE, DATA_TABLE_RELATIVE, MATERIAL_FLOW_RELATIVE, MATERIAL_FLOW_STATE_RELATIVE
+    global PRODUCTION_FLOW_RELATIVE, PRODUCTION_FLOW_STATE_RELATIVE
+    global TECHNOLOGY_FLOW_RELATIVE, TECHNOLOGY_FLOW_STATE_RELATIVE
+    global ANCESTRY_RUNTIME_RELATIVE, RECIPE_FORMS_RELATIVE, ICON_ASSETS_RELATIVE
+
+    output_dir = report_relative.parent if str(report_relative.parent) != "." else Path(mod_name)
+    REPORT_RELATIVE = report_relative
+    DATA_TABLE_RELATIVE = output_dir / "data-table.lua"
+    MATERIAL_FLOW_RELATIVE = output_dir / "material-flow.json"
+    MATERIAL_FLOW_STATE_RELATIVE = output_dir / "material-flow-data.js"
+    PRODUCTION_FLOW_RELATIVE = output_dir / "production-flow.json"
+    PRODUCTION_FLOW_STATE_RELATIVE = output_dir / "production-flow-data.js"
+    TECHNOLOGY_FLOW_RELATIVE = output_dir / "technology-flow.json"
+    TECHNOLOGY_FLOW_STATE_RELATIVE = output_dir / "technology-flow-data.js"
+    ANCESTRY_RUNTIME_RELATIVE = output_dir / "ancestry-runtime.json"
+    RECIPE_FORMS_RELATIVE = output_dir / "recipe-forms.json"
+    ICON_ASSETS_RELATIVE = output_dir / "icon-assets"
+
+
+def refresh_harness_config() -> None:
+    """Resolve active harness defaults from info.json and tools/test/harness.json."""
+    global HARNESS_MOD_NAME, HARNESS_ARTIFACTS, HARNESS_CONFIG, PROFILES
+    global DEFAULT_TEST_MOD_PROFILE, DEFAULT_DEBUG_SETTING, DEFAULT_SETTINGS_MOD
+
+    info = load_mod_info(MOD_DIR)
+    config = load_harness_config(MOD_DIR)
+    HARNESS_CONFIG = dict(config)
+    info_name = str(info.get("name") or MOD_DIR.name)
+    mod_name = str(config.get("mod_name") or info_name)
+    report_relative = path_value(config.get("report_path"), Path(mod_name) / "test-report.json")
+
+    HARNESS_MOD_NAME = mod_name
+    set_output_relative_paths(report_relative, mod_name)
+
+    default_profiles = default_profiles_for_mod(mod_name)
+    PROFILES = normalize_profiles(config.get("profiles"), default_profiles)
+    HARNESS_ARTIFACTS = normalize_artifacts(config.get("artifacts"), default_artifacts_for_mod(mod_name))
+
+    DEFAULT_SETTINGS_MOD = str(config.get("settings_mod") or mod_name)
+    DEFAULT_DEBUG_SETTING = str(config.get("debug_setting") or (DEFAULT_IS_DEBUG_SETTING if mod_name == DEFAULT_IS_MOD_NAME else ""))
+    config_mod_profile = config.get("mod_profile")
+    if isinstance(config_mod_profile, str) and config_mod_profile.strip():
+        DEFAULT_TEST_MOD_PROFILE = config_mod_profile.strip()
+    elif mod_name == DEFAULT_IS_MOD_NAME:
+        DEFAULT_TEST_MOD_PROFILE = DEFAULT_IS_TEST_MOD_PROFILE
+    else:
+        DEFAULT_TEST_MOD_PROFILE = ""
+
+
+def configure_mod_root(mod_root: Path) -> None:
+    """Point the harness at the Factorio mod that contains the Lua test files."""
+    global MOD_DIR, TOOLS_DIR, MODS_DIR, PROFILE_FILE, TMP_DIR, MOD_SETTINGS_FILE, MOD_SETTINGS_BACKUP_FILE
+    MOD_DIR = mod_root.resolve()
+    TOOLS_DIR = MOD_DIR / "tools"
+    MODS_DIR = MOD_DIR.parent
+    PROFILE_FILE = MOD_DIR / "tools" / "test" / "profile.lua"
+    TMP_DIR = MOD_DIR / "tools" / "test" / "tmp"
+    MOD_SETTINGS_FILE = MODS_DIR / "mod-settings.dat"
+    MOD_SETTINGS_BACKUP_FILE = MODS_DIR / "mod-settings.dat.codex-test-backup"
+    refresh_harness_config()
+
+
+refresh_harness_config()
 
 COLOR = {
     "reset": "\033[0m",
@@ -168,6 +376,32 @@ def remove_settings_cache() -> None:
                     cache_file.unlink()
                 except FileNotFoundError:
                     pass
+
+
+def target_mod_profiles_json() -> Path | None:
+    """Return the target mod's local mod-list profile file when it exists."""
+    path = MOD_DIR / "tools" / "test" / "modlist-profiles.json"
+    return path if path.exists() else None
+
+
+def resolve_mod_profiles_json(cli_value: Path | None, tool_config: dict[str, object]) -> Path | None:
+    """Resolve the mod-list profile source in the harness-defined precedence order."""
+    if cli_value is not None:
+        return cli_value
+    configured = optional_config_path(HARNESS_CONFIG.get("mod_profiles_json"), MOD_DIR)
+    if configured is not None:
+        return configured
+    local_profiles = target_mod_profiles_json()
+    if local_profiles is not None:
+        return local_profiles
+    return modlist.config_path_value(tool_config, "profiles_json", modlist.DEFAULT_PROFILES_JSON)
+
+
+def profile_source_label(profiles_json: Path | None) -> str:
+    """Return a concise display label for the active mod-list profile source."""
+    if profiles_json is None:
+        return "built-in/toolset default"
+    return str(profiles_json)
 
 
 def factorio_root(factorio_exe: Path) -> Path:
@@ -509,10 +743,12 @@ def print_pretty_report(report: dict, color: bool = True, show_passes: bool = Fa
 
     cases = report.get("cases", [])
     logs = report.get("logs", [])
+    is_ingredient_scrap_report = report.get("schema") == "ingredient-scrap-test-report/v1"
     if failed == 0 and not show_passes:
         print(colored("All assertions passed. Use --show-passes to print every case.", "green", color))
-        print_mixed_rounding(report, color=color)
-        print_mixed_recycle_distribution(report, color=color)
+        if is_ingredient_scrap_report:
+            print_mixed_rounding(report, color=color)
+            print_mixed_recycle_distribution(report, color=color)
         print_report_logs(logs, color=color, show_passes=show_passes)
         return
 
@@ -532,8 +768,9 @@ def print_pretty_report(report: dict, color: bool = True, show_passes: bool = Fa
             details = case.get("details")
             if details is not None and (show_passes or case_status != "pass"):
                 print(colored(f"       details: {compact_json(details)}", "gray", color))
-    print_mixed_rounding(report, color=color)
-    print_mixed_recycle_distribution(report, color=color)
+    if is_ingredient_scrap_report:
+        print_mixed_rounding(report, color=color)
+        print_mixed_recycle_distribution(report, color=color)
     print_report_logs(logs, color=color, show_passes=show_passes)
 
 
@@ -565,20 +802,22 @@ def run_factorio_profile(
     factorio_exe: Path,
     profile_name: str,
     settings: dict[str, object],
+    artifacts: list[str] | None = None,
     extra_factorio_args: list[str] | None = None,
     strict_prototype_warnings: bool = False,
 ) -> tuple[bool, dict | None]:
     TMP_DIR.mkdir(exist_ok=True)
-    save_path = TMP_DIR / f"ingredient-scrap-{profile_name}.zip"
+    save_path = TMP_DIR / f"{HARNESS_MOD_NAME}-{profile_name}.zip"
     output_path = report_path(factorio_exe)
-    dump_path = data_table_path(factorio_exe)
-    flow_path = material_flow_path(factorio_exe)
-    production_path = production_flow_path(factorio_exe)
-    technology_path = technology_flow_path(factorio_exe)
-    ancestry_path = ancestry_runtime_path(factorio_exe)
-    forms_path = recipe_forms_path(factorio_exe)
+    configured_artifacts = list(artifacts or HARNESS_ARTIFACTS)
+    if "test-report.json" not in configured_artifacts and str(REPORT_RELATIVE) not in configured_artifacts:
+        configured_artifacts.insert(0, "test-report.json")
+    artifact_paths = {
+        artifact: script_output_path(factorio_exe, artifact_relative_path(artifact))
+        for artifact in configured_artifacts
+    }
 
-    for path in (save_path, output_path, dump_path, flow_path, production_path, technology_path, ancestry_path, forms_path):
+    for path in {save_path, *artifact_paths.values()}:
         if path.exists():
             path.unlink()
 
@@ -596,11 +835,11 @@ def run_factorio_profile(
     print(f"\n=== {profile_name} ===")
     print(f"Factorio: {factorio_exe}")
     print(f"Report:   {output_path}")
-    print(f"Data:     {dump_path}")
-    print(f"Flow:     {flow_path}")
-    print(f"Prod:     {production_path}")
-    print(f"Tech:     {technology_path}")
-    print(f"Forms:    {forms_path}")
+    if len(artifact_paths) > 1:
+        print("Artifacts:")
+        for artifact, path in artifact_paths.items():
+            if path != output_path:
+                print(f"  {artifact}: {path}")
 
     try:
         proc = subprocess.run(command, timeout=TIMEOUT, capture_output=True, text=True)
@@ -641,33 +880,24 @@ def run_factorio_profile(
     summary = report.get("summary", {})
     status = report.get("status")
     print(f"Status: {status} | {summary.get('passed', 0)}/{summary.get('total', 0)} bestanden")
-    if dump_path.exists():
-        print(f"Data table dump: {dump_path}")
-    else:
-        print("WARNUNG: data-table.lua wurde nicht erzeugt.")
-    if flow_path.exists():
-        enrich_material_flow_metadata(factorio_exe, flow_path)
-        print(f"Material flow:   {flow_path}")
-    else:
-        print("WARNUNG: material-flow.json wurde nicht erzeugt.")
-    if production_path.exists():
-        enrich_material_flow_metadata(factorio_exe, production_path, production_flow_state_path(factorio_exe))
-        print(f"Production flow: {production_path}")
-    else:
-        print("WARNUNG: production-flow.json wurde nicht erzeugt.")
-    if technology_path.exists():
-        enrich_material_flow_metadata(factorio_exe, technology_path, technology_flow_state_path(factorio_exe))
-        print(f"Technology flow: {technology_path}")
-    else:
-        print("WARNUNG: technology-flow.json wurde nicht erzeugt.")
-    if ancestry_path.exists():
-        print(f"Ancestry:        {ancestry_path}")
-    else:
-        print("WARNUNG: ancestry-runtime.json wurde nicht erzeugt.")
-    if forms_path.exists():
-        print(f"Recipe forms:    {forms_path}")
-    else:
-        print("WARNUNG: recipe-forms.json wurde nicht erzeugt.")
+
+    for artifact, path in artifact_paths.items():
+        if path == output_path:
+            continue
+        if not path.exists():
+            print(f"WARNUNG: {artifact} wurde nicht erzeugt.")
+            continue
+        if artifact.endswith("material-flow.json"):
+            enrich_material_flow_metadata(factorio_exe, path, material_flow_state_path(factorio_exe))
+            print(f"Material flow:   {path}")
+        elif artifact.endswith("production-flow.json"):
+            enrich_material_flow_metadata(factorio_exe, path, production_flow_state_path(factorio_exe))
+            print(f"Production flow: {path}")
+        elif artifact.endswith("technology-flow.json"):
+            enrich_material_flow_metadata(factorio_exe, path, technology_flow_state_path(factorio_exe))
+            print(f"Technology flow: {path}")
+        else:
+            print(f"{artifact}: {path}")
     return status == "pass", report
 
 
@@ -677,18 +907,40 @@ def compat_label(compat_name: str | None, profiles: dict[str, dict[str, object]]
     return modlist.profile_label(compat_name, profiles)
 
 
+def all_mod_profile_names(
+    mod_profiles_json: Path | None,
+    mod_profiles: dict[str, dict[str, object]],
+    explicit_mod_profile: str | None,
+) -> list[str | None]:
+    """Return the mod-list profiles used for --all."""
+    if explicit_mod_profile is not None:
+        return [explicit_mod_profile]
+    groups = modlist.load_profile_groups(mod_profiles_json)
+    if "all" not in groups:
+        return [DEFAULT_TEST_MOD_PROFILE or None]
+    return modlist.validate_profile_group("all", groups, mod_profiles)
+
+
+def run_label(mod_profile: str | None, test_profile: str) -> str:
+    """Return the report summary key for one matrix cell."""
+    return f"{mod_profile}/{test_profile}" if mod_profile else test_profile
+
+
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Run Ingredient Scrap Factorio tests")
+    parser = argparse.ArgumentParser(description="Run Factorio mod integration tests")
+    parser.add_argument("--mod-root", type=Path, help="target mod root containing info.json and tools/test/*.lua")
     parser.add_argument("--factorio", type=Path, help="Factorio executable path; defaults to tools/toolset/tool-ui.json or the local portable install")
-    parser.add_argument("--profile", choices=sorted(PROFILES), default="default")
-    parser.add_argument("--all", action="store_true", help="run all standard profiles")
+    parser.add_argument("--profile", default="default", help="test profile from tools/test/harness.json")
+    parser.add_argument("--all", action="store_true", help="run all configured profiles")
     parser.add_argument("--compat", help="legacy alias for --mod-profile")
     parser.add_argument("--mod-profile", help="Factorio mod-list profile to enable")
     parser.add_argument("--mod-profiles-json", type=Path, help="optional JSON file with additional mod-list profiles; defaults to modlist.py config")
     parser.add_argument("--list-mod-profiles", action="store_true", help="print known mod-list profiles and exit")
     parser.add_argument("--keep-mod-list", action="store_true", help="leave the selected mod profile enabled after the run")
-    parser.add_argument("--settings-mod", default=DEFAULT_SETTINGS_MOD, help="label passed through to the settings tool terminology")
-    parser.add_argument("--debug-setting", default=DEFAULT_DEBUG_SETTING, help="startup setting to force to true while tests run")
+    parser.add_argument("--settings-mod", help="label passed through to the settings tool terminology")
+    parser.add_argument("--debug-setting", help="startup setting to force to true while tests run")
+    parser.add_argument("--report-relative", help="script-output relative report path, e.g. Some_Mod/test-report.json")
+    parser.add_argument("--artifact", action="append", help="expected artifact name or script-output relative path; repeatable")
     parser.add_argument("--factorio-verbose", action="store_true", help="pass --verbose to Factorio")
     parser.add_argument("--check-unused-prototype-data", action="store_true", help="pass --check-unused-prototype-data to Factorio")
     parser.add_argument("--strict-prototype-warnings", action="store_true", help="fail when Factorio prototype diagnostics are printed")
@@ -697,12 +949,19 @@ def main() -> int:
     parser.add_argument("--keep-saves", action="store_true", help="keep temporary Factorio saves under tools/test/tmp")
     args = parser.parse_args()
 
+    if args.mod_root:
+        configure_mod_root(args.mod_root)
+    if args.report_relative:
+        set_output_relative_paths(path_value(args.report_relative, REPORT_RELATIVE), HARNESS_MOD_NAME)
+
     tool_config = modlist.load_tool_config()
     factorio_exe = args.factorio or modlist.config_path_value(tool_config, "factorio", DEFAULT_FACTORIO)
-    mod_profiles_json = args.mod_profiles_json or modlist.config_path_value(tool_config, "profiles_json", modlist.DEFAULT_PROFILES_JSON)
+    mod_profiles_json = resolve_mod_profiles_json(args.mod_profiles_json, tool_config)
     mod_profiles = modlist.load_profiles(mod_profiles_json)
+    profile_groups = modlist.load_profile_groups(mod_profiles_json)
 
     if args.list_mod_profiles:
+        print(f"Profiles: {profile_source_label(mod_profiles_json)}")
         for name in sorted(mod_profiles):
             print(f"{name}: {modlist.profile_label(name, mod_profiles)}")
         return 0
@@ -714,11 +973,35 @@ def main() -> int:
         print(f"FEHLER: Factorio nicht gefunden: {factorio_exe}")
         return 2
 
+    print(f"Profiles: {profile_source_label(mod_profiles_json)}")
+
     selected = list(PROFILES) if args.all else [args.profile]
-    mod_profile = args.mod_profile or args.compat or DEFAULT_TEST_MOD_PROFILE
-    if mod_profile not in mod_profiles:
-        print(f"FEHLER: Unbekanntes Mod-Profil: {mod_profile}")
+    unknown_profiles = [profile_name for profile_name in selected if profile_name not in PROFILES]
+    if unknown_profiles:
+        print(f"FEHLER: Unbekannte Testprofil(e): {', '.join(unknown_profiles)}")
+        print("Verfuegbar: " + ", ".join(sorted(PROFILES)))
+        return 2
+
+    explicit_mod_profile = args.mod_profile or args.compat
+    mod_profile = explicit_mod_profile or DEFAULT_TEST_MOD_PROFILE or None
+    if args.all and "all" in profile_groups and explicit_mod_profile is None:
+        try:
+            selected_mod_profiles = all_mod_profile_names(mod_profiles_json, mod_profiles, None)
+        except KeyError as exc:
+            print(f"FEHLER: {exc.args[0]}")
+            print("Verfuegbare Mod-Profile: " + ", ".join(sorted(mod_profiles)))
+            if mod_profiles_json is not None:
+                print(f"Profilquelle: {mod_profiles_json}")
+            return 2
+    else:
+        selected_mod_profiles = [mod_profile]
+
+    missing_mod_profiles = [name for name in selected_mod_profiles if name is not None and name not in mod_profiles]
+    if missing_mod_profiles:
+        print(f"FEHLER: Unbekannte Mod-Profil(e): {', '.join(missing_mod_profiles)}")
         print("Verfuegbar: " + ", ".join(sorted(mod_profiles)))
+        if mod_profiles_json is not None:
+            print(f"Profilquelle: {mod_profiles_json}")
         return 2
     extra_factorio_args = factorio_diagnostic_args(
         verbose=args.factorio_verbose,
@@ -727,32 +1010,50 @@ def main() -> int:
     failed = []
     reports: list[dict] = []
     original_mod_settings = None
+    mod_settings_changed = False
+    artifacts = args.artifact if args.artifact else HARNESS_ARTIFACTS
+    settings_mod = args.settings_mod or DEFAULT_SETTINGS_MOD
+    debug_setting = args.debug_setting if args.debug_setting is not None else DEFAULT_DEBUG_SETTING
+    mod_list_file = modlist.default_mod_list_file(factorio_exe)
+    original_mod_list = mod_list_file.read_bytes() if mod_list_file.exists() else None
 
     try:
-        mod_profile_result = modlist.apply_profile(factorio_exe, mod_profile, mod_profiles_json)
-        if mod_profile != DEFAULT_TEST_MOD_PROFILE:
-            print(f"Mod profile: {mod_profile_result['label']}")
-        print(f"Debug setting: {args.settings_mod}.{args.debug_setting}=true")
-        original_mod_settings = with_debug_setting_enabled(args.debug_setting)
-        for profile_name in selected:
-            ok, report = run_factorio_profile(
-                factorio_exe,
-                profile_name,
-                PROFILES[profile_name],
-                extra_factorio_args=extra_factorio_args,
-                strict_prototype_warnings=args.strict_prototype_warnings,
-            )
-            if report is not None:
-                if mod_profile != DEFAULT_TEST_MOD_PROFILE:
-                    report["compat"] = mod_profile
-                    report["compat_label"] = compat_label(mod_profile, mod_profiles)
-                reports.append(report)
-            if not ok:
-                failed.append(profile_name)
+        if debug_setting:
+            print(f"Debug setting: {settings_mod}.{debug_setting}=true")
+            original_mod_settings = with_debug_setting_enabled(debug_setting)
+            mod_settings_changed = True
+        else:
+            print("Debug setting: none")
+        for current_mod_profile in selected_mod_profiles:
+            if current_mod_profile is not None:
+                mod_profile_result = modlist.apply_profile(factorio_exe, current_mod_profile, mod_profiles_json)
+                print(f"Mod profile: {mod_profile_result['label']}")
+            else:
+                print("Mod profile: unchanged")
+            for profile_name in selected:
+                ok, report = run_factorio_profile(
+                    factorio_exe,
+                    profile_name,
+                    PROFILES[profile_name],
+                    artifacts=artifacts,
+                    extra_factorio_args=extra_factorio_args,
+                    strict_prototype_warnings=args.strict_prototype_warnings,
+                )
+                if report is not None:
+                    if current_mod_profile is not None:
+                        report["compat"] = current_mod_profile
+                        report["compat_label"] = compat_label(current_mod_profile, mod_profiles)
+                    reports.append(report)
+                if not ok:
+                    failed.append(run_label(current_mod_profile, profile_name))
     finally:
-        restore_mod_settings(original_mod_settings)
+        if mod_settings_changed:
+            restore_mod_settings(original_mod_settings)
         if not args.keep_mod_list:
-            modlist.apply_profile(factorio_exe, DEFAULT_TEST_MOD_PROFILE, mod_profiles_json)
+            if original_mod_list is not None:
+                mod_list_file.write_bytes(original_mod_list)
+            elif mod_list_file.exists():
+                mod_list_file.unlink()
         remove_profile()
         remove_settings_cache()
         if not args.keep_saves:
@@ -762,7 +1063,7 @@ def main() -> int:
     if failed:
         print("Fehlgeschlagen: " + ", ".join(failed))
     else:
-        print(f"Alle {len(selected)} Profil(e) bestanden.")
+        print(f"Alle {len(selected) * len(selected_mod_profiles)} Profil(e) bestanden.")
 
     if reports:
         print("\n=== JSON Reports ===")

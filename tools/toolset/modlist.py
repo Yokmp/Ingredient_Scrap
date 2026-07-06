@@ -17,6 +17,9 @@ An optional JSON file can add or override profiles:
       "label": "Example Mod Set",
       "mods": ["some-mod", "some-dependency"]
     }
+  },
+  "profile_groups": {
+    "all": ["example"]
   }
 }
 """
@@ -49,10 +52,6 @@ BUILTIN_PROFILES: dict[str, dict[str, object]] = {
     "vanilla_dlc": {
         "label": "Vanilla + DLCs",
         "mods": VANILLA_MODS + DLC_MODS,
-    },
-    "ingredient_scrap": {
-        "label": "Ingredient Scrap + DLCs",
-        "mods": VANILLA_MODS + DLC_MODS + ["Ingredient_Scrap"],
     },
 }
 
@@ -177,6 +176,29 @@ def load_profiles(profiles_json: Path | None = None) -> dict[str, dict[str, obje
             "settings": dict(profile.get("settings") or {}),
         }
     return profiles
+
+
+def load_profile_groups(profiles_json: Path | None = None) -> dict[str, list[str]]:
+    """Load named profile groups from JSON; built-ins do not define groups."""
+    if profiles_json is None or not profiles_json.exists():
+        return {}
+    data = json.loads(profiles_json.read_text(encoding="utf-8"))
+    groups: dict[str, list[str]] = {}
+    for name, values in (data.get("profile_groups") or {}).items():
+        if not isinstance(name, str) or not isinstance(values, list):
+            continue
+        groups[name] = [value for value in values if isinstance(value, str) and value]
+    return groups
+
+
+def validate_profile_group(group_name: str, groups: dict[str, list[str]], profiles: dict[str, dict[str, object]]) -> list[str]:
+    """Return a validated profile group or raise a KeyError with a concise message."""
+    if group_name not in groups:
+        raise KeyError(f"Unknown profile group: {group_name}")
+    missing = [profile_name for profile_name in groups[group_name] if profile_name not in profiles]
+    if missing:
+        raise KeyError(f"Unknown profile(s) in group {group_name}: {', '.join(missing)}")
+    return list(groups[group_name])
 
 
 def profile_label(profile_name: str, profiles: dict[str, dict[str, object]] | None = None) -> str:

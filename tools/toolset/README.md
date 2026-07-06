@@ -200,11 +200,15 @@ The same common commands are available in the UI under the Debug tab. It include
 buttons for default, all profiles, selected mod profiles, and a custom argument
 field for ad-hoc `run_tests.py` arguments.
 
-To generate only `material-flow.json` without printing the test assertion report:
+To generate a configured JSON dump without printing the test assertion report:
 
 ```powershell
-python tools\toolset\material_flow.py --mod-profile vanilla_dlc --dump-profile default
+python tools\toolset\material_flow.py --mod-root . --mod-profile vanilla_dlc --dump-profile default
 ```
+
+`material_flow.py` reads the selected mod's `tools/test/harness.json` when
+available. It opens the configured `material-flow.json` by default, then the
+first configured JSON artifact, then `test-report.json`.
 
 To build an offline ancestry comparison from archived dumps:
 

@@ -5,7 +5,9 @@ and GitHub source, not for the Mod Portal zip.
 
 ## Local Test Harness
 
-The Factorio harness lives under `tools/test`.
+The Lua-side Factorio harness lives under `tools/test`. The Python launcher can
+run from here or from the external internal tool package under
+`../Toolsets/testharness`.
 
 Common commands:
 
@@ -14,12 +16,45 @@ python tools\test\run_tests.py --profile default --no-color
 python tools\test\run_tests.py --all --no-color
 python tools\test\run_tests.py --mod-profile krastorio_is --profile default --no-color
 python tools\test\run_tests.py --mod-profile bob_angels_full_is --profile default --no-color
+python ..\Toolsets\testharness\run_tests.py --mod-root . --profile default --no-color
 ```
 
 The harness starts Factorio with temporary saves, enables the hidden debug
 setting, reads JSON reports from `script-output/Ingredient_Scrap`, and formats
 the result in the terminal. It does not use Factorio log parsing as the primary
 test result mechanism.
+
+Harness defaults are declared in `tools/test/harness.json`. The reusable
+Toolsets runner reads this file from the selected `--mod-root`, so other mods
+can define their own report path, debug setting, artifacts, mod-list profile,
+and test profiles without editing Python code.
+
+Mod-list profiles are declared in `tools/test/modlist-profiles.json`. The
+`profile_groups.all` group defines which compatible mod combinations are part of
+the full matrix:
+
+```json
+{
+  "profiles": {
+    "ingredient_scrap": {
+      "label": "Ingredient Scrap + DLCs",
+      "mods": ["base", "elevated-rails", "Ingredient_Scrap", "quality", "space-age"]
+    }
+  },
+  "profile_groups": {
+    "all": ["ingredient_scrap"]
+  }
+}
+```
+
+`--all` runs every harness test profile against every mod-list profile listed in
+`profile_groups.all`. If the group is missing, `--all` falls back to the single
+configured `mod_profile`. An explicit `--mod-profile NAME` always overrides the
+group and runs the full test-profile set only against that one mod profile.
+
+Do not treat "all locally installed mods" as a stable test matrix. Mod-specific
+files should list only known-compatible combinations in `profile_groups.all`;
+unstable diagnostic profiles belong outside that group.
 
 Important debug profiles include:
 
@@ -54,7 +89,10 @@ Portal zip.
 
 ## Toolset
 
-General tools live under `tools/toolset`.
+General tools live under `tools/toolset` during development. They can also be
+copied into the shared internal package `../Toolsets/factorio-toolset` so other
+mods can reuse the same UI and CLI helpers without embedding Python tools in the
+target mod.
 
 Useful entry points:
 
@@ -63,6 +101,7 @@ python tools\toolset\ui.py
 python tools\toolset\deploy.py check --verbose
 python tools\toolset\deploy.py build
 python tools\toolset\deploy.py publish-public --dry-run
+python ..\Toolsets\factorio-toolset\ui.py
 ```
 
 The UI provides shortcuts for profile selection, dump creation, JSON viewing,

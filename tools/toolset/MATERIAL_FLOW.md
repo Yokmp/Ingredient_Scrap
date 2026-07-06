@@ -1,23 +1,26 @@
-# Material Flow Dump Integration
+# Factorio JSON Dump Viewer Integration
 
-`material_flow.py` launches Factorio once, creates a temporary save, and expects the active mod set to write a Material Flow dump into Factorio's `script-output` directory.
+`material_flow.py` launches Factorio once, creates a temporary save, and expects the active mod set to write a configured JSON artifact into Factorio's `script-output` directory.
 
-It is a dump runner, not the full Ingredient Scrap assertion harness. Use `tools/test/run_tests.py` when you want the complete test report.
+It is a dump runner, not the full assertion harness. Use `tools/test/run_tests.py` when you want the complete test report.
 
 ## Run
 
 From the repository root:
 
 ```powershell
-python tools\toolset\material_flow.py --mod-profile vanilla_dlc --dump-profile default --open-viewer
+python tools\toolset\material_flow.py --mod-root . --mod-profile vanilla_dlc --dump-profile default --open-viewer
 ```
 
 Useful options:
 
 - `--factorio PATH`: Factorio executable. Defaults to `tool-ui.json` or the local portable test install.
+- `--mod-root PATH`: target mod root containing `info.json` and optional `tools/test/harness.json`.
 - `--mod-profile NAME`: mod-list profile to apply before starting Factorio.
-- `--dump-profile NAME`: Ingredient Scrap settings profile, for example `default` or `recipe_chain_targets`.
-- `--debug-setting NAME`: startup setting forced to `true`; defaults to `yis-IS_DEBUG`.
+- `--mod-profiles-json PATH`: optional mod-list profile JSON; otherwise the harness config, target mod local profiles, tool UI config, and Toolset default are checked in that order.
+- `--dump-profile NAME`: configured test/dump settings profile, for example `default`.
+- `--viewer-artifact NAME`: JSON artifact to open in the viewer. Defaults to configured `material-flow.json`, then the first configured JSON artifact, then `test-report.json`.
+- `--debug-setting NAME`: startup setting forced to `true`; defaults to the selected mod's harness config.
 - `--no-debug-setting`: do not edit `mod-settings.dat`.
 - `--keep-mod-list`: leave the selected mod profile enabled after the run. Without
   this option, the previous `mod-list.json` content is restored exactly after
@@ -32,7 +35,7 @@ After a run, summarize Ingredient Scrap data-stage timing markers from
 python tools\toolset\is_timing.py
 ```
 
-The generated files are:
+For Ingredient Scrap, the generated files are:
 
 ```text
 script-output/Ingredient_Scrap/material-flow.json
@@ -160,13 +163,13 @@ script.on_init(function()
 end)
 ```
 
-Ingredient Scrap currently writes to:
+Ingredient Scrap writes to:
 
 ```text
 script-output/Ingredient_Scrap/material-flow.json
 ```
 
-and the tools expect that path by default.
+Other mods can use their own output folder by declaring `report_path` and `artifacts` in `tools/test/harness.json`.
 
 ## Icons
 
@@ -211,7 +214,7 @@ The viewer can resolve this metadata through:
 - dropped loose image files
 - the configured Factorio root path
 
-`material_flow.py` enriches Ingredient Scrap dumps with `asset_roots` and extracts ZIP icons into `script-output/Ingredient_Scrap/icon-assets/`.
+`material_flow.py` enriches supported flow dumps with `asset_roots` and extracts ZIP icons into the configured script-output `icon-assets/` folder.
 
 ## Viewer URLs
 

@@ -1,0 +1,76 @@
+{
+  "mod_name": "Ingredient_Scrap",
+  "settings_mod": "Ingredient_Scrap",
+  "debug_setting": "yis-IS_DEBUG",
+  "report_path": "Ingredient_Scrap/test-report.json",
+  "mod_profiles_json": "tools/test/modlist-profiles.json",
+  "mod_profile": "ingredient_scrap",
+  "artifacts": [
+    "test-report.json",
+    "data-table.lua",
+    "material-flow.json",
+    "production-flow.json",
+    "technology-flow.json",
+    "ancestry-runtime.json",
+    "recipe-forms.json"
+  ],
+  "profiles": {
+    "default": {},
+    "fixed_amount": {
+      "fixed_amount": true
+    },
+    "limit_off": {
+      "limit": false
+    },
+    "probability_min": {
+      "probability": 1
+    },
+    "probability_full": {
+      "probability": 100
+    },
+    "needed_min": {
+      "needed": 1
+    },
+    "needed_high": {
+      "needed": 20
+    },
+    "hide_tech_quiet": {
+      "hide_tech": true,
+      "shallow_log": false
+    },
+    "show_tech_quiet": {
+      "hide_tech": false,
+      "shallow_log": false
+    },
+    "show_tech_debug": {
+      "hide_tech": false,
+      "shallow_log": true
+    },
+    "hide_tech_debug": {
+      "hide_tech": true,
+      "shallow_log": true
+    },
+    "recipe_chain_targets": {
+      "recipe_chain_targets": true
+    },
+    "ancestry_component_heavy": {
+      "ancestry_mode": "component-heavy"
+    },
+    "ancestry_material_heavy": {
+      "ancestry_mode": "material-heavy"
+    },
+    "ancestry_width_1": {
+      "ancestry_mixed_limit": 1
+    },
+    "ancestry_width_2": {
+      "ancestry_mixed_limit": 2
+    },
+    "ancestry_depth_3": {
+      "ancestry_max_depth": 3
+    },
+    "toggles_off": {
+      "limit": false,
+      "fluids": false
+    }
+  }
+}
