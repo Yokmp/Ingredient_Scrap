@@ -56,6 +56,38 @@ Do not treat "all locally installed mods" as a stable test matrix. Mod-specific
 files should list only known-compatible combinations in `profile_groups.all`;
 unstable diagnostic profiles belong outside that group.
 
+Startup settings are a separate harness axis. `tools/test/harness.json` may
+define `setting_profiles` and `setting_profile_groups.all`; these are applied to
+`mod-settings.dat` before each Factorio run and restored immediately afterward.
+Use this for real startup settings that must exist before the data stage:
+
+```json
+{
+  "setting_profiles": {
+    "default": {},
+    "steam_off": {
+      "some-startup-setting": false
+    }
+  },
+  "setting_profile_groups": {
+    "all": ["default", "steam_off"]
+  }
+}
+```
+
+The three harness axes are intentionally separate:
+
+| Axis | CLI | Config |
+| --- | --- | --- |
+| Mod list | `--mod-profile`, mod `profile_groups.all` | `tools/test/modlist-profiles.json` |
+| Startup settings | `--setting-profile`, `--all-setting-profiles` | `tools/test/harness.json` |
+| Lua assertions | `--profile`, `--all` | `tools/test/harness.json` |
+
+`--all` alone runs all Lua test profiles with the default startup setting
+profile. Add `--all-setting-profiles` when the test matrix should include all
+configured startup setting variants. The hidden debug setting is still mixed into
+each setting profile unless `--debug-setting` is disabled.
+
 Important debug profiles include:
 
 | Profile | Purpose |

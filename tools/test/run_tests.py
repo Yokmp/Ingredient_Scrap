@@ -98,6 +98,8 @@ DEFAULT_SETTINGS_MOD = DEFAULT_IS_MOD_NAME
 HARNESS_MOD_NAME = DEFAULT_IS_MOD_NAME
 HARNESS_ARTIFACTS = list(DEFAULT_IS_ARTIFACTS)
 HARNESS_CONFIG: dict[str, object] = {}
+SETTING_PROFILES: dict[str, dict[str, object]] = {"default": {}}
+SETTING_PROFILE_GROUPS: dict[str, list[str]] = {}
 
 
 DEFAULT_IS_PROFILES = {
@@ -192,6 +194,34 @@ def normalize_artifacts(value: object, fallback: list[str]) -> list[str]:
     return artifacts or list(fallback)
 
 
+def normalize_setting_profiles(value: object) -> dict[str, dict[str, object]]:
+    """Return startup setting profiles from harness config."""
+    if not isinstance(value, dict):
+        return {"default": {}}
+    profiles: dict[str, dict[str, object]] = {}
+    for name, settings_value in value.items():
+        if not isinstance(name, str) or not name.strip():
+            continue
+        if settings_value is None:
+            profiles[name] = {}
+        elif isinstance(settings_value, dict):
+            profiles[name] = dict(settings_value)
+    profiles.setdefault("default", {})
+    return profiles
+
+
+def normalize_setting_profile_groups(value: object) -> dict[str, list[str]]:
+    """Return startup setting profile groups from harness config."""
+    if not isinstance(value, dict):
+        return {}
+    groups: dict[str, list[str]] = {}
+    for name, entries in value.items():
+        if not isinstance(name, str) or not isinstance(entries, list):
+            continue
+        groups[name] = [entry for entry in entries if isinstance(entry, str) and entry]
+    return groups
+
+
 def default_profiles_for_mod(mod_name: str) -> dict[str, dict[str, object]]:
     """Keep the rich Ingredient Scrap defaults, but stay generic for other mods."""
     if mod_name == DEFAULT_IS_MOD_NAME:
@@ -241,6 +271,7 @@ def set_output_relative_paths(report_relative: Path, mod_name: str) -> None:
 def refresh_harness_config() -> None:
     """Resolve active harness defaults from info.json and tools/test/harness.json."""
     global HARNESS_MOD_NAME, HARNESS_ARTIFACTS, HARNESS_CONFIG, PROFILES
+    global SETTING_PROFILES, SETTING_PROFILE_GROUPS
     global DEFAULT_TEST_MOD_PROFILE, DEFAULT_DEBUG_SETTING, DEFAULT_SETTINGS_MOD
 
     info = load_mod_info(MOD_DIR)
@@ -256,6 +287,8 @@ def refresh_harness_config() -> None:
     default_profiles = default_profiles_for_mod(mod_name)
     PROFILES = normalize_profiles(config.get("profiles"), default_profiles)
     HARNESS_ARTIFACTS = normalize_artifacts(config.get("artifacts"), default_artifacts_for_mod(mod_name))
+    SETTING_PROFILES = normalize_setting_profiles(config.get("setting_profiles"))
+    SETTING_PROFILE_GROUPS = normalize_setting_profile_groups(config.get("setting_profile_groups"))
 
     DEFAULT_SETTINGS_MOD = str(config.get("settings_mod") or mod_name)
     DEFAULT_DEBUG_SETTING = str(config.get("debug_setting") or (DEFAULT_IS_DEBUG_SETTING if mod_name == DEFAULT_IS_MOD_NAME else ""))
@@ -326,28 +359,40 @@ def write_profile(profile_name: str, settings: dict[str, object]) -> None:
     PROFILE_FILE.write_text("\n".join(lines), encoding="utf-8")
 
 
-def with_debug_setting_enabled(setting_name: str) -> bytes | None:
+def apply_startup_settings(profile_settings: dict[str, object], debug_setting: str | None = None) -> bytes | None:
+    """Write startup settings for one Factorio run and return exact previous bytes."""
     original = MOD_SETTINGS_FILE.read_bytes() if MOD_SETTINGS_FILE.exists() else None
-    if original is not None:
-        MOD_SETTINGS_BACKUP_FILE.write_bytes(original)
+    merged = dict(profile_settings)
+    if debug_setting:
+        merged[debug_setting] = True
+    if not merged:
+        return original
     try:
-        settings.set_startup_setting(MOD_SETTINGS_FILE, setting_name, True)
+        settings.set_startup_settings(MOD_SETTINGS_FILE, merged)
     except Exception:
         if original is not None:
             MOD_SETTINGS_FILE.write_bytes(original)
+        else:
+            try:
+                MOD_SETTINGS_FILE.unlink()
+            except FileNotFoundError:
+                pass
         raise
     return original
 
 
+def with_debug_setting_enabled(setting_name: str) -> bytes | None:
+    return apply_startup_settings({}, setting_name)
+
+
 def restore_mod_settings(original: bytes | None) -> None:
-    backup = MOD_SETTINGS_BACKUP_FILE.read_bytes() if MOD_SETTINGS_BACKUP_FILE.exists() else original
-    if backup is None:
+    if original is None:
         try:
             MOD_SETTINGS_FILE.unlink()
         except FileNotFoundError:
             pass
     else:
-        MOD_SETTINGS_FILE.write_bytes(backup)
+        MOD_SETTINGS_FILE.write_bytes(original)
     try:
         MOD_SETTINGS_BACKUP_FILE.unlink()
     except FileNotFoundError:
@@ -737,6 +782,8 @@ def print_pretty_report(report: dict, color: bool = True, show_passes: bool = Fa
     print(f"Mod:     {report.get('mod', 'unknown')}")
     if report.get("compat"):
         print(f"Compat:  {report.get('compat_label', report.get('compat'))}")
+    if report.get("setting_profile"):
+        print(f"Settings:{report.get('setting_profile'):>9}")
     print(f"Schema:  {report.get('schema', 'unknown')}")
     print(f"Factorio:{report.get('factorio_version', 'unknown'):>9}")
     print(f"Summary: {progress_bar(passed, total, color=color)} {passed}/{total} passed, {failed} failed")
@@ -921,9 +968,26 @@ def all_mod_profile_names(
     return modlist.validate_profile_group("all", groups, mod_profiles)
 
 
-def run_label(mod_profile: str | None, test_profile: str) -> str:
+def all_setting_profile_names(explicit_setting_profile: str | None, use_all_setting_profiles: bool) -> list[str]:
+    """Return startup setting profiles used for this run."""
+    if explicit_setting_profile is not None:
+        return [explicit_setting_profile]
+    if not use_all_setting_profiles:
+        return ["default"]
+    if "all" in SETTING_PROFILE_GROUPS:
+        return list(SETTING_PROFILE_GROUPS["all"])
+    return list(SETTING_PROFILES)
+
+
+def validate_setting_profiles(selected: list[str]) -> list[str]:
+    """Return unknown startup setting profile names."""
+    return [name for name in selected if name not in SETTING_PROFILES]
+
+
+def run_label(mod_profile: str | None, setting_profile: str, test_profile: str) -> str:
     """Return the report summary key for one matrix cell."""
-    return f"{mod_profile}/{test_profile}" if mod_profile else test_profile
+    mod_label = mod_profile or "unchanged"
+    return f"{mod_label}/{setting_profile}/{test_profile}"
 
 
 def main() -> int:
@@ -937,6 +1001,9 @@ def main() -> int:
     parser.add_argument("--mod-profiles-json", type=Path, help="optional JSON file with additional mod-list profiles; defaults to modlist.py config")
     parser.add_argument("--list-mod-profiles", action="store_true", help="print known mod-list profiles and exit")
     parser.add_argument("--keep-mod-list", action="store_true", help="leave the selected mod profile enabled after the run")
+    parser.add_argument("--setting-profile", help="startup setting profile from tools/test/harness.json")
+    parser.add_argument("--all-setting-profiles", action="store_true", help="run selected Lua profiles against all configured startup setting profiles")
+    parser.add_argument("--list-setting-profiles", action="store_true", help="print known startup setting profiles and groups and exit")
     parser.add_argument("--settings-mod", help="label passed through to the settings tool terminology")
     parser.add_argument("--debug-setting", help="startup setting to force to true while tests run")
     parser.add_argument("--report-relative", help="script-output relative report path, e.g. Some_Mod/test-report.json")
@@ -964,6 +1031,16 @@ def main() -> int:
         print(f"Profiles: {profile_source_label(mod_profiles_json)}")
         for name in sorted(mod_profiles):
             print(f"{name}: {modlist.profile_label(name, mod_profiles)}")
+        return 0
+
+    if args.list_setting_profiles:
+        print("Setting profiles:")
+        for name in sorted(SETTING_PROFILES):
+            print(f"{name}: {len(SETTING_PROFILES[name])} startup setting(s)")
+        if SETTING_PROFILE_GROUPS:
+            print("Setting profile groups:")
+            for name in sorted(SETTING_PROFILE_GROUPS):
+                print(f"{name}: {', '.join(SETTING_PROFILE_GROUPS[name])}")
         return 0
 
     if factorio_exe is None:
@@ -1003,14 +1080,19 @@ def main() -> int:
         if mod_profiles_json is not None:
             print(f"Profilquelle: {mod_profiles_json}")
         return 2
+
+    selected_setting_profiles = all_setting_profile_names(args.setting_profile, args.all_setting_profiles)
+    missing_setting_profiles = validate_setting_profiles(selected_setting_profiles)
+    if missing_setting_profiles:
+        print(f"FEHLER: Unbekannte Setting-Profil(e): {', '.join(missing_setting_profiles)}")
+        print("Verfuegbar: " + ", ".join(sorted(SETTING_PROFILES)))
+        return 2
     extra_factorio_args = factorio_diagnostic_args(
         verbose=args.factorio_verbose,
         check_unused_prototype_data=args.check_unused_prototype_data,
     )
     failed = []
     reports: list[dict] = []
-    original_mod_settings = None
-    mod_settings_changed = False
     artifacts = args.artifact if args.artifact else HARNESS_ARTIFACTS
     settings_mod = args.settings_mod or DEFAULT_SETTINGS_MOD
     debug_setting = args.debug_setting if args.debug_setting is not None else DEFAULT_DEBUG_SETTING
@@ -1018,37 +1100,43 @@ def main() -> int:
     original_mod_list = mod_list_file.read_bytes() if mod_list_file.exists() else None
 
     try:
-        if debug_setting:
-            print(f"Debug setting: {settings_mod}.{debug_setting}=true")
-            original_mod_settings = with_debug_setting_enabled(debug_setting)
-            mod_settings_changed = True
-        else:
-            print("Debug setting: none")
+        print(f"Debug setting: {settings_mod}.{debug_setting}=true" if debug_setting else "Debug setting: none")
         for current_mod_profile in selected_mod_profiles:
             if current_mod_profile is not None:
                 mod_profile_result = modlist.apply_profile(factorio_exe, current_mod_profile, mod_profiles_json)
                 print(f"Mod profile: {mod_profile_result['label']}")
             else:
                 print("Mod profile: unchanged")
-            for profile_name in selected:
-                ok, report = run_factorio_profile(
-                    factorio_exe,
-                    profile_name,
-                    PROFILES[profile_name],
-                    artifacts=artifacts,
-                    extra_factorio_args=extra_factorio_args,
-                    strict_prototype_warnings=args.strict_prototype_warnings,
-                )
-                if report is not None:
-                    if current_mod_profile is not None:
-                        report["compat"] = current_mod_profile
-                        report["compat_label"] = compat_label(current_mod_profile, mod_profiles)
-                    reports.append(report)
-                if not ok:
-                    failed.append(run_label(current_mod_profile, profile_name))
+            for setting_profile_name in selected_setting_profiles:
+                setting_values = SETTING_PROFILES[setting_profile_name]
+                print(f"Setting profile: {setting_profile_name}")
+                for profile_name in selected:
+                    print(f"Lua profile: {profile_name}")
+                    original_mod_settings = None
+                    mod_settings_applied = False
+                    try:
+                        original_mod_settings = apply_startup_settings(setting_values, debug_setting)
+                        mod_settings_applied = True
+                        ok, report = run_factorio_profile(
+                            factorio_exe,
+                            profile_name,
+                            PROFILES[profile_name],
+                            artifacts=artifacts,
+                            extra_factorio_args=extra_factorio_args,
+                            strict_prototype_warnings=args.strict_prototype_warnings,
+                        )
+                    finally:
+                        if mod_settings_applied:
+                            restore_mod_settings(original_mod_settings)
+                    if report is not None:
+                        if current_mod_profile is not None:
+                            report["compat"] = current_mod_profile
+                            report["compat_label"] = compat_label(current_mod_profile, mod_profiles)
+                        report["setting_profile"] = setting_profile_name
+                        reports.append(report)
+                    if not ok:
+                        failed.append(run_label(current_mod_profile, setting_profile_name, profile_name))
     finally:
-        if mod_settings_changed:
-            restore_mod_settings(original_mod_settings)
         if not args.keep_mod_list:
             if original_mod_list is not None:
                 mod_list_file.write_bytes(original_mod_list)
@@ -1063,7 +1151,8 @@ def main() -> int:
     if failed:
         print("Fehlgeschlagen: " + ", ".join(failed))
     else:
-        print(f"Alle {len(selected) * len(selected_mod_profiles)} Profil(e) bestanden.")
+        total_runs = len(selected) * len(selected_mod_profiles) * len(selected_setting_profiles)
+        print(f"Alle {total_runs} Profil(e) bestanden.")
 
     if reports:
         print("\n=== JSON Reports ===")
