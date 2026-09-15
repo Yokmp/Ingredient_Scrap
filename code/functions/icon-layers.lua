@@ -83,8 +83,8 @@ function icon_layers.get(data_table, scrap_type, tech_icon, result_type, result_
       table.insert(icons, layer)
     end
   else
-    if mods["quality"] then
-      table.insert(icons, { icon = "__quality__/graphics/icons/recycling.png", icon_size = 64, scale = 0.8})
+    if mods["recycler"] then
+      table.insert(icons, { icon = "__recycler__/graphics/icons/recycling.png", icon_size = 64, scale = 0.8})
     else
       table.insert(icons, { icon = constants.icon_path .. "recycle-64.png", icon_size = 64, scale = 0.8})
     end
@@ -92,8 +92,8 @@ function icon_layers.get(data_table, scrap_type, tech_icon, result_type, result_
   end
 
   if not tech_icon then
-    if mods["quality"] then
-      table.insert(icons, { icon = "__quality__/graphics/icons/recycling-top.png", icon_size = 64, scale = 0.8})
+    if mods["recycler"] then
+      table.insert(icons, { icon = "__recycler__/graphics/icons/recycling-top.png", icon_size = 64, scale = 0.8})
     else
       table.insert(icons, { icon = constants.icon_path .. "recycle-top-64.png", icon_size = 64, scale = 0.8})
     end

@@ -17,16 +17,30 @@ end
 ---@param data_table ISdata_table
 function fish.apply(data_table)
   if not raw_fish_exists() then return end
-  if data.raw.recipe["yis-recycle-raw-fish"] or data_table_reader.generated_recipe(data_table, "yis-recycle-raw-fish") then
-    return
-  end
 
   mixed.ensure_scrap_item(data_table)
   mixed.ensure_recycle_recipe(data_table)
 
+  local active_recipe_name = "yis-recycle-raw-fish"
+  local existing_recipe = data.raw.recipe["raw-fish-recycling"]
+  if existing_recipe then
+    existing_recipe.categories = { "recycling" }
+    existing_recipe.category = nil
+    existing_recipe.enabled = false
+    existing_recipe.hidden = true
+    existing_recipe.hide_from_player_crafting = true
+    existing_recipe.allow_as_intermediate = false
+    existing_recipe.allow_intermediates = false
+    existing_recipe.auto_recycle = false
+  end
+
+  if data.raw.recipe[active_recipe_name] or data_table_reader.generated_recipe(data_table, active_recipe_name) then
+    return
+  end
+
   local recipe = {
     type = "recipe",
-    name = "yis-recycle-raw-fish",
+    name = active_recipe_name,
     localised_name = {
       "recipe-name.yis-recycle-name",
       { "item-name.recycle" },
@@ -34,10 +48,10 @@ function fish.apply(data_table)
     },
     icons = icon_layers.get(data_table, mixed.material, false, "item", mixed.scrap_name()),
     subgroup = "raw-material",
-    category = data_table_reader.constants(data_table).recycle_categories.solid,
+    categories = { "recycling" },
     order = "is-a[yis-recycle-raw-fish]",
-    enabled = false,
-    always_show_products = true,
+    enabled = true,
+    hidden = true,
     allow_as_intermediate = false,
     allow_intermediates = false,
     hide_from_player_crafting = true,
@@ -48,7 +62,6 @@ function fish.apply(data_table)
       { type = "item", name = mixed.scrap_name(), amount = 1 },
     },
   }
-
   data_table_writer.set_generated_recipe(data_table, recipe.name, recipe, {
     scrap_type = mixed.material,
     result_type = "item",
@@ -56,33 +69,27 @@ function fish.apply(data_table)
     source = "fish-compat",
   })
 
-  data_table_writer.set_generated_technology(data_table, recipe.name, {
-    type = "technology",
-    name = recipe.name,
-    localised_name = {
-      "technology-name.yis-recycling-name",
-      { "item-name.recycling" },
-      { "item-name.raw-fish" },
-    },
-    localised_description = { "technology-description.yis-recycling-description" },
-    icons = icon_layers.get(data_table, mixed.material, true, "item", mixed.scrap_name()),
-    enabled = true,
-    hidden = ISsettings.hide_tech == true and ISsettings.shallow_log == false,
-    effects = {
-      { type = "unlock-recipe", recipe = recipe.name },
-    },
-    research_trigger = {
-      type = "build-entity",
-      entity = "recycler",
-    },
-  })
+  if not (data.raw.achievement and data.raw.achievement["yis-fish-arent-real"]) then
+    data:extend({
+      {
+        type = "achievement",
+        name = "yis-fish-arent-real",
+        localised_name = { "achievement-name.yis-fish-arent-real" },
+        localised_description = { "achievement-description.yis-fish-arent-real" },
+        order = "z[ingredient-scrap]-a[fish-arent-real]",
+        hidden = true,
+        icon = "__Ingredient_Scrap__/graphics/fish-arent-real.png",
+        icon_size = 128,
+      },
+    })
+  end
 
   is_log.write(
     "compat",
     "info",
     "fish-mixed-scrap",
-    "Added raw fish recycling into mixed scrap.",
-    { recipe = recipe.name, result = mixed.scrap_name() }
+    "Added hidden raw fish recycling into mixed scrap.",
+    { recipe = active_recipe_name, result = mixed.scrap_name() }
   )
 end
 

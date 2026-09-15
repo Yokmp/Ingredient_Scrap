@@ -2,6 +2,7 @@ local expected = require("tools.test.expected")
 local material_resolver = require("code.resolver.materials.resolver")
 local material_flow = require("code.resolver.debug.material-flow")
 local data_table_writer = require("code.data_table.writer")
+local recipe_categories = require("code.functions.recipe-categories")
 local recycle_order = require("code.functions.recycle-order")
 require("code.override.categories")
 local source_overrides = require("code.override.sources")
@@ -49,7 +50,7 @@ local function result_signature(result)
     amount = result.amount,
     amount_min = result.amount_min,
     amount_max = result.amount_max,
-    probability = result.probability,
+    probability = result.independent_probability or result.probability,
   }
 end
 
@@ -151,7 +152,7 @@ end
 ---Returns the first recycling recipe that received a generated scrap result.
 local function recycling_recipe_with_scrap_result()
   for recipe_name, recipe in pairs(data.raw.recipe or {}) do
-    if recipe.category == "recycling" and recipe_name:match("^yis%-recycle%-") == nil and scrap_results(recipe)[1] then
+    if recipe_categories.has(recipe, "recycling") and recipe_name:match("^yis%-recycle%-") == nil and scrap_results(recipe)[1] then
       return recipe_name
     end
   end
@@ -185,10 +186,10 @@ local function expected_recycle_input_amount(data_table, scrap_name)
       if result.name == scrap_name then
         local expected
         if ISsettings.fixed_amount then
-          expected = (result.amount or 1) * (result.probability or 1)
+          expected = (result.amount or 1) * (result.independent_probability or result.probability or 1)
         else
           local mid = ((result.amount_min or 1) + (result.amount_max or 1)) / 2
-          expected = mid * (result.probability or 1)
+          expected = mid * (result.independent_probability or result.probability or 1)
         end
         total_expected = total_expected + expected
         count = count + 1
@@ -216,6 +217,12 @@ local function has_any_category(machine, allowed_categories)
     if allowed_categories[crafting_category] then return true end
   end
   return false
+end
+
+---Returns true when a machine has a Space Age metallurgy-style category.
+local function has_metallurgy_category(machine)
+  return category_count(machine, "metallurgy") > 0
+    or category_count(machine, "metallurgy-or-assembling") > 0
 end
 
 ---Returns the names of all machines of a prototype type that can craft the category.
@@ -535,11 +542,11 @@ function runner.run(production_flow_dump)
     local mixed_recycle_total_probability = 0
     local mixed_recycle_results_sorted = true
     for index, result in ipairs(mixed_recycle_results) do
-      mixed_recycle_total_probability = mixed_recycle_total_probability + (result.probability or 1)
+      mixed_recycle_total_probability = mixed_recycle_total_probability + (result.independent_probability or result.probability or 1)
       local previous = mixed_recycle_results[index - 1]
       if previous then
-        local previous_probability = previous.probability or 1
-        local current_probability = result.probability or 1
+        local previous_probability = previous.independent_probability or previous.probability or 1
+        local current_probability = result.independent_probability or result.probability or 1
         if previous_probability < current_probability then
           mixed_recycle_results_sorted = false
         end
@@ -551,14 +558,15 @@ function runner.run(production_flow_dump)
       ) or (
         mixed_rows > 0 and
         mixed_recycle_recipe and
-        mixed_recycle_recipe.category == "recycling" and
+        recipe_categories.has(mixed_recycle_recipe, "recycling") and
         mixed_recycle_recipe.enabled == false and
         mixed_recycle_recipe.hide_from_player_crafting == true
       ),
       nil,
       {
         mixed_rows = mixed_rows,
-        recipe_category = mixed_recycle_recipe and mixed_recycle_recipe.category,
+        recipe_category = recipe_categories.first(mixed_recycle_recipe),
+        recipe_categories = recipe_categories.list(mixed_recycle_recipe),
         enabled = mixed_recycle_recipe and mixed_recycle_recipe.enabled,
         hide_from_player_crafting = mixed_recycle_recipe and mixed_recycle_recipe.hide_from_player_crafting,
       })
@@ -1221,11 +1229,13 @@ function runner.run(production_flow_dump)
 
   local recycle_item_category = "yis-recycle-to-item"
   local recycle_fluid_category = "yis-recycle-to-fluid"
+  local recycle_chemical_category = "yis-recycle-chemical"
   local furnace_recycle_source_categories = {
     ["smelting"] = true,
     ["recycling"] = true,
   }
   local furnace_fluid_recycle_source_categories = {
+    ["metallurgy"] = true,
     ["metallurgy-or-assembling"] = true,
   }
   local assembling_recycle_source_categories = {
@@ -1234,11 +1244,13 @@ function runner.run(production_flow_dump)
     ["advanced-crafting"] = true,
   }
   local assembling_fluid_recycle_source_categories = {
-    ["basic-crafting"] = true,
-    ["crafting"] = true,
-    ["advanced-crafting"] = true,
     ["crafting-with-fluid-or-metallurgy"] = true,
+    ["metallurgy"] = true,
     ["metallurgy-or-assembling"] = true,
+  }
+  local chemical_recycle_source_categories = {
+    ["chemistry"] = true,
+    ["chemistry-or-cryogenics"] = true,
   }
   local eligible_furnace_count = 0
   local patched_furnace_count = 0
@@ -1259,7 +1271,8 @@ function runner.run(production_flow_dump)
       end
     end
     if category_count(furnace, recycle_item_category) > 1 or
-      category_count(furnace, recycle_fluid_category) > 1 then
+      category_count(furnace, recycle_fluid_category) > 1 or
+      category_count(furnace, recycle_chemical_category) > 1 then
       duplicate_machine = furnace.name
     end
   end
@@ -1269,17 +1282,18 @@ function runner.run(production_flow_dump)
     { eligible = eligible_furnace_count, patched = patched_furnace_count })
   local recycler_recipe = data.raw.recipe["yis-recycle-mixed-scrap"]
   add_case("categories.recycler.required-for-mixed-scrap", "mixed scrap has a recycler that accepts the recycling category",
-    data.raw.furnace.recycler and
+      data.raw.furnace.recycler and
       data.raw.item.recycler and
       data.raw.recipe.recycler and
       category_count(data.raw.furnace.recycler, "recycling") == 1 and
-      (not recycler_recipe or recycler_recipe.category == "recycling"),
+      (not recycler_recipe or recipe_categories.has(recycler_recipe, "recycling")),
     nil,
     {
       entity = data.raw.furnace.recycler,
       item = data.raw.item.recycler,
       recipe = data.raw.recipe.recycler,
-      mixed_recycle_category = recycler_recipe and recycler_recipe.category,
+      mixed_recycle_category = recipe_categories.first(recycler_recipe),
+      mixed_recycle_categories = recipe_categories.list(recycler_recipe),
     })
   if data.raw.furnace.recycler then
     add_case("categories.furnace.recycler", "quality recycler can craft item recycle recipes",
@@ -1307,7 +1321,7 @@ function runner.run(production_flow_dump)
     { eligible = eligible_fluid_furnace_count, patched = patched_fluid_furnace_count })
   if data.raw.furnace.foundry then
     add_case("categories.furnace.foundry-fluid-only", "Space Age foundry gets fluid recycling but not item recycling",
-      category_count(data.raw.furnace.foundry, "metallurgy-or-assembling") > 0 and
+      has_metallurgy_category(data.raw.furnace.foundry) and
         category_count(data.raw.furnace.foundry, recycle_item_category) == 0 and
         category_count(data.raw.furnace.foundry, recycle_fluid_category) == 1,
       nil,
@@ -1347,6 +1361,8 @@ function runner.run(production_flow_dump)
   local patched_assembler_count = 0
   local fluid_assembler_count = 0
   local patched_fluid_assembler_count = 0
+  local chemical_assembler_count = 0
+  local patched_chemical_assembler_count = 0
   local foundry = data.raw.furnace.foundry or data.raw["assembling-machine"].foundry
   duplicate_machine = nil
   for _, assembling_machine in pairs(data.raw["assembling-machine"] or {}) do
@@ -1364,24 +1380,35 @@ function runner.run(production_flow_dump)
         end
       end
     end
+    if has_any_category(assembling_machine, chemical_recycle_source_categories) then
+      chemical_assembler_count = chemical_assembler_count + 1
+      if category_count(assembling_machine, recycle_chemical_category) == 1 then
+        patched_chemical_assembler_count = patched_chemical_assembler_count + 1
+      end
+    end
     if category_count(assembling_machine, recycle_item_category) > 1 or
-      category_count(assembling_machine, recycle_fluid_category) > 1 then
+      category_count(assembling_machine, recycle_fluid_category) > 1 or
+      category_count(assembling_machine, recycle_chemical_category) > 1 then
       duplicate_machine = assembling_machine.name
     end
   end
-  add_case("categories.assembling.item", "eligible assembling machines can craft item recycle recipes",
-    eligible_assembler_count > 0 and patched_assembler_count == eligible_assembler_count,
+  add_case("categories.assembling.no-standard-item-recycling", "normal assembling machines do not craft item recycle recipes",
+    eligible_assembler_count > 0 and patched_assembler_count == 0,
     nil,
     { eligible = eligible_assembler_count, patched = patched_assembler_count })
-  add_case("categories.assembling.fluid", "fluid-capable eligible assembling machines can craft fluid recycle recipes",
+  add_case("categories.assembling.fluid", "metallurgy assembling machines can craft fluid recycle recipes",
     fluid_assembler_count > 0 and patched_fluid_assembler_count == fluid_assembler_count,
     nil,
     { eligible = fluid_assembler_count, patched = patched_fluid_assembler_count })
+  add_case("categories.assembling.chemical", "chemical assembling machines can craft chemical recycle recipes",
+    chemical_assembler_count > 0 and patched_chemical_assembler_count == chemical_assembler_count,
+    nil,
+    { eligible = chemical_assembler_count, patched = patched_chemical_assembler_count })
   add_case("categories.assembling.no-duplicates", "assembling machine recycle categories are not duplicated",
     duplicate_machine == nil, nil, { duplicate = duplicate_machine })
   if foundry then
     add_case("categories.foundry.fluid-only", "foundry gets fluid recycling but not item recycling",
-      category_count(foundry, "metallurgy-or-assembling") > 0 and
+      has_metallurgy_category(foundry) and
         category_count(foundry, recycle_item_category) == 0 and
         category_count(foundry, recycle_fluid_category) == 1,
       nil,
@@ -1480,22 +1507,31 @@ function runner.run(production_flow_dump)
   local item_recycling_assemblers = machine_names_with_category("assembling-machine", recycle_item_category)
   local item_recycling_furnaces = machine_names_with_category("furnace", recycle_item_category)
   add_case("categories.iron-recycle.recipe", "iron-scrap recycle recipe uses item recycling category",
-    iron_recycle_recipe and iron_recycle_recipe.category == recycle_item_category,
+    iron_recycle_recipe and recipe_categories.has(iron_recycle_recipe, recycle_item_category),
     nil,
-    { recipe_category = iron_recycle_recipe and iron_recycle_recipe.category, expected = recycle_item_category })
-  add_case("categories.iron-recycle.assembling", "at least one assembling machine accepts iron-scrap recycle recipes",
-    iron_recycle_recipe and array_contains(item_recycling_assemblers, "assembling-machine-1"),
+    { recipe_category = recipe_categories.first(iron_recycle_recipe), recipe_categories = recipe_categories.list(iron_recycle_recipe), expected = recycle_item_category })
+  add_case("categories.iron-recycle.not-base-assembling", "base assembling machines do not accept iron-scrap recycle recipes",
+    iron_recycle_recipe and not array_contains(item_recycling_assemblers, "assembling-machine-1"),
     nil,
-    { recipe_category = iron_recycle_recipe and iron_recycle_recipe.category, machines = item_recycling_assemblers })
+    { recipe_category = recipe_categories.first(iron_recycle_recipe), recipe_categories = recipe_categories.list(iron_recycle_recipe), machines = item_recycling_assemblers })
   add_case("categories.iron-recycle.furnace", "at least one furnace accepts iron-scrap recycle recipes",
     iron_recycle_recipe and #item_recycling_furnaces > 0,
     nil,
-    { recipe_category = iron_recycle_recipe and iron_recycle_recipe.category, machines = item_recycling_furnaces })
+    { recipe_category = recipe_categories.first(iron_recycle_recipe), recipe_categories = recipe_categories.list(iron_recycle_recipe), machines = item_recycling_furnaces })
   add_case("categories.iron-recycle.result", "iron-scrap recycles to iron-plate",
     iron_recycle_recipe and iron_recycle_recipe.results and
       iron_recycle_recipe.results[1] and iron_recycle_recipe.results[1].name == "iron-plate",
     nil,
     { result = iron_recycle_recipe and iron_recycle_recipe.results and iron_recycle_recipe.results[1] })
+  local plastic_recycle_recipe = data.raw.recipe["yis-recycle-plastic-scrap"]
+  add_case("categories.plastic-recycle.chemical", "plastic-scrap recycle recipe uses chemical recycling category",
+    not plastic_recycle_recipe or recipe_categories.has(plastic_recycle_recipe, recycle_chemical_category),
+    nil,
+    {
+      recipe_category = recipe_categories.first(plastic_recycle_recipe),
+      recipe_categories = recipe_categories.list(plastic_recycle_recipe),
+      chemical_plant = data.raw["assembling-machine"]["chemical-plant"] and data.raw["assembling-machine"]["chemical-plant"].crafting_categories,
+    })
   local active_lookup_direct = ISsettings.ancestry_policy
     and ISsettings.ancestry_policy.mode ~= "component-heavy"
     and ISsettings.ancestry_policy.root_policy ~= "resources"
@@ -1571,14 +1607,15 @@ function runner.run(production_flow_dump)
     local imersium_recycle_recipe = data.raw.recipe["yis-recycle-imersium-scrap"]
     local imersium_result = imersium_recycle_recipe and imersium_recycle_recipe.results and imersium_recycle_recipe.results[1]
     add_case("compat.krastorio2.imersium-recycle-visible", "K2 imersium scrap has a visible item recycle recipe to plate",
-      imersium_recycle_recipe and
+        imersium_recycle_recipe and
         imersium_recycle_recipe.hidden ~= true and
-        imersium_recycle_recipe.category == recycle_item_category and
+        recipe_categories.has(imersium_recycle_recipe, recycle_item_category) and
         imersium_result and imersium_result.type == "item" and imersium_result.name == "kr-imersium-plate",
       nil,
       {
         hidden = imersium_recycle_recipe and imersium_recycle_recipe.hidden,
-        category = imersium_recycle_recipe and imersium_recycle_recipe.category,
+        category = recipe_categories.first(imersium_recycle_recipe),
+        categories = recipe_categories.list(imersium_recycle_recipe),
         result = imersium_result,
       })
 
@@ -1769,7 +1806,7 @@ function runner.run(production_flow_dump)
     hidden = solid_recipe.hidden or false,
     enabled = solid_recipe.enabled,
     subgroup = solid_recipe.subgroup,
-    category = solid_recipe.category,
+    categories = recipe_categories.list(solid_recipe),
     allow_as_intermediate = solid_recipe.allow_as_intermediate,
     hide_from_player_crafting = solid_recipe.hide_from_player_crafting,
     result = solid_recipe.results and solid_recipe.results[1],
@@ -1795,7 +1832,7 @@ function runner.run(production_flow_dump)
     hidden = hidden_recipe.hidden or false,
     enabled = hidden_recipe.enabled,
     subgroup = hidden_recipe.subgroup,
-    category = hidden_recipe.category,
+    categories = recipe_categories.list(hidden_recipe),
     allow_as_intermediate = hidden_recipe.allow_as_intermediate,
     hide_from_player_crafting = hidden_recipe.hide_from_player_crafting,
     result = hidden_recipe.results and hidden_recipe.results[1],
@@ -1811,7 +1848,7 @@ function runner.run(production_flow_dump)
     hidden = disabled_recipe.hidden or false,
     enabled = disabled_recipe.enabled,
     subgroup = disabled_recipe.subgroup,
-    category = disabled_recipe.category,
+    categories = recipe_categories.list(disabled_recipe),
     allow_as_intermediate = disabled_recipe.allow_as_intermediate,
     hide_from_player_crafting = disabled_recipe.hide_from_player_crafting,
     result = disabled_recipe.results and disabled_recipe.results[1],
@@ -1829,7 +1866,7 @@ function runner.run(production_flow_dump)
       hidden = fluid_recipe.hidden or false,
       enabled = fluid_recipe.enabled,
       subgroup = fluid_recipe.subgroup,
-      category = fluid_recipe.category,
+      categories = recipe_categories.list(fluid_recipe),
       allow_as_intermediate = fluid_recipe.allow_as_intermediate,
       hide_from_player_crafting = fluid_recipe.hide_from_player_crafting,
       result = fluid_recipe.results and fluid_recipe.results[1],
@@ -1863,7 +1900,7 @@ function runner.run(production_flow_dump)
       hidden = solution_recipe.hidden or false,
       enabled = solution_recipe.enabled,
       subgroup = solution_recipe.subgroup,
-      category = solution_recipe.category,
+      categories = recipe_categories.list(solution_recipe),
       allow_as_intermediate = solution_recipe.allow_as_intermediate,
       hide_from_player_crafting = solution_recipe.hide_from_player_crafting,
       result = solution_recipe.results and solution_recipe.results[1],
@@ -1891,7 +1928,7 @@ function runner.run(production_flow_dump)
       hidden = hidden_fluid_recipe.hidden or false,
       enabled = hidden_fluid_recipe.enabled,
       subgroup = hidden_fluid_recipe.subgroup,
-      category = hidden_fluid_recipe.category,
+      categories = recipe_categories.list(hidden_fluid_recipe),
       allow_as_intermediate = hidden_fluid_recipe.allow_as_intermediate,
       hide_from_player_crafting = hidden_fluid_recipe.hide_from_player_crafting,
       result = hidden_fluid_recipe.results and hidden_fluid_recipe.results[1],
@@ -1942,35 +1979,45 @@ function runner.run(production_flow_dump)
   end
 
   if data.raw.item["raw-fish"] or (data.raw.capsule and data.raw.capsule["raw-fish"]) then
-    local fish_recipe = data.raw.recipe["yis-recycle-raw-fish"]
-    local fish_tech = data.raw.technology["yis-recycle-raw-fish"]
+    local base_fish_recipe = data.raw.recipe["raw-fish-recycling"]
+    local fallback_fish_recipe = data.raw.recipe["yis-recycle-raw-fish"]
+    local fish_recipe = fallback_fish_recipe
+    local fish_achievement = data.raw.achievement and data.raw.achievement["yis-fish-arent-real"]
     add_case("compat.fish.mixed-scrap", "raw fish can be recycled into mixed scrap",
       fish_recipe and
-        fish_recipe.enabled == false and
+        fish_recipe.enabled == true and
+        fish_recipe.hidden == true and
         fish_recipe.hide_from_player_crafting == true and
-        fish_recipe.category == "yis-recycle-to-item" and
+        recipe_categories.has(fish_recipe, "recycling") and
         fish_recipe.ingredients and fish_recipe.ingredients[1] and
         fish_recipe.ingredients[1].name == "raw-fish" and
         fish_recipe.ingredients[1].amount == 1 and
         fish_recipe.results and fish_recipe.results[1] and
         fish_recipe.results[1].name == "yis-mixed-scrap" and
         fish_recipe.results[1].amount == 1 and
+        (not base_fish_recipe or (
+          base_fish_recipe.enabled == false and
+          base_fish_recipe.hidden == true and
+          base_fish_recipe.hide_from_player_crafting == true
+        )) and
         data.raw.item["yis-mixed-scrap"] and data.raw.recipe["yis-recycle-mixed-scrap"],
       nil,
-      { recipe = fish_recipe })
-    local expected_fish_technology_hidden = ISsettings.hide_tech == true and ISsettings.shallow_log == false
-    add_case("compat.fish.recycler-trigger-tech", "raw fish recycling unlocks after building a recycler",
-      fish_tech and
-        fish_tech.enabled == true and
-        fish_tech.hidden == expected_fish_technology_hidden and
-        fish_tech.research_trigger and
-        fish_tech.research_trigger.type == "build-entity" and
-        fish_tech.research_trigger.entity == "recycler" and
-        technology_unlocks_recipe("yis-recycle-raw-fish"),
+      {
+        recipe = fish_recipe,
+        base_recipe = base_fish_recipe,
+        fallback_recipe = fallback_fish_recipe,
+      })
+    add_case("compat.fish.hidden-achievement", "raw fish recycling defines a hidden achievement",
+      fish_achievement and
+        fish_achievement.hidden == true and
+        fish_achievement.icon_size == 128 and
+        data.raw.technology["yis-recycle-raw-fish"] == nil,
       nil,
       {
-        technology = fish_tech,
-        expected_hidden = expected_fish_technology_hidden,
+        achievement = fish_achievement,
+        technology = data.raw.technology["yis-recycle-raw-fish"],
+        base_recipe = base_fish_recipe,
+        fallback_recipe = fallback_fish_recipe,
       })
   end
 

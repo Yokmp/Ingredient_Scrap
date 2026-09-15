@@ -11,7 +11,11 @@ function init.create(material_overrides)
   return {
     constants = {
       icon_path = "__Ingredient_Scrap__/graphics/icons/",
-      recycle_categories = { solid = "yis-recycle-to-item", fluid = "yis-recycle-to-fluid" },
+      recycle_categories = {
+        solid = "yis-recycle-to-item",
+        fluid = "yis-recycle-to-fluid",
+        chemical = "yis-recycle-chemical",
+      },
       icon_scrap = { "scrap-64" },
       scrap_pictures = 3,
     },

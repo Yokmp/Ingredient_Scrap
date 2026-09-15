@@ -4,6 +4,7 @@ timing.mark("data-final-fixes", "start")
 --#endregion
 
 local context = yokmods and yokmods.ingredient_scrap and yokmods.ingredient_scrap.internal
+local recipe_categories = require("code.functions.recipe-categories")
 
 ---Returns true for the tiny Base + Ingredient Scrap profile used for fragile vanilla-only compatibility patches.
 local function is_small_vanilla_profile()
@@ -118,7 +119,7 @@ end
 local function remove_scrap_from_recycling_recipes()
   for recipe_name, recipe in pairs(data.raw.recipe or {}) do
     if recipe.results and not is_ingredient_scrap_recycle_recipe(recipe_name) and
-        (recipe.category == "recycling" or recipe_name:match("%-recycling$") ~= nil) then
+        (recipe_categories.has(recipe, "recycling") or recipe_name:match("%-recycling$") ~= nil) then
       local filtered_results = {}
       local removed = false
       for _, result in ipairs(recipe.results) do

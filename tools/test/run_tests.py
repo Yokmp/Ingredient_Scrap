@@ -532,7 +532,7 @@ def collect_icon_sources(value: object, by_mod: dict[str, set[str]] | None = Non
 
 
 def builtin_data_mod_path(root: Path, mod_name: str) -> Path | None:
-    if mod_name in {"core", "base", "quality", "space-age", "elevated-rails"}:
+    if mod_name in {"core", "base", "recycler", "quality", "space-age", "elevated-rails"}:
         path = root / "data" / mod_name
         if path.exists():
             return path

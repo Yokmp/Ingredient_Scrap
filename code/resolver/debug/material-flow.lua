@@ -1,5 +1,6 @@
 local resolver = require("code.resolver.materials.resolver")
 local naming = require("code.functions.naming")
+local recipe_categories = require("code.functions.recipe-categories")
 
 local material_flow = {}
 
@@ -102,7 +103,7 @@ local function result_signature(result)
     amount = result.amount,
     amount_min = result.amount_min,
     amount_max = result.amount_max,
-    probability = result.probability,
+    probability = result.independent_probability or result.probability,
     prototype = item_or_fluid_ref(result.type, result.name),
   }
 end
@@ -118,7 +119,7 @@ local function ingredient_signature(ingredient)
     amount = ingredient.amount,
     amount_min = ingredient.amount_min,
     amount_max = ingredient.amount_max,
-    probability = ingredient.probability,
+    probability = ingredient.independent_probability or ingredient.probability,
     prototype = item_or_fluid_ref(ingredient.type or "item", ingredient.name),
   }
 end
@@ -191,8 +192,9 @@ end
 ---@param recipe table
 ---@return boolean
 local function is_generated_recycle_recipe(recipe)
-  return recipe.category == "yis-recycle-to-item"
-    or recipe.category == "yis-recycle-to-fluid"
+  return recipe_categories.has(recipe, "yis-recycle-to-item")
+    or recipe_categories.has(recipe, "yis-recycle-to-fluid")
+    or recipe_categories.has(recipe, "yis-recycle-chemical")
     or (type(recipe.name) == "string" and recipe.name:match("^yis%-recycle%-") ~= nil)
 end
 
@@ -238,8 +240,8 @@ local function recipe_custom_metadata(recipe)
   if not recipe then return nil end
   local markers = {}
 
-  if recipe.category then
-    add_marker(markers, "category:" .. recipe.category, recipe.category, recipe.category)
+  for _, category in ipairs(recipe_categories.list(recipe)) do
+    add_marker(markers, "category:" .. category, category, category)
   end
   if recipe.hidden then
     add_marker(markers, "hidden", true, "hidden")
@@ -307,7 +309,7 @@ local function minable_results(resource)
         amount = result.amount,
         amount_min = result.amount_min,
         amount_max = result.amount_max,
-        probability = result.probability,
+        probability = result.independent_probability or result.probability,
       })
     end
   end
@@ -366,7 +368,8 @@ local function build_recycle_index(data_table)
       push(by_material[material], {
         recipe = recipe_name,
         recipe_icon = icon_signature(recipe),
-        category = recipe and recipe.category,
+        category = recipe_categories.first(recipe),
+        categories = recipe_categories.list(recipe),
         hidden = recipe and recipe.hidden or false,
         result = result_signature(result),
       })
@@ -395,7 +398,8 @@ local function build_skipped_sources(data_table)
       source_recipe = {
         name = source.recipe,
         icon = icon_signature(source_recipe),
-        category = source.category,
+        category = recipe_categories.first(source_recipe) or source.category,
+        categories = recipe_categories.list(source_recipe),
         custom = recipe_custom_metadata(source_recipe),
         ingredients = recipe_ingredients(source_recipe, source),
         results = recipe_results(source_recipe),
@@ -449,7 +453,8 @@ function material_flow.build(data_table)
           source_recipe = {
             name = recipe_name,
             icon = icon_signature(source_recipe),
-            category = source_recipe and source_recipe.category,
+            category = recipe_categories.first(source_recipe),
+            categories = recipe_categories.list(source_recipe),
             custom = recipe_custom_metadata(source_recipe),
             main_product = insert and insert.main_product,
             main_product_prototype = item_or_fluid_ref_by_name(insert and insert.main_product),
@@ -544,7 +549,8 @@ local function production_recipe_node(recipe)
   return {
     name = recipe.name,
     icon = icon_signature(recipe),
-    category = recipe.category,
+    category = recipe_categories.first(recipe),
+    categories = recipe_categories.list(recipe),
     subgroup = recipe.subgroup,
     order = recipe.order,
     enabled = recipe.enabled,
@@ -596,7 +602,7 @@ end
 ---@return boolean
 local function is_side_chain_recipe(recipe)
   if not recipe then return false end
-  return recipe.category == "recycling"
+  return recipe_categories.has(recipe, "recycling")
     or contains_any_term(recipe.name, { "barrel", "barreling", "-recycling" })
 end
 
@@ -610,7 +616,8 @@ local function is_chemical_recipe(recipe)
     "solution", "electrolysis", "hydro", "water", "chlor", "sulfur",
     "nitric", "ammonia", "fluoric",
   }
-  return contains_any_term(recipe.category, terms) or contains_any_term(recipe.name, terms)
+  return recipe_categories.any_matches(recipe, function(category) return contains_any_term(category, terms) end)
+    or contains_any_term(recipe.name, terms)
 end
 
 ---Returns true when a recipe name or category looks like ore or smelting process work.
@@ -623,7 +630,8 @@ local function is_smelting_process_recipe(recipe)
     "blast", "powder", "pellet", "ingot", "slag", "oxide", "crystal",
     "chunk", "geode", "purif", "leach", "liquif",
   }
-  return contains_any_term(recipe.category, terms) or contains_any_term(recipe.name, terms)
+  return recipe_categories.any_matches(recipe, function(category) return contains_any_term(category, terms) end)
+    or contains_any_term(recipe.name, terms)
 end
 
 ---Returns true when a recipe is hidden or explicitly excluded from raw decomposition.

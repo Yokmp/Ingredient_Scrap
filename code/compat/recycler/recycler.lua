@@ -98,7 +98,7 @@ local prototypes = {
     type = "recipe",
     name = "recycler",
     icon = "__Ingredient_Scrap__/graphics/icons/recycler.png",
-    category = "crafting",
+    categories = {"crafting"},
     enabled = true,
     ingredients = {
       { type = "item", name = "steel-plate", amount = 10 },

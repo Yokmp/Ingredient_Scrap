@@ -7,6 +7,7 @@ local data_table_writer = require("code.data_table.writer")
 local category_overrides = require("code.override.categories")
 local is_log = require("code.functions.is-log")
 local naming = require("code.functions.naming")
+local recipe_categories = require("code.functions.recipe-categories")
 local recycle_order = require("code.functions.recycle-order")
 
 local patcher = {}
@@ -64,12 +65,13 @@ local function update_furnace_result_inventory_sizes(data_table)
   local max_recipe_by_category = {}
 
   for recipe_name, recipe in pairs(data.raw.recipe or {}) do
-    local category = recipe.category
-    if category and has_ingredient_scrap_item_result(recipe) then
+    if has_ingredient_scrap_item_result(recipe) then
       local width = item_result_width(recipe)
-      if width > (max_width_by_category[category] or 0) then
-        max_width_by_category[category] = width
-        max_recipe_by_category[category] = recipe_name
+      for _, category in ipairs(recipe_categories.list(recipe)) do
+        if width > (max_width_by_category[category] or 0) then
+          max_width_by_category[category] = width
+          max_recipe_by_category[category] = recipe_name
+        end
       end
     end
   end
@@ -225,8 +227,8 @@ function patcher.validate_generated_prototypes(data_table)
     if not recipe.results or not recipe.results[1] then
       add_error(errors, "recipe.results", name, "Generated recipe has no results", { source = source })
     end
-    if not recipe.category then
-      add_error(errors, "recipe.category", name, "Generated recycle recipe has no category", { source = source })
+    if not recipe.categories or not recipe.categories[1] then
+      add_error(errors, "recipe.categories", name, "Generated recycle recipe has no categories", { source = source })
     end
   end
 
@@ -265,10 +267,10 @@ function patcher.patch_recycle_amounts(data_table)
         totals[scrap_name] = totals[scrap_name] or { sum = 0, count = 0 }
         local expected
         if ISsettings.fixed_amount then
-          expected = (result.amount or 1) * (result.probability or 1)
+          expected = (result.amount or 1) * (result.independent_probability or result.probability or 1)
         else
           local mid = ((result.amount_min or 1) + (result.amount_max or 1)) / 2
-          expected = mid * (result.probability or 1)
+          expected = mid * (result.independent_probability or result.probability or 1)
         end
         totals[scrap_name].sum = totals[scrap_name].sum + expected
         totals[scrap_name].count = totals[scrap_name].count + 1
@@ -305,6 +307,7 @@ local function patch_machine_categories(data_table)
   category_overrides.apply_registered_rules({
     solid = constants.recycle_categories.solid,
     fluid = constants.recycle_categories.fluid,
+    chemical = constants.recycle_categories.chemical,
   })
 end
 
@@ -346,7 +349,7 @@ function patcher.patch(data_table)
   for recipe_name, insert_data in pairs(data_table_reader.recipe_inserts(data_table)) do
     local recipe = data.raw.recipe[recipe_name]
     local is_recycling_recipe = recipe and
-      (recipe.category == "recycling" or recipe_name:match("%-recycling$") ~= nil)
+      (recipe_categories.has(recipe, "recycling") or recipe_name:match("%-recycling$") ~= nil)
     if recipe and insert_data.results and not is_recycling_recipe then
       recipe.main_product = insert_data.main_product
       recipe.results = recipe.results or {}

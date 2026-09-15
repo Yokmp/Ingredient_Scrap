@@ -2,6 +2,7 @@ local graph = require("code.resolver.ancestry.graph")
 local roots = require("code.resolver.ancestry.roots")
 local composition_resolver = require("code.resolver.ancestry.resolver")
 local material_resolver = require("code.resolver.materials.resolver")
+local recipe_categories = require("code.functions.recipe-categories")
 
 local recipe_forms = {}
 
@@ -72,7 +73,7 @@ end
 ---@param result table
 ---@return boolean
 local function looks_like_alloy_process(recipe, result)
-  return contains_any(recipe.category, ALLOY_TERMS)
+  return recipe_categories.any_matches(recipe, function(category) return contains_any(category, ALLOY_TERMS) end)
     or contains_any(recipe.name, ALLOY_TERMS)
     or contains_any(result.name, ALLOY_TERMS)
 end

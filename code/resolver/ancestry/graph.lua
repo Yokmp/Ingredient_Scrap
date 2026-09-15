@@ -1,4 +1,5 @@
 local graph = {}
+local recipe_categories = require("code.functions.recipe-categories")
 
 local GENERATED_PREFIXES = { "yis-recycle-" }
 local SIDE_CHAIN_TERMS = {
@@ -55,9 +56,10 @@ end
 ---@return boolean
 function graph.looks_like_side_chain(recipe)
   if not recipe then return false end
-  if recipe.category == "recycling" then return true end
+  if recipe_categories.has(recipe, "recycling") then return true end
   if type(recipe.name) == "string" and recipe.name:match("%-recycling$") then return true end
-  return contains_side_chain_term(recipe.name) or contains_side_chain_term(recipe.category)
+  return contains_side_chain_term(recipe.name)
+    or recipe_categories.any_matches(recipe, contains_side_chain_term)
 end
 
 ---Scores a producer recipe for ancestry resolution priority.

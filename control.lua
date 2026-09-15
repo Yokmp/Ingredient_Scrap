@@ -12,8 +12,21 @@ local ancestry_runtime_name = "ingredient-scrap-ancestry-runtime"
 local ancestry_runtime_path = "Ingredient_Scrap/ancestry-runtime.json"
 local recipe_forms_name = "ingredient-scrap-recipe-forms"
 local recipe_forms_path = "Ingredient_Scrap/recipe-forms.json"
+local fish_recycle_recipe_name = "yis-recycle-raw-fish"
+local fish_achievement_name = "yis-fish-arent-real"
+local fish_achievement_recipe_names = {
+  ["raw-fish-recycling"] = true,
+  [fish_recycle_recipe_name] = true,
+}
 
 --#region debug
+---Returns true when runtime debug helpers should be active.
+---@return boolean
+local function is_debug_runtime_enabled()
+  local debug_setting = settings and settings.startup and settings.startup["yis-IS_DEBUG"]
+  return debug_setting and debug_setting.value == true
+end
+
 ---Returns the stack size for an item, falling back to 1 for unknown prototypes.
 ---@param item_name string
 ---@return integer
@@ -55,9 +68,30 @@ local function add_machine_item_stacks(requests)
   end
 end
 
+---Builds the shared debug inventory kit for manual prototype and achievement testing.
+---@return table<string, integer>
+local function build_debug_inventory_requests()
+  local requests = {}
+  add_matching_item_stacks(requests, "^yis%-.+%-scrap$")
+  add_matching_item_stacks(requests, "%-ore$")
+  add_machine_item_stacks(requests)
+  add_inventory_request(requests, "raw-fish", 10)
+  add_inventory_request(requests, "coal")
+  add_inventory_request(requests, "solar-panel", 20)
+  add_inventory_request(requests, "small-electric-pole", 20)
+  add_inventory_request(requests, "personal-roboport-mk2-equipment")
+  add_inventory_request(requests, "battery-mk2-equipment")
+  add_inventory_request(requests, "fission-reactor-equipment")
+  add_inventory_request(requests, "power-armor-mk2")
+  add_inventory_request(requests, "infinity-chest")
+  add_inventory_request(requests, "construction-robot", 50)
+  return requests
+end
+
 ---Inserts the requested debug items into the player's inventory.
 ---@param player LuaPlayer
 ---@param requests table<string, integer>
+---@return integer inserted_total
 local function insert_debug_inventory(player, requests)
   local inserted_total = 0
   local missed = {}
@@ -74,6 +108,7 @@ local function insert_debug_inventory(player, requests)
   if #missed > 0 then
     player.print("[IS-DEBUG] Inventory full or blocked for: " .. table.concat(missed, ", "))
   end
+  return inserted_total
 end
 
 ---Registers the debug inventory command for manual prototype testing.
@@ -82,30 +117,38 @@ local function register_debug_inventory_command()
     local player = command.player_index and game.get_player(command.player_index)
     if not player then return end
 
-    local requests = {}
-    add_matching_item_stacks(requests, "^yis%-.+%-scrap$")
-    add_matching_item_stacks(requests, "%-ore$")
-    add_machine_item_stacks(requests)
-    add_inventory_request(requests, "coal")
-    add_inventory_request(requests, "personal-roboport-mk2-equipment")
-    add_inventory_request(requests, "battery-mk2-equipment")
-    add_inventory_request(requests, "fission-reactor-equipment")
-    add_inventory_request(requests, "power-armor-mk2")
-    add_inventory_request(requests, "infinity-chest")
-    add_inventory_request(requests, "construction-robot", 50)
-
-    insert_debug_inventory(player, requests)
+    insert_debug_inventory(player, build_debug_inventory_requests())
   end)
 end
 
 register_debug_inventory_command()
+
+script.on_event(defines.events.on_player_created, function(event)
+  if not is_debug_runtime_enabled() then return end
+  storage.yis_pending_debug_inventory = storage.yis_pending_debug_inventory or {}
+  storage.yis_pending_debug_inventory[event.player_index] = 60
+end)
 --#endregion
 
 ---Returns true for Ingredient Scrap recycling recipe categories.
 ---@param category string?
 ---@return boolean
 local function is_recycle_category(category)
-  return category == "yis-recycle-to-item" or category == "yis-recycle-to-fluid"
+  return category == "yis-recycle-to-item"
+    or category == "yis-recycle-to-fluid"
+    or category == "yis-recycle-chemical"
+    or category == "recycling"
+end
+
+---Returns true when a runtime recipe prototype has an Ingredient Scrap recycling category.
+---@param recipe LuaRecipe|nil
+---@return boolean
+local function is_runtime_recycle_recipe(recipe)
+  if not recipe or not recipe.valid or not recipe.prototype then return false end
+  for _, category in ipairs(recipe.prototype.categories or {}) do
+    if is_recycle_category(category) then return true end
+  end
+  return false
 end
 
 ---Returns true for Ingredient Scrap generated recycling recipe names.
@@ -138,8 +181,11 @@ local function sync_recycle_runtime_state()
 
   for _, force in pairs(game.forces) do
     for recipe_name, recipe in pairs(force.recipes or {}) do
-      if recipe.valid and is_ingredient_scrap_recycle_recipe(recipe_name) and is_recycle_category(recipe.category) then
-        local should_be_enabled = is_recipe_unlocked_by_researched_technology(force, recipe_name)
+      if is_ingredient_scrap_recycle_recipe(recipe_name) and is_runtime_recycle_recipe(recipe) then
+        local should_be_enabled = (
+          recipe_name == fish_recycle_recipe_name
+          or is_recipe_unlocked_by_researched_technology(force, recipe_name)
+        )
         if recipe.enabled ~= should_be_enabled then
           log("[IS] Synced recycle recipe state for existing save: " .. recipe_name .. " -> " ..
             tostring(should_be_enabled))
@@ -153,7 +199,7 @@ local function sync_recycle_runtime_state()
         local enables_recycle_recipe = false
         for _, effect in pairs(technology.prototype.effects or {}) do
           local recipe = effect.type == "unlock-recipe" and force.recipes[effect.recipe]
-          if recipe and recipe.valid and is_recycle_category(recipe.category) then
+          if is_runtime_recycle_recipe(recipe) then
             enables_recycle_recipe = true
             break
           end
@@ -170,6 +216,58 @@ local function sync_recycle_runtime_state()
   end
 end
 
+---Unlocks the hidden fish achievement once any recycler processes the hidden fish recipe.
+local function unlock_fish_recycling_achievement()
+  if not (game and game.surfaces and game.players) then return end
+
+  for _, surface in pairs(game.surfaces) do
+    for _, entity in pairs(surface.find_entities_filtered({ name = "recycler" })) do
+      if entity.valid and entity.get_recipe then
+        local recipe = entity.get_recipe()
+        if recipe and recipe.valid and fish_achievement_recipe_names[recipe.name] then
+          for _, player in pairs(game.players) do
+            if player.valid and player.connected then
+              player.unlock_achievement(fish_achievement_name)
+            end
+          end
+          return
+        end
+      end
+    end
+  end
+end
+
+---Retries the debug start inventory until Freeplay exposes the character inventory.
+local function flush_pending_debug_inventory()
+  if not is_debug_runtime_enabled() then return end
+  local pending = storage.yis_pending_debug_inventory
+  if not pending then return end
+
+  for player_index, tries_left in pairs(pending) do
+    local player = game.get_player(player_index)
+    if not player or not player.valid then
+      pending[player_index] = nil
+    elseif tries_left <= 0 then
+      player.print("[IS-DEBUG] Could not insert debug inventory after waiting for the player inventory.")
+      pending[player_index] = nil
+    elseif player.character then
+      local inserted = insert_debug_inventory(player, build_debug_inventory_requests())
+      if inserted > 0 then
+        pending[player_index] = nil
+      else
+        pending[player_index] = tries_left - 1
+      end
+    else
+      pending[player_index] = tries_left - 1
+    end
+  end
+end
+
+local function on_periodic_runtime_tick()
+  flush_pending_debug_inventory()
+  unlock_fish_recycling_achievement()
+end
+
 ---Writes debug report and data table dumps from mod-data into script-output.
 local function write_debug_files()
   if not prototypes or not prototypes.mod_data then return end
@@ -184,9 +282,9 @@ local function write_debug_files()
       local function recipe_state(recipe_name)
         local recipe = force.recipes[recipe_name]
         return recipe and {
-          category = recipe.category,
+          categories = recipe.prototype and recipe.prototype.categories,
           enabled = recipe.enabled,
-          hidden = recipe.hidden,
+          hidden = recipe.prototype and recipe.prototype.hidden,
           valid = recipe.valid,
         } or nil
       end
@@ -267,3 +365,5 @@ script.on_event(defines.events.on_tick, function()
   sync_recycle_runtime_state()
   script.on_event(defines.events.on_tick, nil)
 end)
+
+script.on_nth_tick(120, on_periodic_runtime_tick)

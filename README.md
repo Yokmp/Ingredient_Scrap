@@ -20,6 +20,8 @@ plates can resolve back to useful material scrap.
   factory with scrap.
 - Generated recycle recipes stay present but start disabled, so they do not show
   up in handcrafting or machine recipe lists before their unlock trigger.
+- Material scrap is recycled in furnaces and recyclers, not in normal
+  assemblers. Chemical scraps such as plastic use chemical machines.
 - Recycling technologies unlock automatically when the first matching scrap item
   is produced. Their visibility follows `Hide recycling technologies`; shallow
   logging keeps them visible for testing.
@@ -57,7 +59,8 @@ The recycler is allowed to be lossy. This is intentional: it gives late-game
 factories a controlled way to reduce excess scrap.
 
 Fish recycling is a small compatibility recipe that turns raw fish into mixed
-scrap. It unlocks when a recycler is built.
+scrap. It is available from the start, hidden from normal crafting views, and
+awards a hidden achievement when the recycler starts processing it.
 
 ## Settings
 
@@ -94,8 +97,7 @@ Supported and tested:
 Large overhaul mods can still have edge cases. Ingredient Scrap prefers safe
 fallbacks and visible logs over crashing during prototype loading.
 
-Chemistry-specific gameplay and preserve-shape recycling are intentionally kept
-for future work.
+Preserve-shape recycling is intentionally kept for future work.
 
 ## Troubleshooting
 

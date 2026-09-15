@@ -42,7 +42,7 @@ APP_VERSION = "1.0.0"
 TOOLSET_URL = "https://github.com/Yokmp/factorio_toolset"
 
 VANILLA_MODS = ["base"]
-DLC_MODS = ["elevated-rails", "quality", "space-age"]
+DLC_MODS = ["elevated-rails", "recycler", "quality", "space-age"]
 
 BUILTIN_PROFILES: dict[str, dict[str, object]] = {
     "vanilla": {

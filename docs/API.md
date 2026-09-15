@@ -117,13 +117,19 @@ Furnaces and assembling machines are intentionally registered separately.
 ```lua
 api.register.category.furnace({
   source_categories = { "smelting", "recycling" },
-  add_categories = { "yis-recycle-to-item" },
+  add_item_recycling = true,
 })
 
 api.register.category.assembling_machine({
-  source_categories = { "crafting", "advanced-crafting" },
-  add_categories = { "yis-recycle-to-item" },
-  fluid_categories = { "yis-recycle-to-fluid" },
+  source_categories = { "chemistry" },
+  add_item_recycling = false,
+  add_chemical_recycling = true,
+})
+
+api.register.category.assembling_machine({
+  source_categories = { "metallurgy" },
+  add_item_recycling = false,
+  add_fluid_recycling_if_fluid_boxes = true,
 })
 ```
 
@@ -139,7 +145,7 @@ operations; finalization is internal.
 api.queue.prototype.recipe("example-recycle-recipe", {
   type = "recipe",
   name = "yis-example-recycle",
-  category = "yis-recycle-to-item",
+  categories = { "yis-recycle-to-item" },
   ingredients = { { type = "item", name = "yis-mixed-scrap", amount = 1 } },
   results = { { type = "item", name = "iron-plate", amount = 1 } },
 }, {

@@ -23,7 +23,7 @@ local function mixed_result(amount)
   local result = {
     type = "item",
     name = mixed.scrap_name(),
-    probability = ISsettings.probability > 0 and (ISsettings.probability / 100) or nil,
+    independent_probability = ISsettings.probability > 0 and (ISsettings.probability / 100) or nil,
   }
 
   if ISsettings.fixed_amount then

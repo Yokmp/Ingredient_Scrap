@@ -115,7 +115,7 @@ function reader.result_expected_amount(result)
     amount = (result.amount_min + result.amount_max) / 2
   end
   amount = amount or 1
-  return amount * (result.probability or 1)
+  return amount * (result.independent_probability or result.probability or 1)
 end
 
 ---Returns weighted generated scrap targets from staged source recipe inserts.

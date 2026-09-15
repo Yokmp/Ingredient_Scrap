@@ -166,7 +166,7 @@ local function mixed_recycle_distribution(targets, results)
   local top_targets = {}
 
   for index, result in ipairs(results or {}) do
-    local probability = result.probability or 1
+    local probability = result.independent_probability or result.probability or 1
     total_probability = total_probability + probability
     min_probability = min_probability and math.min(min_probability, probability) or probability
     max_probability = math.max(max_probability, probability)
@@ -202,7 +202,7 @@ local function mixed_recycle_results(targets)
       type = "item",
       name = target.name,
       amount = 1,
-      probability = probabilities[index],
+      independent_probability = probabilities[index],
     })
   end
 
@@ -211,7 +211,7 @@ local function mixed_recycle_results(targets)
       type = "item",
       name = mixed_scrap_name,
       amount = 1,
-      probability = 0.25,
+      independent_probability = 0.25,
     })
   end
 
@@ -231,11 +231,11 @@ function mixed.ensure_recycle_recipe(data_table)
   local distribution = mixed_recycle_distribution(targets, results)
 
   if recycle_recipe then
-    recycle_recipe.category = "recycling"
+    recycle_recipe.categories = { "recycling" }
+    recycle_recipe.category = nil
     recycle_recipe.enabled = false
     recycle_recipe.results = results
     recycle_recipe.icons = icon_layers.get(data_table, mixed.material, false)
-    recycle_recipe.always_show_products = true
     recycle_recipe.hide_from_player_crafting = true
     data_table_writer.merge_recipe_source(data_table, recipe_name, {
       scrap_type = mixed.material,
@@ -261,10 +261,9 @@ function mixed.ensure_recycle_recipe(data_table)
     },
     icons = icon_layers.get(data_table, mixed.material, false),
     subgroup = "raw-material",
-    category = "recycling",
+    categories = { "recycling" },
     order = recycle_order.recipe(data_table, mixed.material, recipe_name),
     enabled = false,
-    always_show_products = true,
     allow_as_intermediate = false,
     hide_from_player_crafting = true,
     ingredients = {

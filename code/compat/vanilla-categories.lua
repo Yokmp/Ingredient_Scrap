@@ -16,6 +16,7 @@ api.register.category.furnace({
 
 api.register.category.furnace({
   source_categories = {
+    "metallurgy",
     "metallurgy-or-assembling",
   },
   add_item_recycling = false,
@@ -32,13 +33,24 @@ api.register.category.assembling_machine({
     "crafting",
     "advanced-crafting",
   },
-  add_item_recycling = true,
-  add_fluid_recycling_if_fluid_boxes = true,
+  add_item_recycling = false,
+  add_fluid_recycling_if_fluid_boxes = false,
+})
+
+api.register.category.assembling_machine({
+  source_categories = {
+    "chemistry",
+    "chemistry-or-cryogenics",
+  },
+  add_item_recycling = false,
+  add_fluid_recycling_if_fluid_boxes = false,
+  add_chemical_recycling = true,
 })
 
 api.register.category.assembling_machine({
   source_categories = {
     "crafting-with-fluid-or-metallurgy",
+    "metallurgy",
     "metallurgy-or-assembling",
   },
   add_item_recycling = false,

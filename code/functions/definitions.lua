@@ -18,7 +18,7 @@
 
 ---@class ISdata_table_constants
 ---@field icon_path string
----@field recycle_categories {solid: string, fluid: string}
+---@field recycle_categories {solid: string, fluid: string, chemical: string}
 ---@field icon_scrap string[]
 ---@field scrap_pictures integer
 
@@ -72,14 +72,13 @@
 ---@field hidden boolean?
 ---@field enabled boolean?
 ---@field category string?
----@field categories category?
+---@field categories string[]?
 ---@field main_product string?
 ---@field ingredients ISIngredientPrototype[]?
 ---@field results ISResultPrototype[]?
 ---@field icons ISIconLayers?
 ---@field subgroup string?
 ---@field order string?
----@field always_show_products boolean?
 ---@field allow_as_intermediate boolean?
 ---@field hide_from_player_crafting boolean?
 

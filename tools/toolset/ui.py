@@ -132,6 +132,7 @@ TOOL_REGISTRY: dict[str, ToolDefinition] = {}
 PINNED_MOD_NAMES = [
     "base",
     "elevated-rails",
+    "recycler",
     "quality",
     "space-age",
 ]

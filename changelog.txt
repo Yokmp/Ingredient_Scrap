@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2026-09-15
+  Changes:
+    - updated to factorio 2.1
+    - recipes from chemplants now have their own recipe category
+    - hidden achievement
+---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2026-06-28
   Changes:

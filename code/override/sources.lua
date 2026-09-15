@@ -2,6 +2,7 @@ yokmods = yokmods or {}
 yokmods.ingredient_scrap = yokmods.ingredient_scrap or {}
 
 local overrides = {}
+local recipe_categories = require("code.functions.recipe-categories")
 
 overrides.blocked_recipes = {}
 overrides.blocked_categories = {}
@@ -155,9 +156,11 @@ function overrides.ignored_source(recipe, ingredient, scrap_type, mode)
     end
   end
 
-  for _, category_rule in ipairs(overrides.blocked_categories[recipe.category] or {}) do
-    if rule_applies(category_rule, ingredient, scrap_type, mode) then
-      return category_rule
+  for _, category in ipairs(recipe_categories.list(recipe)) do
+    for _, category_rule in ipairs(overrides.blocked_categories[category] or {}) do
+      if rule_applies(category_rule, ingredient, scrap_type, mode) then
+        return category_rule
+      end
     end
   end
 

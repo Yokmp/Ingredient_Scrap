@@ -1,4 +1,5 @@
 local technology_flow = {}
+local recipe_categories = require("code.functions.recipe-categories")
 
 ---Splits a Factorio icon path like "__base__/graphics/foo.png" into source metadata.
 ---@param path string|nil
@@ -89,7 +90,8 @@ local function recipe_ref(recipe_name)
   return {
     type = "recipe",
     name = recipe_name,
-    category = recipe and recipe.category,
+    category = recipe_categories.first(recipe),
+    categories = recipe_categories.list(recipe),
     enabled = recipe and recipe.enabled,
     hidden = recipe and recipe.hidden,
     localised_name = recipe and recipe.localised_name,

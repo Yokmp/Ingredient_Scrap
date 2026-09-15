@@ -15,6 +15,11 @@ Normal scrap is tied to a material family, for example iron scrap, copper scrap,
 steel scrap, or modded metals. Generated recycling recipes turn that scrap back
 into the matching material target.
 
+Normal material scrap is recycled in furnaces and recyclers rather than regular
+assemblers. Chemical material scraps, such as plastic, use chemical machines.
+Molten or solution-style targets use suitable metallurgy or fluid-capable
+machines.
+
 Recycling recipes start locked. They are unlocked automatically by generated
 trigger technologies when the matching scrap is first produced; these
 technologies can be hidden through the startup settings.
@@ -35,8 +40,8 @@ late-game factories a controlled way to reduce excess scrap.
 If Quality is not active, Ingredient Scrap provides a compatible fallback
 recycler.
 
-Fish recycling unlocks when a recycler is built and turns raw fish into mixed
-scrap.
+Fish recycling is available from the start as a hidden recycler recipe and turns
+raw fish into mixed scrap.
 
 ## API And Compatibility
 

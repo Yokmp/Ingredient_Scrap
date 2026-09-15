@@ -1,6 +1,7 @@
 local writer = {}
 local item_prototypes = require("code.functions.item-prototypes")
 local naming = require("code.functions.naming")
+local recipe_categories = require("code.functions.recipe-categories")
 local scrap_amount = require("code.functions.scrap-amount")
 
 ---Returns the recipe insert staging table and creates it when needed.
@@ -64,7 +65,8 @@ function writer.record_skipped_source(data_table, recipe, ingredient, scrap_type
   sources.skipped = sources.skipped or {}
   table.insert(sources.skipped, {
     recipe = recipe.name,
-    category = recipe.category,
+    category = recipe_categories.first(recipe),
+    categories = recipe_categories.list(recipe),
     ingredient = ingredient.name,
     ingredient_type = ingredient.type or "item",
     amount = ingredient.amount,
@@ -131,7 +133,7 @@ function writer.add_scrap_result(data_table, ingredient, recipe, scrap_type)
   local result = {
     type        = "item",
     name        = scrap_name,
-    probability = ISsettings.probability > 0 and (ISsettings.probability / 100) or nil,
+    independent_probability = ISsettings.probability > 0 and (ISsettings.probability / 100) or nil,
   }
 
   if deferred_amount then

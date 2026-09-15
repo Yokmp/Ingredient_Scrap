@@ -65,7 +65,7 @@ local function dummy_recipe(name, ingredients, results, main_product, category)
     name = name,
     icon = dummy_icon,
     icon_size = 64,
-    category = category or "crafting",
+    categories = { category or "crafting" },
     enabled = true,
     energy_required = 1,
     ingredients = ingredients,

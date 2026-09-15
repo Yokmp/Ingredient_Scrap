@@ -97,6 +97,10 @@ data:extend({
     type = "recipe-category",
     name = "yis-recycle-to-fluid"
   },
+  {
+    type = "recipe-category",
+    name = "yis-recycle-chemical"
+  },
 })
 
 local public_api = require("code.api.public")

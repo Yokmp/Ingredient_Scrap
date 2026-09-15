@@ -40,7 +40,7 @@ end
 
 ---Registers a category patch rule for a prototype group.
 ---@param prototype_group "furnace"|"assembling_machine"
----@param definition {source_categories?: string[]|table<string, boolean>, fast_replaceable_groups?: string[]|table<string, boolean>, add_item_recycling?: boolean, add_fluid_recycling_if_fluid_boxes?: boolean}
+---@param definition {source_categories?: string[]|table<string, boolean>, fast_replaceable_groups?: string[]|table<string, boolean>, add_item_recycling?: boolean, add_fluid_recycling_if_fluid_boxes?: boolean, add_chemical_recycling?: boolean}
 local function register_rule(prototype_group, definition)
   if type(definition) ~= "table" then
     error("Ingredient Scrap category override requires a definition table")
@@ -51,6 +51,7 @@ local function register_rule(prototype_group, definition)
     fast_replaceable_groups = normalize_groups(definition.fast_replaceable_groups),
     add_item_recycling = definition.add_item_recycling ~= false,
     add_fluid_recycling_if_fluid_boxes = definition.add_fluid_recycling_if_fluid_boxes == true,
+    add_chemical_recycling = definition.add_chemical_recycling == true,
   })
 end
 
@@ -101,7 +102,8 @@ end
 ---@param rules table[]
 ---@param recycle_item_category string
 ---@param recycle_fluid_category string
-function category_overrides.apply_category_rules(prototype_type, rules, recycle_item_category, recycle_fluid_category)
+---@param recycle_chemical_category string
+function category_overrides.apply_category_rules(prototype_type, rules, recycle_item_category, recycle_fluid_category, recycle_chemical_category)
   for _, machine in pairs(data.raw[prototype_type] or {}) do
     for _, rule in ipairs(rules or {}) do
       if category_overrides.has_category(machine, rule.source_categories)
@@ -112,6 +114,9 @@ function category_overrides.apply_category_rules(prototype_type, rules, recycle_
         if rule.add_fluid_recycling_if_fluid_boxes and machine.fluid_boxes then
           category_overrides.add_category_once(machine, recycle_fluid_category)
         end
+        if rule.add_chemical_recycling then
+          category_overrides.add_category_once(machine, recycle_chemical_category)
+        end
       end
     end
   end
@@ -121,15 +126,17 @@ end
 ---@param prototype_type string
 ---@param recycle_item_category string
 ---@param recycle_fluid_category string
-function category_overrides.propagate_fast_replaceable_group_categories(prototype_type, recycle_item_category, recycle_fluid_category)
+---@param recycle_chemical_category string
+function category_overrides.propagate_fast_replaceable_group_categories(prototype_type, recycle_item_category, recycle_fluid_category, recycle_chemical_category)
   local group_flags = {}
 
   for _, machine in pairs(data.raw[prototype_type] or {}) do
     local group = machine.fast_replaceable_group
     if group then
-      local flags = group_flags[group] or { item = false, fluid = false }
+      local flags = group_flags[group] or { item = false, fluid = false, chemical = false }
       flags.item = flags.item or category_overrides.has_category(machine, { [recycle_item_category] = true })
       flags.fluid = flags.fluid or category_overrides.has_category(machine, { [recycle_fluid_category] = true })
+      flags.chemical = flags.chemical or category_overrides.has_category(machine, { [recycle_chemical_category] = true })
       group_flags[group] = flags
     end
   end
@@ -144,34 +151,41 @@ function category_overrides.propagate_fast_replaceable_group_categories(prototyp
       if flags.fluid and machine.fluid_boxes then
         category_overrides.add_category_once(machine, recycle_fluid_category)
       end
+      if flags.chemical then
+        category_overrides.add_category_once(machine, recycle_chemical_category)
+      end
     end
   end
 end
 
 ---Applies all registered category rules to Factorio crafting-machine prototypes.
----@param recycle_categories {solid: string, fluid: string}
+---@param recycle_categories {solid: string, fluid: string, chemical: string}
 function category_overrides.apply_registered_rules(recycle_categories)
   category_overrides.apply_category_rules(
     "furnace",
     category_overrides.rules.furnace,
     recycle_categories.solid,
-    recycle_categories.fluid
+    recycle_categories.fluid,
+    recycle_categories.chemical
   )
   category_overrides.propagate_fast_replaceable_group_categories(
     "furnace",
     recycle_categories.solid,
-    recycle_categories.fluid
+    recycle_categories.fluid,
+    recycle_categories.chemical
   )
   category_overrides.apply_category_rules(
     "assembling-machine",
     category_overrides.rules.assembling_machine,
     recycle_categories.solid,
-    recycle_categories.fluid
+    recycle_categories.fluid,
+    recycle_categories.chemical
   )
   category_overrides.propagate_fast_replaceable_group_categories(
     "assembling-machine",
     recycle_categories.solid,
-    recycle_categories.fluid
+    recycle_categories.fluid,
+    recycle_categories.chemical
   )
 end
 

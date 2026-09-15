@@ -14,6 +14,11 @@ local material_resolver = require("code.resolver.materials.resolver")
 
 local active = {}
 
+local CHEMICAL_RECYCLING_MATERIALS = {
+  plastic = true,
+  sulfur = true,
+}
+
 ---Returns a sorted list of map keys.
 ---@param values table|nil
 ---@return string[]
@@ -194,6 +199,18 @@ local function forced_recycle_target(material, mode)
   return nil
 end
 
+---Returns the recycle crafting category for a material target.
+---@param data_table ISdata_table
+---@param material string
+---@param result_type "item"|"fluid"
+---@return string
+local function recycle_category_for_target(data_table, material, result_type)
+  local categories = data_table_reader.constants(data_table).recycle_categories
+  if result_type == "fluid" then return categories.fluid end
+  if CHEMICAL_RECYCLING_MATERIALS[material] then return categories.chemical end
+  return categories.solid
+end
+
 ---Returns true when active ancestry should replace this comparison row.
 ---@param row table
 ---@return boolean
@@ -268,7 +285,7 @@ local function ensure_material_prototypes(data_table, material, recipe, fallback
     result_type = solid_target.result_type,
     result_name = solid_target.result_name,
     scrap_type = material,
-    categories = { data_table_reader.constants(data_table).recycle_categories.solid },
+    categories = { recycle_category_for_target(data_table, material, solid_target.result_type) },
     hidden = hidden,
   })
   if ISsettings.fluids then
