@@ -3,11 +3,16 @@
 Ingredient Scrap adds material scrap as an extra byproduct to many recipes.
 The generated scrap can be recycled back into the matching source material.
 
+
 ![Scrap byproducts](shot_01.png)
 ![Recycle recipes](shot_02.png)
 ![Mixed scrap sorting](shot_03.png)
 
-The mod is built around Factorio 2.0 and Space Age style recycling, but it also
+| Example recipes | Modded recipes |
+| :-: | :-: |
+| ![](shot_01.png)<br>![](shot_02.png) | ![](shot_03.png) |
+
+The mod is built around Factorio 2.0/2.1 and Space Age style recycling, but it also
 works without Space Age. It tries to follow the actual recipe chain instead of
 only matching names, so components such as gears, cables, circuits, beams, and
 plates can resolve back to useful material scrap.
@@ -66,6 +71,7 @@ factories a controlled way to reduce excess scrap.
 Fish recycling is a small compatibility recipe that turns raw fish into mixed
 scrap. It is available from the start, hidden from normal crafting views, and
 awards a hidden achievement when the recycler starts processing it.
+
 
 ## Settings
 
