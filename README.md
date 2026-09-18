@@ -7,7 +7,7 @@ The generated scrap can be recycled back into the matching source material.
 | :-: | :-: |
 | ![](shot_01.png)<br>![](shot_02.png) | ![](shot_03.png) |
 
-The mod is built for Factorio 2.0 and runs its generation logic during the
+The mod is built for Factorio 2.0/2.1 and runs its generation logic during the
 data stage. It collects solid and fluid material families, generates scrap
 items, recycle recipes, and unlock technologies, then patches matching recipes
 with additional scrap results.
