@@ -1,4 +1,10 @@
-require("code.lib.definitions")
+--#region debug
+require("code.functions.definitions")
+--#endregion
+--#region debug
+local timing = require("code.functions.timing")
+timing.mark("data", "start")
+--#endregion
 data:extend({
   {
     type = "sprite",
@@ -91,39 +97,49 @@ data:extend({
     type = "recipe-category",
     name = "yis-recycle-to-fluid"
   },
+  {
+    type = "recipe-category",
+    name = "yis-recycle-chemical"
+  },
 })
 
-local recycle_item_category = "yis-recycle-to-item"
-local recycle_fluid_category = "yis-recycle-to-fluid"
-local category_overrides = require("code.lib.category-overrides")
+local public_api = require("code.api.public")
+local api_modules = public_api.load()
+local material_overrides = api_modules.materials
+local ancestry_settings = require("code.functions.ancestry-settings")
+local startup_settings = require("code.functions.startup-settings")
+
 require("code.compat.vanilla-categories")
+require("code.compat.vanilla-materials")
+require("code.compat.mod-materials")
+require("code.compat.recycler.ensure").recycler()
+require("code.compat.recycler.tips-and-tricks")
 
----Applies registered category rules to one prototype type.
-local function apply_category_rules(prototype_type, rules)
-  for _, machine in pairs(data.raw[prototype_type] or {}) do
-    for _, rule in ipairs(rules or {}) do
-      if category_overrides.has_category(machine, rule.source_categories) then
-        if rule.add_item_recycling then
-          category_overrides.add_category_once(machine, recycle_item_category)
-        end
-        if rule.add_fluid_recycling_if_fluid_boxes and machine.fluid_boxes then
-          category_overrides.add_category_once(machine, recycle_fluid_category)
-        end
-      end
-    end
-  end
-end
-
-apply_category_rules("furnace", category_overrides.rules.furnace)
-apply_category_rules("assembling-machine", category_overrides.rules.assembling_machine)
-
-
-
--- Debug-Flag: in data-updates.lua auf true setzen zum Testen
--- IS_DEBUG = true  (global, damit data-updates.lua es auch sieht)
 IS_DEBUG = settings.startup["yis-IS_DEBUG"].value
+--#region debug
+if IS_DEBUG then
+  require("tools.test.material-overrides")
+end
+--#endregion
+startup_settings.load(material_overrides, ancestry_settings)
 
+local internal_api = require("code.api.internal")
+local context = internal_api.create(material_overrides)
+yokmods = yokmods or {}
+yokmods.ingredient_scrap = yokmods.ingredient_scrap or {}
+yokmods.ingredient_scrap.internal = context
+public_api.publish_generated(context)
+public_api.publish_queue(context)
+require("code.functions.utils")
+
+--#region debug
+yokmods.ingredient_scrap.data_table = context:debug_data_table()
+yokmods.ingredient_scrap.data_table.debug.performance = yokmods.ingredient_scrap.performance
+timing.mark("data", "init-api-context")
 if IS_DEBUG then
   require("tools.test.test-data")
   log("[IS-TEST] Debug-Modus aktiv")
+  timing.mark("data", "load-test-data")
 end
+timing.mark("data", "complete")
+--#endregion

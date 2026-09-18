@@ -1,17 +1,36 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 2026-09-18
+  Changes:
+    - scrap quality now always normal
+    - migrate existing higher-quality scrap to normal without changing item counts
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2026-09-15
+  Changes:
+    - fixed recycler "Key inventory_index not found"
+    - new scrap icons
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2026-09-15
+  Changes:
+    - updated to factorio 2.1
+    - recipes from chemplants now have their own recipe category
+    - hidden achievement
+---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2026-06-28
   Changes:
-    - updated the mod for Factorio 2.0
-    - rewrote scrap generation to collect materials, stage generated prototypes, validate them, and patch recipes from a shared data table
-    - added support for fluid-based scrap and fluid recycle recipes
-    - added debug test fixtures and an in-game JSON test report written to script-output
-    - added a Lua data table dump for easier manual inspection while debugging
-    - added local LuaLS annotation generation from Factorio's offline API documentation
+    - complete rewrite for Factorio 2.0
+    - added recipe-chain based scrap generation with component resolving
+    - added mixed scrap as a fallback for broad or unresolved recipe chains
+    - added weighted mixed scrap recycling and special recycler/quality DLC recycler
+    - added fluid-aware material matching and fluid recycle targets
+    - added built-in compatibility for Space Age, Quality, Krastorio 2, Bob's Mods, and Angel's Mods
+    - added a public data-stage API for compatibility mods
+    - more details and API documentation are available on GitHub: https://github.com/Yokmp/Ingredient_Scrap
   Bugfixes:
-    - fixed recipes with fluid main products being ignored when fluid support is enabled
-    - fixed generated recycle recipes using invalid category data
-    - fixed generated tint tables so Factorio accepts generated scrap icons
+    - fixed many Factorio 2.0 prototype, icon, category, technology, and compatibility issues
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.11
 Date: 2024-11-15

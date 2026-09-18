@@ -1,22 +1,30 @@
-require("code.lib.category-overrides")
+require("code.override.categories")
 
 local api = yokmods.ingredient_scrap.api
 
 --------------------------------
----*FURNACES*                --
+---*FURNACES*                 --
 --------------------------------
 
 api.register.category.furnace({
   source_categories = {
     "smelting",
     "recycling",
-    "metallurgy-or-assembling",
   },
   add_item_recycling = true,
 })
 
+api.register.category.furnace({
+  source_categories = {
+    "metallurgy",
+    "metallurgy-or-assembling",
+  },
+  add_item_recycling = false,
+  add_fluid_recycling_if_fluid_boxes = true,
+})
+
 --------------------------------
----*ASSEMBLING MACHINES*     --
+---*ASSEMBLING MACHINES*      --
 --------------------------------
 
 api.register.category.assembling_machine({
@@ -24,10 +32,28 @@ api.register.category.assembling_machine({
     "basic-crafting",
     "crafting",
     "advanced-crafting",
+  },
+  add_item_recycling = false,
+  add_fluid_recycling_if_fluid_boxes = false,
+})
+
+api.register.category.assembling_machine({
+  source_categories = {
+    "chemistry",
+    "chemistry-or-cryogenics",
+  },
+  add_item_recycling = false,
+  add_fluid_recycling_if_fluid_boxes = false,
+  add_chemical_recycling = true,
+})
+
+api.register.category.assembling_machine({
+  source_categories = {
     "crafting-with-fluid-or-metallurgy",
+    "metallurgy",
     "metallurgy-or-assembling",
   },
-  add_item_recycling = true,
+  add_item_recycling = false,
   add_fluid_recycling_if_fluid_boxes = true,
 })
 

@@ -1,0 +1,41 @@
+{
+  "cases": [
+    {
+      "label": "Assembler pipe, no productivity",
+      "target": "pipe"
+    },
+    {
+      "label": "Foundry pipe, inherent bonuses only",
+      "target": "pipe",
+      "routes": {"item:pipe": "casting-pipe", "item:iron-plate": "casting-iron", "fluid:molten-iron": "iron-ore-melting"},
+      "productivity": {"casting-pipe": 0.5, "casting-iron": 0.5, "iron-ore-melting": 0.5}
+    },
+    {
+      "label": "EM circuits, inherent bonuses only",
+      "target": "electronic-circuit",
+      "productivity": {"copper-cable": 0.5, "electronic-circuit": 0.5}
+    },
+    {
+      "label": "EM circuits, five normal productivity-3 modules",
+      "target": "electronic-circuit",
+      "productivity": {"copper-cable": 1.0, "electronic-circuit": 1.0}
+    },
+    {
+      "label": "EM circuits, five legendary productivity-3 modules",
+      "target": "electronic-circuit",
+      "productivity": {"copper-cable": 1.75, "electronic-circuit": 1.75}
+    },
+    {
+      "label": "Foundry LDS, inherent bonuses only",
+      "target": "low-density-structure",
+      "routes": {"item:low-density-structure": "casting-low-density-structure", "item:iron-plate": "casting-iron", "item:copper-plate": "casting-copper", "item:steel-plate": "casting-steel", "fluid:molten-iron": "iron-ore-melting", "fluid:molten-copper": "copper-ore-melting", "fluid:petroleum-gas": "basic-oil-processing"},
+      "productivity": {"casting-low-density-structure": 0.5, "casting-iron": 0.5, "casting-copper": 0.5, "casting-steel": 0.5, "iron-ore-melting": 0.5, "copper-ore-melting": 0.5}
+    },
+    {
+      "label": "Foundry LDS, four normal productivity-3 modules, research level 21",
+      "target": "low-density-structure",
+      "routes": {"item:low-density-structure": "casting-low-density-structure", "item:iron-plate": "casting-iron", "item:copper-plate": "casting-copper", "item:steel-plate": "casting-steel", "fluid:molten-iron": "iron-ore-melting", "fluid:molten-copper": "copper-ore-melting", "fluid:petroleum-gas": "basic-oil-processing"},
+      "productivity": {"casting-low-density-structure": 3.0, "casting-iron": 0.9, "casting-copper": 0.9, "casting-steel": 0.9, "iron-ore-melting": 0.9, "copper-ore-melting": 0.9}
+    }
+  ]
+}

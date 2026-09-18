@@ -1,0 +1,765 @@
+{
+  "schema": "ingredient-scrap-recycling-cycle/v1",
+  "active": false,
+  "assumptions": [
+    "One finished item, including all upstream IS scrap; main item recycled once.",
+    "Returned components are reused and valued at replacement raw cost, not recursively shredded.",
+    "No new scrap credited for replacement valuation; no reinvestment simulation.",
+    "No recycling productivity or proposed quality modifiers.",
+    "Explicit per-recipe manufacturing productivity includes all bonuses and respects recipe caps.",
+    "No energy, fuel, mining productivity, research costs or credit for unused coproducts.",
+    "Ratios are per resource, not proof of an entirely self-sustaining factory."
+  ],
+  "cases": [
+    {
+      "target": "pipe",
+      "production": {
+        "resources": {
+          "item:iron-ore": 1.0
+        },
+        "scrap": {
+          "yis-iron-scrap": 0.36
+        },
+        "crafts": {
+          "pipe": 1.0,
+          "iron-plate": 1.0
+        },
+        "contributors": [
+          {
+            "recipe": "pipe",
+            "scrap": {
+              "yis-iron-scrap": 0.36
+            },
+            "total": 0.36
+          }
+        ],
+        "selected_producers": {
+          "item:pipe": "pipe",
+          "item:iron-plate": "iron-plate"
+        },
+        "alternatives": {
+          "item:pipe": [
+            "casting-pipe",
+            "pipe"
+          ],
+          "item:iron-plate": [
+            "casting-iron",
+            "iron-plate"
+          ]
+        },
+        "gaps": []
+      },
+      "recycling_recipe": "pipe-recycling",
+      "returned_product": {
+        "item:iron-plate": 0.25
+      },
+      "returned_scrap": {
+        "item:iron-plate": 0.12
+      },
+      "resource_equivalents": {
+        "product": {
+          "item:iron-ore": 0.25
+        },
+        "scrap": {
+          "item:iron-ore": 0.12
+        }
+      },
+      "ratios": {
+        "item:iron-ore": {
+          "product": 0.25,
+          "scrap": 0.12,
+          "total": 0.37
+        }
+      },
+      "complete": true,
+      "gaps": [],
+      "unvalued": {},
+      "label": "Assembler pipe, no productivity",
+      "configuration": {
+        "label": "Assembler pipe, no productivity",
+        "target": "pipe"
+      }
+    },
+    {
+      "target": "pipe",
+      "production": {
+        "resources": {
+          "item:iron-ore": 0.4444444444444444,
+          "item:calcite": 0.008888888888888889
+        },
+        "scrap": {
+          "yis-iron-scrap": 0.36
+        },
+        "crafts": {
+          "casting-pipe": 0.6666666666666666,
+          "iron-ore-melting": 0.008888888888888889
+        },
+        "contributors": [
+          {
+            "recipe": "casting-pipe",
+            "scrap": {
+              "yis-iron-scrap": 0.36
+            },
+            "total": 0.36
+          }
+        ],
+        "selected_producers": {
+          "item:pipe": "casting-pipe",
+          "fluid:molten-iron": "iron-ore-melting"
+        },
+        "alternatives": {
+          "item:pipe": [
+            "casting-pipe",
+            "pipe"
+          ],
+          "fluid:molten-iron": [
+            "iron-ore-melting",
+            "molten-iron-from-lava"
+          ]
+        },
+        "gaps": []
+      },
+      "recycling_recipe": "pipe-recycling",
+      "returned_product": {
+        "item:iron-plate": 0.25
+      },
+      "returned_scrap": {
+        "item:iron-plate": 0.12
+      },
+      "resource_equivalents": {
+        "product": {
+          "item:iron-ore": 0.1111111111111111,
+          "item:calcite": 0.0022222222222222222
+        },
+        "scrap": {
+          "item:iron-ore": 0.05333333333333334,
+          "item:calcite": 0.0010666666666666667
+        }
+      },
+      "ratios": {
+        "item:iron-ore": {
+          "product": 0.25,
+          "scrap": 0.12000000000000001,
+          "total": 0.37
+        },
+        "item:calcite": {
+          "product": 0.25,
+          "scrap": 0.12000000000000001,
+          "total": 0.37
+        }
+      },
+      "complete": true,
+      "gaps": [],
+      "unvalued": {},
+      "label": "Foundry pipe, inherent bonuses only",
+      "configuration": {
+        "label": "Foundry pipe, inherent bonuses only",
+        "target": "pipe",
+        "routes": {
+          "item:pipe": "casting-pipe",
+          "item:iron-plate": "casting-iron",
+          "fluid:molten-iron": "iron-ore-melting"
+        },
+        "productivity": {
+          "casting-pipe": 0.5,
+          "casting-iron": 0.5,
+          "iron-ore-melting": 0.5
+        }
+      }
+    },
+    {
+      "target": "electronic-circuit",
+      "production": {
+        "resources": {
+          "item:iron-ore": 0.6666666666666666,
+          "item:copper-ore": 0.6666666666666666
+        },
+        "scrap": {
+          "yis-iron-scrap": 0.36,
+          "yis-copper-scrap": 0.72
+        },
+        "crafts": {
+          "electronic-circuit": 0.6666666666666666,
+          "iron-plate": 0.6666666666666666,
+          "copper-cable": 0.6666666666666666,
+          "copper-plate": 0.6666666666666666
+        },
+        "contributors": [
+          {
+            "recipe": "electronic-circuit",
+            "scrap": {
+              "yis-iron-scrap": 0.36,
+              "yis-copper-scrap": 0.36
+            },
+            "total": 0.72
+          },
+          {
+            "recipe": "copper-cable",
+            "scrap": {
+              "yis-copper-scrap": 0.36
+            },
+            "total": 0.36
+          }
+        ],
+        "selected_producers": {
+          "item:electronic-circuit": "electronic-circuit",
+          "item:iron-plate": "iron-plate",
+          "item:copper-cable": "copper-cable",
+          "item:copper-plate": "copper-plate"
+        },
+        "alternatives": {
+          "item:iron-plate": [
+            "casting-iron",
+            "iron-plate"
+          ],
+          "item:copper-cable": [
+            "casting-copper-cable",
+            "copper-cable"
+          ],
+          "item:copper-plate": [
+            "casting-copper",
+            "copper-plate"
+          ]
+        },
+        "gaps": []
+      },
+      "recycling_recipe": "electronic-circuit-recycling",
+      "returned_product": {
+        "item:iron-plate": 0.25,
+        "item:copper-cable": 0.75
+      },
+      "returned_scrap": {
+        "item:iron-plate": 0.12,
+        "item:copper-plate": 0.36
+      },
+      "resource_equivalents": {
+        "product": {
+          "item:iron-ore": 0.25,
+          "item:copper-ore": 0.25
+        },
+        "scrap": {
+          "item:iron-ore": 0.12,
+          "item:copper-ore": 0.36
+        }
+      },
+      "ratios": {
+        "item:iron-ore": {
+          "product": 0.375,
+          "scrap": 0.18,
+          "total": 0.5549999999999999
+        },
+        "item:copper-ore": {
+          "product": 0.375,
+          "scrap": 0.54,
+          "total": 0.915
+        }
+      },
+      "complete": true,
+      "gaps": [],
+      "unvalued": {},
+      "label": "EM circuits, inherent bonuses only",
+      "configuration": {
+        "label": "EM circuits, inherent bonuses only",
+        "target": "electronic-circuit",
+        "productivity": {
+          "copper-cable": 0.5,
+          "electronic-circuit": 0.5
+        }
+      }
+    },
+    {
+      "target": "electronic-circuit",
+      "production": {
+        "resources": {
+          "item:iron-ore": 0.5,
+          "item:copper-ore": 0.375
+        },
+        "scrap": {
+          "yis-iron-scrap": 0.36,
+          "yis-copper-scrap": 0.63
+        },
+        "crafts": {
+          "electronic-circuit": 0.5,
+          "iron-plate": 0.5,
+          "copper-cable": 0.375,
+          "copper-plate": 0.375
+        },
+        "contributors": [
+          {
+            "recipe": "electronic-circuit",
+            "scrap": {
+              "yis-iron-scrap": 0.36,
+              "yis-copper-scrap": 0.36
+            },
+            "total": 0.72
+          },
+          {
+            "recipe": "copper-cable",
+            "scrap": {
+              "yis-copper-scrap": 0.27
+            },
+            "total": 0.27
+          }
+        ],
+        "selected_producers": {
+          "item:electronic-circuit": "electronic-circuit",
+          "item:iron-plate": "iron-plate",
+          "item:copper-cable": "copper-cable",
+          "item:copper-plate": "copper-plate"
+        },
+        "alternatives": {
+          "item:iron-plate": [
+            "casting-iron",
+            "iron-plate"
+          ],
+          "item:copper-cable": [
+            "casting-copper-cable",
+            "copper-cable"
+          ],
+          "item:copper-plate": [
+            "casting-copper",
+            "copper-plate"
+          ]
+        },
+        "gaps": []
+      },
+      "recycling_recipe": "electronic-circuit-recycling",
+      "returned_product": {
+        "item:iron-plate": 0.25,
+        "item:copper-cable": 0.75
+      },
+      "returned_scrap": {
+        "item:iron-plate": 0.12,
+        "item:copper-plate": 0.315
+      },
+      "resource_equivalents": {
+        "product": {
+          "item:iron-ore": 0.25,
+          "item:copper-ore": 0.1875
+        },
+        "scrap": {
+          "item:iron-ore": 0.12,
+          "item:copper-ore": 0.315
+        }
+      },
+      "ratios": {
+        "item:iron-ore": {
+          "product": 0.5,
+          "scrap": 0.24,
+          "total": 0.74
+        },
+        "item:copper-ore": {
+          "product": 0.5,
+          "scrap": 0.84,
+          "total": 1.3399999999999999
+        }
+      },
+      "complete": true,
+      "gaps": [],
+      "unvalued": {},
+      "label": "EM circuits, five normal productivity-3 modules",
+      "configuration": {
+        "label": "EM circuits, five normal productivity-3 modules",
+        "target": "electronic-circuit",
+        "productivity": {
+          "copper-cable": 1.0,
+          "electronic-circuit": 1.0
+        }
+      }
+    },
+    {
+      "target": "electronic-circuit",
+      "production": {
+        "resources": {
+          "item:iron-ore": 0.36363636363636365,
+          "item:copper-ore": 0.1983471074380165
+        },
+        "scrap": {
+          "yis-iron-scrap": 0.36,
+          "yis-copper-scrap": 0.5563636363636364
+        },
+        "crafts": {
+          "electronic-circuit": 0.36363636363636365,
+          "iron-plate": 0.36363636363636365,
+          "copper-cable": 0.1983471074380165,
+          "copper-plate": 0.1983471074380165
+        },
+        "contributors": [
+          {
+            "recipe": "electronic-circuit",
+            "scrap": {
+              "yis-iron-scrap": 0.36,
+              "yis-copper-scrap": 0.36
+            },
+            "total": 0.72
+          },
+          {
+            "recipe": "copper-cable",
+            "scrap": {
+              "yis-copper-scrap": 0.19636363636363635
+            },
+            "total": 0.19636363636363635
+          }
+        ],
+        "selected_producers": {
+          "item:electronic-circuit": "electronic-circuit",
+          "item:iron-plate": "iron-plate",
+          "item:copper-cable": "copper-cable",
+          "item:copper-plate": "copper-plate"
+        },
+        "alternatives": {
+          "item:iron-plate": [
+            "casting-iron",
+            "iron-plate"
+          ],
+          "item:copper-cable": [
+            "casting-copper-cable",
+            "copper-cable"
+          ],
+          "item:copper-plate": [
+            "casting-copper",
+            "copper-plate"
+          ]
+        },
+        "gaps": []
+      },
+      "recycling_recipe": "electronic-circuit-recycling",
+      "returned_product": {
+        "item:iron-plate": 0.25,
+        "item:copper-cable": 0.75
+      },
+      "returned_scrap": {
+        "item:iron-plate": 0.12,
+        "item:copper-plate": 0.2781818181818182
+      },
+      "resource_equivalents": {
+        "product": {
+          "item:iron-ore": 0.25,
+          "item:copper-ore": 0.13636363636363635
+        },
+        "scrap": {
+          "item:iron-ore": 0.12,
+          "item:copper-ore": 0.2781818181818182
+        }
+      },
+      "ratios": {
+        "item:iron-ore": {
+          "product": 0.6875,
+          "scrap": 0.32999999999999996,
+          "total": 1.0175
+        },
+        "item:copper-ore": {
+          "product": 0.6875,
+          "scrap": 1.4025000000000003,
+          "total": 2.0900000000000003
+        }
+      },
+      "complete": true,
+      "gaps": [],
+      "unvalued": {},
+      "label": "EM circuits, five legendary productivity-3 modules",
+      "configuration": {
+        "label": "EM circuits, five legendary productivity-3 modules",
+        "target": "electronic-circuit",
+        "productivity": {
+          "copper-cable": 1.75,
+          "electronic-circuit": 1.75
+        }
+      }
+    },
+    {
+      "target": "low-density-structure",
+      "production": {
+        "resources": {
+          "item:iron-ore": 3.5555555555555554,
+          "item:calcite": 0.29333333333333333,
+          "item:copper-ore": 11.11111111111111,
+          "fluid:crude-oil": 74.07407407407406,
+          "item:coal": 1.6666666666666665
+        },
+        "scrap": {
+          "yis-iron-scrap": 0.48,
+          "yis-copper-scrap": 0.72,
+          "yis-plastic-scrap": 0.36
+        },
+        "crafts": {
+          "casting-low-density-structure": 0.6666666666666666,
+          "iron-ore-melting": 0.07111111111111111,
+          "copper-ore-melting": 0.2222222222222222,
+          "plastic-bar": 1.6666666666666665,
+          "basic-oil-processing": 0.7407407407407406
+        },
+        "contributors": [
+          {
+            "recipe": "casting-low-density-structure",
+            "scrap": {
+              "yis-iron-scrap": 0.48,
+              "yis-copper-scrap": 0.72,
+              "yis-plastic-scrap": 0.36
+            },
+            "total": 1.56
+          }
+        ],
+        "selected_producers": {
+          "item:low-density-structure": "casting-low-density-structure",
+          "fluid:molten-iron": "iron-ore-melting",
+          "fluid:molten-copper": "copper-ore-melting",
+          "item:plastic-bar": "plastic-bar",
+          "fluid:petroleum-gas": "basic-oil-processing"
+        },
+        "alternatives": {
+          "item:low-density-structure": [
+            "casting-low-density-structure",
+            "low-density-structure"
+          ],
+          "fluid:molten-iron": [
+            "iron-ore-melting",
+            "molten-iron-from-lava"
+          ],
+          "fluid:molten-copper": [
+            "copper-ore-melting",
+            "molten-copper-from-lava"
+          ],
+          "item:plastic-bar": [
+            "bioplastic",
+            "plastic-bar"
+          ],
+          "fluid:petroleum-gas": [
+            "advanced-oil-processing",
+            "basic-oil-processing",
+            "coal-liquefaction",
+            "empty-petroleum-gas-barrel",
+            "light-oil-cracking"
+          ]
+        },
+        "gaps": []
+      },
+      "recycling_recipe": "low-density-structure-recycling",
+      "returned_product": {
+        "item:steel-plate": 0.5,
+        "item:copper-plate": 5.0,
+        "item:plastic-bar": 1.25
+      },
+      "returned_scrap": {
+        "item:iron-plate": 0.16,
+        "item:copper-plate": 0.36,
+        "item:plastic-bar": 0.09
+      },
+      "resource_equivalents": {
+        "product": {
+          "item:iron-ore": 0.6666666666666667,
+          "item:calcite": 0.05777777777777778,
+          "item:copper-ore": 2.2222222222222223,
+          "fluid:crude-oil": 27.77777777777778,
+          "item:coal": 0.625
+        },
+        "scrap": {
+          "item:iron-ore": 0.07111111111111111,
+          "item:calcite": 0.004622222222222222,
+          "item:copper-ore": 0.15999999999999998,
+          "fluid:crude-oil": 1.9999999999999998,
+          "item:coal": 0.045
+        }
+      },
+      "ratios": {
+        "item:iron-ore": {
+          "product": 0.18750000000000003,
+          "scrap": 0.02,
+          "total": 0.20750000000000002
+        },
+        "item:calcite": {
+          "product": 0.196969696969697,
+          "scrap": 0.01575757575757576,
+          "total": 0.21272727272727274
+        },
+        "item:copper-ore": {
+          "product": 0.2,
+          "scrap": 0.014399999999999998,
+          "total": 0.2144
+        },
+        "fluid:crude-oil": {
+          "product": 0.37500000000000006,
+          "scrap": 0.027,
+          "total": 0.4020000000000001
+        },
+        "item:coal": {
+          "product": 0.37500000000000006,
+          "scrap": 0.027,
+          "total": 0.4020000000000001
+        }
+      },
+      "complete": true,
+      "gaps": [],
+      "unvalued": {},
+      "label": "Foundry LDS, inherent bonuses only",
+      "configuration": {
+        "label": "Foundry LDS, inherent bonuses only",
+        "target": "low-density-structure",
+        "routes": {
+          "item:low-density-structure": "casting-low-density-structure",
+          "item:iron-plate": "casting-iron",
+          "item:copper-plate": "casting-copper",
+          "item:steel-plate": "casting-steel",
+          "fluid:molten-iron": "iron-ore-melting",
+          "fluid:molten-copper": "copper-ore-melting",
+          "fluid:petroleum-gas": "basic-oil-processing"
+        },
+        "productivity": {
+          "casting-low-density-structure": 0.5,
+          "casting-iron": 0.5,
+          "casting-copper": 0.5,
+          "casting-steel": 0.5,
+          "iron-ore-melting": 0.5,
+          "copper-ore-melting": 0.5
+        }
+      }
+    },
+    {
+      "target": "low-density-structure",
+      "production": {
+        "resources": {
+          "item:iron-ore": 1.0526315789473684,
+          "item:calcite": 0.08684210526315789,
+          "item:copper-ore": 3.289473684210526,
+          "fluid:crude-oil": 27.77777777777778,
+          "item:coal": 0.625
+        },
+        "scrap": {
+          "yis-iron-scrap": 0.48,
+          "yis-copper-scrap": 0.72,
+          "yis-plastic-scrap": 0.36
+        },
+        "crafts": {
+          "casting-low-density-structure": 0.25,
+          "iron-ore-melting": 0.021052631578947368,
+          "copper-ore-melting": 0.06578947368421052,
+          "plastic-bar": 0.625,
+          "basic-oil-processing": 0.2777777777777778
+        },
+        "contributors": [
+          {
+            "recipe": "casting-low-density-structure",
+            "scrap": {
+              "yis-iron-scrap": 0.48,
+              "yis-copper-scrap": 0.72,
+              "yis-plastic-scrap": 0.36
+            },
+            "total": 1.56
+          }
+        ],
+        "selected_producers": {
+          "item:low-density-structure": "casting-low-density-structure",
+          "fluid:molten-iron": "iron-ore-melting",
+          "fluid:molten-copper": "copper-ore-melting",
+          "item:plastic-bar": "plastic-bar",
+          "fluid:petroleum-gas": "basic-oil-processing"
+        },
+        "alternatives": {
+          "item:low-density-structure": [
+            "casting-low-density-structure",
+            "low-density-structure"
+          ],
+          "fluid:molten-iron": [
+            "iron-ore-melting",
+            "molten-iron-from-lava"
+          ],
+          "fluid:molten-copper": [
+            "copper-ore-melting",
+            "molten-copper-from-lava"
+          ],
+          "item:plastic-bar": [
+            "bioplastic",
+            "plastic-bar"
+          ],
+          "fluid:petroleum-gas": [
+            "advanced-oil-processing",
+            "basic-oil-processing",
+            "coal-liquefaction",
+            "empty-petroleum-gas-barrel",
+            "light-oil-cracking"
+          ]
+        },
+        "gaps": []
+      },
+      "recycling_recipe": "low-density-structure-recycling",
+      "returned_product": {
+        "item:steel-plate": 0.5,
+        "item:copper-plate": 5.0,
+        "item:plastic-bar": 1.25
+      },
+      "returned_scrap": {
+        "item:iron-plate": 0.16,
+        "item:copper-plate": 0.36,
+        "item:plastic-bar": 0.09
+      },
+      "resource_equivalents": {
+        "product": {
+          "item:iron-ore": 0.41551246537396125,
+          "item:calcite": 0.036011080332409975,
+          "item:copper-ore": 1.3850415512465375,
+          "fluid:crude-oil": 27.77777777777778,
+          "item:coal": 0.625
+        },
+        "scrap": {
+          "item:iron-ore": 0.044321329639889204,
+          "item:calcite": 0.002880886426592798,
+          "item:copper-ore": 0.0997229916897507,
+          "fluid:crude-oil": 1.9999999999999998,
+          "item:coal": 0.045
+        }
+      },
+      "ratios": {
+        "item:iron-ore": {
+          "product": 0.3947368421052632,
+          "scrap": 0.04210526315789474,
+          "total": 0.436842105263158
+        },
+        "item:calcite": {
+          "product": 0.4146730462519937,
+          "scrap": 0.033173843700159494,
+          "total": 0.44784688995215316
+        },
+        "item:copper-ore": {
+          "product": 0.4210526315789474,
+          "scrap": 0.030315789473684213,
+          "total": 0.45136842105263164
+        },
+        "fluid:crude-oil": {
+          "product": 1.0,
+          "scrap": 0.072,
+          "total": 1.072
+        },
+        "item:coal": {
+          "product": 1.0,
+          "scrap": 0.072,
+          "total": 1.072
+        }
+      },
+      "complete": true,
+      "gaps": [],
+      "unvalued": {},
+      "label": "Foundry LDS, four normal productivity-3 modules, research level 21",
+      "configuration": {
+        "label": "Foundry LDS, four normal productivity-3 modules, research level 21",
+        "target": "low-density-structure",
+        "routes": {
+          "item:low-density-structure": "casting-low-density-structure",
+          "item:iron-plate": "casting-iron",
+          "item:copper-plate": "casting-copper",
+          "item:steel-plate": "casting-steel",
+          "fluid:molten-iron": "iron-ore-melting",
+          "fluid:molten-copper": "copper-ore-melting",
+          "fluid:petroleum-gas": "basic-oil-processing"
+        },
+        "productivity": {
+          "casting-low-density-structure": 3.0,
+          "casting-iron": 0.9,
+          "casting-copper": 0.9,
+          "casting-steel": 0.9,
+          "iron-ore-melting": 0.9,
+          "copper-ore-melting": 0.9
+        }
+      }
+    }
+  ]
+}

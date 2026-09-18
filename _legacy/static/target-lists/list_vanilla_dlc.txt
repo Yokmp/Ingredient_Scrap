@@ -1,0 +1,268 @@
+Ingredient Scrap Target List: vanilla_dlc
+================================================================================
+
+[fluid] copper
+  resources:
+    copper-ore -> item:copper-ore
+  recycle targets:
+    yis-recycle-copper-scrap -> item:copper-plate x1
+    yis-recycle-copper-scrap-to-fluid -> fluid:molten-copper x10
+  source recipes:
+    fluid:molten-copper x1 -> casting-copper-cable -> item:copper-cable x2, item:yis-copper-scrap x1
+    fluid:molten-copper x2 -> casting-copper -> item:copper-plate x2, item:yis-copper-scrap x1
+    fluid:molten-copper x25 -> casting-low-density-structure -> item:low-density-structure x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+
+[fluid] hiddenfluidium
+  resources:
+    yis-test-hiddenfluidium-resource -> fluid:hiddenfluidium-solution x10
+  recycle targets:
+    yis-recycle-hiddenfluidium-scrap-to-fluid -> fluid:hiddenfluidium-solution x14
+  source recipes:
+    fluid:hiddenfluidium-solution x5 -> hiddenfluidium-solution-barrel -> item:hiddenfluidium-solution-barrel x1, item:yis-hiddenfluidium-scrap x1
+    fluid:hiddenfluidium-solution x7 -> yis-test-hiddenfluidium-fluid -> item:hiddenfluidium-product x1, item:yis-hiddenfluidium-scrap x1
+
+[fluid] holmium
+  recycle targets:
+    yis-recycle-holmium-scrap -> item:holmium-plate x1
+    yis-recycle-holmium-scrap-to-fluid -> fluid:holmium-solution x10
+  source recipes:
+    fluid:holmium-solution x1 -> electrolyte -> fluid:electrolyte x10, item:yis-holmium-scrap x1
+    fluid:holmium-solution x2 -> holmium-plate -> item:holmium-plate x1, item:yis-holmium-scrap x1
+
+[fluid] iron
+  resources:
+    iron-ore -> item:iron-ore
+  recycle targets:
+    yis-recycle-iron-scrap -> item:iron-plate x1
+    yis-recycle-iron-scrap-to-fluid -> fluid:molten-iron x10
+  source recipes:
+    fluid:molten-iron x1 -> casting-iron-gear-wheel -> item:iron-gear-wheel x1, item:yis-iron-scrap x1
+    fluid:molten-iron x1 -> casting-pipe -> item:pipe x1, item:yis-iron-scrap x1
+    fluid:molten-iron x1 -> tungsten-plate -> item:tungsten-plate x1, item:yis-tungsten-scrap x1, item:yis-iron-scrap x1
+    fluid:molten-iron x2 -> casting-iron -> item:iron-plate x2, item:yis-iron-scrap x1
+    fluid:molten-iron x2 -> casting-iron-stick -> item:iron-stick x4, item:yis-iron-scrap x1
+    fluid:molten-iron x2 -> concrete-from-molten-iron -> item:concrete x10, item:yis-iron-scrap x1
+    fluid:molten-iron x20 -> big-mining-drill -> item:big-mining-drill x1, item:yis-iron-scrap x1
+    fluid:molten-iron x3 -> casting-steel -> item:steel-plate x1, item:yis-iron-scrap x1
+    fluid:molten-iron x5 -> casting-pipe-to-ground -> item:pipe-to-ground x2, item:yis-iron-scrap x1
+    fluid:molten-iron x8 -> casting-low-density-structure -> item:low-density-structure x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+
+[fluid] rare-metal
+  resources:
+    yis-test-rare-metal-resource -> item:rare-metal-ore x1
+    yis-test-rare-metal-solution-resource -> fluid:rare-metal-solution x10
+  recycle targets:
+    yis-recycle-rare-metal-scrap-to-fluid -> fluid:rare-metal-solution x10
+  source recipes:
+    fluid:molten-rare-metal x5 -> molten-rare-metal-barrel -> item:molten-rare-metal-barrel x1, item:yis-rare-metal-scrap x1
+    fluid:rare-metal-solution x5 -> rare-metal-solution-barrel -> item:rare-metal-solution-barrel x1, item:yis-rare-metal-scrap x1
+
+[fluid] solvium
+  recycle targets:
+    yis-recycle-solvium-scrap-to-fluid -> fluid:solvium-solution x12
+  source recipes:
+    fluid:solvium-solution x5 -> solvium-solution-barrel -> item:solvium-solution-barrel x1, item:yis-solvium-scrap x1
+    fluid:solvium-solution x6 -> yis-test-solvium-solution -> item:solvium-product-fluid x1, item:yis-solvium-scrap x1
+
+[fluid] testium
+  recycle targets:
+    yis-recycle-testium-scrap -> item:testium-plate x1
+    yis-recycle-testium-scrap-to-fluid -> fluid:molten-testium x10
+  source recipes:
+    fluid:molten-testium x4 -> yis-test-testium-mixed -> item:testium-product-mixed x1, item:yis-testium-scrap x2
+    fluid:molten-testium x5 -> molten-testium-barrel -> item:molten-testium-barrel x1, item:yis-testium-scrap x1
+    fluid:molten-testium x5 -> yis-test-testium-fluid -> item:testium-product-fluid x1, item:yis-testium-scrap x1
+
+[solid] blockium
+  resources:
+    yis-test-blockium-resource -> item:blockium-ore x1
+  recycle targets:
+    yis-recycle-blockium-scrap -> item:blockium-plate x1
+  source recipes:
+    item:blockium-ore x4 -> yis-test-blockium-disabled -> item:blockium-plate x1, item:yis-blockium-scrap x1
+
+[solid] copper
+  resources:
+    copper-ore -> item:copper-ore
+  recycle targets:
+    yis-recycle-copper-scrap -> item:copper-plate x1
+    yis-recycle-copper-scrap-to-fluid -> fluid:molten-copper x10
+  source recipes:
+    item:copper-ore x1 -> copper-plate -> item:copper-plate x1, item:yis-copper-scrap x1
+    item:copper-ore x50 -> molten-copper -> fluid:molten-copper x500, item:yis-copper-scrap x2
+    item:copper-plate x1 -> battery -> item:battery x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+    item:copper-plate x1 -> copper-cable -> item:copper-cable x2, item:yis-copper-scrap x1
+    item:copper-plate x1 -> superconductor -> item:superconductor x2, item:yis-holmium-scrap x1, item:yis-copper-scrap x1
+    item:copper-plate x10 -> gun-turret -> item:gun-turret x1, item:yis-copper-scrap x1, item:yis-iron-scrap x1
+    item:copper-plate x100 -> heat-exchanger -> item:heat-exchanger x1, item:yis-steel-scrap x1, item:yis-copper-scrap x2
+    item:copper-plate x20 -> heat-pipe -> item:heat-pipe x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1
+    item:copper-plate x20 -> low-density-structure -> item:low-density-structure x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1
+    item:copper-plate x5 -> solar-panel -> item:solar-panel x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1
+    item:copper-plate x50 -> steam-turbine -> item:steam-turbine x1, item:yis-copper-scrap x2
+    item:copper-plate x500 -> nuclear-reactor -> item:nuclear-reactor x1, item:yis-steel-scrap x4, item:yis-copper-scrap x4
+
+[solid] disabledium
+  resources:
+    yis-test-disabledium-resource -> item:disabledium-ore x1
+  recycle targets:
+    yis-recycle-disabledium-scrap -> item:disabledium-plate x1
+  source recipes:
+    item:disabledium-ore x4 -> yis-test-disabledium-disabled -> item:disabledium-plate x1, item:yis-disabledium-scrap x1
+
+[solid] hiddenium
+  resources:
+    yis-test-hiddenium-resource -> item:hiddenium-ore x1
+  recycle targets:
+    yis-recycle-hiddenium-scrap -> item:hiddenium-plate x1
+  source recipes:
+    item:hiddenium-plate x4 -> yis-test-hiddenium-hidden -> item:hiddenium-product x1, item:yis-hiddenium-scrap x1
+
+[solid] holmium
+  recycle targets:
+    yis-recycle-holmium-scrap -> item:holmium-plate x1
+    yis-recycle-holmium-scrap-to-fluid -> fluid:holmium-solution x10
+  source recipes:
+    item:holmium-ore x2 -> holmium-solution -> fluid:holmium-solution x100, item:yis-holmium-scrap x1
+    item:holmium-plate x1 -> fusion-power-cell -> item:fusion-power-cell x1, item:yis-holmium-scrap x1
+    item:holmium-plate x1 -> lithium -> item:lithium x5, item:yis-holmium-scrap x1
+    item:holmium-plate x1 -> superconductor -> item:superconductor x2, item:yis-holmium-scrap x1, item:yis-copper-scrap x1
+    item:holmium-plate x150 -> electromagnetic-plant -> item:electromagnetic-plant x1, item:yis-holmium-scrap x3, item:yis-steel-scrap x2
+    item:holmium-plate x2 -> supercapacitor -> item:supercapacitor x1, item:yis-holmium-scrap x1
+
+[solid] iron
+  resources:
+    iron-ore -> item:iron-ore
+  recycle targets:
+    yis-recycle-iron-scrap -> item:iron-plate x1
+    yis-recycle-iron-scrap-to-fluid -> fluid:molten-iron x10
+  source recipes:
+    item:iron-ore x1 -> concrete -> item:concrete x10, item:yis-iron-scrap x1
+    item:iron-ore x1 -> iron-plate -> item:iron-plate x1, item:yis-iron-scrap x1
+    item:iron-ore x2 -> advanced-thruster-oxidizer -> fluid:thruster-oxidizer x1500, item:yis-iron-scrap x1
+    item:iron-ore x2 -> thruster-oxidizer -> fluid:thruster-oxidizer x75, item:yis-iron-scrap x1
+    item:iron-ore x50 -> molten-iron -> fluid:molten-iron x500, item:yis-iron-scrap x2
+    item:iron-plate x1 -> battery -> item:battery x1, item:yis-iron-scrap x1, item:yis-copper-scrap x1
+    item:iron-plate x1 -> burner-inserter -> item:burner-inserter x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> display-panel -> item:display-panel x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> electronic-circuit -> item:electronic-circuit x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> inserter -> item:inserter x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> iron-stick -> item:iron-stick x2, item:yis-iron-scrap x1
+    item:iron-plate x1 -> long-handed-inserter -> item:long-handed-inserter x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> pipe -> item:pipe x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> small-lamp -> item:small-lamp x1, item:yis-iron-scrap x1
+    item:iron-plate x1 -> sulfuric-acid -> fluid:sulfuric-acid x50, item:yis-iron-scrap x1
+    item:iron-plate x1 -> transport-belt -> item:transport-belt x2, item:yis-iron-scrap x1
+    item:iron-plate x10 -> electric-mining-drill -> item:electric-mining-drill x1, item:yis-iron-scrap x1
+    item:iron-plate x10 -> radar -> item:radar x1, item:yis-iron-scrap x1
+    item:iron-plate x10 -> steam-engine -> item:steam-engine x1, item:yis-iron-scrap x1
+    item:iron-plate x10 -> underground-belt -> item:underground-belt x2, item:yis-iron-scrap x1
+    item:iron-plate x10 -> uranium-fuel-cell -> item:uranium-fuel-cell x10, item:yis-iron-scrap x1
+    item:iron-plate x2 -> accumulator -> item:accumulator x1, item:yis-iron-scrap x1
+    item:iron-plate x2 -> fast-inserter -> item:fast-inserter x1, item:yis-iron-scrap x1
+    item:iron-plate x2 -> iron-gear-wheel -> item:iron-gear-wheel x1, item:yis-iron-scrap x1
+    item:iron-plate x20 -> biochamber -> item:biochamber x1, item:yis-iron-scrap x1
+    item:iron-plate x20 -> gun-turret -> item:gun-turret x1, item:yis-copper-scrap x1, item:yis-iron-scrap x1
+    item:iron-plate x20 -> storage-tank -> item:storage-tank x1, item:yis-iron-scrap x1, item:yis-steel-scrap x1
+    item:iron-plate x3 -> burner-mining-drill -> item:burner-mining-drill x1, item:yis-iron-scrap x1
+    item:iron-plate x3 -> programmable-speaker -> item:programmable-speaker x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> loader -> item:loader x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> pipe-to-ground -> item:pipe-to-ground x2, item:yis-iron-scrap x1
+    item:iron-plate x5 -> power-switch -> item:power-switch x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> rail-chain-signal -> item:rail-chain-signal x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> rail-signal -> item:rail-signal x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> splitter -> item:splitter x1, item:yis-iron-scrap x1
+    item:iron-plate x5 -> steel-plate -> item:steel-plate x1, item:yis-iron-scrap x1
+    item:iron-plate x6 -> train-stop -> item:train-stop x1, item:yis-iron-scrap x1, item:yis-steel-scrap x1
+    item:iron-plate x8 -> iron-chest -> item:iron-chest x1, item:yis-iron-scrap x1
+    item:iron-plate x9 -> assembling-machine-1 -> item:assembling-machine-1 x1, item:yis-iron-scrap x1
+
+[solid] quietium
+  recycle targets:
+    yis-recycle-quietium-scrap -> item:quietium-plate x1
+  source recipes:
+    item:quietium-plate x4 -> yis-test-quietium-neutral -> item:neutral-product x1, item:yis-quietium-scrap x1
+
+[solid] steel
+  recycle targets:
+    yis-recycle-steel-scrap -> item:steel-plate x1
+  source recipes:
+    item:steel-plate x1 -> barrel -> item:barrel x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> engine-unit -> item:engine-unit x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> flying-robot-frame -> item:flying-robot-frame x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> land-mine -> item:land-mine x4, item:yis-steel-scrap x1
+    item:steel-plate x1 -> pump -> item:pump x1, item:yis-steel-scrap x1
+    item:steel-plate x1 -> refined-concrete -> item:refined-concrete x10, item:yis-steel-scrap x1
+    item:steel-plate x10 -> agricultural-tower -> item:agricultural-tower x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> battery-equipment -> item:battery-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> beacon -> item:beacon x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> belt-immunity-equipment -> item:belt-immunity-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> crusher -> item:crusher x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> electric-furnace -> item:electric-furnace x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> energy-shield-equipment -> item:energy-shield-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> heat-exchanger -> item:heat-exchanger x1, item:yis-steel-scrap x1, item:yis-copper-scrap x2
+    item:steel-plate x10 -> heat-pipe -> item:heat-pipe x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1
+    item:steel-plate x10 -> night-vision-equipment -> item:night-vision-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> rail-support -> item:rail-support x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> substation -> item:substation x1, item:yis-steel-scrap x1
+    item:steel-plate x10 -> thruster -> item:thruster x1, item:yis-steel-scrap x1
+    item:steel-plate x1000 -> rocket-silo -> item:rocket-silo x1, item:yis-steel-scrap x5
+    item:steel-plate x15 -> oil-refinery -> item:oil-refinery x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> assembling-machine-2 -> item:assembling-machine-2 x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> gate -> item:gate x1, item:yis-steel-scrap x1
+    item:steel-plate x2 -> low-density-structure -> item:low-density-structure x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1
+    item:steel-plate x2 -> medium-electric-pole -> item:medium-electric-pole x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> cargo-bay -> item:cargo-bay x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> discharge-defense-equipment -> item:discharge-defense-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> exoskeleton-equipment -> item:exoskeleton-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> laser-turret -> item:laser-turret x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> personal-roboport-equipment -> item:personal-roboport-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> recycler -> item:recycler x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> rocket-turret -> item:rocket-turret x1, item:yis-steel-scrap x1
+    item:steel-plate x20 -> space-platform-foundation -> item:space-platform-foundation x1, item:yis-steel-scrap x1
+    item:steel-plate x25 -> cargo-landing-pad -> item:cargo-landing-pad x1, item:yis-steel-scrap x1
+    item:steel-plate x3 -> train-stop -> item:train-stop x1, item:yis-iron-scrap x1, item:yis-steel-scrap x1
+    item:steel-plate x30 -> flamethrower-turret -> item:flamethrower-turret x1, item:yis-steel-scrap x2
+    item:steel-plate x45 -> roboport -> item:roboport x1, item:yis-steel-scrap x2
+    item:steel-plate x5 -> big-electric-pole -> item:big-electric-pole x1, item:yis-steel-scrap x1
+    item:steel-plate x5 -> chemical-plant -> item:chemical-plant x1, item:yis-steel-scrap x1
+    item:steel-plate x5 -> pumpjack -> item:pumpjack x1, item:yis-steel-scrap x1
+    item:steel-plate x5 -> solar-panel -> item:solar-panel x1, item:yis-steel-scrap x1, item:yis-copper-scrap x1
+    item:steel-plate x5 -> solar-panel-equipment -> item:solar-panel-equipment x1, item:yis-steel-scrap x1
+    item:steel-plate x5 -> storage-tank -> item:storage-tank x1, item:yis-iron-scrap x1, item:yis-steel-scrap x1
+    item:steel-plate x50 -> centrifuge -> item:centrifuge x1, item:yis-steel-scrap x2
+    item:steel-plate x50 -> electromagnetic-plant -> item:electromagnetic-plant x1, item:yis-holmium-scrap x3, item:yis-steel-scrap x2
+    item:steel-plate x50 -> foundry -> item:foundry x1, item:yis-steel-scrap x2
+    item:steel-plate x500 -> nuclear-reactor -> item:nuclear-reactor x1, item:yis-steel-scrap x4, item:yis-copper-scrap x4
+    item:steel-plate x6 -> steel-furnace -> item:steel-furnace x1, item:yis-steel-scrap x1
+    item:steel-plate x8 -> lightning-rod -> item:lightning-rod x1, item:yis-steel-scrap x1
+    item:steel-plate x8 -> steel-chest -> item:steel-chest x1, item:yis-steel-scrap x1
+
+[solid] testium
+  recycle targets:
+    yis-recycle-testium-scrap -> item:testium-plate x1
+    yis-recycle-testium-scrap-to-fluid -> fluid:molten-testium x10
+  source recipes:
+    item:testium-ore x3 -> yis-test-testium-no-tech -> item:testium-product-no-tech x1, item:yis-testium-scrap x1
+    item:testium-plate x200 -> yis-test-testium-large -> item:testium-product-large x1, item:yis-testium-scrap x3
+    item:testium-plate x5 -> yis-test-testium-fluid-main-product -> fluid:steam x100, item:yis-testium-scrap x1
+    item:testium-plate x5 -> yis-test-testium-solid -> item:testium-product-solid x1, item:yis-testium-scrap x1
+    item:testium-plate x5 -> yis-test-testium-with-tech -> item:testium-product-tech x1, item:yis-testium-scrap x1
+    item:testium-plate x6 -> yis-test-testium-mixed -> item:testium-product-mixed x1, item:yis-testium-scrap x2
+
+[solid] tungsten
+  resources:
+    tungsten-ore -> item:tungsten-ore
+  recycle targets:
+    yis-recycle-tungsten-scrap -> item:tungsten-plate x1
+  source recipes:
+    item:tungsten-ore x2 -> tungsten-carbide -> item:tungsten-carbide x1, item:yis-tungsten-scrap x1
+    item:tungsten-ore x4 -> tungsten-plate -> item:tungsten-plate x1, item:yis-tungsten-scrap x1, item:yis-iron-scrap x1
+    item:tungsten-plate x100 -> fusion-generator -> item:fusion-generator x1, item:yis-tungsten-scrap x2
+    item:tungsten-plate x15 -> turbo-splitter -> item:turbo-splitter x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x200 -> fusion-reactor -> item:fusion-reactor x1, item:yis-tungsten-scrap x3
+    item:tungsten-plate x250 -> fusion-reactor-equipment -> item:fusion-reactor-equipment x1, item:yis-tungsten-scrap x3
+    item:tungsten-plate x30 -> railgun-turret -> item:railgun-turret x1, item:yis-tungsten-scrap x2
+    item:tungsten-plate x4 -> foundation -> item:foundation x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x40 -> turbo-underground-belt -> item:turbo-underground-belt x2, item:yis-tungsten-scrap x2
+    item:tungsten-plate x5 -> turbo-transport-belt -> item:turbo-transport-belt x1, item:yis-tungsten-scrap x1
+    item:tungsten-plate x60 -> artillery-turret -> item:artillery-turret x1, item:yis-tungsten-scrap x2

@@ -1,5 +1,7 @@
-local material_overrides = require("code.lib.material-overrides")
-require("code.lib.recipe-chain-overrides")
+local public_api = require("code.api.public")
+local api_modules = public_api.load()
+local material_overrides = api_modules.materials
+local ancestry_settings = require("code.functions.ancestry-settings")
 require("code.compat.vanilla-materials")
 require("code.compat.mod-materials")
 
@@ -52,11 +54,11 @@ data:extend({
         name = "yis-shallow-log",
         localised_name = { "", "[img=gears-symbol]", " - ", { "mod-setting-name.yis-shallow-log" } },
         setting_type = "startup",
-        default_value = true,
+        default_value = false,
         order = "e",
     },
     {
-        hidden = false,
+        hidden = true,
         type = "bool-setting",
         name = "yis-fluid-recipes",
         localised_name = { "", "[img=drop-symbol]", " - ", { "mod-setting-name.yis-fluid-recipes" } },
@@ -73,6 +75,38 @@ data:extend({
         setting_type = "startup",
         default_value = true,
         order = "g",
+    },
+    {
+        hidden = false,
+        type = "string-setting",
+        name = ancestry_settings.setting_name,
+        localised_name = { "", "[img=recipe-symbol]", " - ", { "mod-setting-name.yis-ancestry-mode" } },
+        setting_type = "startup",
+        default_value = ancestry_settings.default_value,
+        allowed_values = ancestry_settings.allowed_values,
+        order = "h",
+    },
+    {
+        hidden = false,
+        type = "int-setting",
+        name = ancestry_settings.max_depth_setting_name,
+        localised_name = { "", "[img=recipe-symbol]", " - ", { "mod-setting-name.yis-ancestry-max-depth" } },
+        setting_type = "startup",
+        minimum_value = 1,
+        maximum_value = 20,
+        default_value = 8,
+        order = "h-a",
+    },
+    {
+        hidden = false,
+        type = "int-setting",
+        name = ancestry_settings.mixed_limit_setting_name,
+        localised_name = { "", "[img=recipe-symbol]", " - ", { "mod-setting-name.yis-ancestry-mixed-limit" } },
+        setting_type = "startup",
+        minimum_value = 1,
+        maximum_value = 12,
+        default_value = 3,
+        order = "h-b",
     },
     {
         hidden = true,

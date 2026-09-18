@@ -1,0 +1,246 @@
+# Ingredient Scrap Development Notes
+
+This file describes local development assets. It is intended for the dev branch
+and GitHub source, not for the Mod Portal zip.
+
+## Local Test Harness
+
+The Lua-side Factorio harness lives under `tools/test`. The Python launcher can
+run from here or from the external internal tool package under
+`../Toolsets/testharness`.
+
+Common commands:
+
+```powershell
+python tools\test\run_tests.py --profile default --no-color
+python tools\test\run_tests.py --all --no-color
+python tools\test\run_tests.py --mod-profile krastorio_is --profile default --no-color
+python tools\test\run_tests.py --mod-profile bob_angels_full_is --profile default --no-color
+python ..\Toolsets\testharness\run_tests.py --mod-root . --profile default --no-color
+```
+
+The harness starts Factorio with temporary saves, enables the hidden debug
+setting, reads JSON reports from `script-output/Ingredient_Scrap`, and formats
+the result in the terminal. It does not use Factorio log parsing as the primary
+test result mechanism.
+
+Harness defaults are declared in `tools/test/harness.json`. The reusable
+Toolsets runner reads this file from the selected `--mod-root`, so other mods
+can define their own report path, debug setting, artifacts, mod-list profile,
+and test profiles without editing Python code.
+
+Mod-list profiles are declared in `tools/test/modlist-profiles.json`. The
+`profile_groups.all` group defines which compatible mod combinations are part of
+the full matrix:
+
+```json
+{
+  "profiles": {
+    "ingredient_scrap": {
+      "label": "Ingredient Scrap + DLCs",
+      "mods": ["base", "elevated-rails", "Ingredient_Scrap", "quality", "space-age"]
+    }
+  },
+  "profile_groups": {
+    "all": ["ingredient_scrap"]
+  }
+}
+```
+
+`--all` runs every harness test profile against every mod-list profile listed in
+`profile_groups.all`. If the group is missing, `--all` falls back to the single
+configured `mod_profile`. An explicit `--mod-profile NAME` always overrides the
+group and runs the full test-profile set only against that one mod profile.
+
+Do not treat "all locally installed mods" as a stable test matrix. Mod-specific
+files should list only known-compatible combinations in `profile_groups.all`;
+unstable diagnostic profiles belong outside that group.
+
+Startup settings are a separate harness axis. `tools/test/harness.json` may
+define `setting_profiles` and `setting_profile_groups.all`; these are applied to
+`mod-settings.dat` before each Factorio run and restored immediately afterward.
+Use this for real startup settings that must exist before the data stage:
+
+```json
+{
+  "setting_profiles": {
+    "default": {},
+    "steam_off": {
+      "some-startup-setting": false
+    }
+  },
+  "setting_profile_groups": {
+    "all": ["default", "steam_off"]
+  }
+}
+```
+
+The three harness axes are intentionally separate:
+
+| Axis | CLI | Config |
+| --- | --- | --- |
+| Mod list | `--mod-profile`, mod `profile_groups.all` | `tools/test/modlist-profiles.json` |
+| Startup settings | `--setting-profile`, `--all-setting-profiles` | `tools/test/harness.json` |
+| Lua assertions | `--profile`, `--all` | `tools/test/harness.json` |
+
+`--all` alone runs all Lua test profiles with the default startup setting
+profile. Add `--all-setting-profiles` when the test matrix should include all
+configured startup setting variants. The hidden debug setting is still mixed into
+each setting profile unless `--debug-setting` is disabled.
+
+Important debug profiles include:
+
+| Profile | Purpose |
+| --- | --- |
+| `default` | Normal baseline behavior. |
+| `ancestry_width_1` | Stress mixed-scrap fallback width. |
+| `ancestry_material_heavy` | Strict resource-root material resolution. |
+| `fixed_amount` | Fixed scrap amounts. |
+| `needed_min` / `needed_high` | Recycling base value bounds. |
+
+## Debug Dumps
+
+Debug mode can emit several reports under:
+
+```text
+script-output/Ingredient_Scrap/
+```
+
+Useful files:
+
+| File | Purpose |
+| --- | --- |
+| `test-report.json` | Harness assertions and summaries. |
+| `data-table.lua` | Searchable Lua dump of internal staged data. |
+| `material-flow*.json` | Recipe/material flow for the HTML viewer. |
+| `production-flow*.json` | Production graph dump. |
+| `technology-flow*.json` | Generated technology/unlock flow. |
+
+Large dumps are intentionally development-only and must not ship in the Mod
+Portal zip.
+
+## Toolset
+
+General tools live under `tools/toolset` during development. They can also be
+copied into the shared internal package `../Toolsets/factorio-toolset` so other
+mods can reuse the same UI and CLI helpers without embedding Python tools in the
+target mod.
+
+Useful entry points:
+
+```powershell
+python tools\toolset\ui.py
+python tools\toolset\deploy.py check --verbose
+python tools\toolset\deploy.py build
+python tools\toolset\deploy.py publish-public --dry-run
+python ..\Toolsets\factorio-toolset\ui.py
+```
+
+The UI provides shortcuts for profile selection, dump creation, JSON viewing,
+debug test runs, and deploy commands. It is a local helper and is excluded from
+release artifacts.
+
+## Deploy Artifacts
+
+`deploy.py build` creates two zips under `_release_`:
+
+| Artifact | Contents |
+| --- | --- |
+| `Ingredient_Scrap_<version>.zip` | Mod Portal zip. No Markdown, screenshots, tools, debug dumps, or dev-only files. |
+| `public.zip` | Clean GitHub `main` source zip. Includes README/API/DEV docs and production source. |
+
+`publish-public` unpacks `public.zip` into a temporary worktree, commits it to
+the target branch, pushes, and removes the temporary worktree again. The current
+dev worktree is not switched.
+
+## Debug Regions
+
+Release-only stripping uses Lua region markers:
+
+```lua
+--#region debug
+-- debug-only code
+--#endregion
+```
+
+The Mod Portal zip strips these regions. Keep region boundaries balanced; the
+deploy check fails on unmatched starts or ends.
+
+## Local Documentation And Definitions
+
+LuaLS helper definitions and generated Factorio type annotations are development
+assets. They may exist in the dev branch but should not be copied into the
+released Mod Portal zip.
+
+The offline Factorio docs used during development are usually available at:
+
+```text
+F:\Games\Factorio_ModTest\doc-html\prototype-api.json
+F:\Games\Factorio_ModTest\doc-html\runtime-api.json
+```
+
+## Release Checklist
+
+For the quality-stock migration, also use the isolated test below before release.
+
+Before publishing:
+
+1. Run the default profile.
+2. Run all standard profiles.
+3. Run targeted K2 and Bob/Angels profiles if those mods are installed.
+4. Run `deploy.py check --verbose`.
+5. Run `deploy.py build`.
+6. Start Factorio once with the Mod Portal zip.
+7. Inspect `_release_/Ingredient_Scrap_<version>.zip` for accidental dev files.
+
+## Scrap Quality Migration Test
+
+`tools/test/migration-smoke` is a separate dev-only test mod, not part of normal
+gameplay. Copy it into an isolated mod directory as `is-migration-smoke`, enable
+it alongside IS and the DLCs using its `mod-list.json`, and create a fresh save
+with `factorio --mod-directory <test-mods> --create <test-saves>/test.zip`.
+Keep saves outside the mod-directory root so they are not mistaken for mod ZIPs.
+
+The test restores legacy output permissions for one recipe, seeds 161 higher-quality
+scrap items across 73 stacks, runs the helper and verifies normal quality,
+unchanged counts, preservation of unrelated legendary items, belt position,
+inventory filter conversion and idempotence. Covered locations: character main
+inventory, chest, machine output, inserter hand, belt, ground and script inventory.
+It also tests all 64 transport lines of yellow/red/blue/turbo splitters and paired
+underground belts, plus iron and mixed scrap in a chest on a second surface.
+Transport counts, qualities and positions are checked individually.
+It leaves 123 higher-quality scrap items across those transport lines and the
+two surface chests for a subsequent load test. Fixture references are saved in
+the test mod's `storage` so the checks do not depend on world positions.
+
+After creating that save, copy `tools/test/migration-smoke-verify.lua` into the
+test mod's `migrations/verify.lua`. Load the save using `--benchmark <save>
+--benchmark-ticks 1 --benchmark-runs 1`. The new migration calls the same helper
+and asserts that every saved legacy stack is normal with its count preserved,
+including transport positions, the second surface and a second idempotence pass.
+Success markers: `IS-MIGRATION-SMOKE PASS` and `IS-MIGRATION-LOAD PASS`.
+Remove the verification migration from the disposable test mod before creating
+another fresh test world; it specifically expects the saved 123-item fixture.
+
+Verified with Factorio 2.1.17. Player cursor handling is implemented but not
+exercised by the headless fixture (it creates a character, not a connected player).
+Loaders, linked belts and large modded saves still merit targeted testing.
+The tests never load or modify a user's regular saves.
+
+### Matrix Results (2026-09-18)
+
+- All 18 configured Lua profiles passed with Ingredient Scrap + DLCs on Factorio
+  2.1.17; the configured matrix currently contains no K2/Bob/Angels mod profiles.
+- All 17 offline quality/chain/cycle Python tests passed.
+- Expanded migration smoke test: 161 items in 73 stacks normalized, then zero
+  changes on a repeated run. No item counts or transport positions changed.
+- Save-load Lua migration: 123 items in 67 stacks normalized across 64 transport
+  lines and two surfaces; repeated run again changed zero items.
+- No production migration changes were needed for the expanded coverage.
+
+The old local `tools/test/run_tests.py` currently fails to import the extracted
+`settings` helper. The matrix was run successfully with the external toolset:
+
+```text
+python F:/Games/Factorio_ModTest/mods/Toolsets/testharness/run_tests.py --mod-root F:/Games/Factorio_ModTest/mods/Ingredient_Scrap --all --no-color
+```
