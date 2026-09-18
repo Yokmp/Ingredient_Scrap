@@ -3,11 +3,6 @@
 Ingredient Scrap adds material scrap as an extra byproduct to many recipes.
 The generated scrap can be recycled back into the matching source material.
 
-
-![Scrap byproducts](shot_01.png)
-![Recycle recipes](shot_02.png)
-![Mixed scrap sorting](shot_03.png)
-
 | Example recipes | Modded recipes |
 | :-: | :-: |
 | ![](shot_01.png)<br>![](shot_02.png) | ![](shot_03.png) |
