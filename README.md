@@ -5,7 +5,7 @@ The generated scrap can be recycled back into the matching source material.
 
 | Example recipes | Modded recipes |
 | :-: | :-: |
-| ![](shot_01.png)<br>![](shot_02.png) | ![](shot_03.png) |
+| ![](shot_01.png)<br>![](shot_02.png)<br>![](shot_04.png)<br>![](shot_05.png) | ![](shot_03.png) |
 
 The mod is built around Factorio 2.0/2.1 and Space Age style recycling, but it also
 works without Space Age. It tries to follow the actual recipe chain instead of
