@@ -1,23 +1,24 @@
 {
   "name": "Ingredient_Scrap",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "title": "Ingredient Scrap",
   "author": "yokmp",
   "contact": "yokmp.sfgmail.com",
   "factorio_version": "2.1",
   "homepage": "https://github.com/Yokmp/Ingredient_Scrap",
-  "dependencies": ["base >= 2.1",
-                  "? elevated-rails",
-                  "? recycler",
-                  "? space-age",
-                  "? quality",
-                  "(?) SeaBlock",
-                  "(?) angelspetrochem",
-                  "(?) angelsrefining",
-                  "(?) angelssmelting",
-                  "(?) bzlead",
-                  "(?) bzaluminum",
-                  "(?) Krastorio2"
-                ],
+  "dependencies": [
+    "base >= 2.1",
+    "? elevated-rails",
+    "? recycler",
+    "? space-age",
+    "? quality",
+    "(?) SeaBlock",
+    "(?) angelspetrochem",
+    "(?) angelsrefining",
+    "(?) angelssmelting",
+    "(?) bzlead",
+    "(?) bzaluminum",
+    "(?) Krastorio2"
+  ],
   "description": "Adds scrap results depending on the recipes ingredients."
 }

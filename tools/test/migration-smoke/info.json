@@ -1,0 +1,8 @@
+{
+  "name": "is-migration-smoke",
+  "version": "1.0.0",
+  "title": "IS migration isolated smoke test",
+  "author": "Ingredient Scrap tests",
+  "factorio_version": "2.1",
+  "dependencies": ["Ingredient_Scrap", "quality"]
+}

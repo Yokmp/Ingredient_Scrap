@@ -71,9 +71,9 @@ function icon_layers.get(data_table, scrap_type, tech_icon, result_type, result_
   if tech_icon then
     table.insert(icons, { icon = constants.icon_path .. "recycle-256.png", icon_size = 256, scale = 0.8})
     table.insert(icons, {
-      icon = constants.icon_path .. "scrap-128.png",
-      icon_size = 128,
-      scale = 0.8,
+      icon = scrap_item.icons[1].icon,
+      icon_size = scrap_item.icons[1].icon_size,
+      scale = 102.4 / scrap_item.icons[1].icon_size,
       tint = scrap_item.icons and scrap_item.icons[1] and scrap_item.icons[1].tint,
     })
     for _, v in ipairs(source_icons) do
@@ -88,7 +88,19 @@ function icon_layers.get(data_table, scrap_type, tech_icon, result_type, result_
     else
       table.insert(icons, { icon = constants.icon_path .. "recycle-64.png", icon_size = 64, scale = 0.8})
     end
-    for _, v in ipairs(source_icons) do table.insert(icons, normalize_icon_layer(v)) end
+    if source_icons ~= scrap_item.icons then
+      local base = normalize_icon_layer(scrap_item.icons[1])
+      base.scale = 32 / base.icon_size
+      table.insert(icons, base)
+      for _, v in ipairs(source_icons) do
+        local layer = normalize_icon_layer(v)
+        layer.scale = 21.12 / layer.icon_size
+        layer.shift = { -6, 0 }
+        table.insert(icons, layer)
+      end
+    else
+      for _, v in ipairs(source_icons) do table.insert(icons, normalize_icon_layer(v)) end
+    end
   end
 
   if not tech_icon then

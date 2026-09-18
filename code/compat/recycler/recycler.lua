@@ -64,7 +64,7 @@ local recycler = {
     icon_draw_specification = {shift = {0, -0.55}},
     icons_positioning =
     {
-      {inventory_index = defines.inventory.furnace_modules, shift = {0, 0.2}}
+      {inventory_index = defines.inventory.crafter_modules, shift = {0, 0.2}}
     },
     allowed_effects = {"consumption", "speed", "pollution"},
     perceived_performance = {maximum = 4},

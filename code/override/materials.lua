@@ -10,6 +10,7 @@ overrides.localized_setting_names = {}
 overrides.sources = {}
 overrides.setting_icons = {}
 overrides.tints = {}
+overrides.visuals = {}
 overrides.exact_scrap = {}
 overrides.prototype_aliases = {
   item = {},
@@ -203,6 +204,22 @@ function overrides.register_material_override(definition)
     overrides.tints[definition.name] = definition.tint
   end
 
+  if definition.scrap_class ~= nil or definition.scrap_family ~= nil then
+    local valid = { ["metal-soft"] = true, ["metal-light"] = true, ["metal-hard"] = true,
+      brittle = true, granules = true, shreds = true }
+    if definition.scrap_class ~= nil and not valid[definition.scrap_class] then
+      error("Ingredient Scrap: unknown scrap_class " .. tostring(definition.scrap_class))
+    end
+    if definition.scrap_family ~= nil and (type(definition.scrap_family) ~= "number"
+      or definition.scrap_family < 1 or definition.scrap_family % 1 ~= 0) then
+      error("Ingredient Scrap: scrap_family must be a positive integer")
+    end
+    local visual = overrides.visuals[definition.name] or {}
+    visual.scrap_class = definition.scrap_class or visual.scrap_class
+    visual.scrap_family = definition.scrap_family or visual.scrap_family
+    overrides.visuals[definition.name] = visual
+  end
+
   if definition.exact_scrap == true then
     overrides.exact_scrap[definition.name] = true
   elseif definition.exact_scrap == false then
@@ -227,6 +244,8 @@ local function material_definition(name, mode, options)
     setting_icons = options.setting_icons,
     source = options.source,
     tint = options.tint,
+    scrap_class = options.scrap_class,
+    scrap_family = options.scrap_family,
     exact_scrap = options.exact_scrap,
   }
 end

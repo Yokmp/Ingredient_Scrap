@@ -311,6 +311,31 @@ local function patch_machine_categories(data_table)
   })
 end
 
+-- Run after inserts and compat patches so every recipe producing IS scrap is covered.
+local function restrict_scrap_quality()
+  for _, recipe in pairs(data.raw.recipe or {}) do
+    for _, result in ipairs(recipe.results or {}) do
+      if (result.type or "item") == "item" and result.name
+        and result.name:match("^yis%-.*%-scrap$") then
+        result.quality_min = "normal"
+        result.quality_max = "normal"
+        result.quality_change = 0
+        result.affected_by_quality = false
+      end
+    end
+  end
+end
+
+-- Also cap inherent/research productivity, not just module eligibility.
+local function restrict_recycling_productivity()
+  for name, recipe in pairs(data.raw.recipe or {}) do
+    if name:match("^yis%-recycle%-") then
+      recipe.allow_productivity = false
+      recipe.maximum_productivity = 0
+    end
+  end
+end
+
 ---Registers generated prototypes and applies queued scrap result inserts to existing recipes.
 ---@param data_table ISdata_table
 function patcher.patch(data_table)
@@ -381,6 +406,8 @@ function patcher.patch(data_table)
   end
   log("Patched " .. inserts .. " recipe(s) with scrap results.")
   log("Patched " .. mixed_inserts .. " recipe(s) with mixed scrap results.")
+  restrict_scrap_quality()
+  restrict_recycling_productivity()
   update_furnace_result_inventory_sizes(data_table)
 end
 

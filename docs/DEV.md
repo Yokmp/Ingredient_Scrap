@@ -181,6 +181,8 @@ F:\Games\Factorio_ModTest\doc-html\runtime-api.json
 
 ## Release Checklist
 
+For the quality-stock migration, also use the isolated test below before release.
+
 Before publishing:
 
 1. Run the default profile.
@@ -190,3 +192,55 @@ Before publishing:
 5. Run `deploy.py build`.
 6. Start Factorio once with the Mod Portal zip.
 7. Inspect `_release_/Ingredient_Scrap_<version>.zip` for accidental dev files.
+
+## Scrap Quality Migration Test
+
+`tools/test/migration-smoke` is a separate dev-only test mod, not part of normal
+gameplay. Copy it into an isolated mod directory as `is-migration-smoke`, enable
+it alongside IS and the DLCs using its `mod-list.json`, and create a fresh save
+with `factorio --mod-directory <test-mods> --create <test-saves>/test.zip`.
+Keep saves outside the mod-directory root so they are not mistaken for mod ZIPs.
+
+The test restores legacy output permissions for one recipe, seeds 161 higher-quality
+scrap items across 73 stacks, runs the helper and verifies normal quality,
+unchanged counts, preservation of unrelated legendary items, belt position,
+inventory filter conversion and idempotence. Covered locations: character main
+inventory, chest, machine output, inserter hand, belt, ground and script inventory.
+It also tests all 64 transport lines of yellow/red/blue/turbo splitters and paired
+underground belts, plus iron and mixed scrap in a chest on a second surface.
+Transport counts, qualities and positions are checked individually.
+It leaves 123 higher-quality scrap items across those transport lines and the
+two surface chests for a subsequent load test. Fixture references are saved in
+the test mod's `storage` so the checks do not depend on world positions.
+
+After creating that save, copy `tools/test/migration-smoke-verify.lua` into the
+test mod's `migrations/verify.lua`. Load the save using `--benchmark <save>
+--benchmark-ticks 1 --benchmark-runs 1`. The new migration calls the same helper
+and asserts that every saved legacy stack is normal with its count preserved,
+including transport positions, the second surface and a second idempotence pass.
+Success markers: `IS-MIGRATION-SMOKE PASS` and `IS-MIGRATION-LOAD PASS`.
+Remove the verification migration from the disposable test mod before creating
+another fresh test world; it specifically expects the saved 123-item fixture.
+
+Verified with Factorio 2.1.17. Player cursor handling is implemented but not
+exercised by the headless fixture (it creates a character, not a connected player).
+Loaders, linked belts and large modded saves still merit targeted testing.
+The tests never load or modify a user's regular saves.
+
+### Matrix Results (2026-09-18)
+
+- All 18 configured Lua profiles passed with Ingredient Scrap + DLCs on Factorio
+  2.1.17; the configured matrix currently contains no K2/Bob/Angels mod profiles.
+- All 17 offline quality/chain/cycle Python tests passed.
+- Expanded migration smoke test: 161 items in 73 stacks normalized, then zero
+  changes on a repeated run. No item counts or transport positions changed.
+- Save-load Lua migration: 123 items in 67 stacks normalized across 64 transport
+  lines and two surfaces; repeated run again changed zero items.
+- No production migration changes were needed for the expanded coverage.
+
+The old local `tools/test/run_tests.py` currently fails to import the extracted
+`settings` helper. The matrix was run successfully with the external toolset:
+
+```text
+python F:/Games/Factorio_ModTest/mods/Toolsets/testharness/run_tests.py --mod-root F:/Games/Factorio_ModTest/mods/Ingredient_Scrap --all --no-color
+```

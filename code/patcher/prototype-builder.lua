@@ -3,12 +3,10 @@
 --------------------------------
 
 local item_sounds = require("__base__.prototypes.item_sounds")
-local item_tints  = require("__base__.prototypes.item-tints")
-local scrap_tints = require("code.functions.item-tints")
+local material_visuals = require("code.functions.material-visuals")
 local data_table_reader = require("code.data_table.reader")
 local data_table_writer = require("code.data_table.writer")
 local icon_layers = require("code.functions.icon-layers")
-local is_log = require("code.functions.is-log")
 local naming = require("code.functions.naming")
 local item_prototypes = require("code.functions.item-prototypes")
 local recycle_order = require("code.functions.recycle-order")
@@ -24,6 +22,7 @@ local function icon_scale_and_shift(icon_data, shift)
   return {
     icon = icon_data.icon,
     icon_size = icon_data.icon_size,
+    tint = icon_data.tint,
     scale = 0.33 * scale_factor,
     shift = shift or { -6, 0 }
   }
@@ -46,15 +45,10 @@ function prototype_builder.ensure_scrap_item(data_table, scrap_defines)
   end
 
   local constants = data_table_reader.constants(data_table)
-  local scrap_pictures = constants.scrap_pictures
-  local scrap_icons = constants.icon_scrap
   local icon_path = constants.icon_path
   local source_item = item_prototypes.get(scrap_defines.name)
-  local pictures = {}
-
-  for i = 1, scrap_pictures, 1 do
-    pictures[i] = { size = 64, filename = icon_path .. "scrap-" .. i .. "-64.png", scale = 0.5, shift = {0, 0} }
-  end
+  local scrap_icon, pictures = material_visuals.graphics(
+    scrap_defines.scrap_type, data_table_reader.materials(data_table), icon_path)
 
   ---@type ISItemPrototype
   local scrap_item = {
@@ -69,11 +63,7 @@ function prototype_builder.ensure_scrap_item(data_table, scrap_defines)
       "item-description.yis-scrap-description",
       { "item-name." .. scrap_defines.scrap_type },
     },
-    icons = { {
-      icon_size = 64,
-      icon = icon_path .. scrap_icons[1] .. ".png",
-      tint = scrap_tints[scrap_defines.scrap_type] or item_tints.iron_rust
-    }, },
+    icons = { scrap_icon },
     pictures = pictures,
     subgroup = "raw-material",
     order = "is-[" .. scrap_name .. "]",
@@ -85,16 +75,6 @@ function prototype_builder.ensure_scrap_item(data_table, scrap_defines)
     default_import_location = (mods["space-age"] and naming.get_import_location(scrap_defines.scrap_type)) or nil,
   }
 
-  if not scrap_tints[scrap_defines.scrap_type] and not item_tints.iron_rust then
-    is_log.write(
-      "generator",
-      "warn",
-      "missing-scrap-tint",
-      "No scrap tint or base fallback tint is available.",
-      { scrap_type = scrap_defines.scrap_type }
-    )
-  end
-
   if source_item.icon then
     scrap_item.icons[2] = icon_scale_and_shift({
       icon = source_item.icon,
@@ -105,6 +85,7 @@ function prototype_builder.ensure_scrap_item(data_table, scrap_defines)
     for _, v in ipairs(source_item.icons) do
       table.insert(scrap_item.icons, icon_scale_and_shift({
         icon = v.icon,
+        tint = v.tint,
         icon_size = v.size or v.icon_size or 64
       }))
     end
@@ -209,7 +190,8 @@ function prototype_builder.ensure_recycle_recipe(data_table, recipe_defines)
     subgroup = "raw-material",
     categories = recipe_defines.categories,
     order = recycle_order.recipe(data_table, recipe_defines.scrap_type, recipe_name, recipe_defines.recipe_suffix),
-    allow_productivity = true,
+    allow_productivity = false,
+    maximum_productivity = 0,
     allow_as_intermediate = false,
     allow_intermediates = false,
     hide_from_player_crafting = true,

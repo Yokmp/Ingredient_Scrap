@@ -1,5 +1,17 @@
 ---------------------------------------------------------------------------------------------------
-Version: 2.0.1
+Version: 2.1.2
+Date: 2026-09-18
+  Changes:
+    - scrap quality now always normal
+    - migrate existing higher-quality scrap to normal without changing item counts
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2026-09-15
+  Changes:
+    - fixed recycler "Key inventory_index not found"
+    - new scrap icons
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
 Date: 2026-09-15
   Changes:
     - updated to factorio 2.1

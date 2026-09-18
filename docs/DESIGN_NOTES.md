@@ -1,5 +1,89 @@
 # Design Notes
 
+## Decision: No Additional Machine-Quality Scaling (2026-09-18)
+
+Status: accepted. Do not activate the experimental machine-quality curve.
+This decision concerns additional IS quantity/yield modifiers, not Factorio's
+existing machine speed, module, or research effects.
+
+### Behavior To Keep
+
+- Newly generated scrap outputs remain normal quality.
+- IS does not reduce scrap per craft or increase recycling yield per scrap
+  based on the crafting/recycling machine's quality.
+- IS recycling recipes reject productivity and cap total productivity at zero
+  (`allow_productivity = false`, `maximum_productivity = 0`).
+- Existing manufacturing recipes, productivity research, Foundries and EM Plants
+  remain unchanged by this decision. No machine-specific exclusions are added.
+- Material-specific surpluses at high productivity are accepted as part of
+  Space Age endgame gameplay. IS does not promise a universally lossy material
+  balance; the recycler can serve as an overflow sink.
+
+### Arguments For The Experimental Curve
+
+- Reducing scrap per craft could relieve belt and output congestion in fast,
+  heavily moduled late-game production.
+- Improved recycling yield could provide another reward for machine quality.
+- The offline proposal made the trade-off measurable: legendary production
+  used 20% of normal scrap per craft, while legendary recycling returned 112%
+  of normal yield. These are experimental values, not shipped behavior.
+
+### Why It Is Not Being Activated
+
+- Current play experience has not established a widespread scrap-throughput
+  problem requiring another mechanic. Rare large recipes alone are insufficient.
+- Higher recycler quality already improves throughput; another yield bonus is
+  not needed to make quality useful.
+- The measured surpluses fit the intended endgame rather than demanding a
+  universal anti-surplus rule. They are not bounded to the earlier 8% example.
+- The considered implementation using hidden recipe variants and runtime
+  selection adds complexity around circuit recipe changes, furnaces, blueprints
+  and other mods. That cost is not justified by the currently demonstrated need.
+- Excluding EM Plants or introducing special recipes per modded machine would
+  undermine compatibility and require continuing exception maintenance.
+
+### Evidence And Revisit Conditions
+
+The [complete cycle comparison](recycling-cycle-results.md) includes both the
+finished product and upstream IS scrap. Green circuits produced with EM Plants
+returned 91.5% copper without modules, 134% with five normal productivity-3
+modules, and 209% with five legendary ones. These are route-specific offline
+expectations, not universal bounds or proof of a self-sustaining factory.
+The Foundry comparison also shows why molten inputs and solid recycling outputs
+must be valued through explicit production routes.
+
+Keep the [quality model](quality-balancing.md) and
+[scrap-only chain results](quality-chain-results.md) as analysis references.
+Move quality-based scrap reduction to [Future](Future.md), not the release plan.
+Revisit only when actual play or reproducible modpack tests show persistent
+scrap congestion or unwanted gameplay. Recheck the then-current Factorio API
+before selecting an implementation; hidden variants are not a permanent requirement.
+Any future yield bonus needs its own justification and full-cycle analysis.
+Existing higher-quality scrap is normalized by the separate one-time Lua
+migration described below; it does not activate the experimental quality curve.
+
+### Existing Scrap Quality Migration
+
+`migrations/2.1.1-normalize-scrap-quality.lua` runs the helper in
+`code/migrations/normalize-scrap-quality.lua` once per save. It discovers current
+scrap item prototypes by the owned `yis-*-scrap` naming convention, including
+mixed scrap and dynamically generated material families. No static material
+list and no direct runtime access to the data-stage `data_table` are needed.
+
+The helper replaces higher-quality stacks in place with normal-quality stacks
+of the same name and count. It visits player inventories/cursor, script-created
+inventories, entity inventories on generated chunks of all surfaces, inserter
+hands, ground items and transport lines. Scrap inventory-slot quality filters
+are normalized as well. Normal scrap and other items remain unchanged.
+Failed writes or changed counts abort loading with an error instead of silently
+discarding items. Repeated calls are idempotent; there is no recurring runtime scan.
+
+This is stock conversion, not a logistics reconfiguration: requests, circuit or
+inserter filters, recipe selections and blueprints are not rewritten. Custom mod
+data containing serialized item descriptions is outside the scan. Large saves
+may take longer on the first migrated load. Keep a pre-update save backup.
+See [the migration test notes](DEV.md#scrap-quality-migration-test) for coverage.
+
 ## Active: Release Candidate Cleanup
 
 ## Current Roadmap

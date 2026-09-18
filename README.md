@@ -15,7 +15,12 @@ plates can resolve back to useful material scrap.
 ## Current Behavior
 
 - Recipes can receive extra scrap results based on their consumed ingredients.
+- All IS scrap outputs, including mixed scrap, have normal quality even when
+  crafting higher-quality recipes or using quality modules. Main products retain
+  their normal quality behavior. Existing higher-quality scrap in saves is not converted.
 - Component ingredients are traced back through recipe chains when possible.
+- IS recycling recipes do not accept productivity modules and cap productivity
+  bonuses at zero, including mixed-scrap sorting and fish recycling.
 - Very large scrap outputs are smoothed so a single huge recipe does not flood a
   factory with scrap.
 - Generated recycle recipes stay present but start disabled, so they do not show

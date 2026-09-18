@@ -56,7 +56,18 @@ Useful `options` fields:
 | `setting_icon` / `setting_icons` | Explicit rich-text icon for the startup setting. |
 | `prototype_aliases` | Exact item/fluid names that belong to this material. |
 | `prototype_affixes` | Prefix/suffix/infix hints for resolver matching. |
-| `tint` | Hex string or Factorio tint table for generated scrap icons. |
+| `tint` | Hex string or Factorio tint table for generated scrap icons and belt/ground pictures. Material overlays retain their own colors. |
+| `scrap_class` | Optional visual class: `metal-soft`, `metal-light`, `metal-hard`, `brittle`, `granules`, or `shreds`. |
+| `scrap_family` | Optional positive family index within the class (soft/light: 1-2, hard: 1-3, others: 1). Each family has three picture variants. |
+
+Visual defaults live in `code/functions/material-visuals.lua`. Glass and silicon
+share the `brittle` shapes with separate tints. Unclassified material families
+(except known nonmetals and exact component families) are assigned the seven
+metal image families in sorted name order, repeating after seven. Adding a new
+material can shift these automatic assignments; use explicit visual overrides
+when a compat mod needs a fixed appearance. Partial overrides retain previously
+registered visual fields. Icons retain material overlays; belt/ground pictures
+use only the tinted scrap shapes.
 | `source` | Mod/DLC label shown in setting descriptions and debug output. |
 
 ## Source Filters

@@ -1397,7 +1397,7 @@ function runner.run(production_flow_dump)
     nil,
     { eligible = eligible_assembler_count, patched = patched_assembler_count })
   add_case("categories.assembling.fluid", "metallurgy assembling machines can craft fluid recycle recipes",
-    fluid_assembler_count > 0 and patched_fluid_assembler_count == fluid_assembler_count,
+    patched_fluid_assembler_count == fluid_assembler_count,
     nil,
     { eligible = fluid_assembler_count, patched = patched_fluid_assembler_count })
   add_case("categories.assembling.chemical", "chemical assembling machines can craft chemical recycle recipes",
@@ -2058,7 +2058,7 @@ function runner.run(production_flow_dump)
     { expected = exp.technology, actual = normalized_tech })
   add_case("raw.technology.recycle-yis-testium-scrap.icon-tint", "technology scrap icon layer uses the scrap material tint",
     tech and tech.icons and tech.icons[2] and item and item.icons and item.icons[1] and
-      tech.icons[2].icon == "__Ingredient_Scrap__/graphics/icons/scrap-128.png" and
+      tech.icons[2].icon == item.icons[1].icon and
       same_value(tech.icons[2].tint, item.icons[1].tint),
     nil,
     {
@@ -2075,6 +2075,39 @@ function runner.run(production_flow_dump)
     })
   add_case("raw.technology.no-phantom", "no recipe-specific phantom technology is created",
     data.raw.technology["yis-test-yis-testium-no-tech"] == nil)
+
+  local scrap_quality_count = 0
+  local recycle_count = 0
+  local invalid_recycle_productivity = {}
+  for name, recipe in pairs(data.raw.recipe or {}) do
+    if name:match("^yis%-recycle%-") then
+      recycle_count = recycle_count + 1
+      if recipe.allow_productivity ~= false or recipe.maximum_productivity ~= 0 then
+        invalid_recycle_productivity[#invalid_recycle_productivity + 1] = name
+      end
+    end
+  end
+  table.sort(invalid_recycle_productivity)
+  add_case("raw.recycling.no-productivity", "IS recycling recipes reject productivity modules and cap all productivity bonuses",
+    recycle_count > 0 and #invalid_recycle_productivity == 0, nil,
+    { checked = recycle_count, invalid = invalid_recycle_productivity })
+  local invalid_scrap_quality = {}
+  for recipe_name, recipe in pairs(data.raw.recipe or {}) do
+    for _, result in ipairs(recipe.results or {}) do
+      if (result.type or "item") == "item" and result.name
+        and result.name:match("^yis%-.*%-scrap$") then
+        scrap_quality_count = scrap_quality_count + 1
+        if result.quality_min ~= "normal" or result.quality_max ~= "normal"
+          or result.affected_by_quality ~= false or (result.quality_change or 0) ~= 0 then
+          invalid_scrap_quality[#invalid_scrap_quality + 1] = recipe_name .. ":" .. result.name
+        end
+      end
+    end
+  end
+  table.sort(invalid_scrap_quality)
+  add_case("raw.scrap.normal-quality", "all IS scrap outputs stay normal regardless of recipe quality or quality modules",
+    scrap_quality_count > 0 and #invalid_scrap_quality == 0, nil,
+    { checked = scrap_quality_count, invalid = invalid_scrap_quality })
 
   return report
 end
